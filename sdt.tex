@@ -1,0 +1,874 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{mathtools}
+\usepackage{scalerel}
+
+\usepackage{stackengine}
+\usepackage[parfill]{parskip}
+\usepackage[margin=1in]{geometry}
+
+\date{2\textsuperscript{o} Semestre 2018/19}
+\title{Sistemi di Telecomunicazione}
+\author{ale-cci }
+
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+
+\pagestyle{fancy}
+
+\def\myupbracefill#1{\rotatebox{90}{\stretchto{\{}{#1}}}
+\def\rlwd{.5pt}
+\newcommand\notate[4][B]{%
+  \if B#1\else\def\myupbracefill##1{}\fi%
+  \def\useanchorwidth{T}%
+  \setbox0=\hbox{$\displaystyle#2$}%
+  \def\stackalignment{c}\stackunder[-6pt]{%
+    \def\stackalignment{c}\stackunder[-1.5pt]{%
+      \stackunder[2pt]{\strut $\displaystyle#2$}{\myupbracefill{\wd0}}}{%
+    \rule{\rlwd}{#3\baselineskip}}}{%
+  \strut\kern9pt$\rightarrow$\smash{\rlap{$~\displaystyle#4$}}}%
+}
+
+
+
+\begin{document}
+\begin{titlingpage}
+\maketitle
+\end{titlingpage}
+
+\newpage
+%% -- Begin --
+
+\section{Guadagno in potenza}
+
+\[
+    P_{out} = gP_{in}  \xrightarrow[]{10\log_{10}{}} P_{out_{db}} = g_{db} + P_{in_{db}}
+\]
+
+\begin{itemize}
+    \item $g < 1$: Perdita di Trasmisione
+
+    \item $L$: Transmission Loss $\coloneqq \quad g^{-1}=\frac{P_{in}}{P_{out}}$
+
+\end{itemize}
+
+\subsection{Attenuazione di tipo Radio}
+Sistemi di telecomunicazione su cao (Dal nome, Segnale si propaga lungo un cavo)
+
+\begin{itemize}
+    \item $l$: lunghezza del cavo
+    \item $\alpha$: coefficente d'attenuazione $\frac{dB}{Km}$
+\end{itemize}
+
+\[
+    \notate{P_{out}}{2}{\text{Da fisica}} = \notate{10^{-\frac{\alpha}{10}l} P_{in} }{1}{\text{$\cdot < 1 $ Siccome $\alpha$ e $l$ sono positivi}}
+\]
+
+$g = 10^{+\frac{\alpha}{10}l}$
+
+$L=10^{-\frac{\alpha}{10} l}$
+
+$L_{dB} = 10\log_{10} L = \alpha \cdot l$
+
+
+\begin{center}
+    \begin{tabular}{||c|c|c||}
+        \hline
+        Esempi & Frequenza & \( \alpha \)     \\
+        \hline \hline
+        Doppino Telefonico & \( 10 kHz \) & 2 \\
+                           & \( 100 kHz\) & 3 \\
+                           & \( 300 kHz\) & 6 \\
+        \hline
+        Cavo Coassiale     & \( 100 kHz\) & 1 \\
+                           & \( 1 MHz\) & 2 \\
+                           & \( 3 MHz\) & 4 \\
+        \hline
+        Guida d'onda rettangolare     & \( 10 GHz\) & 5 \\
+
+        \hline
+        Cavo in fibra Ottica & \( 4\cdot 10^{14} Hz\) & 10 \\
+
+        \hline
+    \end{tabular}
+\end{center}
+
+Per ``combattere'' l'attenuazione vengono usati i ripetitori
+
+\textbf{Trasmissione Radio}: Perdita di potenza dovuta all'irradiazione stessa
+
+\begin{itemize}
+    \item $l$: distanza
+    \item $\lambda$: Lunghezza d'onda
+    \item $\alpha$: path loss exponent
+\end{itemize}
+
+
+$ L = {(\frac{4\pi l}{\lambda})}^2 $
+
+
+\framebox{$ C = \lambda f_c $} \quad
+$f_c$ frequenza portante
+
+$ L = {(\frac{4\pi l}{\lambda})}^\alpha $
+
+$f_c$ \'e solamente espressa in $GHz$, quindi si ha che:
+
+\[
+    L_{dB} = 20\log_{10} {\left(\frac{4\pi}{\lambda}l\right)}^2 + 20\log_{10} 10^9 + 20\log_{10} f_{c_{GHz}} = 92.4 + 20\log_{10} l + 20\log_{10} f_{c_{GHz}}
+\]
+
+\subsection{Tramissioni Cablate}
+$L_{dB} = \alpha l$
+
+\textbf{Antenna Radio}: Soino dette \textbf{direttive}, se concentrano la potenza su un unica direzione
+
+Piu l'antenna \'e direttiva, pi\'u \'e alto il guadagno
+
+\underline{Esercizio}
+
+\subsection{Formule di Friis}
+
+\[
+    P_{out} = P_{in} \frac{g_T g_R}{{(\frac{4 \pi d f_c} {C})}^\nu} \quad \rightarrow  \quad K{\left(\frac{1}{d}\right)}^\nu
+\]
+
+% diagram
+
+\begin{itemize}
+    \item \textbf{Shadowing}: Fluttuazione dovuta a cambiamento dell'ambiente
+    \item \textbf{Short Term Fading}: Fluttuazione a breve distanza, distribuita come la \textit{distribuzione di Reileigh}
+\end{itemize}
+
+\subsection{Dominio Frequenziale}
+
+$S_y(f) =S_x(f) {\lvert H(f) \rvert}^2$
+
+% grafico 1 %
+% grafico 2 %
+$B_c$: Banda di Coerenza $\rightarrow$
+Intervallo frequenziale in cui la risposta  in frequenza del canale varia di poco
+
+$B_c > B$: Canale \textbf{NON} selettio di frequenza, La risposta del canale ``non'' cambia su $T_s$ (Tempo di fading) lento ($T_s < T_c$)
+
+
+$B_c < B$: Canale Selettivo in frequenza
+fading veloce: risposta cambia su $T_s$ $(T_s > T_c)$
+
+% immagine antenne %
+
+$B_c = \frac{1}{5\sigma_D}$
+
+$T_s$: Tempo di simbolo
+
+$T_c = \frac{6}{16\pi f_D}$
+
+$f_D$: Frequenza Doppler
+
+\newpage
+\section{Modello ISO-OSI}
+
+\begin{enumerate}
+    \item Phisical
+    \item Data-Link
+    \item Network
+    \item Transport
+    \item Session
+    \item Presentation
+    \item Application
+\end{enumerate}
+
+\textbf{Tabelle di Routing} Protocollo IP Riesce a trovare il percorso tra utente ed endpoint
+
+\subsection{Livello 1}
+perso
+
+% image %
+
+\subsection{Livello 2}
+Trasmette i grame al nodo successivo
+\begin{itemize}
+    \item Controlla che il lin sia attivo
+    \item Fornisce informazione ai livelli superiori
+    \item Correzione errore per frame
+\end{itemize}
+
+\textbf{MAC}: Medium Access Control
+
+\textbf{LLC}: Logical Link Control $\rightarrow$ controlla che il link sia attivo
+
+
+\subsection{Livello 3}
+Si occupa solo del \textbf{percorso logico} tra due punti, non compe vengono trasferiti i dati
+
+Nasconde i livelli inferiiori ai layer superiori rendendoli hardware-independent
+
+\subsection{Livello 4}
+Consegna messaggio tra due processi
+% dual split
+
+\subsection{Livello 5}
+Abilita, Modifica, Termina sessioni tra applicazioni
+
+Pi\'u connessioni possono essere viste come una singola sessione
+
+distingue i dati che arrivano tra ``application data'' (dati usati dalle applicazioni) e ``session control data''
+
+Usa dati dei layer 3\&4 per monitorare la comunicazione tra applicazioni
+
+Translation for naming services (google.com $\rightarrow$ 8.8.4.4)
+
+\subsection{Livello 6}
+Translation, Compression, Decription and Encapsulation of Data, (Es: Html, JPG, Ascii\ldots)
+
+\subsection{Livello 7}
+Fornisce servizi di comunicazione alle applicazioni, esempi ne sono: Http e FTP
+
+\section{TCP/IP}
+Inizialmente suddiviso in 4 layer:
+
+\begin{itemize}
+    \item Host to Network
+    \item Internet
+    \item Transport
+    \item Application
+\end{itemize}
+
+Ma se confrontato al modello OSI ne si possono riconoscere 5:
+
+\begin{itemize}
+    \item Application
+    \item Transport
+    \item Network
+    \item Data Link
+    \item Phisical
+\end{itemize}
+
+In una rete TCP/IP vengono usati 4 livelli di indirizzi
+
+\begin{itemize}
+    \item Phisical
+    \item Logical
+    \item Port
+    \item Application-Specific
+\end{itemize}
+
+\section{Struttura generale di un sistema di comunicazione}
+% image
+
+\textbf{Capacit\'a di canale ($C$)}: Massima velocit\'a a cui possono essere trasmessi i dati
+
+\textbf{Data rate ($bps$)}: Dati effettvamente comunicati
+
+\textbf{BandWidth ($B$)}: la grandezza di banda del segnale trasmesso
+
+\textbf{Bit Error Rate ($BER$)}: Frequenza con cui avvengono erriri di trasmissione
+
+\section{Modulazione}
+Aggiungere informazioni al segnale portante $x(t)$
+\[
+    x(t) = A\cos(2\pi ft + \Phi)
+\]
+
+$A$: Ampiezza
+
+$f$: Frequenza
+
+$\Phi$: Fase
+
+Carrier signal: $x(t)$ su cui sono state modulate le informazioni
+Analog to analog conversion: Needed only if a bandpass is available
+
+\begin{samepage}
+    \begin{itemize}
+        \item Aplitude modulation
+        \item Frequency modulation
+        \item Phase modulation
+    \end{itemize}
+\end{samepage}
+
+\subsection{Amplitude modulation (AM)}
+\begin{itemize}
+    \item $m(t)$: Information signal
+    \item $A_c\cos(2 \pi f_c t)$: carrier
+    \item $f_c$: Carrier frequency
+\end{itemize}
+
+Total Bandwidth: $2B$
+
+\[S(t) = A_c(1 + K_o m(t)) \cos(2\pi f_c t)\]
+
+\[\quad \Big\Downarrow \mathcal{F} \quad \]
+
+\[S(f) = \frac{A_c}{2} \left[ \delta(f - f_c) + \delta(f+f_c) + K_o M(f - f_c) + K_o M(f+f_c)\right]\]
+
+%immagine
+
+\subsection{Frequency modulation FM}
+
+\begin{minipage}[]{0.5\textwidth}
+    \[
+    S(t) = A_c \cos(\theta(t))
+    \]
+    % first image
+\end{minipage}
+\begin{minipage}[]{0.5\textwidth}
+    \[
+        m(t) \coloneqq \frac{ d\theta(t)}{dt} = 2\pi f_c + 2\pi K_f m(t)
+    \]
+    % second image
+\end{minipage}
+
+\textbf{$K_f$}: Frequency derivation constant $\frac{Hz}{V}$
+
+\subsection{Phase Modulation PM}
+\[
+    S(t) = A_c \cos(2\pi f_c t + K_p m(t))
+\]
+
+La variazione di fase si manifesta come una variazione istantanea di frequenza, (proporzionale alla derivata di m)
+
+\textit{Total Bandwidth}: $6B$
+
+Le modulazioni lineari occupano meno banda $\rightarrow$ utilizzate per accomodare pi\'u utenti
+
+Se l'informazione da trasmetter non \'e Analogica ma digitale, la modulazione si chiama Keying
+
+\begin{minipage}[t]{0.5\textwidth}
+    \textbf{Amplitude shift Keying ASK}
+    \begin{itemize}
+        \item $f$ \'e costante
+        \item low bandwidth
+        \item weak against interference
+    \end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \textbf{Frequency shift Keying FSK}
+
+    \[
+        FSK(t) =
+        \begin{cases*}
+            \sin(2\pi f_1 t) \\
+            \sin(2\pi f_2 t)
+        \end{cases*}
+    \]
+
+    % image
+    \begin{itemize}
+        \item More bandwidth required
+    \end{itemize}
+\end{minipage}
+
+\newpage
+
+%% -- Section --
+\section{Random Access Protocols}
+
+Tutti i protocolli ad accesso multiplo trasmettono su un unico canale.
+
+Nal caso in cui due o piu nodi trasmettano contemporaneamente avviene una collisione.
+
+Per comunicare, i nodi possono utilizzare solamente il canale
+
+In una rete tra computer, non tutti i nodi trasmettono continuamente, quindi partizionare equamente le risorse del canale renderebbe la rete non del tutto utilizzata
+
+\underline{Idealmente}: se il Broadcast channel ha una bit rate R
+\begin{enumerate}
+    \item Quando M nodi vogliono trasmettere, lo fanno con bit-rate \(\frac{R}{M}\)
+    \item Decentralizzata: Non ci deve essere uno a coordinare le trasmissioni; i nodi non dovrebbero essere sincronizzati
+\end{enumerate}
+
+\subsection{Algoritmo ALOHA}
+
+\subsubsection{Aloha Pure}
+Pros:
+\begin{itemize}
+    \item No sincronization needed
+\end{itemize}
+Procedure:
+
+\begin{enumerate}
+    \item When new frame is received transmit it immediately
+    \item on collision retry after a random interval
+\end{enumerate}
+
+
+\subsubsection{Aloha Slotted}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.8in]{placeholder.jpg}
+    \caption{Slotted aloha}
+\end{figure}
+Assumptions:
+\begin{enumerate}
+    \item All frames have the same size
+    \item Time is divided in equal slots
+    \item Nodes transmit frames only at the beginning of a slot
+    \item syncronization is needed
+    \item Collision are always detected
+\end{enumerate}
+
+
+Procedure:
+
+\begin{enumerate}
+    \item New frame received transmit
+    \item while no collisions are detected send next slot
+    \item If collision: start transmission in the next slot with probability P until success
+\end{enumerate}
+\hfill
+
+\newpage
+\section{Protocollo Ethernet CSMA}
+
+Se il pacchetto \'e molto lungo rispetto ai tempi di propagazione termina la trasmissione per non intasare la rete.
+
+Con il protocollo ethernet \'e possibile misurare l'energia in un cavo, confrontarla con quella ricevuta per poter identificare facilmente i casi di interferenza
+
+Principali problemi con il protocollo Wifi:
+\begin{itemize}
+    \item Non \'e possibile utilizzare lo stesso sistema di error-detection siccome la potenza del segnale ricevuto dipende dalla distanza e dalla vicinanza dagli altri utenti
+    \item Il segnale ethernet \'e quasi sempre a bus condiviso
+\end{itemize}
+
+Struttura frame livello 2:
+\begin{itemize}
+    \item \textbf{Preamble} 8 byte, 7 con 10101010 1 con 10101011; Utilizzati per sincronizzare il ricevitore con il trasmettitore
+    \item \textbf{Destination Address}: Target machine / Broadcast
+    \item \textbf{Source Address}: Source machine MAC address
+    \item \textbf{Type}: Protocollo di livello 3 (ex: IP)
+    \item \textbf{CRC}: Cycling Redundance Check; Controlla solo se si sono verificati errori, non si occupa della correzione
+\end{itemize}
+
+\subsection{Ethernet (Standard IEEE 802.3)}
+
+CSMA/CD 1 Persistent
+
+% Lezione 13/05/19 (di vodafone)
+\newpage
+
+\section{5G}
+
+\subsection{Advanteges over 4G}
+
+\begin{itemize}
+    \item Maggiore disponibilit\'a di banda
+    \item Bassa latenza: da 9 a 10 ms; Dovuta alla minore distanza cloud-server\\
+        Multiaccess Edge Computing: Place more computing resource closer to the point of data creation\\
+        Very useful for AR/VR
+
+    \item Maggior numero di dispositivi connessi per km\textsuperscript{2} (1 mln)
+    \item Peak data rate from 1\(Gbs\) to 20\(Gbs\)
+    \item Available spectrum from 3\(GHz\) to 30\(GHz\)
+    \item Higher data traffic; from 7.2 Exabyte/Month to 50 Exabyte/Month
+
+\end{itemize}
+
+
+Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
+
+
+5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
+
+% copiare
+\newpage
+\section{UMTS}
+La terza generazione GSM in europa IS-95 negli Stati uniti, Capirono che la telefonia cellulare era un fenomeno di massa.
+Discussero per avere una terza generazione unica.
+
+Alla fine lo standard che doveva prendere piede era IMT-2000. Tutte le entit\'a cercarono di spingere le proprie soluzioni significative rispetto alla 2\textsuperscript{a} generazione $\rightarrow$ dovevano reggere applicazioni multimediali.
+
+Il sistema doveva supportare la commutazione di circuito (telefono) e pacchetto (tipo internet) ed il tasso di trasmissione in continuo aumento $\left(2\frac{Mb}{s}\right)$
+
+\begin{itemize}
+    \item $1G$ $\rightarrow$ Vari sistemi sparsi
+    \item $2G$ $\rightarrow$ Sistemi cellulari e il GSM e IS-95 anche se ci sono stati altri sistemi come per esempio IRIDIUM (costellazione di satelliti) o global\\
+        $\Rightarrow$ Fornire connettivit\'a connnessione di satellite geostazionario anche se la gesione ed i costi erano assurdi
+\end{itemize}
+
+Con la 3\textsuperscript{a} Generazione si vuole arrivare ad una famiglia di standard, applicabile in tutti i continenti
+
+\textbf{UMTS}: (Standard Principale) e poi \textbf{MC CDMA} (portanti multiple)
+
+%Una evoluzione tra GSM e UMTS ...
+
+Per coordinare gli sforzi di tante entit\'a \'e stato creato un associazione 3GPP
+Era una partnership per uno standard comune, ne facevano parte: ZTSI, ARIB ed ANSI
+
+Alla fine degli anni 90 \'e stato introdotto la rete di accesso terrestre \underline{UTRA}
+Interfaccia radio \textbf{WCDMA} $\rightarrow$ Bande pi\'u larghe del CDMA classico e  poteva funzionare sia in modalit\'a TDD sia una modalit\'a FDD
+
+\'E pi\'u facile allocare una banda in uplink e downlink
+
+Con il TDD c'\'e pi\'u flessibilit\'a
+
+% \begin{tabular}{||c|c||}
+%     \hline
+%     GSM & a\\
+%     GPRS & b
+%     \hline
+% \end{tabular}
+
+\subsection{Tasso di trasmissione}
+\begin{itemize}
+    \item \textbf{GSM} $\rightarrow$ traffico dati $36 \frac{Kb}{s}$
+    \item \textbf{GPRS} $\rightarrow$ Potenziale a livello fisico che arrivava fino a $171.2\frac{Kb}{s}$ (teorico)
+    \item \textbf{EDGE} $\rightarrow 553.6\frac{Kb}{s}$
+    \item \textbf{UTRA} (a livello teorico) $\rightarrow 1920\frac{Kb}{s}$
+\end{itemize}
+
+
+
+
+\subsection{Differenze tra W-CDMA e GSM }
+
+\begin{itemize}
+    \item  Maggiore spaziatura tra plrtanti
+    \item Maggiore frequenza di controllo
+
+\end{itemize}
+
+\subsection{frequenza di controllo} nel GSM non importa la potenza relativa delle trasmissioni, perche ogniuno ha la sua frequenza $\rightarrow$ non ci sono interferenze
+
+Con la 3\textsuperscript{a} generazione viene introdotto un controllo in potenza
+
+
+\subsection{Controllo qualit\'a}
+legato alla pianificazione delle reti (dipende dal numero di celle per kluster e come vangono distribuite le risorse) Con la 3\textsuperscript{a} generazione nascono gli algoritmi di gestione delle risorse
+
+
+\subsection{Diversit\'a di frequenza}
+Serve per prevenire Fading nel canale;
+\begin{itemize}
+    \item \textbf{GSM} utilizzava frequency hopping
+    \item \textbf{W-CDMA} siccome il canale \'e molto grande la banda non viene completamente distrutta (notch); Vengono sfruttati con ricevitori \textbf{Rake}
+\end{itemize}
+
+\subsection{dati e pacchetto}
+
+\begin{itemize}
+    \item GSM pu\'o assegnare all'utente pi\'u time slot successivi
+    \item con \textbf{$3g$} viene potenziato lo scheduling per la trasmissione dei pacchetti $\rightarrow$ il sistema assegna pi\'u risorse per aumentare la velocit\'a di trasmissione in downlonk
+\end{itemize}
+
+% image 1
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=3in]{img/diversi_cammini.jpg}
+    \caption{Diversit\'a di cammino}
+\end{figure}
+\subsection{Diversit\'a di trasmissione in downlink}
+
+Antenne multiple in trasmissione ed antenna unica in recezione $\rightarrow$ diversit\'a di trasmissione
+
+Usando antenne multiple in recezione, aumenta la velocit\'a di canale esponenzialmente; (Con \textbf{5G} verranno utilizzate almeno 2 antenne per device)
+
+
+% Desegno 115
+Per garantire l'ottimizzazione dell'assegnazione delle assegnazzione delle risorse $\rightarrow$ 4G intrpduce il concetto di ``negoziazione'' delle risorse attraverso \textit{Radio Bearer} $\rightarrow$ Canale di trasporto che consente  di negoziare dati (date bearer) o caratteristiche a livello fisico (Signal bearer)
+
+Gli attributi definiti da questi pacchetti di controllo riguardano:
+
+\begin{enumerate}
+    \item throughput
+    \item Ritardo trasmissivo
+    \item Tasso di errore massimo tollerabile
+\end{enumerate}
+
+$\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \textbf{QoS} \textit{Quality of Service}
+
+\begin{samepage}
+    \subsection{Classi di QoS di UMTS}
+    \begin{itemize}
+        \item \textbf{Conversazionale}: applicazione principale per voce, videogiochi e videotelefonia;
+            \begin{itemize}
+                \item deve essere preservata l'interazione temporale tra le informative del flusso
+                \item Bassa varianza dei ritardi
+                    % Image 2
+
+                    \begin{figure}[h]
+                        \centering
+                        \includegraphics[width=3in]{img/classe_conversazionale_grafico.jpg}
+                        \caption{Classe Conversazionale}
+                    \end{figure}
+                \item \'e sopportabile la perdita di alcuni frame, ma non il ritardo eccessivo dell'arrivo di ogni frame
+
+            \end{itemize}
+
+        \item \textbf{Streaming}: Streaming multimediale
+            \begin{itemize}
+                \item no vincoli su ritardi
+                \item perservazione temporale tra i frame
+
+                    % Image 3
+                    \begin{figure}[h]
+                        \centering
+                        \includegraphics[width=3in]{img/streaming_grafico.jpg}
+                        \caption{Grafico Streaming}
+                    \end{figure}
+            \end{itemize}
+
+        \item \textbf{Interattiva}: Cadono i requisiti delle entit\'a informative, siccome non \'e piu presente un flusso di dati
+            \begin{itemize}
+                \item ottenere risposta da entit\'a remota
+                \item preservare integrit\'a dei dati
+            \end{itemize}
+
+        \item \textbf{Background}: Chiede solo di preservare l'integrit\'a dei dati, (Es: Download delle email in background)
+
+            Hanno la minore priorit\'a rispetto alle altre classi di traffico
+
+    \end{itemize}
+\end{samepage}
+% Disegno 117
+Sistema UMBS \'e di fatto formato da 2 sottoinsiemi (che sono l'evoluzione del BSS e NSS)
+
+\textbf{NSS} $\rightarrow$ \textit{Core Network} (CN) $\rightarrow$ autenticazione utenti connessi, commutazione autenticazione connessione, interconnessione verso reti esterne (di altri provider o internet)
+
+\textbf{BSS} $\rightarrow$ \textit{UMTS} Radio Access Network (\textit{UTRAN})
+
+
+Nella fase iniziale del $3G$ coesistenza di sistemi di 2\textsuperscript{a} e 3\textsuperscript{a} generazione
+
+Con la 3\textsuperscript{a} generazione si inizia ad affiancare la rete d'accesso con la rete d'accesso \textit{UTRAN}
+
+\textbf{CS}: Circuit switching
+
+\textbf{PS}: Packet Switching
+
+\textbf{RNC}: Radio network Controller $\rightarrow$ novit\'a introdotta dalla 3G, Collegati con interfaccia \textbf{Iur}, idealmente sono tutti connessi tra loro
+
+Idea del 3G:\@ Delegare all'esterno pi\'u responsabilit\'a ed intelligenza, mentre lascia all'interno della core Network la tariffazione
+
+%Disegno 118
+
+\textbf{UTRAN} $\rightarrow$ formata da vari RNS, ogniuno dei quali \'e formato da diversi Node B. Ogni Node B gestisce un certo numero di \notate{\text{celle (da 3 a 6)}}{1}{\text{In ogni cella \'e supportato FDD e TDD}}
+
+\begin{samepage}
+\subsection{Interfacce Considerate nello Standard}
+\begin{itemize}
+    \item \framebox{UU} $\rightarrow$ Interfaccia telefono e Node B, ha il compito di
+        \begin{itemize}
+            \item trasportare i servizi per l'utente
+            \item Gestione della mobilit\'a: Trasporto delle informazioni necessarie
+        \end{itemize}
+    \item \framebox{IU} $\rightarrow$ Interfacciamento tra \textit{UTRAN} e \textit{Core Network}
+        \begin{itemize}
+            \item \textbf{Iu-CS} Circuit Switching $\rightarrow$ per traffico vocale
+            \item \textbf{Iu-PS} Packet Swtiching $\rightarrow$ per traffico dati
+        \end{itemize}
+        \item \framebox{Iub} $\rightarrow$ Interfaccia di collegamento fra Node B ed il proprio RNC
+        \item \framebox{Iur} $\rightarrow$ Collega RNC appeartenenti a diversi RNS
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=6in]{img/architettura_uts.jpg}
+                \caption{Architettura UTS}
+            \end{figure}
+
+\end{itemize}
+
+\end{samepage}
+
+La novit\'a a livello architetturale dell'UMTS \'e la presenza degli RNC nella \textit{UTRAN} $\Rightarrow$ \underline{RNC} gestisce tutte le funzionalit\'a lato utente:
+\begin{itemize}
+    \item Mobilit\'a
+    \item Assegnazione risorse
+\end{itemize}
+
+Senza passare da core network
+
+\underline{Node B}
+\begin{itemize}
+    \item Realizza le trasmissioni radio (modulazione, potenza trasmissiva, gestire il controllo di potenza)
+    \item Riceve dal proprio RNC le indicazioni sulle risore da assegnare agli utenti
+
+    \item Effettuare misure sulla potenza e QoS
+\end{itemize}
+
+
+% Drift and Serving RNC
+% Slide 255
+\textbf{HSPA} High Sped Packet Access
+
+Dispositivi di generazioni successive devono garantire il funzionamento delle generazioni precedenti fino a quando non vengono dismesse
+
+% Lezione 21 - 5 -19
+\section{LTE (4G)}
+
+% slide 261
+% slide 262
+
+Machine to machine legata ad IOT (dovrebbe rimanere piccola siccome i dati trasmessi sono pochi)
+
+Con LTE le comunicazioni dati iniziano ad essere deflesse sulla comunicazione dati
+
+% slide 263
+% slide 264
+
+Obbiettivo \textbf{LTE}: supportare sempre pi\'u traffico dati
+
+3GPP creata per generare un potenziale standard per la 4\textsuperscript{a} generazione
+
+\subsection{Motivation for LTE}
+\begin{itemize}
+    \item Higher data rates $\Rightarrow$ More spectral efficiency
+    \item  Sistema completamente ottimizzato per packet switching non \textit{Commutazione per circuito}
+    \item Higher quality service
+
+        Aumentare l'esperienza di always on
+
+        Suddivisione logica  tra \textit{User Plane} e \textit{Control Plane} (Non visibile all
+        utente)
+    \item Infrastruttura pi\'u economica
+
+        Semplificazione architettura con riduzione elementi in rete
+\end{itemize}
+
+
+\subsection{LTE performance requirements}
+\begin{itemize}
+    \item Data rate con picchi di $100\frac{Mb}{s}$, massima banda assegnabile ad un utente $20MHz$
+
+        Da 3\textsuperscript{a} Generazione ci si \'e accorti che il traffico \'e asimmetrico, downlink \'e molto pi\'u utilizzato rispetto all' uplink, per questo motivo, l'efficenza spettrale dell'uplink \'e la met\'a rispetto a quella del downlink
+
+    \item Cell range ideale di qualche Km, idealmente si puntava ad avere celle di $30$ e $100Km$ di raggio
+
+    \item Cell Capacity fino a 200 utenti attivi per cella
+    \item Mobilit\'a (Sistema ottimizzato per basse mobilit\'a)
+    \item Latency
+        \begin{itemize}
+            \item User Plane (nell'ordine di pochi millisecondi $\approx 5ms$), essenziale per AR \& VR
+            \item Control Plane
+        \end{itemize}
+
+    \item Improved Spectral efficiency
+    \item Broadcasting: Tutte le applicazioni legate al Digital Video Broadcasting, (es Eventi in diretta)
+    \item Ottimizzato verso l'IP, per essere direttamente compatibili con Internet
+    \item Bande scalabili (Attraverso \textbf{OFDMA} consente assegnazioni flessibili di risorse frequenziali)
+    \item Co-esistenza con precedenti versioni delle reti cellulari
+\end{itemize}
+
+\subsection{3 principali limitazioni del 3G}
+\begin{enumerate}
+    \item Massima bit rate  % perso
+    \item 3\textsuperscript{a} gen non era stata progettata per tenere conto dei vincoli sulla latenza,
+
+        diventa difficile utilizzare applicazioni interattive
+
+        Interazioni ancora peggiori con il resource assignment
+    \item 3G richiedeva dei terminali complessi, per funzionare bene c'era bisogno utilizzare dei ricevitori RAKE (molto complessi), i quali richiedevano un grande consumo di batteria
+\end{enumerate}
+
+Latenza $\coloneqq$ Round trip delay
+
+Struttura 4G: Core Network + parte di controllo; Scompare l'RNC $\rightarrow$ Prima semplificazione rispetto alla 3\textsuperscript{a} generazione
+
+\subsection{LTE/SAE Key features}
+SAE $\coloneqq$ System Artchitecture Evolution
+
+\textbf{E-UTRAN}: Evolved UTRAN, parte d'accesso
+
+\textbf{eNB}: Evolved Node B, parlano direttamente con un Gateway
+
+Esistono due tipologie di Gateway
+
+\textbf{P-GW}: Packed Data Network Gateway
+
+\textbf{EPC}: Evolved Packet Core
+
+Architettura semplice dal punto di vista dell'user plane: 3 passi perraggiungere l'esterno
+
+A livello di controllo gli eNB si collegano all'MME \textit{Mobility management entity}
+
+HLR (Home location register) e VLR vengono integrati nell'HSS
+
+PCRF, si occupa della tariffazione
+
+% image 1
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.8in]{placeholder.jpg}
+    \caption{Architettura LTE}
+    \label{fig:lte_architecture}
+\end{figure}
+
+
+Si pu\'o notare la sudivisione tra piu livelli nell'architettura dell'LTE (Figura~\ref{fig:lte_architecture})
+
+LTE in uplink viene utilizzato SC-FDMA, in downlink OFDMA
+
+HARQ: Garantisce ritrasmissione selettiva di pacchetti persi
+
+Da punto di vista dell'accesso, si concentra tutto sugli eNB
+
+Ruoi delegati all'eNB
+\begin{itemize}
+    \item Resource Scheduling
+    \item QoS Aware
+    \item Autoconfigurante, idea: installare eNB e lui doveva autoconfigurarsi rispetto alla sua posizione nella rete
+\end{itemize}
+
+\begin{itemize}
+    \item Scompare completamente il CS domain, viene tutto orientato al Packet Switching
+    \item IETF: Internet Engeneering Task Force, si occupa di standardizzare qualsiasi protocollo legato ad internet,
+
+        fondalmente libera, per proporre qualcosa di nuovo vengono richiesti degli RFC (Request For Comments)
+
+        Si occupano di sviluppare i protocolli, non di come vengono trasmessi i dati
+
+        Entra lo standard (MIP-v6, i.e. IPv6)
+
+        4G considerava gi\'a di supportare protocolli per ``IP in mobilit\'a''
+
+    \item  Prepared for Non-3GPP Access
+
+        ePC deve essere in grado di gestire flussi informativi non necessariamente legati a rete cellulare,
+        ma anche da access point WiFi
+\end{itemize}
+
+\subsection{Key Features}
+
+\begin{itemize}
+    \item al posto di NodeB arriva eNB
+    \item Scompare RNC
+        Delegando le capacit\'a gestionali all'eNB, il sistema diventa pi\'u semplice e reattivo
+    \item Transport Layer (trasporto informazione): tutto diventa orientato all'IP
+
+    \item Resource Scheduling in Uplink e Downlink
+
+        eNB Contiene uno scheduler che assegna le risorse a tutti gli utenti connessi
+\end{itemize}
+
+Idea fondamentale per rendere possibile assegnazione dinamica delle risorse
+
+\textbf{Sistemi multiportante}
+% slide 282
+Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
+
+$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
+Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
+
+\textbf{OFDM}: Orthogonal Frequency Division Moldulation
+
+\textbf{HARQ} (H, H+):  Hybrid Authomatic Retransmission reQuest
+Cercare di accelerare il pi\'u possibile la trasmissione, non interrompendo il flusso
+
+\subsection{LTE key parameters}
+
+Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
+Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
+
+Protocolli di accesso multiplo e modelli di scheduling sono identici,
+
+\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
+
+In Uplink, anche se ogniuno ha una singola antenna, nel caso di Cooperazione viene creata una \textit{Antenna Array} $\rightarrow$ Multiuser Collaborative MIMO (Mai implementata)
+
+Uplink max: $75Mbps$
+
+\end{document}
+
