@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+set -e
+
+function help() {
+    echo "Usage: $0 [OPTIONS] EXTENSION DIRECTORY
+     -s     Overwrite files
+     -n     Move files that doesnt match the word
+     -h     Show this message"
+}
+
+while getopts ":sn" opt; do
+    case "$opt" in
+        s) overwrite=true;;
+        n) reversed=true ;;
+        \?) help; exit 0 ;;
+    esac
+done
+
+shift "$((OPTIND -1))"
+
+extension=$1
+dirname=$2
+
+[[ ! "$extension"  || ! "$dirname" ]] && help && exit 1
+
+echo "Insert word to find: "
+read word
+
+[[ "$reversed" ]] && reversed="-v"
+[[ "$overwrite" ]] && overwrite="-f" || overwrite="-i"
+
+list="$( grep $word *.$extension -l -s $reversed )"
+mv $overwrite -t "$dirname" ${list[@]}
+
+echo "Done!"

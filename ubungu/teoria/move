@@ -1,0 +1,59 @@
+#!/usr/bin/bash
+
+set -e
+
+function usage() {
+    echo "$0 <extension> <dirname>"
+    exit 1
+}
+
+
+reversed=0
+overwrite=0
+
+for arg in $@; do
+    case $arg in
+        -s)  overwrite=1;;
+        -n)  reversed=1;;
+        *)
+            if (! $extension) then
+                extension=$arg
+            else
+                if (! $directory ) then
+                    directory=$arg
+                fi
+            fi
+            ;;
+    esac
+
+done
+
+directory=$2
+extension=$1
+
+[[ ! $directory ]] && usage
+[[ ! $extension ]] && usage
+
+if (test ! -d $directory) then
+    echo "Directory $directory not found, creating..."
+    mkdir -p $2
+fi
+
+
+echo "Insert word to find: "
+read word
+
+if ( test "$reversed" -eq 1 ) then
+    list="$(grep $word *.$extension -l -s -v)"
+else
+    list="$(grep $word *.$extension -l -s)"
+fi
+
+for file in $list; do
+    echo "Moving $file"
+    if ( test "$overwrite" -eq 1) then
+        mv -f $file $directory
+    else
+        mv -i $file $directory
+    fi
+done

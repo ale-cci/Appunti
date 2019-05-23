@@ -1,0 +1,415 @@
+[Legenda]
+     : All'inizio di una riga indica una nota
+     ==[ MACRO-ARGOMENTO ]==
+     == ARGOMENTO ==
+
+===[ Evoluzione e Strutture ]===
+
+ Tipi di sistemi:
+ * Isolati         - Computer Offline
+    batch: Input > Processing > Output
+
+ * Centralizzati   - Google
+    Remote job entry
+    Time-Sharing
+
+ * Decentralizzati - blockchain
+    Logging
+
+ * Distributiti    - Servers
+    LAN
+    WLAN
+
+    Vantaggi:
+    > + Capacita' di elaborazione
+    > Tolleranza al guasto ( Un nodo della rete puo mancare)
+    > Sharing: I dati diventano patrimonio comune (DB)
+
+ SO nasce come stratificazione successiva di funzioni per aumentare efficienza e semplicita' d'uso della macchina
+
+ = Techiniche di gesione di un sistema di calcolo =
+
+ * Monoprogrammazione:
+    I processi vengono eseguiti sequenzialmente, ottenendo il completo controllo della CPU ed HW fino a quando non termina
+    1 processo alla volta puo essere eseguito
+
+    Il sistema non e' sfruttato completamente, in particolar modo durante I/O
+
+ * Multiprogrammazione:
+    Gestione simultanea di uno o piu processi per aumentare il THR
+    Le risorse sono meglio utilizzate in quanto si riducono i tempi morti
+
+    Cresce complessita', e sono necessari algoritmi di protezione delle risorse
+
+Time Sharing:  Elaboratore serve simultaneamente +Utenti, dotati di terminali. Dedicando ad Ogniuno le risorse del sistema per
+    un determinato quanto di tempo
+
+Gestione Batch:
+    Raggruppamento dei programmi in lotti per ottimizzare l'utilizzo delle risorse.
+
+Evoluzione sistema batch:
+    calcolatore satellite:
+        Compito di leggere/scrivere da nastri, ha potenza ridotta rispetto a CPU
+        nastri vengono letti da CPU, processati e riscritti su nastro
+
+    SPOOL(ing) "Simultaneous Perhipheral Operation On Line":
+        calcolatori satellite ~> Programmi di spooling
+        nastri ~> Disco
+
+        Disco utilizzato come buffer di grosse dimensioni, a cui possono accedere sia CPU che
+            dispositivi di IO (attraverso programmi di spooling)
+
+= CPU =
+ * Memoria:  int M[2**32 -1]
+ * Registri, tra cui
+    IR "Instruction Register"
+    PC "Program Count"
+    IRR "Interruption Request Register"
+    IMG "Interruption Mask Register" (abilitazione disabilitazione singole eccezioni)
+    AG "Abilitazione Generale"  (per interruzioni)
+
+
+
+    ``` System Initialization
+    IRR := 0
+    PC := 0
+    ```
+
+    ``` System Loop
+
+    while !halt:
+        if IRR == 0
+            IR = M[PC]        # Next Instruction
+            PC += 1
+        else
+            IR = M[0]         # Interrupt Instruction
+
+        exec(IR)
+    ```
+
+    ``` Interrupt procedure (M[0])
+    context-switch
+    x = interrupter-procedure
+    IRR & mask-interrupter
+
+    x()
+    context-restore
+    ```
+
+ * Interazione fra dispositivi I/O inizialmente attraverso le flag READY & BUSY,
+    successivamente attraverso interruptions
+
+ * Interrupt sono possibili anche via timer, ma meno efficenti per via dei context-switch
+
+= Interruzioni & Multiprogrammazione =
+    SO raccoglie interruzioni
+        * sincrone: software
+            eccezioni/trap per tentativo di azioni illegali (accesso ad aree di memoria non permisso)
+            SYSCALL
+
+        * asincrone:
+            powerfail: salvataggio urgente dello stato del sistema
+            time interrupt: clock
+            device interrupt: Errore su periferica
+
+    le interruzini possono essere abilitate e disabilitate singolarmente o attraverso un "flip-flop" di abilitazione generale
+
+    al termine di routine di interruzione, il SO sceglie in base all'algoritmo di scheduling a quale programma
+    presente in memoria affidare il controllo della CPU
+
+    Vengono utilizzate interruzioni via timer, per evitare che alcuni processi prendano il pieno controllo della CPU
+
+    Diverse interruzioni hanno diversi livelli di priorita' (Utilizzati per nested-interruptions);
+        durante il servizio di interrupt di livello L, le interruzioni con priorita' minore restano disabilitate
+
+    Lo stato della CPU viene salvato via Stack
+
+    Per questo e' necessario:
+     * Tabella di stati dei dispositivi
+     * Sospendere programmi che vogliono accedere a risorse al momento impegnate
+     * Algoritmi di gestioone delle risorse
+     * Protezione memoria utilizzata dal programma
+
+    Stato dei processi:
+        > Running
+        > Ready: Waiting in CPU
+        > Idle: Bloccato ad esempio per IO
+
+= PCB "Process Control Block" =
+ :Necessario per il Context-Switch
+ :Accessibile solo dal kernel
+
+ * Stato di un processo {Running, Ready, Idle}
+ * Program Counter (PC)
+ * Registri della cpu
+ * Memory limits
+ * List of opened files
+
+= Sistema di protezione =
+    All'HW viene affidata l'error detection per indirizzi di memoria, segnalando eventuali eccezioni al SO via trap
+    Diritto d'accesso Pair(resource, perms)
+    Lista capabilities oggetti ed operazioni CONSENTITE su dominio
+
+    :file descriptor sono capabilities, Pair no!
+
+
+    Sistema di protezione richiede diversi livelli di funzionamento della CPU:
+    * Supervisor
+        I/O
+        modifica registri per partizioni logiche di memoria
+        manipolazione interrupt
+        halt
+
+    * User
+
+    // ci possono essere anche altri modi al posto dei precedenti (0:Kernel, 1&2:IO, 3:User)
+
+    Cambio di mode eseguito via interruption
+    * User > Supervisor: Sincrona o Asincrona
+    * Supervisor > User: Sincrona da parte del SO prima di eseguire un processo Utente
+
+    Per la protezione della memoria vengono generati ed assegnati a processi degli indirizzi virtuali;
+    In questo modo il processore accede da parte del processo ad un indirizzo logico di memoria, limitato
+    da un upper&lower bound
+
+    Esecuzioni di operazioni IO sono privilegiate. Possono essere eseguite dai programmi utente solo attraverso SYSCALL
+
+= SYSCALL =
+ i parametri vengono passati o sui registri o tramite puntatore a struttura dati (Come in C)
+
+= STRUTTURA SO =
+* User
+* dynamic libraries, shell commands
+* syscall interface
+* kernel interface
+* hw
+
+= KERNEL =
+    Interfaccia tra SO & HW
+    Provvede allo scheduling della CPU
+    Fornisce strumenti per sincronizzazione e comunicazione tra processi
+
+= Virtualizzazione =
+    Ha lo scopo di astrarrre dall'HW
+    Attraverso essa una singola piattaforma puo' venire suddivisa da + sistemi operativi garantendo isolamento e stabilita
+
+    Vantaggi:
+    * Stesso HW per piu SW differenti
+    * Isolamento ambienti di esecuzione
+    * +SO Su stessa macchina
+    * Semplicita' nel trasportare macchine virtuali su macchine fisiche
+
+
+    [Emulazione] esegue applicazioni scritte per un altro SO emulando le chiamate di sistema e funzionalita'
+
+===[ Sistemi in multiprogrammazione ]===
+
+= Modello ad ambiente globale =
+    Le interazioni avvengono attraverso una memoria comune a tutti i processi.
+    I processori possono comunque avere una memoria privata
+
+    * Competizione:
+        :Sync indiretta o implicita
+        Competizione avviene principalmente per il numer limitato di risorse del sistema che non possono essere utilizzate
+            contemporaneamente
+        La sincronizzazione non e' desiderata ma a volte e' necessaria
+
+    * Cooperazione:
+        :Sync diretta o esplicita
+        Comprende tuttle le interazioni all'interno della logica dei programmi
+        Richiede lo scambio di informazioni, di conseguenza la sincronizzazione tra i processi
+
+    * Interferenza:
+        Non prevista
+        Provocata da errori di programmazione
+        Puo' dipendere dalla velocita' relativa tra i processi (errori tempo-dipendenti)
+
+        1.
+
+        2. Interferenze tempo-dipendenti
+
+        Interferenze di tipo 1. semplificata se e' formito un meccanismo di protezione degli accessi
+        Multiprogrammazione strutturata x interferenze del tipo 2.
+
+
+        > Mutua esclusione: Non piu di un processo alla volta puo' accedere a variabili comuni
+        > Sezione Critica: Sequenza di istruzioni con la quale un processo accede/modifica variabili comuni
+            1.Livello: (Utente) wait & signal
+            2.Livello: (SO) lock & unlock
+            3.Livello: (HW) TSL i.e. Test Set Lock
+Semafori:
+    Variabile (Integer > 0)
+    Ammesse solo le SYSCALL Wait & Signal
+
+    Wait(s):
+        lock(t)
+            s = 0 -> processo WAIT ed inserito nella coda dei dei processi in attesa della risorsa
+            s = 1 -> s := 0
+        unlock(t)
+
+    Signal(s):
+        lock(t)
+            se processo in coda, allora processo READY e rimosso dalla lista
+            altrimenti s = 1
+        unlock(t)
+
+    :s=1 indica che la risorsa e' libera
+    :wait & signal assicurano la mutua esclusione, devono essere atomiche, percio si basano su funzioni atomiche lock & unlock
+
+= Modello a scambio di messaggi =
+ :Modello puo' essere utilizzato anche con memoria comune, utilizzata per realizzare i canali di comunicazione
+ :Si basa sulle primitive send & receive
+
+    Sistema visto come un insieme di processi, operanti in abiente locale, non accessibile da altri processi;
+    Ogni processore ha una memoria privata
+    Ogni forma di interazione avviene tramite scambio di messaggi
+    Le risorse non sono direttamente accessibili dai processi, per accedervi, o si delega un processo servitore, o vengono
+        richieste, e restituite attraverso messaggi
+
+    struct Message type { origine, destinazione, contenuto }
+
+    Per semplificare si suppone che ad ogni processo sia associata una coda di messaggi in arrivo
+
+    func send(m Message) = messageQueue.push(m)
+    func recv(m Message) = messageQueue.pop(m)
+
+    Comunicazione & Sincronizzazione sono necessarie tra processi
+
+
+    Target dei messaggi:
+    > Diretto/Esplicito: simmetrico/asimmetrico
+     : Target identifica univocamente una coda di messaggi di un processo
+       func send(m Message, destination Target)
+       func recv(m Message, source Target)
+
+    > Indiretto/Globale: mailbox/porte
+     * Mailbox
+         : Mailbox = broadcast a tutti i processi che possono ricevere una richiesta su essa
+         : appena il messaggio e' ricevuto da un processo viene reso non-disponibile agli altri processi
+     * Port
+         : Tutte le receive di una porta appartengono ad un solo processo
+         : Soluzione a Client-Server
+
+       func send(m Message, destination Mailbox/Port)
+       func recv(m Message, source Mailbox/Port)
+
+   Pair(destination, source) e' detto canale di comunicazione;
+   * Schema Simmetrico: source e destination sono entrambi espliciti (ex. Pipeline)
+   * Schema Asimmetrico: solo uno tra source e destination e' di tipo Target, l'altro e' Mailbox/Port (ex. Client-Server)
+
+    Tipo di sincronizzazione tra processi comunicanti:
+    > Asincrona
+      * Send: messaggio inviato e basta da parte del client
+
+    > Sincrona
+      * Send [Rendez-vous semplice]:
+        mittente si blocca in attesa che il messaggio sia ricevuto
+        Invio del messaggio e' un punto di sincronizzazione tra client e server, dato che lo scambio delle informazioni avviene
+        solo quando entrambi sono pronti a comunicare
+
+      * Send [Rendez-vous esteso] o RPC "Remote Procedure Call" (lato client):
+        Sempre seguita da Receive
+        Client invoca una procedura nel server e ne attende la response
+
+      * Accept RPC (lato Server):
+        Viene spesso combinata con "comunicazioni selettive" (pathname) e consente di selezionare la richiesta del client
+        "Incapsula" le funzinoi all'interno del server in API, chiamabili a lato client a grosso modo come una libreria
+
+      * Receive:
+        Bloccante (in assenza di messaggi su canale). E' punto di sincronizzazione
+
+= Deadlock =
+    Risorse riusabili: dopo il loro utilizzo, altri processi possono farne uso (file)
+    Risorse consumabili: non utilizzabili da altri processi al termine (buffer)
+
+    Analizzato con "Grafo di Allocaizone delle Risorse":
+     - V = {Processi..., Risorse...}
+     - E = { (Pi, Rj)..., (Rj, Pi)...}
+
+    (Pi, Rj): Il Processo #i richiede un istanza della Risorsa #j
+    (Rj, Pi): Un istanza della Risorsa #j e' allocata nel Processo #i
+
+    :Quando un istanza di una risorsa e' allocata (Pi, Rj) ~> (Rj, Pi)
+    :Quando un processo ha finito di usare una risorsa (Rj, Pi) e' eliminato
+
+    Il deadlock si manifesta quando tutte le istanze di un tipo di risorsa sono allocate in un processo ed e' presente
+    un ciclo nel grafo
+
+    Le 4 condizioni di Havender per il deadlock:
+        * Mutua Esclusione
+        * Hold & Wait delle risorse
+        * Assenza di revoca delle risorse
+        * Attesa circolare (i.e. ciclo nel grafo)
+     :Il deadlock si verifica solo se si verificano tutte e 4
+    =. Strategie per evitarlo .=
+
+    1. Ignorare il problema (evitato a codice di SO)
+    2. Rilevarlo e risolverlo (detection & recovery)
+        Eseguito periodicamente nel SO, controlla il grafo di allocazione delle risorse
+        Nel caso di deadlock si terminano l'uno o + processi coinvolti
+    3. Prevenirlo (Algoritmo banchiere):
+        Identificare situazioni rischiose e negare assegnazione risorse quando la loro attribuzione potrebbe portare a deadlock
+        Richiede di conoscere a priori le risorse utilizzate
+        Eseguito ad ogni richiesta di allocazione di risorsa libera
+    4. Prevenzione statica:
+        Negare una delle 4 condizioni di Havender (normalmente il ciclo)
+        Utilizzato all'interno del SO
+
+
+
+== Scheduling dell CPU ==
+
+Risorse piu importanti per il SO sono la CPU e la memoria principale
+
+* Scheduler: Decide a quali processi assegnare il controllo della CPU.
+    Fa parte del SO
+* Algoritmo di scheduling: Criterio di scielta dei processi
+
+
+
+Burst di CPU:
+* Programma di I/O Bound ha molti burst brevi
+* Programma CPU Bound ha pochi burst lungi
+
+Long term Scheduler (job scheduler):
+    Determina quali processi caricare in memoria. Interviene ogniqualvolta un processo lascia il sistema
+    Non presente in sistemi time-sharing, dato che i processi entrano direttamente in memoria centrale.
+
+Short term Scheduler:
+    Seleziona quale tra i processi in memoria (ready to execute) assegnare alla CPU, interviene molto frequentemente, quindi deve essere molto efficente
+
+
+Scheduling non-preemptive:
+    La CPU gli rimane fino a quando il processo non termina oppure va a fare I/O
+
+Scheduling preemptive:
+    Oltre a cedere la CPU nei casi del non preemptive, la CPU gli viene tolta se l'esecuzione super un certo quanto di tempo cronometrato da clock esterno
+
+/? Controlla riassegnazione della CPU a slide #93
+
+Algoritmi di Scheduling:
+* Criteri massimizzabili dai vari algoritmi:
+    - Turnaround time: Quanto tempo un processo deve aspettare prima di essere eseguito
+    ! Waiting time: Tempo speso in coda
+    - Response Time
+    - Fairness: No privilegi tra processi da eseguire
+    - CPU Usage
+    - Thruput (THR):
+
+
+* Algoritmi:
+ [S] = Soggetto a Starvation
+    > non-preemptive
+        - FCFS: FIFO, pessima riguardo a tempo d'attesa ma fair
+        - SJF [S]: Ottimo riguardo a Waiting Time
+
+
+    > preemptive
+        - SRTF[S]: SJF preemptive
+        - PQ  [S]: nel sistema favorisce i processi I/O. Processi a priorita' dinamica per evitare starvation, penalizzare processi CPU-Intensive
+        - Round Robin: (tipico di sistemi time-sharing), Quanto di tempo (10-100ms) prefissato ai processi + Coda Circolare. Penalizzato dal tempo di context-switch
+
+Per gestione di job in fore/back-ground in maniera ottimale, i processi si suddividono su due code, ogniuna con proprio algoritmo di scheduling
+In alcuni casi e' consentito ai job di cambiare coda (ex. se troppo CPU-intensive o attende da molto tempo)
+
+/? Scheduling in UNIX da #108
