@@ -1,7 +1,7 @@
 *.aux
 *.log
-*.pdf
 *.fls
 *.synctex.gz
 *.fdb_latexmk
+*.pdf
 placeholder.jpg
