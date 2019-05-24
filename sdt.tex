@@ -2,14 +2,16 @@
 
 \usepackage{graphicx}
 \usepackage{wrapfig}
+\usepackage{circuitikz}
 \usepackage{titling}
 \usepackage{fancyhdr}
 \usepackage{mathtools}
 \usepackage{scalerel}
-
+\usepackage{amssymb}
 \usepackage{stackengine}
 \usepackage[parfill]{parskip}
 \usepackage[margin=1in]{geometry}
+\usepackage[makeroom]{cancel}
 
 \date{2\textsuperscript{o} Semestre 2018/19}
 \title{Sistemi di Telecomunicazione}
@@ -33,6 +35,11 @@
   \strut\kern9pt$\rightarrow$\smash{\rlap{$~\displaystyle#4$}}}%
 }
 
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator\erf{erf}
+\DeclareMathOperator\snr{SNR}
+\DeclareMathOperator\erfc{erfc}
 
 
 \begin{document}
@@ -363,9 +370,313 @@ Se l'informazione da trasmetter non \'e Analogica ma digitale, la modulazione si
     \end{itemize}
 \end{minipage}
 
-\newpage
+\subsection{Phase Shift Keying (PSK)}
+\[
+    \text{PSK}(t) =
+    \begin{cases}
+        \sin (2\pi f t)\\
+        \sin (2 \pi f t + \pi)
+    \end{cases}
+\]
+\begin{itemize}
+    \item More complex
+    \item Strong against interference
+\end{itemize}
+
+\subsection{Binary Phase Shift Keying (BPSK)}
+\[
+    \text{BPSK}(t) =
+    \begin{cases}
+        \sqrt{\frac{2E_b}{T_b}} \cos (2\pi f_c t + \delta_c)\\
+        \sqrt{\frac{2E_b}{T_b}} \cos (2\pi f_c t + \pi \delta_c)
+    \end{cases}
+    \qquad \text{con} \quad 0 < t < T_b
+\]
+\begin{itemize}
+    \item $T_b$ Tempo di Bit
+    \item $E_b$ Energia di Bit
+\end{itemize}
+
+\subsection{Quadrature Phase Shift Keying (QPSK)}
+La fase della portante assume 5 valori separati di $\frac{\pi}{2}$. Ogni fase corrisponde ad una coppia unica di bit
+
+\[
+    S_{\text{QPSK}}(t) = \sqrt{{2E_b}{T_b}} \cos (2\pi f_c t + i\frac{\pi}{2}) \qquad \text{con} \quad i \in 0..3
+\]
+
+La larghezza di banda \'e la met\'a della BPSK
+
+Pu\'o essere espressa come 2 BPSK, il bit-error-rate rimane lo stesso ma la Banda utiilzzata raddoppia
+
+(X: Diagramma a costellazione)
+
+\subsection{Multi-? Phase and Amplitude modulation}
+(X: 16Qam, 16psk 16apsk )
+Pi\'u i punti sono vicini, pi\'u sono sensibili al rumore
+
+\subsection{Capacit\'a di Canale AWGN (Additive White Gaussian Noise)}
+\begin{minipage}{0.4\textwidth}
+\[
+    C = B\log_2(1 + \frac{P_{in}}{P_{out}})
+\]
+\[ P_N = B \dot N_0 \qquad \rho \coloneqq \frac{R}{B} \]
+\[
+    \begin{cases}
+        C = B\log_2\left( 1 + \frac{P_{in}}{BN_0}\right)\\
+        R \le C
+    \end{cases}
+\]
+\[  \frac{R}{B} \le \log_2\left(1 + \frac{E_b \cdot R}{N_0B}\right) \]
+\[  \frac{R}{B} \le \log_2\left(1 + \frac{R}{B}\gamma_b\right) \]
+\[ \rho \le \log_2 \left( 1 + \rho \gamma_b\right) \]
+
+\framebox{\textbf{Rumore Bianco} \( \sim \mathcal{N}(0, \sigma^2) \rightarrow n(t) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{t^2}{2\sigma^2}} \)}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+    \begin{itemize}
+        \item $P_{in}$: Potenza Segnale in ingresso
+        \item $B$: Banda del Canale
+        \item $P_N$: Potenza del Rumore Bianco (Gaussiano)
+        \item $N_0$ Densit\'a spettrale di potenza del rumore
+        \item $\rho$: Efficenza Spettrale
+        \item $R$: Data Rate Utilizzato
+        \item $\gamma_b$: Signal Noise ratio $\coloneqq \frac{E_b}{N_0}$
+    \end{itemize}
+\end{minipage}
+
+\subsection{Calcolo Errore su BPSK}
+Ricordando che, da definizione:
+\[ \erf(x) = \frac{2}{\sqrt{\pi}}\int_0^x e^{-t^2} dt\]
+\[ \erfc(x) = 1-\erf(x) = \frac{2}{\sqrt{\pi}}\int_x^{+\infty} e^{-t^2}dt\]
+Calcolo l'errore come:
+
+\begin{minipage}{0.4\textwidth}
+(Grafico)
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\[ P_e = \int^0_{-\infty} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(n - \sqrt{E_b})^2}{2\sigma^2}}dn =\]
+\[ = \int^{-\sqrt{E_b}}_{-\infty}\frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{n^2}{2\sigma^2}}dn =\]
+\[ \textit{Per Simmetria} \rightarrow = \int^{+\infty}_{\sqrt{E_b}}  \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{n^2}{2\sigma^2}}dn =\]
+\[\framebox{\(\begin{split}
+    z = \frac{n}{\sigma}\\
+    \sigma dz = dn
+    \end{split} \)} \rightarrow =
+    \int^{+\infty}_{\frac{\sqrt{E_b}}{\sigma}}  \frac{\cancel{\sigma}}{\sqrt{2\pi \cancel{\sigma^2}}} e^{-\frac{z^2}{z}}dz =\]
+\[ = \frac{1}{2} \erfc\left(\sqrt{\frac{E_b}{2\sigma}}\right)\]
+\end{minipage}
+
+Per simmetria, stessi calcoli per $-\sqrt{E_b}$, Quindi:
+\begin{itemize}
+    \item Trasmetto $-\sqrt{E_b}$ ricevo $+\sqrt{E_b}$:
+        \[ P_e \big|_{-\sqrt{E_b}} = \frac{1}{2} \erfc\left(\sqrt{\frac{E_b}{2\sigma}}\right)\]
+    \item Trasmetto $+\sqrt{E_b}$ ricevo $-\sqrt{E_b}$:
+        \[ P_e \big|_{+\sqrt{E_b}} = \frac{1}{2} \erfc\left(\sqrt{\frac{E_b}{2\sigma}}\right)\]
+\end{itemize}
+Siccome sono due eventi indipendenti:
+\[ P_{-E_b} = P_{+E_b} = \frac{1}{2} \]
+\[ P_e = P_e \big|_{-E_b} \cdot P_{-E_b} + P_e \big|_{+E_b} \cdot P_{+E_b}= \frac{1}{2} \erfc\left(\sqrt{\frac{E_b}{2\sigma}}\right) \]
+
+
+\subsection{Determinare Simbolo ricevuto da QPSK}
+(x: Grafico simbolo)
+Chiamato $r$ il simbolo ricevuto
+\[ R = S+N \]
+\[ \text{con} \quad S \in {s_1, s_2, s_3, s_4 } \qquad P{S = s_i} = \sqrt{1}{4}\]
+\[ N \sim \mathcal{N}_{\mathbb{C}}(0, \sigma^2)\]
+
+Ricevuto $R=r$, il problema diventa trovare il simbolo ($\bar{s}$) che minimizzi la probabilit\'a d'errore
+
+\[ \bar{s} = s_i \quad \text{t.c.} \quad i = \argmax_{j \in 1\ldots 4} P\{ S=s_j \big| R=r\}  = \]
+Per la formula di Bayes Mista:
+\[= \argmax_{j \in 1\ldots 4} \frac{f_R(r | S=s_j) P\{ S=s_j\}}{f_R(r)} =\]
+Dato che gli altri termini non dipendono da $j$:
+\[= \argmax_{j \in 1\ldots 4} f_R(r|S=s_j) =\]
+$R = S+N \rightarrow R$ \'e gaussiana a media $s_j$
+\[ = \argmax_{j \in 1\ldots 4} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(r - s_j)^2}{2\sigma^2}} \]
+Siccome $\exp$ \'e strettamente crescente:
+\[= \argmax_{j \in 1\ldots 4} -(r - s_j)^2 = \framebox{$\argmin_{j \in 1 \ldots 4} | r - s_j |$} \leftarrow\text{Distanza Euclidea}\]
+
+\section{Wired vs Wireless}
+Utilizzando gli stessi approcci di una rete cablata, su una rete wireless, si manifestano due principali problemi:
+\begin{itemize}
+    \item Sul Wireless la Banda \'e molto pi\'u ridotta
+    \item Il canale \'e pi\'u soggetto a fading che collision tra frame
+\end{itemize}
+
+Soluzioni:
+\begin{itemize}
+    \item TDMA: Reserves time slots
+    \item FDMA: Reserves Frequencies
+    \item CDMA: Reserves Expansion Codes
+    \item Random Access Techniques
+\end{itemize}
+
+\subsection{FDMA}
+Frequency Division Multiple Access: Utenti suddivisi in frequenza
+\subsubsection{FDD}
+Frequency division Duplex: Uplink e Downlink divisi in frequenze
+
+(X: Grafico)
+
+Pi\'u suscettibile ad interferenze in frequenza
+\[ N_{\textit{max}} = \frac{B}{B_c K} \]
+
+\subsubsection{TDD}
+Uplink e Downlink divisi in intervalli di tempo
+
+(X: Grafico)
+
+\subsection{TDMA}
+Time Division Multiple Access: Ad ogni utente \'e assegnato uno slot di tempo
+
+(X: I due grafici)
+
+\subsection{CDMA}
+Code Division Multiple Access: Assegna ad ogni utente una sequenza di chip specifica e unica
+
+\underline{Es}: Maximal length sequences $\rightarrow$ Periodiche con periodo $2^m -1$
+
+Chiamato $x(n)$ un segnale (discreto) periodico
+
+\begin{minipage}{0.5\textwidth}
+\[ r_{xx}(l) = \sum^{2^m-1}_{n=0}  x(n)\dot x(n -l)\]
+\[ r_{xx}(0) = \sum^{n-1}_{n=0} x^2(n) = 2^m \]
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    (X: Grafico coi punti)
+\end{minipage}
+
+$r_{xx}(1)= 0$ Siccome mediamente il numero di $+1$ \'e uguale al numero di $-1$
+
+\subsection{DSSS Modulation}
+Direct Sequence Spread Spectrum
+
+Chiamata $m(t)$ la sequenza di bit da trasmettere
+
+\[S(t) = \sqrt{\frac{2E}{T}} m(t)\cos(2\pi f_c t + \theta) = \sqrt{E}\,m(t)\sqrt{\frac{2}{T}}\cos(2\pi f_c t + \theta)\]
+
+Schematizzato:
+
+(X: Schema modulazione)
+
+\[r(t) = m(t)p(t)\sqrt{\frac{2E}{T}}\cos(2\pi f_c t) + A_{int}(t) \]
+\[p(t)r(t) = \cancel{p(t) p(t)}m(t) \sqrt{\frac{2E}{T}}\cos(2\pi f_c t) + p(t)A_{int}(t)
+= \sqrt{\frac{2E}{T}}\cos(2\pi f_c t) + p(t)A_{int}(t) \]
+
+Se N utenti vogliono trasmettere informazioni assegno ad ogniuno id essi un codice di spreading \underline{unico}
+
+(Assumendo che tutti gli N codici di spreading siano quasi ortogonali tra di loro: $r_{xy} = 0$ nell'autocorrelazione con $x \ne y$
+
+\( S_N(t) = \sum^N_{i=1} = m_i(t)p_i(t)s(t)\), Per ottenere $m_k(t)$, basta moltiplicare per il corrispettivo codice di spreading $p_k(t)$
+
+\[ p_k(t) m_k(t) + \sum^N_{i \neq k} m_i(t)\cancelto{\approx 0}{p_i(t)p_k(t)}s(t) \]
+
+\subsection{Vantaggi del CDMA}
+\begin{itemize}
+    \item Mis different users without any specificcoordination
+    \item Nodes doesn't need to be syncronized
+    \item Strong against noise
+\end{itemize}
+\subsubsection{Numero utenti supportati dal CDMA}
+\begin{minipage}{0.5\textwidth}
+    \[ \snr = \frac{P_S}{P_{th} + P_{int}} \]
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+        \item $P_S$: Potenza di Segnale
+        \item $P_{int}$: Potenza Interferenza
+        \item $P_{th}$: Potenza termica = $FKT_0R_b$
+            \begin{itemize}
+                \item F Noise figure
+                \item K Costante di Boltzmann $= 1.38 \cdot 10^{-23}$
+                \item $T_0$ Temperatura Ambiente $= 290K$
+                \item $R_b$ Bit Rate
+            \end{itemize}
+    \end{itemize}
+\end{minipage}
+
+\[ \snr \approx \frac{P_S}{P_{int}} = \frac{g P_r}{(N+1) P_r} \xrightarrow{N \gg 1} \frac{g}{N} = \frac{B}{R_b N} \]
+
+Se viene richiesta una $\snr$ minima
+
+\begin{minipage}{0.5\textwidth}
+\[
+    \begin{cases}
+        \snr \ge \snr_{min}\\
+        \snr = \frac{B}{R_b N}
+    \end{cases} \Rightarrow N_{max} = \frac{B}{R_b \snr_{min}}
+\]
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+        \item $N$: Numero di interferenze
+        \item $B$: larghezza della banda $=gR_b$
+        \item $P_r$: Potenza ricevuta
+        \item $g$: Spreading factor ($> 1$)
+    \end{itemize}
+\end{minipage}
+
+$N_{max}$ \'e il massimo numero di utenti attivi contemporaneamente, \'e possibile migiorare le prestazioni del CDMA, modificando la disposiizone delle antenne trasmettitrici
+
+\begin{minipage}{0.5\textwidth}
+\[ N_{max} = \frac{B}{R_b \snr_{min}} K \qquad \text{con} \quad K = \frac{G_A G_\nu}{H_0}\]
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+        \item $H_0$ Interferenza antenne vicine
+        \item $G_A$ Sectorization Gain factor
+        \item $G_\nu$ Voice activity factor $\approx 2.5$ (pause nella conversazione)
+    \end{itemize}
+\end{minipage}
+
+\section{Rumore Termico}
+Bianco, a media nulla
+
+\begin{minipage}{0.3\textwidth}
+    \begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) to[R, o-o, l=$R$, v=$V$] (0, 2.5);
+    \end{circuitikz}
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.2\textwidth}
+    \[\bar{V} = 0\]
+    \[ V^2 = \frac{2\theta^2 K^2 T^2}{3h}T \]
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{itemize}
+        \item $R$: Resistenza
+        \item $K$: Costante di Boltzman $1.37 \cdot 10^{-23}$ [$\frac{W_s}{K}$]
+        \item $h$: Costante di plank $6.62\cdot10^{-34}$ [$Ws^2$]
+        \item $T$: temperatura [$K$]
+    \end{itemize}
+\end{minipage}
+
+$V$ ha una distribuzione Gaussiana:
+\[ \bar{V} = 0 \]
+\[ \bar{V^2} = \text{VAR}[V] \]
+
+$S_V(f)$: (Densit\'a spettrale) \'e approssimabile ad una costante fino a valori di $f \approx 10^{12}Hz$
+
+Da un punto di vista ingegneristico:
+\[ S_V(f) \approx \frac{KT}{2} = \frac{N_0}{2} \]
+Potenza di rumore:
+\[ P = \cancel{2}B\frac{N_0}{\cancel{2}} = BN_0 = KT_0B \]
+
+Banda di rumore equivalente su filtro con risposta $H(f)$:
+\[ P_{N output}  = \int^{+\infty}_{-\infty} \frac{N_0}{2}|H^2(f)| df\]
+
+$B_{eq} \coloneqq$ Banda di un filtro con risposta in frequenza rettangolare, ed in uscita la stessa potenza di rumore
+\[ P_{N out} = B_{eq} \cdot \frac{N_0}{2} \]
+
+Eguagliando le due espressioni otteniamo che:
+
+\[ B_{eq} \cancel{\frac{N_0}{2}} = \int^{+\infty}_{-\infty} \cancel{\frac{N_0}{2}} | H(f) | df \]
+
+Temperatura Equivalente di Rumore: Varie sorgenti di rumore si comportano similmente al rumore termico
 
 %% -- Section --
+\newpage
 \section{Random Access Protocols}
 
 Tutti i protocolli ad accesso multiplo trasmettono su un unico canale.
