@@ -2,8 +2,10 @@
 
 \usepackage{graphicx}
 \usepackage{wrapfig}
+\usepackage{pgfplots}
 \usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{titling}
+
 \usepackage{fancyhdr}
 \usepackage{mathtools}
 \usepackage{scalerel}
@@ -13,6 +15,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[makeroom]{cancel}
 
+\usepgfplotslibrary{fillbetween}
 \date{2\textsuperscript{o} Semestre 2018/19}
 \title{Sistemi di Telecomunicazione}
 \author{ale-cci }
@@ -452,12 +455,25 @@ Calcolo l'errore come:
 
 \begin{minipage}{0.45\textwidth}
     \begin{tikzpicture}
-        \draw [thick, ->] (-3, 0) -- (5, 0);
-        \draw [thick, ->] (0, -1) -- (0, 5);
-        \draw (-2, 0) parabola (2, 4);
+        \begin{axis}[
+            unit vector ratio*=1 1 1,
+            xticklabel=\empty,
+            yticklabel=\empty,
+            axis lines = middle,
+            ymax = 4
+            ]
+            \addplot[color=red, name path = gauss] {3*exp(-((x)^2)/5)};
+
+            \path[name path=axis] (axis cs:-4,0) -- (axis cs:0,0);
+            \node [ label=$-\sqrt{\frac{E_b}{2}}$] at (axis cs: -4,0){};
+            \addplot[color =blue, fill opacity =0.3]
+                fill between [
+                of = gauss and axis,
+                soft clip = {domain=-4: 0}];
+        \end{axis}
     \end{tikzpicture}
 
-    (X: Grafico Gaussiana)
+    (X: Da controllare su slide)
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \[ P_e = \int^0_{-\infty} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(n - \sqrt{E_b})^2}{2\sigma^2}}dn =\]
@@ -680,6 +696,32 @@ Eguagliando le due espressioni otteniamo che:
 \[ B_{eq} \cancel{\frac{N_0}{2}} = \int^{+\infty}_{-\infty} \cancel{\frac{N_0}{2}} | H(f) | df \]
 
 Temperatura Equivalente di Rumore: Varie sorgenti di rumore si comportano similmente al rumore termico
+
+\[ F(f) = \frac{S_{nf}(f)}{G S_{ni}(f)} \rightarrow F = \frac{P_{no}}{G P_{ni}}\]
+
+\[
+\begin{cases}
+    G P_{Ni} F = P_{No}\\
+    P_{No} = (P_{Ni} + kT_eB)G
+\end{cases}
+\]
+\[ \cancel{G} P_{Ni} F = (P_{Ni} + KT_e B) \cancel{G} \]
+\[ F = \frac{P_{Ni} + kT_e B}{P_{Ni}} = \frac{\cancel{k}T_0\cancel{B} + \cancel{K}T_e\cancel{B}}{\cancel{k}T_0\cancel{B}} = \frac{T_0 + T_e}{T_0} \leftrightarrow T_e = T_0 (F-1)\]
+
+\section{Confronto fra T/F/C-DMA}
+\begin{itemize}
+    \item \textbf{TDMA} \'e pi\'u flessibile del \textbf{FDMA}, siccome il numero di utenti non \'e fissato a priori
+    \item \textbf{TDMA} ha problemi di sincronizzazione tra gli utenti che devono trasmettere
+    \item \textbf{CDMA}, Numero di utenti non \'e prefixxzto, basta associare ad ogniuno di essi una QoS (Quasi ortogonal Spread signal)
+    \item \textbf{FDMA} lavora con bande molto strette $\rightarrow$ molto susciettibile a forti disturbi a breve frequenza
+    \item \textbf{CDMA} pi\'u resistente alle forti interferenze su breve frequena, siccome vengono ``schiacciate'' dalla sequenza di spreading
+\end{itemize}
+\subsection{Handoff comparison}
+\begin{itemize}
+    \item \textbf{FDMA}: Brusco cambio di frequenza con la quale si trasmette
+    \item \textbf{TDMA}: Mobile assisted Il client informa la BSC su come cambia il segnale
+    \item \textbf{CDMA}: Entrambe le celle usano la stessa frequenza, se viene mantenuto lo stesso codice di spreading non ci sono problemi
+    \end{itemize}
 
 %% -- Section --
 \newpage
@@ -909,7 +951,22 @@ $\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \te
 
                     \begin{figure}[h]
                         \centering
-                        \includegraphics[width=3in]{img/classe_conversazionale_grafico.jpg}
+
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                unit vector ratio*=1 1 1,
+                                xmax=2,
+                                xmin=-1,
+                                xticklabel=\empty,yticklabel=\empty,
+                                axis y line = left,
+                                samples=200,
+                                axis x line = bottom,
+                                width=10cm]
+                                \addplot[color=red]
+                                    {exp(-((x)^2/0.01))};
+                            \end{axis}
+                        \end{tikzpicture}
+
                         \caption{Classe Conversazionale}
                     \end{figure}
                 \item \'e sopportabile la perdita di alcuni frame, ma non il ritardo eccessivo dell'arrivo di ogni frame
@@ -924,16 +981,28 @@ $\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \te
                     % Image 3
                     \begin{figure}[h]
                         \centering
-                        \includegraphics[width=3in]{img/streaming_grafico.jpg}
-                        \caption{Grafico Streaming}
-                    \end{figure}
-            \end{itemize}
+                            \begin{tikzpicture}
+                                \begin{axis}[
+                                    unit vector ratio*=1 1 1,
+                                    xmax=6,
+                                    xticklabel=\empty,yticklabel=\empty,
+                                    ymax=3,
+                                    axis y line = left,
+                                    axis x line = bottom,
+                                    width=10cm]
+                                    \addplot[color=red]
+                                        {exp(-((x)^2)/5)};
+                                \end{axis}
+                            \end{tikzpicture}
+                            \caption{Grafico Streaming}
+                        \end{figure}
+                \end{itemize}
 
-        \item \textbf{Interattiva}: Cadono i requisiti delle entit\'a informative, siccome non \'e piu presente un flusso di dati
-            \begin{itemize}
-                \item ottenere risposta da entit\'a remota
-                \item preservare integrit\'a dei dati
-            \end{itemize}
+            \item \textbf{Interattiva}: Cadono i requisiti delle entit\'a informative, siccome non \'e piu presente un flusso di dati
+                \begin{itemize}
+                    \item ottenere risposta da entit\'a remota
+                    \item preservare integrit\'a dei dati
+                \end{itemize}
 
         \item \textbf{Background}: Chiede solo di preservare l'integrit\'a dei dati, (Es: Download delle email in background)
 
