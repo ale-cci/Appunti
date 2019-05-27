@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+set -e
+
+PDFDIR="$PWD/pdf"
+
+case "$1" in
+    "pdf")
+        mkdir -p pdf
+        mkpdf="pdflatex -output-directory $PDFDIR"
+
+
+        echo "Building Elettronica..."
+        (cd elettronica && $mkpdf elettronica.tex >/dev/null)
+
+        echo "Building SDT..."
+        $mkpdf sdt.tex >/dev/null
+
+        echo "Building FCA..."
+        (cd fca && $mkpdf fca.tex >/dev/null)
+
+        print "\nFile creadted:"
+        ls -1X "$PDFDIR"/*.pdf
+    ;;
+
+    "clean")
+        (cd elettronica && rm -f *.pdf *.log *.aux)
+        rm -f *.pdf *.log *.aux
+        (cd fca && rm -f *.pdf *.log *.aux)
+        rm $PDFDIR/*.log $PDFDIR/*.aux
+        ;;
+esac
+
