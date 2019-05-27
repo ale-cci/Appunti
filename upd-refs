@@ -1,1 +1,2 @@
-cp *.pdf ~/pdfs/NOTE
+#!/usr/bin/env zsh
+cp **/*.pdf ~/pdfs/NOTE
