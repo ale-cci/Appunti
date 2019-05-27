@@ -2,6 +2,7 @@
 set -e
 
 PDFDIR="$PWD/pdf"
+LOCAL_PDF_DIR="$HOME/pdfs/NOTE"
 
 build_pdfs() {
     mkdir -p pdf
@@ -33,8 +34,8 @@ case "$1" in
         ;;
 
     "sync")
-        build_pdfs
-        cp "$PDFDIR"/*.pdf ~/pdfs/NOTE
+        mkdir -p $LOCAL_PDF_DIR
+        ln -t "$LOCAL_PDF_DIR" "$PDFDIR"/*.pdf
         ;;
 esac
 
