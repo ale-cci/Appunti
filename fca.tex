@@ -1,6 +1,8 @@
 \documentclass{article}
 
 \usepackage{mathtools}
+\usepackage[margin=1in]{geometry}
+
 \title{FCA}
 \author{ale-cci}
 
@@ -49,14 +51,12 @@ y(K) - y(K-1) + 0.24 y(K-2) = u(k)
 
 Grado di relativit\'a $g = m-n = 0$
 
-\[
-\begin{split}
+\begin{align*}
 Y(z) = -Z^{-1} Y(z) + 0.24 Z^{-2} Y(z) = U(z)\\
 Y(z) \cdot (1-Z^{-1} + 0.24 Z^{-2}) =  U(z)\\
 Y(z) = \frac{1}{1-Z-1 + 0.24 Z^{-2}}U(z) = \frac{Z^{-2}}{Z^2 - z + 0.24} U(z)\\
 n = 2, m=2 \Rightarrow \rho = n - m = 0
-\end{split}
-\]
+\end{align*}
 
 \subsection{Parte 3}
 \[

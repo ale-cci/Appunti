@@ -2,7 +2,7 @@
 
 \usepackage{graphicx}
 \usepackage{wrapfig}
-\usepackage{circuitikz}
+\usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{titling}
 \usepackage{fancyhdr}
 \usepackage{mathtools}
@@ -450,10 +450,16 @@ Ricordando che, da definizione:
 \[ \erfc(x) = 1-\erf(x) = \frac{2}{\sqrt{\pi}}\int_x^{+\infty} e^{-t^2}dt\]
 Calcolo l'errore come:
 
-\begin{minipage}{0.4\textwidth}
-(Grafico)
+\begin{minipage}{0.45\textwidth}
+    \begin{tikzpicture}
+        \draw [thick, ->] (-3, 0) -- (5, 0);
+        \draw [thick, ->] (0, -1) -- (0, 5);
+        \draw (-2, 0) parabola (2, 4);
+    \end{tikzpicture}
+
+    (X: Grafico Gaussiana)
 \end{minipage}
-\begin{minipage}{0.6\textwidth}
+\begin{minipage}{0.5\textwidth}
 \[ P_e = \int^0_{-\infty} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(n - \sqrt{E_b})^2}{2\sigma^2}}dn =\]
 \[ = \int^{-\sqrt{E_b}}_{-\infty}\frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{n^2}{2\sigma^2}}dn =\]
 \[ \textit{Per Simmetria} \rightarrow = \int^{+\infty}_{\sqrt{E_b}}  \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{n^2}{2\sigma^2}}dn =\]
@@ -1181,5 +1187,96 @@ In Uplink, anche se ogniuno ha una singola antenna, nel caso di Cooperazione vie
 
 Uplink max: $75Mbps$
 
-\end{document}
+%Appunti Mon 27 May 2019 10:23:18 AM CEST
+\section{Protocollo LoRa}
+Tecnologia (LPWAN: Low Power Wide Area Network), Bassto su modulazione CSS nel 2014
 
+Utilizzato a livello industriale per connettere dispositivi (IoT),
+
+Da tenere conto per protocolli utilizzati nell'IoT
+\begin{itemize}
+    \item batteria
+    \item larga copertura
+    \item sicurezza
+    \item costo
+\end{itemize}
+
+\textit{LPWAN}: come reti cellulari ma ottimizzate per \textit{IoT/M2M}, (topologia a stella)
+
+Caratteristiche:
+\begin{itemize}
+    \item Wide range
+    \item Low power
+    \item Low cost
+    \item Low data-rate
+    \item Unlicensed bands
+\end{itemize}
+
+LoRa \'e il livello fisico su cui LoRaWAN lavora; LoRa \'e il livello fisico
+
+Comunicazinoe device-gateway in lora, gateway-network via ip
+
+\subsection{livello fisico}
+Modulazione basata su Chirp Spread Spectrum (CSS): Frequenza Aumenta Progressivamente
+
+Spreading Factor: Quanto un simbolo viene ``allargato'' nel tempo, ogni volta che viene incrementato di 1, raddoppia il tempo di trasmissione ed il consumo di energia
+
+\subsubsection{Composizione frame LoRa}
+\begin{enumerate}
+    \item Preambolo, serve a stimare la frequenza utilizzata e la qualit\'a del canale
+    \item  Inizio della data Unit di livello fisico: Il dispositivo comunica la fine del preambolo per iniziare a trasmettere i dati
+    \item  dati
+\end{enumerate}
+
+Air Time: Quanto deve stare acceso il chip per trasmettere dei dati
+
+$T_{off}$ Duty Cycle: Tempo che `devo stare zitto' dopo aver trasmesso (Duty Cy
+\[ T_{air} = T_S (n_{preamble} + n_{payload} + 4.25 )\]
+\[ T_{off} = T_{air} \left( \frac{1}{d} -1 \right) \]
+
+\subsubsection{Capture Effect}
+Fenomeno associato con FM reception, dove solo il segnale pi\'u forte ( o pi\'u vicino) sar\'a demodulato
+
+\subsection{Livello MAC (LoRaWAN)}
+% Da slide 54
+TTN: Server di rete
+
+Esistono 3 tipi di classi
+\begin{itemize}
+    \item \textbf{A}: Sensori alimentati a batteria (A sta per supportati da \underline{all} devices) pi\'u efficenti dal punto di vista energetico, uplink regolato da Aloha
+    \item \textbf{B}: (Attuatori alimentati a batteria) \underline{Beacon}, sincronizzazione tra nodi e gw tramite beaco
+    \item \textbf{C}: Attuatori alimentati a rete elettrica in \underline{Continuous} listening
+\end{itemize}
+
+Per i dispositivi di classe A c'\'e una finestra di downlink dopo ogni trasmissione; Dopo $t_1$ secondi, apre una receiving slot a stessa frequenza e spreading factor della trasmissione
+
+Se riceve un pacchetto di downlink finisce la trasmissione col gateway
+
+Se non lo riceve, dopo $t_1 + 1$ secondi apre una nuova frequenza di trasmissione con SF e altro prestabiliti
+
+Siccome utilizza Slotted Aloha ci deve essere una perfetta sincronizzazione tra end-device e gateway
+
+Tra i messaggi pi\'u importanti trasmiessi ci sono i MAC Commands, utilizzati per impostare potenza, spreading factor $\ldots$
+
+
+Adaptive Data Rate: Cambia Spreading factor per ottimizzare l'energia consumata, algoritmo attuale si basa su una stima dell'SNR dagli ultimi pacchetti ricevuti
+
+\subsection{Architettura di rete e Sicurezza}
+\begin{center}
+(X: Immagine slide 63)
+\end{center}
+
+Quando un nodo trasmette, tutti i gateway nel range trasmissivo ricevono un pacchetto; \'e il server che sceglie quale pacchetto prendere in considerazione, in base alla potenza del segnale ricevuto
+
+$\ldots$
+
+Network server:
+\begin{itemize}
+    \item Gestisce le join
+    \item Controlla che non ci siano pacchetti duplicati
+    \item Decide a quale gateway inviare messaggio di downlink
+\end{itemize}
+
+Application Server: Riceve i pacchetti, schedula le risposte e decripta il payload
+
+\end{document}
