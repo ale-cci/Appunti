@@ -3,30 +3,38 @@ set -e
 
 PDFDIR="$PWD/pdf"
 
+build_pdfs() {
+    mkdir -p pdf
+    mkpdf="pdflatex -output-directory $PDFDIR"
+
+    echo "Building Elettronica..."
+    (cd elettronica && $mkpdf elettronica.tex >/dev/null)
+
+    echo "Building SDT..."
+    $mkpdf sdt.tex >/dev/null
+
+    echo "Building FCA..."
+    (cd fca && $mkpdf fca.tex >/dev/null)
+}
+
 case "$1" in
     "pdf")
-        mkdir -p pdf
-        mkpdf="pdflatex -output-directory $PDFDIR"
+        build_pdfs
 
-
-        echo "Building Elettronica..."
-        (cd elettronica && $mkpdf elettronica.tex >/dev/null)
-
-        echo "Building SDT..."
-        $mkpdf sdt.tex >/dev/null
-
-        echo "Building FCA..."
-        (cd fca && $mkpdf fca.tex >/dev/null)
-
-        print "\nFile creadted:"
+        printf "\nFile creadted:\n"
         ls -1X "$PDFDIR"/*.pdf
-    ;;
+        ;;
 
     "clean")
         (cd elettronica && rm -f *.pdf *.log *.aux)
         rm -f *.pdf *.log *.aux
         (cd fca && rm -f *.pdf *.log *.aux)
         rm $PDFDIR/*.log $PDFDIR/*.aux
+        ;;
+
+    "sync")
+        build_pdfs
+        cp "$PDFDIR"/*.pdf ~/pdfs/NOTE
         ;;
 esac
 
