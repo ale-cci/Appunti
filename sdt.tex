@@ -1372,6 +1372,132 @@ Scalabilit\'a ridotta
 
 $\ldots$
 
+\section{OFDM}
+Consente di avere portanti multiple $\rightarrow$ Combatte in maniera efficace l'evanescenza da cammini multipli
+
+Efficente per assegnazione spettrale
+
+Nell'LTE la distanza tra le portanti \'e di circa $15kHz$
+
+Schema dell'OFDM a slide 291:
+\begin{itemize}
+    \item Sorgente di dati
+    \item Modulatore
+    \item Parallelizzatore (1:N $\rightarrow$ flusso entrante viene scomposto in N flussi paralleli, creando N stream di simboli
+    \item Invers FFT (Evoluzione della trasformata di fourier): Avendo in ingresso N stream di dati, IFFT porta in un dominio di simboli OFDM
+
+        Avendo una spaziatura di portanti di $15kHz$, quando si passa attraverso 1:N, Ogni flusso di dati `spaccato' ha una sua sottobanda
+    \item Deparallelizzatore (Da N a 1)
+    \item Prefisso ciclico
+\end{itemize}
 
 
+\subsection{Pulse shaping and spectrum}
+Slide 293
+
+Segnale pi\'u facile da trasmettere sinc, trasmettendo un impulso rettangolare $\rightarrow$ sync
+
+Da slide 294: Una serie di impulsi, ricevuti in maniera diversa con diversi ritardi.
+
+A livello temporale si riceve la somma dei segnali ritardati, i quali possono interferire tra di loro (Interferenza da commino multiplo)
+
+Ricevitori \textbf{RAKE} Sfruttano l'evanescenza da cammini multipli per potenziare il segnale
+
+$1^a$ soluzione intuitiva (296): Aggiungere un periodo di guardia (GP): Ritardo tra trasmissione dei simboli
+Risolve solo interferenza intersimbolica, non danneggia simboli successivi
+
+L'elaborazione dei segnali diventa molto pi\'u semplice, ma \'e lento, siccome il periodo di Guardia \'e tempo non utilizzato $\rightarrow$ Non efficente
+
+Un altro problema lo si ha se si manifestano ritardi pi\'u alti del periodo di guardia
+
+
+Supponendo di utilizzare comunque questo approccio, per proteggersi dalle interferenze residue: Una delle repliche ricevute \'e piu forte delle altre. Supponendo che l'interferenza avvenga solamente all'inizio del simbolo: Prefisso e Suffisso ciclico (298)
+
+Prefisso ciclico: Prendere l'ultima parte del simbolo e la mette all'inizio
+
+Suffisso ciclico: Lo stesso solo che prende la prima parte e la mette alla fine del simbolo
+
+\textbf{Limitazione modulazione a singola portante}
+La percentuale del tempo in cui viene trasmesso un simbolo di dati
+\[ E = \frac{T_{SYMBOL}}{T_{SYMBOL} + T_{CP}} \]
+
+\subsection{Multi Carrier Modulation}
+
+Generalizzazione FDMA
+
+Esistono ancora le sottobande, ma vengono assegnate tutte ad un unico utente, su ogni sottobanda viene trasmesso un segnale
+
+Per evitare di perdere risorse, si cercano di fare le sottobande pi\'u vicine possibili, ma se sono troppo vicine si rischia l'interferenza da portanti adiacenti
+
+\subsection{OFDM}
+Impulso utilizzato: Rettangolare
+
+Densit\'a spettrale in potenza $\propto$ al quadrato della sinc
+
+Idea OFDM: Impacchettare densit\'e spettrali di potenza mantenendo ortogonalit\'a e sfruttando gli zeri delle sinc (305)
+
+
+\subsection{OFDM ad accesso multiplo}
+
+Diversi approcci:
+\begin{enumerate}
+    \item slide 309 (Un unico trasmettitore)
+    \item TDMA (Trasmettitori multipli)
+
+        Limitato:
+        Se solo uno deve trasmettere, molte risorse rimangono inutilizzzate
+
+        Introdotto il concetto di blocco di risorse:
+        Posso assegnare le risorse in modo diverso in base alle esigenze deglu utenti (Slide 311)
+
+        12 sottoportanti formano un blocco di risorse
+
+\end{enumerate}
+Le sottoportanti vengono assegnate in base alla risposta dei vari utenti sul canale di comunicazione
+
+(slide 319):
+Superficie gialla presa in un istante temporale (proiezione su asse z-frequenza): Come cambia la risposta in frequenza del canale all'avanzare del tempo, cambia in modo regolare
+
+Blu: per un altro utente (non sono uguali giallo-blu)
+
+La base station ad un certo istante guarda le risposte in frequenza ed in base ad esse sceglie a quale utente assegnare le sottofrequenze
+
+(Scheduling utilizzato nei sistemi di $4^a$ generazione, tipicamente funzionano in modalit\'a TDD, (Trasmissioni suddivise in Uplink e Downlink). Tra le due fasi c\'e una fase di negoziazione, dove vengono riassegnate le risorse per il successivo Uplink/Downlink
+
+Utilizza efficentemente le risorse del canale
+
+LTE utilizza OFDMA in Downlink; Per l'Uplink SC-FDMA
+
+\textbf{SC-FDMA Single Carrier Frequency Division Multiple Access}
+
+Funziona molto bene per valori relativamente bassi di PAPR
+
+PAPR: Peack to Average Power Ratio (Rapporto di potenza fra picco e media), Caratterizza la qualit\'a del segnale trasmesso
+
+(Slide 318) Come Viene implementato l'OFDMA nell'LTE
+
+$5G$ Inizier\'a a funzionare utilizzando l'OFDMA come formato di modulazione
+
+(323) Durada di uno slot in base alla grandezza del prefisso ciclico
+
+LTE modalit\'a FDD (325)
+
+LTE modalit\'a TDD (326)
+Configurazione
+\begin{itemize}
+    \item Downlink
+    \item Sincronizzazione
+    \item Uplink
+    \item Uplink
+    \item Uplink
+    \item Downlink
+    \item Sincronizzazione
+    \item Uplink
+    \item Uplink
+    \item Uplink
+\end{itemize}
+
+In basso a sinistra (sempre 326) Configurazioni personali per ogni utenti, assegnate automaticamente tenendo conto dello stato dell'utente
+
+In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di modulazione
 \end{document}
