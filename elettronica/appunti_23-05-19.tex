@@ -67,6 +67,7 @@
         \end{axis}
     \end{tikzpicture}
     %\includegraphics[width=1.8in, angle=90]{img/elettronica/grafico_invertitore.jpg}
+
     \caption{Grafico invertitore}
 \end{figure}
 
@@ -84,6 +85,8 @@ Cambiando il modo comune $V_{ic}$l'uscita differenziale non cambia
 Doppio ingresso ed uscita singola, posso  un segnale in ingresso differenziale, $V_id$ ed un segnale in ingresso in modo comune $V_ic$  (Grafico)
 
 
+
+\begin{minipage}{0.5\textwidth}
 \begin{figure}[H]
     \centering
     \begin{circuitikz}
@@ -96,8 +99,18 @@ Doppio ingresso ed uscita singola, posso  un segnale in ingresso differenziale, 
     \end{circuitikz}
     \caption{Amplificatore Operazionale}
 \end{figure}
-
-
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[axis lines =middle, yticklabels=\empty, xticklabels=\empty,  ymax=3, ymin=-3, xlabel=$V_{id}$, ylabel=$V_u$]
+        \addplot[color=red, domain=-4:0, smooth]{-2};
+        \addplot[color=red, domain=0:4, smooth]{+2};
+        \addplot+[mark=none, color=red, domain=-2:2] coordinates{(0, -2) (0, 2)} ;
+        \node[label = {180:$V_M$}] at (axis cs: (0, 2));
+        \node[label = {0:$-V_M$}] at (axis cs: (0, -2));
+    \end{axis}
+\end{tikzpicture}
+\end{minipage}
 
 
 Posso definire la pendenza della retta passante per l'origine come $A_d = \frac{dV_U}{dV_{id}} \rightarrow \infty $
@@ -118,9 +131,7 @@ Chiamata \textbf{Regione di alto guadagno}($AG$) La retta quasi verticale passan
 \[
     V_{id} = 0
 \]
-\[
-    -V_n < V_n < +V_n
-\]
+\[ -V_n < V_n < +V_n \]
 
 Abbiamo poi due altre regioni, in cui il guadagno \'e nullo, chiamandole rispettivamente $\cdots$
 
@@ -227,14 +238,15 @@ La retta \'e lineare $\rightarrow$ \'e un buon amplificatore perch\'e non distor
 
 Un altro aspetto importante \'e che quella curva non dipende dai parametri operazionali, dipende unicamente dalle resistenze, \'e totalmente indipendente dalla qualit\'a dell amplificatore stesso
 
+\begin{figure}[H]
 \begin{circuitikz}
     \draw (0, 0) node[eground]{}
         to[vsource] ++(0, 2)
         node[above]{$V_i$}
-        to[R, -*, l=$R_1$] ++(3, 0)
+        to[R, -*, l=$R_1$, i=$I_1$] ++(3, 0)
         coordinate(ing1)
         -- ++(0, 1)
-        to[R, l=$R_2$] ++(3, 0)
+        to[R, l=$R_2$, i=$I_2$] ++(3, 0)
         coordinate(tip);
         \draw (ing1) node[op amp, anchor=-](am){};
         \draw(am.+) -- ++(0, -1) node[eground]{};
@@ -242,6 +254,9 @@ Un altro aspetto importante \'e che quella curva non dipende dai parametri opera
         \draw(am.out) to[short, -o] ++(2, 0) node[above]{$V_u$};
         \draw(am.-) to[open, v>=$V_{id}$] (am.+);
 \end{circuitikz}
+\centering
+\caption{Amplificatore invertente}
+\end{figure}
 
 Principio di cortocircuito virtuale: non \'e cortocircuito dal punto di vista della corrente, ma la tensione risulta virtualmente a terra
 
@@ -259,11 +274,11 @@ Principio di cortocircuito virtuale: non \'e cortocircuito dal punto di vista de
     I_1 = I_2 + \cancel{I^-}
     \end{rcases}
     \end{rcases}\Rightarrow
-        \frac{-V_iR}{R_1} = \frac{V_i- V_u}{\cancel{R_2}} \Rightarrow
-    V_u = V_i \left(1 + \frac{R_2}{R_1}\right)
+        \frac{V_i}{R_1} = -\frac{V_u}{R_2} \Rightarrow
+    V_u = \frac{R_2}{R_1} V_i
 \]
 \[
-    -V_M < V_U < +V_M
+    \text{per} -V_M < V_U < +V_M
 \]
 
 \underline{SAT+}
@@ -308,21 +323,25 @@ Principio di cortocircuito virtuale: non \'e cortocircuito dal punto di vista de
 
 $\Rightarrow$ Tratto orizzontale
 
-\begin{circuitikz}
-    \draw (0, 0)
+\begin{figure}[H]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
         node[above]{$V_i$}
-        to[C, *-*, l=$C$] ++(2, 0)
+        to[C, *-*, l=$C$, i=$I_C$] ++(2, 0)
         coordinate(ing1)
         -- ++(0, 1)
-        to[R, l=R] ++(2.5, 0)
+        to[R, l=R, i=$I_R$] ++(2.5, 0)
         coordinate(tip);
         \draw (ing1) node[op amp, anchor=-](am){};
         \draw(am.+) -- +(0, -1) node[eground]{};
         \draw(am.out) to[short, -*] ++(3, 0)
-            node[right] {$V_u$};
+        node[right] {$V_u$};
         \draw(tip) -- (tip |- am.out);
         \draw(am.-) to[open, v>=$V_{id}$] (am.+);
-\end{circuitikz}
+    \end{circuitikz}
+    \caption{Circuito derivatore}
+\end{figure}
 
 \underline{AG}
 \[

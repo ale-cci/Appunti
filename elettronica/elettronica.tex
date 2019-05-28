@@ -28,5 +28,213 @@
 \include{appunti_23-05-19}
 
 % Appunti Tue 28 May 2019 02:50:49 PM CEST
-\section{}
+\section{Integrazione di un segnale}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R$, i=$I_R$] ++(2, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[C, l=$C$, i=$I_C$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[eground]{};
+        \draw(am.out) to[short, -*] ++(2, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.-) to[open, v>=$V_{id}$] (am.+);
+    \end{circuitikz}
+    \caption{Circuito integratore invertente}
+\end{figure}
+In \underline{AG}:
+
+\[ V_{Id} = 0 \rightarrow V^- = V^+ = 0 \]
+\[
+\begin{rcases}
+ I_R = \frac{V_i - V^- }{R}\\
+ I_C = C\frac{d(V^- - V_u}{dt}\\
+ -I_r = \cancel{I^-} + I_c
+ \end{rcases}\Rightarrow
+ \frac{V_i}{R} = -C \frac{dV_u}{dt}
+ \Rightarrow \frac{dV_u}{dt} = -\frac{V_i}{RC} \rightarrow \int_0^t \frac{dV_u}{dt} dt = \int_0^t -\frac{Vi(t)}{RC} dt
+ \]
+ \[ V_u(t) - V_u(0) = -\frac{1}{RC}\int_0^t V_i(t)dt \]
+
+ \begin{center}
+     \framebox{$ V_u (t) = V_u(0) - \frac{1}{RC}\int_0^t V_i(t) dt $}
+ \end{center}
+
+ Tutto questo vale finche la tensione di uscita rimane compresa fra $\pm V_M$
+
+ A Differenza del derivatore, questo circuito ha memoria
+
+\subsection{}
+
+\begin{figure}[H]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R_1$, i=$I_R$] ++(2, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_R$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[]{$V_i$};
+        \draw(am.out) to[short, -*] ++(2, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.-) to[open, v>=$V_{id}$] (am.+);
+    \end{circuitikz}
+    \caption{Circuito integratore invertente}
+\end{figure}
+
+\underline{AG}
+\[
+    \begin{rcases}
+        V^- = V_i \\
+        I_1 = \frac{0-V^-}{R_1}\\
+        I_2 = \frac{V^- - V_u}{R_1}\\
+        I_2 = \cancel{I^-} + I_c\\
+    \end{rcases}
+    \frac{V_i}{R_1} = \frac{V_i - V_u}{R_2}
+\]
+\[
+    -V_i \left(\frac{1}{R_1} + \frac{1}{R_2} \right) = - \frac{V_u}{R_2}
+\]
+\[ V_u = \left( \frac{1}{R_1} - \frac{1}{R_2} \right) R_2 V_i \]
+\[ V_u = \left( 1 + \frac{R_2}{R_1} \right) V_i \xrightarrow{R_2 \to 0} V_u = V_i  \]
+
+
+\begin{minipage}{0.5\textwidth}
+\begin{circuitikz}
+    \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
+    \draw(0, 2) node[anchor=east]{$V_u$}-- (2, 2) to[R, l=$R_L$] (2, 0) node[eground]{};
+\end{circuitikz}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{circuitikz}
+    \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
+    \draw(0, 2) node[anchor=east]{$V_u$} -- (1, 2) node[op amp, anchor=+](amp){} ;
+    \draw (amp.out) to[R, l=$R_L$] (amp.out |- 0) node[eground]{};
+    \draw (amp.-) -- ++(0, 1) coordinate(angl)-- (angl-|amp.out) -- (amp.out);
+\end{circuitikz}
+\end{minipage}
+
+Da Partitore di tensione:
+\[ V_u = \frac{R_1}{R_1 R_2} V_{DD}  = \frac{1}{1+\frac{R_2}{R_1}} V_{DD}\]
+
+\[ V_u = \frac{1}{1 + \frac{R_2}{R_1 \parallel R_L}} V_{DD}  \qquad R_1 \parallel R_L < R_1\]
+
+
+\subsection{Circuito con piu ingressi}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{circuitikz}
+        \draw (-1, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R_1$, i=$I_R$] (2, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R$, i=$I_R$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (-1, -1) node[above]{$V_2$} to[R, l=$R_2$, *-] (1.5, -1) -- (1.5, 0);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[eground]{};
+        \draw(am.out) to[short, -*] ++(2, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+    \end{circuitikz}
+    \caption{Circuito sommatore analogico}
+\end{figure}
+
+\underline{AG}
+\[ V_id = 0 \rightarrow V^- = V^+ = 0\]
+Applicando Kirkoff
+
+\[ \begin{rcases}
+     I_1 + I_2 = I^- + I_R\\
+     I_1 = \frac{V_1 - \cancel{V^-}}{R_1} \\
+     I_2 = \frac{V_2 - \cancel{V^-}}{R_2} \\
+     I_R = \frac{V^- - V_u}{R} = -\frac{V_u}{R}\\
+ \end{rcases}
+ \frac{V_1}{R_1} + \frac{V_2}{R_2} = -\frac{V_u}{R} \rightarrow V_u = -R\left( \frac{V_1}{R_1} + \frac{V_2}{R_2}\right)  \xrightarrow{R_1 = R_2 = R^*} V_u = -\frac{R}{R^*}(V_1 + V_2)
+ \]
+
+ Questo circuito permette di calcolare direttamente in maniera analogica una combinazione lineare di ingressi
+
+ Provando a progettare un sommatore di tipo digitale:
+
+ (X: Grafico con sommatoria)
+
+ \textbf{ADC}: Analog Digital converter
+
+ \textbf{DAC}: Digital Analog Converter
+
+ Blocco Sommatore: Es $3+6$
+
+ \begin{tabular}{c c c c c}
+     1 & 1 & \\
+     0 & 0 & 1 & 1 & + \\
+     0 & 1 & 1 & 0 & = \\
+     \hline
+     1 & 0 & 0 & 1
+ \end{tabular}
+
+ (X: Grafico sommatore a propagazione di riporto)
+ (RCA: Ripple Carry Adder)
+
+ Dal circuito possiamo distinguere un HA (Half Adder) e 3 FA (Full Adder)
+
+In questo caso aggiungere bit vuol dire aggiungere ritardo, siccome \'e tutto in cascata. Nel caso analogico \'e tutto in parallelo. Qundi aggiungere altri bit non comporta ritardo
+
+\begin{tabular}{c c|c c}
+    a & b & $c_H$ & $S_H$\\
+    \hline
+    0 & 0 & 0 & 1 \\
+    0 & 1 & 0 & 1 \\
+    1 & 0 & 0 & 1 \\
+    1 & 1 & 1 & 0
+\end{tabular}
+
+\begin{circuitikz}
+    \draw (0, 0) node[left]{$a$} to[short, *-]  (2, 0) node[and port, anchor=in 1](ch){} ;
+    \node at (1.5, |- ch.in 2)[jump crossing](X);
+    \draw (0, -2) node[left]{$b$} to[short, *-] (1, -2) -- (1, |- X.west) -- (X.west);
+    \draw (X.east) -- (ch.in 2);
+    \draw (X.north |- 0) -- (X.north);
+    \draw (X.south) -- (X.south |- ,-2) ;
+\end{circuitikz}
+
+$1^a$ mappa k
+\[ C_{out} = ab + C_{in} (a+b) = \]
+
+ricordando che $a + b = ab + \bar{a}b + a\bar{b}$ (Dalla tabella dell'or)
+\[ ab \cancel{(a + C_{in})} + C_{in}(a\bar{b} + \bar{a}b) = C_H ++ C_{in} \cdot S_H \]
+
+$2^a$ mappa k
+
+\begin{center}
+    \begin{tabular}{c|c c c c}
+    & 00 & 01 & 11 & 10\\
+    \hline
+        0 & 0 & 0 & 1 & 0\\
+        1 & 0 & 1 & 1 & 1\\
+    \end{tabular}
+\end{center}
+
+\[ S = \bar{C_{in}} \bar{a} b + \bar{C_{in}} a \bar{b} + C_{in} \bar{a}\bar{b} + C_{in} ab \]
+\[ S = \bar{C_{in}}( a\bar{b} + \bar{a}b) + C_{in}(ab + \bar{a}\bar{b}) = \bar{C_{in}} S_H + C_{in} \bar{S_H} = C_{in} \oplus S_H\]
+
+La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non \'e immune al disturbo
+
+
 \end{document}
+
