@@ -16,6 +16,9 @@ build_pdfs() {
 
     echo "Building FCA..."
     (cd fca && $mkpdf fca.tex >/dev/null)
+
+    echo "Building FCA (Dogmario)"
+    (cd fca && $mkpdf dogmario.tex >/dev/null)
 }
 
 case "$1" in

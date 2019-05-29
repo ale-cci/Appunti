@@ -281,28 +281,31 @@ Sfrutto lo zero della rete anticipatrice per realizzare una cancellazione polo-z
     \end{rcases}
 \]
 
-$ L(s, \alpha) = -\frac{1}{2} $ \framebox{ se $\exists s = jw_P : L(s, \alpha) + \frac{1}{2} = 0$}
+$L(s, \alpha) = -\frac{1}{2}$ \framebox{se $\exists s = jw_P : L(s, \alpha) + \frac{1}{2} = 0$}
+
 \[ \frac{1}{2} + \frac{1900}{\alpha s + 2)(s + 5) (s+10)} = 0 \Leftrightarrow \alpha s^3 + (15 \alpha + 2)s^2 + (50 \alpha + 30) s + 3900 = 0 \]
-\begin{minipage}{0.5\taxtwidth}
+
+\begin{minipage}{0.30\textwidth}
 \begin{tabular}{c| c c c}
     3 & $\alpha$ & $50\alpha$ + 30 & 0\\
     2 & $15\alpha$ + 2 & 3900 & 0\\
     1 & $f(\alpha)$ & 0
 \end{tabular}
 \end{minipage}
-
-\begin{minipage}{0.5\taxtwidth}
-    \[ f(\alpha) = (15 \alpha + 2) ( 50 \alpha + 30) - 3900\alpha = 750\alpha^2 - 3350\alpha + 60 \]
+\begin{minipage}{0.65\textwidth}
+    $ f(\alpha) = (15 \alpha + 2) ( 50 \alpha + 30) - 3900\alpha = 750\alpha^2 - 3350\alpha + 60 $
 \end{minipage}
 
-\[ f(\alpha) = 0
-    \rightarrow \begin{split}
-        \xcancel{\alpha_1 = 44487}\\
-        \alpha_2 = 0.0180 \quad \text{OK}
-    \end{split}
+\[
+    f(\alpha) = 0
+    \quad\rightarrow\quad
+    \begin{aligned}
+        &\xcancel{\alpha_1 = 44487}\\
+        &\alpha_2 = 0.0180 \quad \text{OK}
+    \end{aligned}
 \]
 
-Verifico se ho radici immaginarie poli ausiliari $(15 \alpha + 2) s^2 + 3900 = 0$ $\Rightarow$ Ho radici immaginarie
+Verifico se ho radici immaginarie poli ausiliari $(15 \alpha + 2) s^2 + 3900 = 0$ $\Rightarrow$ Ho radici immaginarie
 
 \[C(s) = 190 \frac{1 + \frac{1}{2}s}{1 + 0.0180 \frac{1}{2} s}\]
 
@@ -339,7 +342,7 @@ Per potere applicare le formule di inversione abbiamo il vincolo:
 \]
 
 \[ \phi_0 = -\arg(P(jw)) - \pi = 0.5849 \]
-Verifica: $\cos \phi_0 = 0.8338 \gte^? 2(0.3726) = 0.742 \rightarrow \text{OK}$
+Verifica: $\cos \phi_0 = 0.8338 \ge^? 2(0.3726) = 0.742 \rightarrow \text{OK}$
 
 Possiamo applicare le Formule di inversione
 \[

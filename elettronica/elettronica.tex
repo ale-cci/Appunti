@@ -15,6 +15,7 @@
 
 \graphicspath{{../}}
 \ctikzset{bipoles/length=1.2cm}
+\pgfplotsset{compat=1.16}
 
 \begin{document}
 
@@ -111,7 +112,7 @@ In \underline{AG}:
 \[ V_u = \left( 1 + \frac{R_2}{R_1} \right) V_i \xrightarrow{R_2 \to 0} V_u = V_i  \]
 
 
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.45\textwidth}
 \begin{circuitikz}
     \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
     \draw(0, 2) node[anchor=east]{$V_u$}-- (2, 2) to[R, l=$R_L$] (2, 0) node[eground]{};
@@ -119,9 +120,9 @@ In \underline{AG}:
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \begin{circuitikz}
-    \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
+    \draw (0, 0) node[eground](G){} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
     \draw(0, 2) node[anchor=east]{$V_u$} -- (1, 2) node[op amp, anchor=+](amp){} ;
-    \draw (amp.out) to[R, l=$R_L$] (amp.out |- 0) node[eground]{};
+    \draw (amp.out) to[R, l=$R_L$] (amp.out |- G) node[eground]{};
     \draw (amp.-) -- ++(0, 1) coordinate(angl)-- (angl-|amp.out) -- (amp.out);
 \end{circuitikz}
 \end{minipage}
@@ -204,14 +205,14 @@ In questo caso aggiungere bit vuol dire aggiungere ritardo, siccome \'e tutto in
     1 & 1 & 1 & 0
 \end{tabular}
 
-\begin{circuitikz}
-    \draw (0, 0) node[left]{$a$} to[short, *-]  (2, 0) node[and port, anchor=in 1](ch){} ;
-    \node at (1.5, |- ch.in 2)[jump crossing](X);
-    \draw (0, -2) node[left]{$b$} to[short, *-] (1, -2) -- (1, |- X.west) -- (X.west);
-    \draw (X.east) -- (ch.in 2);
-    \draw (X.north |- 0) -- (X.north);
-    \draw (X.south) -- (X.south |- ,-2) ;
-\end{circuitikz}
+% \begin{circuitikz}
+%     \draw (0, 0) node[left](zero){$a$} to[short, *-]  (2, 0) node[and port, anchor=in 1](ch){}
+%     \node at (1.5, |- ch.in 2)[jump crossing](X);
+%     \draw (0, -2) node[left]{$b$} to[short, *-] (1, -2) -- (1, |- X.west) -- (X.west);
+%     \draw (X.east) -- (ch.in 2);
+%     \draw (X.north |- zero) -- (X.north);
+%     \draw (X.south) -- (X.south |- ,-2) ;
+% \end{circuitikz}
 
 $1^a$ mappa k
 \begin{center}
@@ -294,7 +295,7 @@ La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non 
     I_R = I_D + \cancel{I^-}\\
     I_R = \frac{V_i - V^-}{R}
     I_D = IS \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
-    \end{rcases}\rightattow
+    \end{rcases}\rightarrow
     \frac{V_i}{RI_s} = \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right) \rightarrow e^{\frac{(V^- - V_u)}{V_T}} = \frac{V_i}{RI_S} + 1
     \xrightarrow{\ln} \ln\left(e^{-\frac{V_u}{V_T}}\right) = \ln\left( \frac{V_i}{RI_S} + 1\right)
 \]
@@ -322,7 +323,7 @@ Ricordando che
 
 Non \'e un caso che il ramoin retroazione sia sul morsetto negativo:
 
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.45\textwidth}
 \begin{tikzpicture}
     \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
         \addplot[color=red, domain=-4:-1]{2};
@@ -363,7 +364,7 @@ Non \'e un caso che il ramoin retroazione sia sul morsetto negativo:
    \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
 \]
 \[ V^+ \left( \frac{1}{R_2} + \frac{1}{R_1} \right) = \frac{V_i}{R_1} + \frac{V_M}{R_2} \]
-\[V^+ \left(\frac{R_1 + R_2}{\cancel{R_1 R_2}} = \frac{V_iR_2 + V_M R_1}{\cancel{R_1 R_2}} \]
+\[V^+ \left(\frac{R_1 + R_2}{\cancel{R_1 R_2}}\right) = \frac{V_iR_2 + V_M R_1}{\cancel{R_1 R_2}} \]
 \[ V^+ = \frac{R_2V_i + R_1 V_M}{\cancel{R_1 + R_2}} > 0\]
 \[ \cancel{R_2} V_i > -\frac{R_1 V_M}{R_2} \]
 
@@ -421,7 +422,7 @@ Guadagno amplificatore operazionale $\to \infty$ in alto guadagno
     \addplot[color=red, domain=-4:1]{2};
     \addplot[color=red, domain=-1:4]{-2};
     \addplot+[mark=none, color=red] coordinates{(-1, -2) (1, 2)};
-\end{axis}
+    \end{axis}
 \end{tikzpicture}
 \end{center}
 
