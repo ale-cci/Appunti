@@ -1,0 +1,19 @@
+sigaction 71
+sa_sigaction (ache pid) <- non viene interrotta da segnali dello stesso tipo che arrivano piu volte (SA_NODEFERR nega il comportamento)
+gestione dei segnali attraverso coda per real time
+
+
+sigsuspend 72: modifica la mask dei segnali
+torna SEMPRE -1
+
+================================================================================
+Pipe slide 78
+
+Esempio di | slide 84
+
+dup  first free fd
+
+================================================================================
+Fifo: 111
+(Utilizzabili da processi esterni)
+

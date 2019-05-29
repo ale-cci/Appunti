@@ -1,6 +1,8 @@
 \documentclass{article}
 
 \usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{cancel}
 
 \usepackage{tikz}
 \usepackage[margin=1in]{geometry}
@@ -10,6 +12,20 @@
 
 \begin{document}
 \maketitle
+\newpage
+\section{Lezione 8 - Stabilit\'a dei sistemi dinamici}
+Un sistema lineare $\sum$ si dice:
+\begin{enumerate}
+    \item STABILE se per ogni perturbazione $y_{lib}(t)$ \'e limitata su $[0,+\infty)$
+
+        $\sum$ \'e stabile $\Leftrightarrow$ tutti i poli hanno parte reale non positiva e gli eventuali poli puramente immaginari sono semplici
+    \item ASINTOTICAMENTE STABILE, se stabile e $lim_{t \to+\infty} y_{lib}(t) = 0$A per ogni perturbazione introdotta.
+    \item SEMPLICEMENTE STABILE \'e stabile ed esiste una perturbazione  per cui
+
+    \[ lim_{t \to +\infty} y_{lib}(t) = y_{\infty} \neq 0 \lor \big\{\text{Non esiste $lim_{t\to\infty} y_{lib}(t)$}\big\} \]
+    \item INSTABILE non \'e stabile
+\end{enumerate}
+
 \newpage
 \section{Criterio di Juri}
 Sia dato il polinomio $a(z) = a_n z^n + a_{n-1} z^{n-1} + \cdots + a_n$ con $a_n > 0$. Condizione necessaria affich\'e $a(z)$ abbia tutte le radici di modulo minore di $1$ \'e che le seguenti disuguaglianze siano soddisfatte:
@@ -177,4 +193,224 @@ Per calcolare se il sistema \'e asintoticamente stabile
     \\
     5 & 0.9534 & * & 0.3979
 \end{tabular}
+\newpage
+\section{Esercitazione Wed 29 May 2019 01:46:34 PM CEST}
+
+($\ldots$ copiare parte prima da appunti)
+\[ P_d (s) = s^3 + (4+c) s^2 + (5+4c)s + 5c \]
+
+\[
+\begin{cases}
+2 + 4b_2 = 4+c\\
+5 + 4c = 9+4b_1\\
+90 = 5c
+\end{cases}
+\Rightarrow
+\begin{cases}
+b_2 = 5\\
+b_1=17\\
+c=18 \qquad \text{Accetto come soluzione siccome $\gg 2$}
+\end{cases}
+\]
+
+\[
+    C(s) = \frac{5s^2 + 17s + 18}{s^2 + 9}
+\]
+
+\[ e_r = \lim{t \to \infty} r(t)-y(t) = 0 \Leftrightarrow \lim _{t\to \infty} r(t) = \lim_{t\to\infty} t(t) \]
+(Grafico)
+
+\[ T_{ry} = \frac{FL(s)}{1 + L(s)} \Rightarrow T_{ry}(0) = 1\]
+\[ T_{ry}(0) = \frac{FL(0)}{1+L(0)} = \framebox{$\frac{F4}{1+4} = 1$} \]
+\[ F= \frac{5}{4} = 1.25 \]
+
+
+\section{Esercizio 4}
+
+$\exists K \in \mathcal{R} $ t.c. $e_r = 0.05$ , $r(t) = 1(t)$
+
+\[ e_r = \frac{1}{1+K_P} \quad , \quad 0.05=\frac{1}{K_P} \Leftrightarrow 0.05 + 0.05 K_P = 1\]
+\framebox{$K_P = 19$}
+\[K_P = \lim_{s_0} C(s)P(s) = \lim_{s\to 0} K \frac{10}{(s+2)(s+5)(s+10)} = \frac{K}{10}\]
+\[ 19 = \frac{K}{10} \Leftrightarrow \framebox{$K = 190$} \]
+
+Verifichiamo che il sistema sia asintoticamente stabile:
+
+Poli del sistema retroazionato
+\[ 1 + C(s)P(s) = 0 \Leftrightarrow 1 + \frac{1900}{(s+2)(s+5)(s+10)} = 0\]
+\[ \Leftrightarrow (s+2)(s+5)(s+10) \neq 0\]
+\[ s^3 + 17s^2 + 80 s + 2000 = 0\]
+
+Routh:
+
+\begin{tabular}{c|c c c}
+        3 & 1 & 80 & 0\\
+        2 & 17 & 2000 & 0\\
+        1 & 1360 - 2000 & 0\\
+        0 & 2000
+\end{tabular}
+
+Per la presenza di due variazioni, vi sono 2 poli retroazionati a parte reale positiva $\Rightarrow$ \underline{Sistema Instabile}
+
+$\Rightarrow \nexists k$  che garantisce $e_r = 0.005$
+
+
+\underline{b}
+\[ C(s) = K\frac{1 + \tau s}{1 + \alpha \tau s} \]
+\[ e_r = \frac{1}{1 + K_P} = 0.05 \Leftrightarrow K_P = 19\]
+\[ K_p = \lim_{s \to 0} C(s)P(s) = \lim_{s \to 0} \frac{1 + \tau s}{1 + \alpha \tau s} \frac{10}{(s+2)(s+5)(s+10)} = \frac{K 10}{100} = \frac{K}{10} \]
+
+\[ 19 - \frac{K}{10} \Leftrightarrow \framebox{$ K = 190 $} \]
+\[ C(s) = 190 \frac{1 + \tau s}{1 = \alpha \tau s} \]
+
+Modo 1 (Con Routh):
+
+
+\[ 1 + K \frac{1 + \tau s }{1 + \alpha \tau s }\frac {10}{(s+2)(s+5) (s+10)} =  0\]
+
+Sfrutto lo zero della rete anticipatrice per realizzare una cancellazione polo-zero ammissibile
+
+\[ 1+ \frac{\cancel{\tau}\cancel{\left( s + \frac{1}{\tau}\right)}}{\cancel{\tau} \left( \alpha s + \frac{1}{\tau}\right)}\frac{1900}{\cancel{(s+2)}(s+5)(s+10)} = 0 \]
+
+\[ L(jw) = \frac{1900}{(2 + \alpha jw) (jw + 5)(jw + 10)} \]
+
+\[
+    \begin{rcases}
+     |L(jw)| = \frac{1900}{\sqrt{4 + \alpha^2 w^2} \sqrt{25 + w^5} \sqrt{100 + w^2}}\\
+     \text{arg}(L(jw)) = -\text{arctg}\left(\frac{\alpha w}{2}\right) - \text{arctg}\left( \frac{w}{5} \right) - \text{arctg}\left(\frac{w}{10}\right)
+    \end{rcases}
+\]
+
+$ L(s, \alpha) = -\frac{1}{2} $ \framebox{ se $\exists s = jw_P : L(s, \alpha) + \frac{1}{2} = 0$}
+\[ \frac{1}{2} + \frac{1900}{\alpha s + 2)(s + 5) (s+10)} = 0 \Leftrightarrow \alpha s^3 + (15 \alpha + 2)s^2 + (50 \alpha + 30) s + 3900 = 0 \]
+\begin{minipage}{0.5\taxtwidth}
+\begin{tabular}{c| c c c}
+    3 & $\alpha$ & $50\alpha$ + 30 & 0\\
+    2 & $15\alpha$ + 2 & 3900 & 0\\
+    1 & $f(\alpha)$ & 0
+\end{tabular}
+\end{minipage}
+
+\begin{minipage}{0.5\taxtwidth}
+    \[ f(\alpha) = (15 \alpha + 2) ( 50 \alpha + 30) - 3900\alpha = 750\alpha^2 - 3350\alpha + 60 \]
+\end{minipage}
+
+\[ f(\alpha) = 0
+    \rightarrow \begin{split}
+        \xcancel{\alpha_1 = 44487}\\
+        \alpha_2 = 0.0180 \quad \text{OK}
+    \end{split}
+\]
+
+Verifico se ho radici immaginarie poli ausiliari $(15 \alpha + 2) s^2 + 3900 = 0$ $\Rightarow$ Ho radici immaginarie
+
+\[C(s) = 190 \frac{1 + \frac{1}{2}s}{1 + 0.0180 \frac{1}{2} s}\]
+
+Modo 2: Uso delle formul di inversione:
+\[ C(s) = 190 \frac{1 + \tau s}{1 + \alpha \tau s}\]
+\[ P(jw) = \frac{1900}{(jw + 2)(jw+5) } \quad , \quad |P(jw)| = \frac{1900}{\sqrt{4 + w^2}\\frac{25 + w^2}\sqrt{w^2 + 100}} \]
+\[ \text{arg}(P(jw)) = - \text{atan}\left(\frac{w}{2}\right) - \text{atan}\left(\frac{w}{5}\right) -\text{atan}\left(\frac{w}{10}\right)\]
+
+Cerchiamo $w_0$ all'interno della circonferenza di raggio $\frac{1}{2}$
+
+\[ \text{arg}(P(jw)) + \pi \phi_0 = 0 \Leftrightarrow \phi_0 = -\text{arg}(P(jw)) -\pi \]
+\[ M = \frac{1}{2 |P(jw)|} \]
+
+Per potere applicare le formule di inversione abbiamo il vincolo:
+\[ \cos \phi_0 > \frac{1}{M} \Leftrightarrow \cos \phi_0 > 2 |P(jw)| \]
+
+\[
+\begin{aligned}
+    w_0 &= 10 \frac{rad}{s} & |P(jw)| = 1.17\\
+    w_0 &=13 \frac{rad}{s} & |P(jw)| = 0.6323\\
+    w_0 &= 15\frac{rad}{s} & |P(jw)| = 0.4405& \rightarrow \text{Potrebbe essere OK}
+\end{aligned}
+\]
+
+\[ \arg(P(jw)) =  = -3.67 \Rightarrow \phi_0 - \arg(P(jw)) - \pi = 0.5285 \]
+\[ \cos (\phi_0) = 0.8636 >^? 2(0.4405) = 0.811 \rightarrow \text{NO}\]
+
+
+\[
+\begin{aligned}
+    &w_0 = 16 \frac{rad}{s} & |P(jw)| = 0.3726\\
+& & \arg(P(jw)) = -2.726
+\end{aligned}
+\]
+
+\[ \phi_0 = -\arg(P(jw)) - \pi = 0.5849 \]
+Verifica: $\cos \phi_0 = 0.8338 \gte^? 2(0.3726) = 0.742 \rightarrow \text{OK}$
+
+Possiamo applicare le Formule di inversione
+\[
+\begin{cases}
+    \phi_0 = 0.5849\\
+    M = \frac{1}{2|P(jw)|} = 1.2419\\
+    \tau = \frac{M - \cos\phi_0}{w_0 \sin \phi_0} = 0.0575\\
+    \alpha = \frac{M\cos\phi_0 -1} {M(M - \cos \phi_0)} = - 0.174
+\end{cases}
+\]
+
+\section{Esercizio 1}
+
+\[ P(s) = \frac{5}{(s+1)^3} \]
+Controllore \underline{PID}: $ C(s) = K\left(1 + T_d s + \frac{1}{T_i s}\right)$
+
+\[
+\begin{split}
+    T_i = 4T_d\\
+    M_F = 45
+\end{split}
+\]
+\[ C(s) = \frac{K}{T_i}\left( \frac{1 + \frac{25}{w_j}s + \frac{s^2}{w_n^2}}{s}\right)\]
+\[ w_n = \frac{1}{\sqrt{T_iT_d}} \qquad \delta = \frac{1}{2}\sqrt{\frac{T_i}{T_d}} \]
+
+\[ C(jw_n) = K_P \]
+
+\[ P(jw) = \frac{5}{(jw+1)^3} \]
+\[ |P(jw)| = \frac{5}{(1 + w^2) ^{\frac{3}{2}}} \]
+\[ \arg(P(jw_0)) = -3 \text{atan}(2) \]
+
+%
+(X: Grafico)
+\[ \arg(P(jw_0)) + \pi = M_F = 45 \]
+
+\[ \arg(P(jw_0)) = M_F - \pi \Leftrightarrow -3 \text{aran}(w) = \frac{\pi}{4} - \pi = -\frac{3}{4}\pi \Leftrightarrow \text{atan}(w) = \frac{\pi}{4} \Leftrightarrow \framebox{$w_0 = 1 \frac{rad}{s}$}\]
+
+\[ |P(jw)| = \frac{5}{(1 + w_0^2)^{\frac{3}{2}}} = 1.7678 \]
+\[ K_P \coloneqq \frac{1}{|P(jw)|} = \frac{1}{1.7678} = \framebox{$0.5657$} \]
+
+\[ \delta = \frac{1}{2}\sqrt{\frac{T_i}{T_d}} = \frac{1}{2}\frac{4} = 1 \]
+\[ T_i = \frac{2\delta}{w_n} = 2 \]
+\[ T_d = \frac{1}{T_i w_0^2} = \frac{1}{2} sec \]
+
+\[\framebox{$C(s) = 0.5657 \left( 1 + \frac{1}{2}s + \frac{1}{2s}\right) $}\]
+
+\section{esercizio 2}
+\[ y_{lib}(2) = \frac{1}{(z - \frac{1}{2}) ^2 (z^2 + 1)}  = \frac{1}{\left(z - \frac{1}{2}\right)^2(z -j)(z + j)} \]
+
+\[ \mathcal{Z}^{-1}[ y_{lib}(z)] = y_{lib}(K) \quad , \quad K \ge 0 \]
+
+Antitrasformazione per fratti semplici
+\[ y_{lib}(z) = \frac{C_{1, 1}}{\left( z - \frac{1}{2}\right)^2} + \frac{C_{1, 2}}{z - 1\frac{1}{2}} + \frac{C_2}{z - j} - \frac{\bar{C_2}}{z+j} \]
+
+\[ C_{i, j} = \frac{1}{(j-1)!} D^{j-1}\big[ (z-P_i)^{r_i} F(z)\big]\big|_{z=P_i} \]
+
+$r_i$ \'e la molt di $P_i$
+
+\[ \text{Res}(F, P) = \frac{1}{(n-1)!} D^{n-1}[(z-p)^n F(z)]\big|_{z=p} \]
+$n$ \'e la molt di P
+
+\underline{Prop} ( Per funzioni razionali \underline{Strettamente proprie})
+\[
+    \sum_i \text{Res}(F, P_i) = \begin{cases}
+        0 \quad \text{se} \quad n-m > 1 \\
+        \frac{b_m}{a_n} \quad \text{se} \quad n-m = 1
+    \end{cases}
+\]
+
+\[ C_{1,1} = \cancel{(z - \frac{1}{2})^2} \frac{1}{\cancel{(z - \frac{1}{2})^2} (z^2 +1) \big|_{z=\frac{1}{2}}} = \frac{1}{\frac{1}{4} + 1} = \framebox{$\frac{4}{5}$} \]
+
+\[ C_2 = \cancel{(z - j)^1} \]
+
 \end{document}

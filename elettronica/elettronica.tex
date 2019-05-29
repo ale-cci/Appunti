@@ -214,13 +214,6 @@ In questo caso aggiungere bit vuol dire aggiungere ritardo, siccome \'e tutto in
 \end{circuitikz}
 
 $1^a$ mappa k
-\[ C_{out} = ab + C_{in} (a+b) = \]
-
-ricordando che $a + b = ab + \bar{a}b + a\bar{b}$ (Dalla tabella dell'or)
-\[ ab \cancel{(a + C_{in})} + C_{in}(a\bar{b} + \bar{a}b) = C_H ++ C_{in} \cdot S_H \]
-
-$2^a$ mappa k
-
 \begin{center}
     \begin{tabular}{c|c c c c}
     & 00 & 01 & 11 & 10\\
@@ -229,12 +222,237 @@ $2^a$ mappa k
         1 & 0 & 1 & 1 & 1\\
     \end{tabular}
 \end{center}
+\[ C_{out} = ab + C_{in} (a+b) = \]
 
+ricordando che $a + b = ab + \bar{a}b + a\bar{b}$ (Dalla tabella dell'or)
+\[ ab \cancel{(a + C_{in})} + C_{in}(a\bar{b} + \bar{a}b) = C_H ++ C_{in} \cdot S_H \]
+
+$2^a$ mappa k
+\begin{center}
+    \begin{tabular}{c|c c c c}
+    & 00 & 01 & 11 & 10\\
+    \hline
+        0 & 0 & 1 & 0 & 1\\
+        1 & 1 & 0 & 1 & 0\\
+    \end{tabular}
+\end{center}
 \[ S = \bar{C_{in}} \bar{a} b + \bar{C_{in}} a \bar{b} + C_{in} \bar{a}\bar{b} + C_{in} ab \]
 \[ S = \bar{C_{in}}( a\bar{b} + \bar{a}b) + C_{in}(ab + \bar{a}\bar{b}) = \bar{C_{in}} S_H + C_{in} \bar{S_H} = C_{in} \oplus S_H\]
 
 La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non \'e immune al disturbo
 
+
+% Appunti Wed 29 May 2019 03:40:33 PM CEST
+
+\section{Circuito Sottrattore}
+\begin{circuitikz}
+    \draw (0, 0) node[left]{$V_i$} to[R, o-] (2, 0)
+    node[op amp, anchor=-](amp){};
+    \draw (amp.+) to[R] ++(0, -2) node[eground]{};
+    \draw (amp.-) -- ++(0, 1) coordinate(ang)
+    (ang) to[R]  (amp.out |- ang) -- (amp.out) to[short, -o] ++(1, 0) node[right]{$V_u$};
+    \draw (0, |- amp.+) node[left]{$V_2$} to[R, o-] (amp.+);
+\end{circuitikz}
+\underline{AG}
+
+\[
+    \begin{rcases}
+    V_{id} = 0 \rightarrow V^+ = V^-\\
+\begin{rcases}
+    I_1 = I_2 + \cancel{I^+} \\
+    I_1 = \frac{V_2 - V^+}{R} \\
+    I_2 = \frac{V^+}{R}
+\end{rcases}
+\rightarrow \frac{V_2 + V^+}{\cancel{R}} = \frac{V^+}{\cancel{R}} \rightarrow V_2 = 2V^+ \rightarrow V^+ = \frac{V_2}{2}
+\end{rcases} \rightarrow
+\begin{rcases}
+    V^- = \frac{V_2}{2}\\
+    I_3 = I_4 + \cancel{I^-}\\
+    I_3 = \frac{V_1 - V^-}{R}\\
+    I_4 = \frac{V^- - V_u}{R}
+\end{rcases}
+\frac{V_1 - \frac{V_2}{2}}{\cancel{R}} = \frac{\frac{V_2}{2} - V_u}{\cancel{R}}
+\]
+
+\begin{center}
+    \framebox{$V_u = V_2 - V_1$}
+\end{center}
+
+
+\section{Amplificatore logaritmico}
+\begin{circuitikz}
+    \draw (0, 0) node[left]{$V_i$} to[R, o-] (2, 0)
+    node[op amp, anchor=-](amp){};
+    \draw (amp.+) -- ++(0, -1) node[eground]{};
+    \draw (amp.-) -- ++(0, 1) coordinate(ang)
+    (ang) to[diode]  (amp.out |- ang) -- (amp.out) to[short, -o] ++(1, 0) node[right]{$V_u$};
+\end{circuitikz}
+\underline{AG}
+\[
+    \begin{rcases}
+    V_{id} = 0 \rightarrow V^+ = V^- = 0\\
+    I_R = I_D + \cancel{I^-}\\
+    I_R = \frac{V_i - V^-}{R}
+    I_D = IS \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
+    \end{rcases}\rightattow
+    \frac{V_i}{RI_s} = \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right) \rightarrow e^{\frac{(V^- - V_u)}{V_T}} = \frac{V_i}{RI_S} + 1
+    \xrightarrow{\ln} \ln\left(e^{-\frac{V_u}{V_T}}\right) = \ln\left( \frac{V_i}{RI_S} + 1\right)
+\]
+\[ V_u = -V_T \ln\left( \frac{V_i}{RI_S -1} \right) \]
+(Grafico: Amplificatore logaritmico)
+
+\section{Amplificatore esponenziale/Antilogaritmico}
+\underline{AG}
+\[
+    \begin{rcases}
+    V_{id} = 0 \rightarrow V^+ = V^- = 0\\
+    I_D = I_R + \cancel{I^-}\\
+    I_D = I_S \left(e^{\frac{V_i - V^-}{V_T}} -1 \right)\\
+    I_R = \frac{V^- - V_u}{R}
+    \end{rcases} \rightarrow
+    I_S \left(e^{\frac{V_i}{V_T}}-1\right) = -\frac{V_u}{R} = -RI_S \left( e^{\frac{V_i}{V_t} -1}\right)
+\]
+
+Amplificatore antilogaritmico
+
+Ricordando che
+\[ \ln (A+B) = \ln(A) \cdot \ln(B) \]
+
+(X: Circuito Sommatore)
+
+Non \'e un caso che il ramoin retroazione sia sul morsetto negativo:
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+        \addplot[color=red, domain=-4:-1]{2};
+        \addplot[color=red, domain=1:4]{-2};
+        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+    \end{axis}
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+        \addplot[color=red, domain=-1:4]{2};
+        \addplot[color=red, domain=-4:1]{-2};
+        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+    \end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+\underline{AG}
+\[
+    \begin{rcases}
+    V_{id} = 0 \rightarrow V^+ = V^- = 0 \\
+    I_1 = I_2 + \cancel{I^+}\\
+\end{rcases} \frac{V_i}{R_1} = -\frac{V_u}{R_2} \rightarrow V_u = -\frac{R_2}{R_1}V_i \qquad \text{Per} -V_M < V_u < V_M
+\]
+
+\underline{SAT +}
+
+\[
+    \begin{rcases}
+    \begin{rcases}
+    V_{id} > 0, \quad V_u = +V_M\\
+    V_{id} = V^+ - V^-
+    \end{rcases} \rightarrow
+    V^+ > 0\\
+   \frac{V_i - V^+ }{R_1} = \frac{V^+ - V_u}{R_2}
+   \end{rcases}
+   \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
+\]
+\[ V^+ \left( \frac{1}{R_2} + \frac{1}{R_1} \right) = \frac{V_i}{R_1} + \frac{V_M}{R_2} \]
+\[V^+ \left(\frac{R_1 + R_2}{\cancel{R_1 R_2}} = \frac{V_iR_2 + V_M R_1}{\cancel{R_1 R_2}} \]
+\[ V^+ = \frac{R_2V_i + R_1 V_M}{\cancel{R_1 + R_2}} > 0\]
+\[ \cancel{R_2} V_i > -\frac{R_1 V_M}{R_2} \]
+
+\underline{SAT -}
+\[
+    \begin{rcases}
+        V_{id} < 0 \rightarrow V^+ - V^- < 0 \rightarrow V^+ < 0\\
+        V_u = -V_M
+    \end{rcases} \ldots \rightarrow V^+ = \frac{R_2V_i - R_1V_M}{\cancel{R_1 + R_2}} < 0 \Rightarrow \cancel{R_2} V_i < \frac{R_1}{R_2} V_M
+\]
+
+Se il guadagno d'anello \'e maggiore di $1$ in modulo si \'e rischio di stabilit\'a
+
+Guadagno amplificatore operazionale $\to \infty$ in alto guadagno
+\section{Circuito Bistabile (Circuiti Schmitt trigger)}
+
+\begin{circuitikz}
+    \draw (0, 0) node[eground]{} to[R] (2, 0)
+    node[op amp, anchor=-](amp){};
+    \draw (amp.+) to[short, -o] ++(-0.5, 0) node[left]{$V_i$};
+    \draw (amp.-) -- ++(0, 1) coordinate(ang)
+    (ang) to[R]  (amp.out |- ang) -- (amp.out) to[short, -o] ++(1, 0) node[right]{$V_u$};
+\end{circuitikz}
+
+
+\underline{AG}
+\[
+\begin{rcases}
+    V_{id} = 0  \rightarrow V^+ = V^- = V_i\\
+    I_1 = I_2 + \cancel{I^+}\\
+    \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_L}
+\end{rcases}
+-\frac{V_i}{R_1} = \frac{V_i - V_u}{R_2} \rightarrow -V_i \left( \frac{R_2}{R_1} + 1\right) = V_u \Rightarrow V_u = V_i\left( 1 + \frac{R_1}{R_2}\right)
+\]
+
+\[ V_M = V_i^*\left( 1 + \frac{R_2}{R_1}\right) \rightarrow V_i^* = \frac{V_M}{1 + \frac{R_2}{R_1}} \]
+\underline{SAT +}
+\[
+    \begin{rcases}
+    \begin{rcases}
+        V_u = +V_M\\
+    V_{id} > 0 \rightarrow V^+ > V^- = V_i\\
+    I_1 = I_2 + \cancel{I^+}\\
+    \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_2}
+\end{rcases} \rightarrow -\frac{V^+}{R_1} = \frac{V^+ - V_M}{R_2} \rightarrow -V^+ \left( \frac{1}{R_1} + \frac{1}{R_2} \right)= - \frac{V_M}{R_2}\\
+        V^+\left( \frac{R_1 + R_2}{R_1\cancel{R_2}}\right) = \frac{V_M}{R_2} \rightarrow
+            V^+ =\frac{R_1}{R_1 + R_2} V_M = \frac{V_M}{1+\frac{R_2}{R_1}}
+    \end{rcases}
+    V_i < \frac{V_M}{1 + \frac{R_2}{R_1}}
+\]
+\subsection{Trigger invertente}
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+    \addplot[color=red, domain=-4:1]{2};
+    \addplot[color=red, domain=-1:4]{-2};
+    \addplot+[mark=none, color=red] coordinates{(-1, -2) (1, 2)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+
+\subsection{Trigger non invertente}
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+        \addplot[color=red, domain=-1:4]{2};
+        \addplot[color=red, domain=-4:1]{-2};
+        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+        \addplot+[mark=none, color=blue] coordinates{(-4, -2) (1, -2) (1, 2) (4, 2)};
+        \addplot+[mark=none, color=green] coordinates{(4, 2) (-1, 2) (-1, -2)};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+Aumentando il valore della tensione di ingresso (da Va) continuo a rimanere nello stesso tratto di curva, senza salti
+
+Se sono al valore basso $-V_M$, per passare al valore alto devo applicare una tensione di ingresso che \'e almeno $V^*$
+Se sono al valore alto, per passare al valore basso devo applicare una tensione che \'e minore di $-V^*$
+
+Nella fascia di ambiguit\'a se sono al valore basso rimango al valore basso, se sono a quallo alto rimango in quello alto
+
+Viene percorso un \textbf{Ciclo di isteresi}
+
+Questo circuito \'e Molto pi\'u resistente al rumore rispetto ad un circuito a soglia per la fascia di ambiguit\'a
+
+Applicando prima un segnale molto positivo, e riportando il segnale a 0 l'uscita rimane positiva. L'uscita del valore in 0, dipende dalla `storia' del circuito. Questo circuito si ricorda se l'ultimo valore applicato \'e positivo o negativo (\'e una Cella di memoria).
+
+\'E in grado di mantenere fin tanto che \'e acceso un valore binario in memoria $\rightarrow$ Passaggio da reti combinatorie a reti sequenziali
 
 \end{document}
 

@@ -1,0 +1,111 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% TODO: Define argmax
+
+\title {Dogmario FCA}
+\author{ale-cci}
+
+\begin{document}
+
+\subsection{Teorema (Stabilit\'a BIBO)}
+Un sistema $\sum$ \'e BIBO se e solo se $\int_0^{+\infty} | g(\tau) | d\tau < + \infty$
+
+\subsection{Stabilit\'a asintotica $\Leftrightarrow$ Stabilit\'a BIBO}
+$\sum$ \'e BIBO stabile se e solo se $\sum$ \'e asintoticamente stabile
+
+\subsection{Polinomio di Hurwitz}
+Un polinomio $a(s)$ \'e detto di Hurwitz se tutte le sue radici hanno parte reale negativa
+
+\textbf{propriet\'a}: Il polinomio $a(s)$ \'e hurwitziano se e solo se tutti i suoi coefficenti sono positivi
+
+\subsection{Criterio di Routh}
+Il polinomio $a(s)$ \'e hurwitziano se e solo se l'associata tabella di Routh pu\'o essere completata (con l'algoritmo base) e presenta nella prima colonna solo permanenze.
+
+I \textbf{Casi singolari} nella costruzione della Tablella di Routh avvengono quando il primo o tutti gli elementi di una riga sono nulli
+
+\subsection{Metodo di Benidir-Picinbono}
+Ogni riga, non nulla che nizia con $p$ zeri viene sommata con la riga da questa ottenuta moltiplicandola er $(-1)^p$ e traslandola verso sinistra di $p$ posizioni. (slide 23 lezione 8)
+
+\[ a(s) - s^3 + 3s -2 = 0 \]
+\begin{center}
+    \begin{tabular} {c|c c c}
+        3 & 1 & 3 & 0\\
+        \hline
+        $2^i$ & 0 & -2 & 0\\
+        $2^{ii}$ & 2 & 0 & 0\\
+        \hline
+        2 & 2 & -2 & 0\\
+        1 & 4 & 0\\
+        0 & -2
+\end{tabular}
+\end{center}
+
+\subsection{Prosecuzione tabella nel caso di riga tutta nulla}
+
+\begin{enumerate}
+    \item Derivare polinomio ausiliario
+    \item i coefficenti ottenuti dalla derivata sostituiscono gli zeri della riga nulla.
+    \item Proseguire la tabella nel modo usuale
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{c|c c c c c c}
+    2i & $\gamma_{n-2i,1}$ & $\gamma_{n-2i,2}$ & $\gamma_{n-2i,3}$  & $\cdots$ & $\gamma_{n-2i,i+1}$  & 0 \\
+    2i -1 & 0 & 0 & 0 & $\cdots$ & 0 & 0
+\end{tabular}
+\end{center}
+
+Polinomio ausiliario:
+$ \beta(s) = \gamma_{n-2i,1} s^{2i} + \gamma_{n-2i,1} s^{2i-2} +\gamma_{n-2i,3} s^{2i - 4}  + \cdots \gamma_{n-2,1} s^{2} +  \cdots \gamma_{n-2i,1} $
+
+Equazione ausiliaria: $ \beta(s) = 0$
+
+\underline{Esempio}:
+
+\begin{minipage}{0.5\textwidth}
+    \[ a(s) = s^6 + s^5 - 2s^4 -3s^3 - 7s^2 -4s -4 \]
+    \begin{center}
+        \begin{tabular}{c|c c c c c}
+            6 & 1 & -2 & -7 & -4 & 0\\
+            5 & 1 & -3 & -4 & 0\\
+            4 & 1 & -3 & -4 & 0\\
+            \hline
+            3 & 2 & -3 & 0 & 0\\
+            2 & -3 & -8 & 0\\
+            1 & -25 & 0\\
+            0 & -8
+        \end{tabular}
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    polinomio ausiliario $\beta(s) = s^4 -3s^2 -4$
+
+    $D\beta(s) = 4s^3 - 6s$
+\end{minipage}
+
+% teorema di analisi armonica
+\subsection{Teorema di analisi armonica}
+Dato $\sum$ sistema asintoticamente stabile cond f.d.t. $G(s) \in \mathbb{Q}$. La risposta forzata di $\sum$ ad un segnale armonico \'e un segnale armonico con stessa frequenza dell'ingresso.
+\[ F(w) = G(jw) \]
+
+(Dimostrazione a Lezione 9 slide 6)
+
+Rappresentazioni grafiche della funzione di risposta armonica sono i Diagrammi di Bode, diagrammi di Nyquist.
+% sistema dinamico lineare come filtro
+% Rappresentazioni standard di G e G
+% Diagrammi di bode elementari
+% Diagrammi di bode asintotici
+
+\subsectoin{Parametri caratteristici della risposta armonica}
+\begin{enumerate}
+    \item Pulsazione di risonanza $w_r \coloneqq $
+    \item Picco di risonanza $M_R$
+    \item Larghezza di banda
+\end{enumerate}
+
+
+\end{document}
