@@ -12,7 +12,7 @@ build_pdfs() {
     (cd elettronica && $mkpdf elettronica.tex >/dev/null)
 
     echo "Building SDT..."
-    $mkpdf sdt.tex >/dev/null
+    (cd sdt && $mkpdf sdt.tex >/dev/null)
 
     echo "Building FCA..."
     (cd fca && $mkpdf fca.tex >/dev/null)
