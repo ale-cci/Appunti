@@ -11,6 +11,13 @@
 
 \begin{document}
 
+\section{Teorema (poli di $\sum$ e stabilit\'a)}
+\begin{enumerate}
+    \item $\sum$ \'e \textit{stabile} se e solo se tutti i poli hanno parte reale non positiva e gli eventuali pli puramente immaginari sono semplici
+    \item $\sum$ \'e \textit{asintoticamente stabile} se e solo se tutti i suoi poli hanno parte reale negativa
+    \item $\sum$ \'e \textit{semplicemente stabile} se e solo se tutti i poli hanno partre reale non positiva e quelli puramente immaginari (che devono esistere) sono semplici
+    \item $\sum$ \'e \textit{instabile} se e solo se esiste almeno un polo a parte reale positiva o un polo puramente immaginario con molteplicit\'a maggiore di uno
+\end{enumerate}
 \subsection{Teorema (Stabilit\'a BIBO)}
 Un sistema $\sum$ \'e BIBO se e solo se $\int_0^{+\infty} | g(\tau) | d\tau < + \infty$
 
@@ -24,6 +31,8 @@ Un polinomio $a(s)$ \'e detto di Hurwitz se tutte le sue radici hanno parte real
 
 \subsection{Criterio di Routh}
 Il polinomio $a(s)$ \'e hurwitziano se e solo se l'associata tabella di Routh pu\'o essere completata (con l'algoritmo base) e presenta nella prima colonna solo permanenze.
+
+(TODO: Aggiungere come calcolare il resto dei coefficenti)
 
 I \textbf{Casi singolari} nella costruzione della Tablella di Routh avvengono quando il primo o tutti gli elementi di una riga sono nulli
 
@@ -102,10 +111,12 @@ Rappresentazioni grafiche della funzione di risposta armonica sono i Diagrammi d
 
 \subsection{Parametri caratteristici della risposta armonica}
 \begin{enumerate}
-    \item Pulsazione di risonanza $w_r \coloneqq $
-    \item Picco di risonanza $M_R$
-    \item Larghezza di banda
+    \item Pulsazione di risonanza $w_r \coloneqq \arg\max_{w\in\mathbb{R+}}|G(jw)|$
+    \item Picco di risonanza $M_R \coloneqq \frac{|G(jw_R)|}{|G(j0)|}$ oppure $M_R \coloneqq |G(jw_R)|$
+    \item Larghezza di banda $B_w \coloneqq w_{t2} - w_{t1} \ge 0$
 \end{enumerate}
 
+\section{Diagrammi di Nyquist}
+\'E la curva tracciata sul piano complesso dal vettore G(jw) per w che varia da 0 a $+\infty$
 
 \end{document}

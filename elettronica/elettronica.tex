@@ -55,23 +55,23 @@ In \underline{AG}:
 
 \[ V_{Id} = 0 \rightarrow V^- = V^+ = 0 \]
 \[
-\begin{rcases}
- I_R = \frac{V_i - V^- }{R}\\
- I_C = C\frac{d(V^- - V_u}{dt}\\
- -I_r = \cancel{I^-} + I_c
- \end{rcases}\Rightarrow
- \frac{V_i}{R} = -C \frac{dV_u}{dt}
- \Rightarrow \frac{dV_u}{dt} = -\frac{V_i}{RC} \rightarrow \int_0^t \frac{dV_u}{dt} dt = \int_0^t -\frac{Vi(t)}{RC} dt
- \]
- \[ V_u(t) - V_u(0) = -\frac{1}{RC}\int_0^t V_i(t)dt \]
+    \begin{rcases}
+        I_R = \frac{V_i - V^- }{R}\\
+        I_C = C\frac{d(V^- - V_u}{dt}\\
+        -I_r = \cancel{I^-} + I_c
+    \end{rcases}\Rightarrow
+    \frac{V_i}{R} = -C \frac{dV_u}{dt}
+    \Rightarrow \frac{dV_u}{dt} = -\frac{V_i}{RC} \rightarrow \int_0^t \frac{dV_u}{dt} dt = \int_0^t -\frac{Vi(t)}{RC} dt
+\]
+\[ V_u(t) - V_u(0) = -\frac{1}{RC}\int_0^t V_i(t)dt \]
 
- \begin{center}
-     \framebox{$ V_u (t) = V_u(0) - \frac{1}{RC}\int_0^t V_i(t) dt $}
- \end{center}
+\begin{center}
+    \framebox{$ V_u (t) = V_u(0) - \frac{1}{RC}\int_0^t V_i(t) dt $}
+\end{center}
 
- Tutto questo vale finche la tensione di uscita rimane compresa fra $\pm V_M$
+Tutto questo vale finche la tensione di uscita rimane compresa fra $\pm V_M$
 
- A Differenza del derivatore, questo circuito ha memoria
+A Differenza del derivatore, questo circuito ha memoria
 
 \subsection{}
 
@@ -113,18 +113,18 @@ In \underline{AG}:
 
 
 \begin{minipage}{0.45\textwidth}
-\begin{circuitikz}
-    \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
-    \draw(0, 2) node[anchor=east]{$V_u$}-- (2, 2) to[R, l=$R_L$] (2, 0) node[eground]{};
-\end{circuitikz}
+    \begin{circuitikz}
+        \draw (0, 0) node[eground]{} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
+        \draw(0, 2) node[anchor=east]{$V_u$}-- (2, 2) to[R, l=$R_L$] (2, 0) node[eground]{};
+    \end{circuitikz}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
-\begin{circuitikz}
-    \draw (0, 0) node[eground](G){} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
-    \draw(0, 2) node[anchor=east]{$V_u$} -- (1, 2) node[op amp, anchor=+](amp){} ;
-    \draw (amp.out) to[R, l=$R_L$] (amp.out |- G) node[eground]{};
-    \draw (amp.-) -- ++(0, 1) coordinate(angl)-- (angl-|amp.out) -- (amp.out);
-\end{circuitikz}
+    \begin{circuitikz}
+        \draw (0, 0) node[eground](G){} to[R, l=$R_1$] (0, 2) to[R, -*, l=$R_L$] (0, 4) node[right]{$V_{DD}$};
+        \draw(0, 2) node[anchor=east]{$V_u$} -- (1, 2) node[op amp, anchor=+](amp){} ;
+        \draw (amp.out) to[R, l=$R_L$] (amp.out |- G) node[eground]{};
+        \draw (amp.-) -- ++(0, 1) coordinate(angl)-- (angl-|amp.out) -- (amp.out);
+    \end{circuitikz}
 \end{minipage}
 
 Da Partitore di tensione:
@@ -161,38 +161,38 @@ Da Partitore di tensione:
 Applicando Kirkoff
 
 \[ \begin{rcases}
-     I_1 + I_2 = I^- + I_R\\
-     I_1 = \frac{V_1 - \cancel{V^-}}{R_1} \\
-     I_2 = \frac{V_2 - \cancel{V^-}}{R_2} \\
-     I_R = \frac{V^- - V_u}{R} = -\frac{V_u}{R}\\
- \end{rcases}
- \frac{V_1}{R_1} + \frac{V_2}{R_2} = -\frac{V_u}{R} \rightarrow V_u = -R\left( \frac{V_1}{R_1} + \frac{V_2}{R_2}\right)  \xrightarrow{R_1 = R_2 = R^*} V_u = -\frac{R}{R^*}(V_1 + V_2)
- \]
+        I_1 + I_2 = I^- + I_R\\
+        I_1 = \frac{V_1 - \cancel{V^-}}{R_1} \\
+        I_2 = \frac{V_2 - \cancel{V^-}}{R_2} \\
+        I_R = \frac{V^- - V_u}{R} = -\frac{V_u}{R}\\
+    \end{rcases}
+    \frac{V_1}{R_1} + \frac{V_2}{R_2} = -\frac{V_u}{R} \rightarrow V_u = -R\left( \frac{V_1}{R_1} + \frac{V_2}{R_2}\right)  \xrightarrow{R_1 = R_2 = R^*} V_u = -\frac{R}{R^*}(V_1 + V_2)
+\]
 
- Questo circuito permette di calcolare direttamente in maniera analogica una combinazione lineare di ingressi
+Questo circuito permette di calcolare direttamente in maniera analogica una combinazione lineare di ingressi
 
- Provando a progettare un sommatore di tipo digitale:
+Provando a progettare un sommatore di tipo digitale:
 
- (X: Grafico con sommatoria)
+(X: Grafico con sommatoria)
 
- \textbf{ADC}: Analog Digital converter
+\textbf{ADC}: Analog Digital converter
 
- \textbf{DAC}: Digital Analog Converter
+\textbf{DAC}: Digital Analog Converter
 
- Blocco Sommatore: Es $3+6$
+Blocco Sommatore: Es $3+6$
 
- \begin{tabular}{c c c c c}
-     1 & 1 & \\
-     0 & 0 & 1 & 1 & + \\
-     0 & 1 & 1 & 0 & = \\
-     \hline
-     1 & 0 & 0 & 1
- \end{tabular}
+\begin{tabular}{c c c c c}
+    1 & 1 & \\
+    0 & 0 & 1 & 1 & + \\
+    0 & 1 & 1 & 0 & = \\
+    \hline
+    1 & 0 & 0 & 1
+\end{tabular}
 
- (X: Grafico sommatore a propagazione di riporto)
- (RCA: Ripple Carry Adder)
+(X: Grafico sommatore a propagazione di riporto)
+(RCA: Ripple Carry Adder)
 
- Dal circuito possiamo distinguere un HA (Half Adder) e 3 FA (Full Adder)
+Dal circuito possiamo distinguere un HA (Half Adder) e 3 FA (Full Adder)
 
 In questo caso aggiungere bit vuol dire aggiungere ritardo, siccome \'e tutto in cascata. Nel caso analogico \'e tutto in parallelo. Qundi aggiungere altri bit non comporta ritardo
 
@@ -258,21 +258,21 @@ La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non 
 
 \[
     \begin{rcases}
-    V_{id} = 0 \rightarrow V^+ = V^-\\
-\begin{rcases}
-    I_1 = I_2 + \cancel{I^+} \\
-    I_1 = \frac{V_2 - V^+}{R} \\
-    I_2 = \frac{V^+}{R}
-\end{rcases}
-\rightarrow \frac{V_2 + V^+}{\cancel{R}} = \frac{V^+}{\cancel{R}} \rightarrow V_2 = 2V^+ \rightarrow V^+ = \frac{V_2}{2}
-\end{rcases} \rightarrow
-\begin{rcases}
-    V^- = \frac{V_2}{2}\\
-    I_3 = I_4 + \cancel{I^-}\\
-    I_3 = \frac{V_1 - V^-}{R}\\
-    I_4 = \frac{V^- - V_u}{R}
-\end{rcases}
-\frac{V_1 - \frac{V_2}{2}}{\cancel{R}} = \frac{\frac{V_2}{2} - V_u}{\cancel{R}}
+        V_{id} = 0 \rightarrow V^+ = V^-\\
+        \begin{rcases}
+            I_1 = I_2 + \cancel{I^+} \\
+            I_1 = \frac{V_2 - V^+}{R} \\
+            I_2 = \frac{V^+}{R}
+        \end{rcases}
+        \rightarrow \frac{V_2 + V^+}{\cancel{R}} = \frac{V^+}{\cancel{R}} \rightarrow V_2 = 2V^+ \rightarrow V^+ = \frac{V_2}{2}
+    \end{rcases} \rightarrow
+    \begin{rcases}
+        V^- = \frac{V_2}{2}\\
+        I_3 = I_4 + \cancel{I^-}\\
+        I_3 = \frac{V_1 - V^-}{R}\\
+        I_4 = \frac{V^- - V_u}{R}
+    \end{rcases}
+    \frac{V_1 - \frac{V_2}{2}}{\cancel{R}} = \frac{\frac{V_2}{2} - V_u}{\cancel{R}}
 \]
 
 \begin{center}
@@ -291,10 +291,10 @@ La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non 
 \underline{AG}
 \[
     \begin{rcases}
-    V_{id} = 0 \rightarrow V^+ = V^- = 0\\
-    I_R = I_D + \cancel{I^-}\\
-    I_R = \frac{V_i - V^-}{R}
-    I_D = IS \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
+        V_{id} = 0 \rightarrow V^+ = V^- = 0\\
+        I_R = I_D + \cancel{I^-}\\
+        I_R = \frac{V_i - V^-}{R}
+        I_D = IS \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
     \end{rcases}\rightarrow
     \frac{V_i}{RI_s} = \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right) \rightarrow e^{\frac{(V^- - V_u)}{V_T}} = \frac{V_i}{RI_S} + 1
     \xrightarrow{\ln} \ln\left(e^{-\frac{V_u}{V_T}}\right) = \ln\left( \frac{V_i}{RI_S} + 1\right)
@@ -306,10 +306,10 @@ La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non 
 \underline{AG}
 \[
     \begin{rcases}
-    V_{id} = 0 \rightarrow V^+ = V^- = 0\\
-    I_D = I_R + \cancel{I^-}\\
-    I_D = I_S \left(e^{\frac{V_i - V^-}{V_T}} -1 \right)\\
-    I_R = \frac{V^- - V_u}{R}
+        V_{id} = 0 \rightarrow V^+ = V^- = 0\\
+        I_D = I_R + \cancel{I^-}\\
+        I_D = I_S \left(e^{\frac{V_i - V^-}{V_T}} -1 \right)\\
+        I_R = \frac{V^- - V_u}{R}
     \end{rcases} \rightarrow
     I_S \left(e^{\frac{V_i}{V_T}}-1\right) = -\frac{V_u}{R} = -RI_S \left( e^{\frac{V_i}{V_t} -1}\right)
 \]
@@ -324,44 +324,44 @@ Ricordando che
 Non \'e un caso che il ramoin retroazione sia sul morsetto negativo:
 
 \begin{minipage}{0.45\textwidth}
-\begin{tikzpicture}
-    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
-        \addplot[color=red, domain=-4:-1]{2};
-        \addplot[color=red, domain=1:4]{-2};
-        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
-    \end{axis}
-\end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+            \addplot[color=red, domain=-4:-1]{2};
+            \addplot[color=red, domain=1:4]{-2};
+            \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+        \end{axis}
+    \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
-\begin{tikzpicture}
-    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
-        \addplot[color=red, domain=-1:4]{2};
-        \addplot[color=red, domain=-4:1]{-2};
-        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
-    \end{axis}
-\end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+            \addplot[color=red, domain=-1:4]{2};
+            \addplot[color=red, domain=-4:1]{-2};
+            \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+        \end{axis}
+    \end{tikzpicture}
 \end{minipage}
 
 \underline{AG}
 \[
     \begin{rcases}
-    V_{id} = 0 \rightarrow V^+ = V^- = 0 \\
-    I_1 = I_2 + \cancel{I^+}\\
-\end{rcases} \frac{V_i}{R_1} = -\frac{V_u}{R_2} \rightarrow V_u = -\frac{R_2}{R_1}V_i \qquad \text{Per} -V_M < V_u < V_M
+        V_{id} = 0 \rightarrow V^+ = V^- = 0 \\
+        I_1 = I_2 + \cancel{I^+}\\
+    \end{rcases} \frac{V_i}{R_1} = -\frac{V_u}{R_2} \rightarrow V_u = -\frac{R_2}{R_1}V_i \qquad \text{Per} -V_M < V_u < V_M
 \]
 
 \underline{SAT +}
 
 \[
     \begin{rcases}
-    \begin{rcases}
-    V_{id} > 0, \quad V_u = +V_M\\
-    V_{id} = V^+ - V^-
-    \end{rcases} \rightarrow
-    V^+ > 0\\
-   \frac{V_i - V^+ }{R_1} = \frac{V^+ - V_u}{R_2}
-   \end{rcases}
-   \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
+        \begin{rcases}
+            V_{id} > 0, \quad V_u = +V_M\\
+            V_{id} = V^+ - V^-
+        \end{rcases} \rightarrow
+        V^+ > 0\\
+        \frac{V_i - V^+ }{R_1} = \frac{V^+ - V_u}{R_2}
+    \end{rcases}
+    \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
 \]
 \[ V^+ \left( \frac{1}{R_2} + \frac{1}{R_1} \right) = \frac{V_i}{R_1} + \frac{V_M}{R_2} \]
 \[V^+ \left(\frac{R_1 + R_2}{\cancel{R_1 R_2}}\right) = \frac{V_iR_2 + V_M R_1}{\cancel{R_1 R_2}} \]
@@ -392,52 +392,52 @@ Guadagno amplificatore operazionale $\to \infty$ in alto guadagno
 
 \underline{AG}
 \[
-\begin{rcases}
-    V_{id} = 0  \rightarrow V^+ = V^- = V_i\\
-    I_1 = I_2 + \cancel{I^+}\\
-    \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_L}
-\end{rcases}
--\frac{V_i}{R_1} = \frac{V_i - V_u}{R_2} \rightarrow -V_i \left( \frac{R_2}{R_1} + 1\right) = V_u \Rightarrow V_u = V_i\left( 1 + \frac{R_1}{R_2}\right)
+    \begin{rcases}
+        V_{id} = 0  \rightarrow V^+ = V^- = V_i\\
+        I_1 = I_2 + \cancel{I^+}\\
+        \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_L}
+    \end{rcases}
+    -\frac{V_i}{R_1} = \frac{V_i - V_u}{R_2} \rightarrow -V_i \left( \frac{R_2}{R_1} + 1\right) = V_u \Rightarrow V_u = V_i\left( 1 + \frac{R_1}{R_2}\right)
 \]
 
 \[ V_M = V_i^*\left( 1 + \frac{R_2}{R_1}\right) \rightarrow V_i^* = \frac{V_M}{1 + \frac{R_2}{R_1}} \]
 \underline{SAT +}
 \[
     \begin{rcases}
-    \begin{rcases}
-        V_u = +V_M\\
-    V_{id} > 0 \rightarrow V^+ > V^- = V_i\\
-    I_1 = I_2 + \cancel{I^+}\\
-    \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_2}
-\end{rcases} \rightarrow -\frac{V^+}{R_1} = \frac{V^+ - V_M}{R_2} \rightarrow -V^+ \left( \frac{1}{R_1} + \frac{1}{R_2} \right)= - \frac{V_M}{R_2}\\
+        \begin{rcases}
+            V_u = +V_M\\
+            V_{id} > 0 \rightarrow V^+ > V^- = V_i\\
+            I_1 = I_2 + \cancel{I^+}\\
+            \frac{0 - V^+}{R_1} = \frac{V^+ - V_u}{R_2}
+        \end{rcases} \rightarrow -\frac{V^+}{R_1} = \frac{V^+ - V_M}{R_2} \rightarrow -V^+ \left( \frac{1}{R_1} + \frac{1}{R_2} \right)= - \frac{V_M}{R_2}\\
         V^+\left( \frac{R_1 + R_2}{R_1\cancel{R_2}}\right) = \frac{V_M}{R_2} \rightarrow
-            V^+ =\frac{R_1}{R_1 + R_2} V_M = \frac{V_M}{1+\frac{R_2}{R_1}}
+        V^+ =\frac{R_1}{R_1 + R_2} V_M = \frac{V_M}{1+\frac{R_2}{R_1}}
     \end{rcases}
     V_i < \frac{V_M}{1 + \frac{R_2}{R_1}}
 \]
 \subsection{Trigger invertente}
 \begin{center}
-\begin{tikzpicture}
-    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
-    \addplot[color=red, domain=-4:1]{2};
-    \addplot[color=red, domain=-1:4]{-2};
-    \addplot+[mark=none, color=red] coordinates{(-1, -2) (1, 2)};
-    \end{axis}
-\end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+            \addplot[color=red, domain=-4:1]{2};
+            \addplot[color=red, domain=-1:4]{-2};
+            \addplot+[mark=none, color=red] coordinates{(-1, -2) (1, 2)};
+        \end{axis}
+    \end{tikzpicture}
 \end{center}
 
 
 \subsection{Trigger non invertente}
 \begin{center}
-\begin{tikzpicture}
-    \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
-        \addplot[color=red, domain=-1:4]{2};
-        \addplot[color=red, domain=-4:1]{-2};
-        \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
-        \addplot+[mark=none, color=blue] coordinates{(-4, -2) (1, -2) (1, 2) (4, 2)};
-        \addplot+[mark=none, color=green] coordinates{(4, 2) (-1, 2) (-1, -2)};
-    \end{axis}
-\end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[axis lines=middle, ymax=3, ymin=-3, yticklabels=\empty, xticklabels=\empty, xlabel=$V_i$, ylabel=$V_u$]
+            \addplot[color=red, domain=-1:4]{2};
+            \addplot[color=red, domain=-4:1]{-2};
+            \addplot+[mark=none, color=red] coordinates{(-1, 2) (1, -2)};
+            \addplot+[mark=none, color=blue] coordinates{(-4, -2) (1, -2) (1, 2) (4, 2)};
+            \addplot+[mark=none, color=green] coordinates{(4, 2) (-1, 2) (-1, -2)};
+        \end{axis}
+    \end{tikzpicture}
 \end{center}
 
 Aumentando il valore della tensione di ingresso (da Va) continuo a rimanere nello stesso tratto di curva, senza salti
@@ -454,6 +454,215 @@ Questo circuito \'e Molto pi\'u resistente al rumore rispetto ad un circuito a s
 Applicando prima un segnale molto positivo, e riportando il segnale a 0 l'uscita rimane positiva. L'uscita del valore in 0, dipende dalla `storia' del circuito. Questo circuito si ricorda se l'ultimo valore applicato \'e positivo o negativo (\'e una Cella di memoria).
 
 \'E in grado di mantenere fin tanto che \'e acceso un valore binario in memoria $\rightarrow$ Passaggio da reti combinatorie a reti sequenziali
+
+\newpage
+%Appunti del  Thu 30 May 2019 03:01:57 PM CEST
+\section{Circuito Astabile}
+
+\begin{circuitikz}
+
+\end{circuitikz}
+(X: Circuito 1)
+
+\[
+    \begin{split}
+        &V_i(0) = 0\\
+        &V_u(0) = V_M \rightarrow \text{SAT +?} \rightarrow V_{id} > 0 \text{?}
+    \end{split}
+\]
+
+La condizione di alto guadagno del circuito abbiamo gi\'a visto che \'e sospetta (instabile), Possiamo presupporre che sia piu facile trovarsi in una delle due altre regioni
+
+Ipotizzo inizialmente che la tensione all'inizio sia $V_M$ (in saturazione positiva)
+
+Posso dire, svolgendo calcoli analoghi ai precedenti:
+\[
+    \begin{rcases}
+        V_i = V^- = 0\\
+        V^+ = V_M \frac{R_1}{R_1 + R_2} = \frac{V_M}{1 + \frac{R_2}{R_1}} > 0
+    \end{rcases} V_{id} = V^+ - V^- > 0 \rightarrow \text{\'E in saturazione positiva!}
+\]
+
+\[
+    \begin{rcases}
+        I_R =\frac{V_i - V_u}{R}\\
+        V_u = V_M\\
+        I_C = C\frac{dV_i}{dt}\\
+        I_C = - I_R
+    \end{rcases}
+    C \frac{dV_i}{dt} = - \frac{V_i - V_M}{R}
+\]
+
+Siccome $V_i$ innizialmente \'e uguale a 0, $V_M$ \'e positivo, vuol dire che il condensatore si sta caricando
+\[
+    \frac{dV_i}{V_i - V_M} = -\frac{dt}{RC}
+\]
+
+\[
+    \int_{V_i(0) = 0}^{V_i(t)} \frac{dV_i}{V_i - V_M} = \int_0^t - \frac{dt}{RC}
+\]
+\[ -\frac{t}{RC} = -\ln\frac{V_i(t) - V_M}{-V_M}\xrightarrow{\exp} e^{-\frac{t}{RC}} = \frac{V_i(t) - V_M}{-V_M} \]
+\[ V_i(t) = V_M - V_M e^{-\frac{t}{RC}} = V_M \left(1 - e^{-\frac{t}{RC}}\right) \]
+
+Questo vale fino a quendo $V_i < Vi^*$
+
+Osservando il condensatore nel momento $V_i = Vi^*$ (Il momento in cui cado nel ramo di saturazione negativa):
+
+\[
+    \begin{rcases}
+        V_i^* > 0\\
+        V_u = -V_M\\
+        V^- = V_i\\
+        V^+ = -V_M \frac{R_1}{R_2} = -\frac{V_M}{1 + \frac{R_2}{R_1}}\\
+    \end{rcases}
+        V_{id} = V^+ - V^- < 0 \rightarrow \text{Saturazione negativa}\\
+    \]
+
+\[
+    \begin{rcases}
+        I_R = \frac{V_i - V_u}{R} > 0\\
+        I_R = -I_C
+    \end{rcases} I_C < 0
+\]
+
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle,
+        ymax=3, ymin=-3,
+        xmax=10,
+        yticklabels=\empty, xticklabels=\empty, xlabel=$t$, ylabel=$V_i$]
+        \addplot[color=red, domain=0:2]{3*(1-exp(-x))};
+    \end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle,
+        ymax=3, ymin=-3,
+        xmax=10,
+        yticklabels=\empty, xticklabels=\empty, xlabel=$t$, ylabel=$V_i$]
+        \addplot[color=red, domain=0:2]{2};
+        \addplot+[mark=none] coordinates{(2, 2) (2, -2)};
+        \addplot[color=red, domain=2:4]{-2};
+        \addplot+[mark=none, color=red] coordinates{(4, -2) (4, 2)};
+        \addplot[color=red, domain=4:6]{2};
+        \addplot+[mark=none, color=red] coordinates{(6, 2) (6, -2)};
+        \addplot[color=red, domain=6:8]{-2};
+    \end{axis}
+\end{tikzpicture}
+
+Continua ad oscillare, la frequenza dipende da $RC$
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[not port](n1){};
+    \draw (n1.out) to[C] ++(0, -1) node[eground]{};
+    \draw (n1.out) -- ++(1, 0) node[not port, anchor=in](n2){};
+    \draw (n2.out) to[C] ++(0, -1) node[eground]{};
+    \draw (n2.out) -- ++(1, 0) node[not port, anchor=in](n3){};
+    \draw (n3.out) -- ++(0, -2) -- (n1.in |-, -2) -- (n1.in);
+\end{circuitikz}
+\end{center}
+
+Attraversando una serie di porte logiche di questo tipo posso rigenerare il segnale (Qualit\'a rigenerativa delle logiche digitali)
+
+Per controllare il ritardo del segnale basta metter in cascata pi\'u invertitori
+
+Per controllare la frequenza dell'onda quadra, basta che aumenti il numero di ritardi? (Domanda Felice)
+
+Dopo un numero pari di inversioni, se in ingresso si ha un valore alto, in uscita avr\'o lo stesso valore $\rightarrow$ Circuito bistabile
+
+(Grafico 2)
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle,
+        ymax=3, ymin=-3,
+        xmax=10,
+        yticklabels=\empty, xticklabels=\empty, xlabel=$x$, ylabel=$y$]
+        \addplot[color=red, domain=0:1]{2};
+        \addplot[color=red, domain=2.5:6]{0};
+        \addplot+[mark=none, color=red] (1, 2)  parabola (2.5, 0);
+    \end{axis}
+\end{tikzpicture}
+
+Questo circuito ha memoria; Se sono in grado di scrivere un valore alto o basso su quel nodo, l'uscita in 0 rimane salvata
+
+(X: Circuito porte 2)
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[not port](n1){};
+    \draw (n1.out) to[C] ++(0, -1) node[eground]{};
+    \draw (n1.out) -- ++(1, 0) node[not port, anchor=in](n2){};
+    \draw (n2.out) to[C] ++(0, -1) node[eground]{};
+    \draw (n2.out) -- ++(1, 0) node[not port, anchor=in](n3){};
+    \draw (n3.out) -- ++(0, -2) -- (n1.in |-, -2) -- (n1.in);
+\end{circuitikz}
+\end{center}
+Nel caso l'interruttore sia attaccato: $Q = D$, altrimenti $Q^1 = Q$
+
+Se voglio cambiare il valore memorizzato basta aprire l'anello ed applicare un valore dall'esterno
+
+Utilizzando un segnale di clock al posto del segnale di scrittura, questo circuito alterna nel tempo una fase di scrittura e di lettura.
+Circuito \underline{Trasparente}
+\[
+    \begin{aligned}
+        CK &= 1 \rightarrow Q = D \rightarrow \text{Fase di valutazione dell'ingresso, EVALUATION}\\
+        CK &= 0 \rightarrow Q^1 = Q \rightarrow \text{Fase di mantenimento, HOLD}
+    \end{aligned}
+\]
+
+Questo circuito non \'e ancora un \textit{Flip Flop}, ma un \textit{Latch}. Quando siamo a $0$ l'uscita \'e bloccata all'ultimo segnale
+
+(X: Grafici clock)
+\begin{tikzpicture}
+    \begin{axis}[axis lines=middle,
+        ymax=3, ymin=-3,
+        xmax=10,
+        yticklabels=\empty, xticklabels=\empty, xlabel=$CK$]
+        \addplot[color=red, domain=0:2]{2};
+        \addplot+[mark=none] coordinates{(2, 2) (2, -2)};
+        \addplot[color=red, domain=2:4]{-2};
+        \addplot+[mark=none, color=red] coordinates{(4, -2) (4, 2)};
+        \addplot[color=red, domain=4:6]{2};
+        \addplot+[mark=none, color=red] coordinates{(6, 2) (6, -2)};
+        \addplot[color=red, domain=6:8]{-2};
+    \end{axis}
+\end{tikzpicture}
+
+(X: Altro grafico)
+Dall'ultimo grafico si pu\'o vedere che non \'e un comportamento da rete sincron. Quello che posso fare \'e aggiungere a queso oggetto un secondo stadio, passando ad un circuito di tipo Master-Slave
+
+Chiamo questo circuito \textit{p-latch}
+
+(X: Circuiti n-latch, caso duale dell' n-latch)
+
+Per creare un circuito di tipo master-slave basta che metto in cascata un circuito\textit{n-latch} con uno \textit{p-latch}.
+
+(X: Foto 1)
+(X: Grafici ambigui dopo foto)
+
+Lo slave legge solo un valore: Quello alla fine dello stato di valutazione del master $\rightarrow$ Il valore dell'uscita pu\'o essere aggiornato solo nei fronti di discesa del clock. $\rightarrow$ \textit{Flip flop} sincrono
+
+(X: Immagine flip flop, (post grefici ambigui))
+
+Per un flip flop Positive triggered (Campionato sul fronte positivo): Scambiare p ed n latch; Prima il P dopo N latch
+
+\subsection{Multiplexer}
+
+(X: Circuito Multiplexer)
+\begin{tabular}{c|c c c c}
+    s-ab & 00 & 01 & 11 & 00\\
+    \hline
+    0  & 0 & 1 & 1 & 0  \\
+    1 & 0 & 0 & 1 & 1
+\end{tabular}
+$\Rightarrow y = as + b\bar{s}$
+
+
+(X: Or ingressi negati)
+
+
+$ z = \bar{x} + \bar{y} = \bar{xy}$ (NAND)
+
+MUX mi costa 12 transistori +2. Per fare un latch utilizzoaltri 2 transistori $\rightarrow$ Latch utilizza 16 (+2) transistori
+Per la configurazione master-slave (\textit{Flip Flop di tipo D}) ne servono altri 16
 
 \end{document}
 
