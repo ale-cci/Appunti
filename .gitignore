@@ -4,6 +4,8 @@
 *.synctex.gz
 *.fdb_latexmk
 *.pdf
+*.out
 prog-x.c
 !pdf/*.pdf
 placeholder.jpg
+
