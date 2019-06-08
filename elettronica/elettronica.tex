@@ -22,8 +22,7 @@
 % \include{parte_a}
 % \include{quaderno}
 
-\include{appunti_diodo}
-
+%\include{appunti_diodo}
 \include{appunti_21-05-19}
 \include{appunti_22-05-19}
 \include{appunti_23-05-19}
@@ -663,6 +662,399 @@ $ z = \bar{x} + \bar{y} = \bar{xy}$ (NAND)
 
 MUX mi costa 12 transistori +2. Per fare un latch utilizzoaltri 2 transistori $\rightarrow$ Latch utilizza 16 (+2) transistori
 Per la configurazione master-slave (\textit{Flip Flop di tipo D}) ne servono altri 16
+
+
+\newpage
+\section{Appunti Tue 04 Jun 2019 02:57:14 PM CEST}
+
+\textbf{Multiplexer} $y = sa + \bar{s}b \Rightarrow \bar{y} = sa + \bar{s}b$
+
+(X: Figura con transistori)
+
+
+Non \'e un problema se il segnale $y$ torna invertito, lo devo utilizzare invertito nel circuito master-slave ugualmente
+
+Per fare il multiplexer, prima servivano 16 transistori, ora nella figura siamo passati a 10. prima il segnale per andare dall'ingresso all'uscita deve attraversare due strati di nand e due di not, ($\times 2$ con master slave), nel nuovo circuito deve attraversarne solo 2.
+
+\`E possibile implementare il mux anche con due interruttori; L'idea diventa quindi sostituire ai due interruttori due transistori controllari da una corrente (Da 8 a 2 transistori). (\textit{Pass Transistor})
+
+Questo \'e il primo caso dove la corrente d'ingresso $I \neq 0$
+
+\begin{circuitikz}
+    \draw (0, 0) node[eground] {}
+    to[C] (0, 2);
+\end{circuitikz}
+
+\underline{Caso $t < 0$}
+
+M off
+\[
+    \begin{rcases}
+         I_D = 0\\
+         I_D = I_c
+     \end{rcases} \rightarrow I_c = 0 \rightarrow I_C = C\frac{dV_u}{dt} = 0 \rightarrow V_u = cost
+\]
+
+ Se l'ingresso \'e 0, l'uscita pu\'o trovarsi in un uscita in condizioni di alta imedenza.
+Il valore si mantiente dentro al condensatore
+
+DRAM: Memoria dinamica associata ad un condensatore
+questo circuito ha 3 tipi d'uscita
+
+\begin{enumerate}
+    \item alta
+    \item bassa
+    \item alta impedenza
+\end{enumerate}
+
+Nel momento in cui si accende il transistore i casi possibili sono:
+
+\begin{tabular}{c c c}
+    $V_i$ & $V_u$ \\
+    \hline
+    $V_L$ & $V_L$ & -\\
+    $V_L$ & $V_H$ & * $V_u : V_H\to 0$\\
+    $V_H$ & $V_L$ & ** $V_u: 0 \to V_{DD} - V_T$\\
+    $V_H$ & $V_H$ & -\\
+\end{tabular}
+
+Studio il primo dei due fenomeni (*):
+
+il nodo $V_u$ ha sempre potenziale piu alto rispetto all'ingresso, di conseguenza \'e il Drain, mentre $V_I$ \'e il source
+
+\[
+    \begin{rcases}
+        I_D = - I_C\\
+        I_D \ge 0\\
+        I_C = C\frac{dV_u}{dt}
+    \end{rcases}
+    C\frac{dV_u}{dt} < 0
+\]
+
+Derivata negativa, la cerica del condensatore si sta esaurendo\\
+Esattamente quello scritto quando abbiamo calcolato il tempo di scarica del condensatore cmos
+
+Il transitorio termina quando la derivata si annulla $\rightarrow$ la corrente si annulla $\rightarrow V_{DS} = V_u$ si annulla
+
+Tende ad assumere asintoticamente il valore nullo
+
+
+Studiando il caso (**)
+Drain e Source sono invertiti
+\[
+    \begin{rcases}
+    I_D = I_C\\
+    I_D \ge 0\\
+    I_C = C \frac{dV_u}{dt}
+\end{rcases}
+C \frac{d V_u}{dt} \ge 0
+\]
+
+
+\[ I_D = \frac{\beta}{2}\left( V_{GS} - V_T\right) ^2 = 0 \]
+\[ V_{DD} - V_i \rightarrow V_u = V_{DD} - V_T \]
+
+Questo pass transistor \'e capace di trasferire uno \textit{0 Forte} ed un un \textit{1 Debole}
+%%
+Supponendo ora di avere lo stesso caso di prima (Alto in ingresso e basso in uscita che voglio portare alto) $\rightarrow$ Transitorio di carica di un invertitore cmos, inizialmente saturo fino a quando la tensione di uscita $> V_{TP} $, poi va in lineare
+
+Quindi sappiamo gi\'a che l'uscita si porta da al valore $V_{DD}$
+
+SAT $\to I_D = \frac{\beta_D}{2}\left(V_{SG} - |V_{TP}|\right)^2 = 0 \rightarrow V_{SG} = V_u = |V_{TP}|$
+
+La rete di pulldown non \'e capace di scaricare completamente il transistore, si ferma una soglia prima
+
+\bigbreak{}
+\begin{tabular}{c c}
+    $V_u : V_H \to V_L$ & n 0 forte\\
+                        & p 0 debole  ($|V_{TP}|)$\\
+                        \hline
+    $V_u: V_L \to V_H$ & n 1 debole ($V_{DD} - V_T$)\\
+                       & p 1 forte\\
+\end{tabular}
+
+
+Metto insieme p ed n mos per migliorare le prestazioni
+
+\[ V_u : 0 \xrightarrow{n SAT\\p SAT} |V_{TP}| \xrightarrow{n SAT\\ p LIN} V_{DD} - V_{TN} \xrightarrow{OFF, LIN} V_{DD} \]
+\[ V_u : V_{DD} \xrightarrow{n SAT\\ p SAT} V_{DD} - V_{TN} \xrightarrow{LIN\\SAT} |V_{TP}| \xrightarrow{LIN, OFF} 0 \]
+
+Un oggetto di questo tipo si chima \textit{transmission gate}
+
+Passando attraverso due invertitori, il valore d'uscita viene rigenerato
+
+Questo multiplexer non \'e immune ai disturbi, il meglio che posso sperare \'e che il segnale esce ridotto al massimo di quanto ci aspettiamo
+
+\begin{tabular}{c c|c}
+    a & b & y\\
+    \hline
+    0 & 0 & 0\\
+    0 & 1 & 0\\
+    1 & 0 & 0\\
+    1 & 1 & 1\\
+\end{tabular}
+
+\[ y = \begin{cases}
+    a \quad \text{se} \, =0\\
+        b \quad \text{se} \,a = 1\\
+    \end{cases}
+\]
+
+Segnale $a$ \'e usato come selettore
+
+Difetto: non abbiamo margine con l'immunit\'a ai disturbi
+
+(X : Circuito and con multiplexer e transistor)
+
+\underline{OR}
+
+\begin{tabular}{c c|c}
+    a & b & y\\
+    \hline
+    0 & 0 & 0\\
+    0 & 1 & 1\\
+    1 & 0 & 1\\
+    1 & 1 & 1\\
+\end{tabular}
+
+(X: Circuito or con multiplexer transistor)
+
+Mentre connettendo stadi cmos, la corrente di gate \'e nulla, in questo caso (pass transistor) la corrente che circola non \'e nulla. Il tempo di propagazione dipende dal tempo di carica e scarica delle capacit\'a parassita
+
+Nel pass transistor le capacit\'a parassita sono caricate dalla corrente che entra in ingresso. In questo caso devo caricare una maggiore capacit\'a con a disposizione una corrente piu debole. Auentare il numero degli stadi vuol dire aumentare la capacit\'a da caricare e la resistenza
+
+
+
+% Appunti Thu 06 Jun 2019 02:42:48 PM CEST
+\newpage
+\section{Appunti Thu 06 Jun 2019 02:42:48 PM CEST}
+
+% Scorsa lezione
+Bit Line:
+
+Wired line
+
+Meccanismo di indirizzamento attraverso un decoder
+
+Decoder si frammenta in una struttura gerarchica id pi\'u righe e decoder
+
+Rimane da capire cosa c'e' in un incrocio
+
+%
+
+R/W segnale di controllo che specifica lettura e scrittura
+
+Memorie a sola lettura: Piu semplice ed economica rispetto ad una memmoria RW.
+
+Classificazione tra memorie:
+
+\begin{itemize}
+    \item ROM: Read Only Memory; Il contenuto rimane invariato, si pone il problema di definire una volta per tutte il contenuto:
+        \begin{itemize}
+            \item (MP) Rom (Mask Programmable); Programmate in fabbrica
+
+            \item \textbf{FP ROM} (Field Programmable ROM); Programmata dall'utente Genericamente chiamata (PROM: Rom Programmabile)
+        \end{itemize}
+    \item RWM: Read Write Memory
+        \begin{itemize}
+            \item Volatile RWM: Perde i dati quando manca l'alimentazione (RAM: Random Access Memory, Memoria ad accesso Arbitrario). Il tempo d'accesso all'informazione non dipende dalla posizione del dato (indirizzo).
+                \begin{itemize}
+                    \item Dato Memorizzato in maniera Statica (SRAM: Static Ram)
+                    \item Dato Memorizzato in maniera Dinamica (DRAM: Dynmic RAM)
+                \end{itemize}
+            \item Non Volatile RWM: Permanente una volta che \'e stato scritto un dato, esso rimane nel tempo indefinitamente
+                \begin{itemize}
+                    \item EPROM
+                    \item $E^2$PROM
+                    \item FLASH EPROM
+                    \item $\ldots$
+                \end{itemize}
+                La sigla ROM indica che l'operazione di lettura e di scrittura sono radicalmente diverse (tempi, tensioni applicate, $ldots$), sono progettate per essere lette frequentemente e programmate o scritte non cosi spesso.
+
+                Chiamate Memorie a Prevalente Lettura (\textit{Read Mostly Memory})
+        \end{itemize}
+\end{itemize}
+
+Come progettare L'incrocio con la memoria ROM
+
+Ogni colonna di questa matrice \'e implementabile come la tabella di verit\'a alimentata dal decoder.
+
+Per avere l'uscita negata basta che inverta la logica del circuito
+% Nor
+
+\textbf{NOR-BASED}
+
+Se sulla tabella di verti\'a leggo uno $\rightarrow$ transistore nella rispettiva \textit{word}? line.
+Anzich\'e invertire l'uscita, basta invertire se mettere o no il transistore in ingresso
+
+Per programmare la memoria:
+
+\begin{itemize}
+    \item
+        Nel caso in cui la programmi il fabbricante, sceglie se mettere o no il transistore, non \'e molto pratico, siccome la costruzione dei transistori \'e una delle prime fasi.
+
+        Quello che si pu\'o fare \'e invece che agire sulle fasi iniziali della progettazione, agiamo sulle fasi finali: Costruisco una matrice, dove i transistori ci sono tutti; Ma siccome ogni transistore \'e collegato alla linea di bit, vuol dire che li devo connettere fisicamente alla linea metallica del segnale della bitline.
+
+        Ovverso scelgo se collegare o no il transistore alla bitline. Se non lo collego, si comporta come se non ci fosse.
+        \'E molto piu costoso differenziare i progetti, piuttosto che produrre qualche transistore in pi\'u.
+
+        Rimane vero che il costo di questa operazione \'e elevato, si giustiica solamente per volumi di produzione sufficentemente grandi (MPROM)
+
+    \item Programmazione sul campo, connetto tutti i transistori, attraverso un interconnessione particolare, rappresentabile impropiamente come un fusibile (tratto di circuito a resistenza elevata, se si scalda a sufficenza interrompe il circuito).
+
+        La pista del fusiblile non si fonde quando leggo, ma quando scrivo: Corrente di fusione di programmazione \'e pi\'u alta,
+
+        Fondere dove ho bisogno di un 1 nella tabella di verit\'a
+
+    \item  Un altro metodo \'e scegliere la tensione di soglia $V_T$ dei transistori.
+        \'E necessario modificare la tensione di soglia dinamicamente. Per non riportare il problema alla fabbricazione
+        Tensione di soglia: Tensione da applicare al gate per far si che si formi sotto al gate un canale conduttivo, che corrisponde ad una certa densit\'a di elettroni.
+
+        Se all'interno dell'ossido \'e intrappolata una carica negativa: Neutralizza una parte della carica positiva di Gate: La tensione di soglia si alza: \'E necessaria pi\'u carica di gate per avere la stessa tensione di soglia
+
+        \textbf{Transistore a Doppio Gate}
+\end{itemize}
+
+Transistore a doppio gate: Ha dimensioni estremamente ridotte, quindi per \textit{Effetto tunnel} \'e possibile con probabilit\'a $\neq 0$ che un elettrone entri dentro lo strato isolato. Accelerando i portatori di canale posso fare si che una parte degli elettroni di canale entrino dentor e rimangano intrappolati dentro a questo \textit{Floating Gate}
+
+In questo modo posso modificare la tensione di soglia variando le correnti di canale
+
+Voglio che la velocit\'a degli elettroni (Energia cinetica)  di quando leggo e quando scrivo siano diverse (Pi\'u basse durante la lettura, pi\'u alte durante la programmazione). Segue che la lettura \'e molto pi\'u rapida
+
+La probabilit\'a di effetto tunnel \'e molto ridotta per fare in modo che i dati non vengano variati durante la lettura.
+
+A lungo andare \'e molto probabile che elettroni entrino dentro all'ossido, rimanendo permanentemente intrappolati. \textit{Fenomeno di Invecchiamento del transistore}. Il numero di volte che posso cancellare e programmare la memoria, non \'e infiito.
+
+Vuol dire che posso leggere la memoria, un numero infinito di volte, ma posso scriverla solo un numero finito di volte. Non \'e utilizzabile come memoria centrale per un Computer. (Se ci voglio scrivere con una velocit\'a di 1 $GHz$ sarebbe esaurita in 1 secondo)
+
+Chiamiamo queste memorie EPROM e  EEPROM (\textit{Elecrically Eraseable Programmable Read Only Memory})
+
+\subsection{Memorie Voltatili}
+
+Se connetto la cella alla bit line, la bit line influisce la cella: necessita distinzione tra lettura e scrittura.
+
+Bistabile + Faccio competere con una rete forte se voglio scrivere ed una rete debole se voglio leggere (dalla cella): SRAM 5T(ransistori)
+
+Alternativa: Condensatore isolato (Problema con capacit\'a parassita della bitline) (DRAM 1T), le operazioni di lettura sono molto pi\'u complicate). Si dice che la lettura \'e distruttiva.
+
+Un altro problema \'e che se carico la cella, il condensatore \'e imperfetto, e poco alla volta perde carica. Periodicamente devo rigenerare i valori nelle celle (Operazione di Refresh). Questo rallenta le operazioni
+
+Per questo motivo, le memorie di tipo statico sono significativamente pi\'u veloci delle memorie di tipo dinamico.
+
+\subsection{Conversione ADC/DAC}
+Ci limitiamo ad enunciare i principi (come nelle memorie) senza entrare nel dettaglio.
+
+Convertitore ADC, entra un segnale esce una n-upla di bit, \'e implicita una perdita di informazione.
+
+Immaginando che il segnale d'ingresso $V_{in}$ vari da 0 a $V_{SF}$.
+Posso rappresentare in funzione dell'ingresso $V_{in}$ la rappresentazione decimale equivalente.
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[xmin=0, ymin=0]
+        \addplot[color=red]{x};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+
+Assegno i possibiili valori d'ingresso a rispettivi valori binari per gli $a_0 \ldots a_n$: Processo di Quantizzazione
+\[\frac{V_{FS}}{2^n} = Q\]
+
+Se scelgo questo tipo di quantizzazione l'errore massimo \'e $Q$
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[xmin=0, ymin=0]
+        \addplot[color=red]{x};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+In questo caso, tralasciando, l'ultimo intervallo l'errore massimo che ho \'e $\frac{Q}{2}$. Tutto questo funziona fino a quando non entro negli intervalli segnati.
+
+% op amp
+\begin{circuitikz}
+    \draw (0, 0) node[op amp](oa){};
+    \draw (-1, |- oa.-) node[left]{$t_1$} to[short , *-] (oa.-);
+
+\end{circuitikz}
+
+Serve un circuito in grado di leggere le soglie d'ingresso (Comparatore elementare)
+\[ V_id = V_{i0} - t_1 > 0 \to V_{in} > t_1 \to V_u = V_M \]
+
+Siccome devo osservare 3 soglie: 3 Amplificatori operazionali
+
+% 3 op amp
+\begin{circuitikz}
+
+\end{circuitikz}
+Codice a 3 monitor
+
+($V_{FS}$ Tensione di fondoscala)
+
+\begin{itemize}
+    \item Generare i valori di riferimento:
+        Siccome entra una corrente nulla nell'operazionale basta un partitore. (Per riprodurre le tensioni basta mettere resistenze proporzionali)
+    \item ABC \'e gia un uscita digitale: Convertire il codice termometro in un codice binario
+
+        \begin{minipage}{0.3\textwidth}
+            \begin{tabular}{c c c|c c c }
+                A & B & C & $a_1$ & $a_0$\\
+                \hline
+                0 & 0 & 0 & 0 & 0\\
+                0 & 0 & 1 & 0 & 1\\
+                0 & 1 & 0 & - & -\\
+                0 & 1 & 1 & 1 & 0\\
+                1 & 0 & 0 & - & -\\
+                1 & 0 & 1 & - & -\\
+                1 & 1 & 0 & - & -\\
+                1 & 1 & 1 & 1 & 1\\
+            \end{tabular}
+        \end{minipage}
+        \begin{minipage}{0.6\textwidth}
+        \begin{tabular}{c|c|c|c|c|}
+            A/BC & 00 & 01 & 11 & 10\\
+            \hline
+            0 & 0 & 0& 1 & -\\
+            \hline
+            1 & - & - & 1 & -\\
+            \hline
+        \end{tabular} $\Rightarrow a_1 = B$
+        \bigbreak
+        \begin{tabular}{c|c|c|c|c|}
+            A/BC & 00 & 01 & 11 & 10\\
+            \hline
+            0 & 0 & 1& 0 & -\\
+            \hline
+            1 & - & - & 1 & -\\
+            \hline
+        \end{tabular} $\Rightarrow a_0 = A + \bar{B}C$
+        \end{minipage}
+
+        Convertitore di tipo Flash
+\end{itemize}
+
+Numero decimale che rappresenta l'n-upla di bit posso scriverlo come
+\[A = \sum\limits_{i=0}^{n-1} a_i2^i  = 2^n\sum\limits_{i=0}^{n-1} a_i2^{i-n} \]
+\[ \sum\limits_{i=0}^{n-1} a_i2^{i-n} \approx 1 \]
+
+\[\sum\limits_{i=0}^{n-1} a_i2^{i-n} V_{FS} = a_{n-1}\frac{V_{FS}}{2} + a_{n-2}\frac{V_FS}{4} \ldots a_0\frac{V_{FS}}{2^n}\]
+
+Ho ricondotto il problema ad una somma di tensioni proporzionale a $V_{FS}$ : Basta un circuito sommatore
+% sommatore
+\[ V_ = - \left( \frac{R}{R_1} V_1 + \frac{R}{R_2}V_2\right) \]
+
+\[ V_u = a_1 \frac{V_{FS}}{2} + a_0\frac{V_{FS}}{4} \]
+Immaginando di applicare il principio di sovrapposizione degli effetti
+\[  a_1a_0 = 01\qquad V_u = \cancel{a_0}\frac{V_{FS}}{4} = -\left(\frac{R}{R_1}V_1 + \frac{R}{R_2} V_2\right) \]
+\[ R_2 = 4R\frac{V_H}{V_{FS}} \]
+
+Altro caso $a_1a_0 = 10$
+\[ V_u = \cancel{a_1} \frac{V_{FS}}{2} + \cancel{a_0 + \frac{V_{FS}}{4}}  = -\frac{R}{R_1} V_H \to
+    R_1 = 2R \frac{V_H}{V_{FS}}
+\]
+
 
 \end{document}
 

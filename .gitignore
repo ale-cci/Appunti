@@ -5,7 +5,12 @@
 *.fdb_latexmk
 *.pdf
 *.out
-prog-x.c
+
+TODO.txt
+
+
 !pdf/*.pdf
 placeholder.jpg
 
+# Blocked until 13/06
+ubungu/extra
