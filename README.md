@@ -2,7 +2,7 @@
 ### Author: ale-cci
 
 ## Disclaimer:
-Nel caso (Molto probabile) che mancasse qualcosa negli appunti.
+Nel caso (Molto probabile) che mancasse qualcosa negli appunti, ditemi un quel.
 ## Struttura:
 
 * /ubungu : Esercitazioni di Sistemi Operativi
