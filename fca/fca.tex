@@ -3,9 +3,13 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{cancel}
-
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
 \usepackage{tikz}
 \usepackage[margin=1in]{geometry}
+
+\pagestyle{fancy}
+\everymath{\displaystyle}
 
 \title{FCA}
 \author{ale-cci}
@@ -22,11 +26,53 @@ Un sistema lineare $\sum$ si dice:
     \item ASINTOTICAMENTE STABILE, se stabile e $lim_{t \to+\infty} y_{lib}(t) = 0$A per ogni perturbazione introdotta.
     \item SEMPLICEMENTE STABILE \'e stabile ed esiste una perturbazione  per cui
 
-    \[ lim_{t \to +\infty} y_{lib}(t) = y_{\infty} \neq 0 \lor \big\{\text{Non esiste $lim_{t\to\infty} y_{lib}(t)$}\big\} \]
+    \[ \lim_{t \to +\infty} y_{lib}(t) = y_{\infty} \neq 0 \lor \big\{\text{Non esiste $lim_{t\to\infty} y_{lib}(t)$}\big\} \]
     \item INSTABILE non \'e stabile
 \end{enumerate}
 
 \newpage
+\section{Trasformata Z}
+Dato un segnale a tempo discreto ($x(k) : \mathbb{Z} \to \mathbb{C}$), La trasformata zeta di $x(k)$ \`e definita come:
+\[ \mathcal{Z}[x] \coloneqq \sum\limits^{+\infty}_{k=0} x(k) z^{-k}\]
+
+\textit{Es:}
+$ \mathcal{Z}[\delta(k)] = \sum\limits_{k=0}^{+\infty} \delta{k}z^{-k} = 1 $
+
+La trasformata $\mathcal{Z}$ \`e lineare:
+$ \mathcal{Z}[ax(k) + by(k)] = a\mathcal{Z}[x(k)] + b\mathcal{Z}[y(k)] $\\
+
+Per calcolare $\mathcal{Z}[\sin(\omega k)]$ e $\mathcal{Z}[\sin(\omega k)]$, basta $\mathcal{Z}[e^{i\omega k}]$, poi utilizzare la formula per serie geometrica di regione $q < 1$: $\sum\limits_{k=0}^{+\infty} q^k = \frac{1}{1-q} $, ottenendo:
+
+\[ \mathcal{Z}[\sin (\omega k)] = \frac{z\sin\omega}{z^2 - 2z\cos \omega +1} \]
+\[ \mathcal{Z}[\cos (\omega k)] = \frac{z(z - \cos\omega)}{z^2 - 2z\cos \omega +1} \]
+
+\subsection{Propiet\'a trasformata Z}
+Trasformata di un segnale in ritardo di $n$ passi:
+\[ \mathcal{Z}[x(k-n)] = z^{-n}\mathcal{Z}[x(k)] + \sum\limits_{k=0}^{n-1} x(k-n) z^{-k} \]
+
+Segnale anticipato di $n$ passi:
+\[ \mathcal{Z}[x(k+n)] = z^n\mathcal[x(k)] - \sum\limits_{k=0}^{n-1}x(k)z^{n-k} \]
+
+Teorema valore iniziale: $x(0) = \lim\limits_{z\to +\infty} \mathcal{Z}[x(k)] $
+
+Teorema valore finale (valido solo se $x(k)$ \`e limitata):
+$\lim\limits_{k\to +\infty} x(k) = \lim\limits_{z \to 1} (z-1) \mathcal{Z}[x(k)] $
+
+Trasformata di $a^kx(k)$: $X(z')\Big|_{z'=\frac{z}{a}}$
+
+Derivata trasformata Z: $\mathcal{Z}[k\cdot x(k)] = -z \frac{dX(z)}{dz}$
+
+Trasformata gradino: $\mathcal{Z}[1(k)] = \frac{z}{z-1} $
+
+Trasformata convoluzione: $\mathcal{Z}[x(k) \ast y(k)] = X(z)\cdot Y(z)$
+
+\section {Antitrasformazione Zeta}
+\[ x(k) = \sum\limits_i Res\{ X(z) z^{k-1}, P_i \} \]
+
+Antitrasformate Notevoli:
+\[ \mathcal{Z}^{-1}\left[ \frac{c}{z-p} + \frac{\bar c}{z-p} \right] = 2|c||p|^{k-1} \cos((k-1) \arg p + \arg c )\, 1(k-1) \]
+\[ \mathcal{Z}^{-1}\left[ \frac{1}{z-a}\right] = a^{k-1} \cdot 1(k-1) \]
+
 \section{Criterio di Juri}
 Sia dato il polinomio $a(z) = a_n z^n + a_{n-1} z^{n-1} + \cdots + a_n$ con $a_n > 0$. Condizione necessaria affich\'e $a(z)$ abbia tutte le radici di modulo minore di $1$ \'e che le seguenti disuguaglianze siano soddisfatte:
 
@@ -354,7 +400,10 @@ Possiamo applicare le Formule di inversione
 \end{cases}
 \]
 
-\section{Esercizio 1}
+\section{Esercitazione 12}
+\subsection{Esercizio 1}
+\textit{Sia dato il seguente sistema in retroazione unitaria, dove $C(s)$ \`e un regolatore PID e $P(s) = \frac{5}{(s+1)^3}$. Posto $T_i = T_d$, progettare il controllore PID affinch\'e il margine di fase del sistema sia $M_f = 45^\circ$}.
+\bigbreak
 
 \[ P(s) = \frac{5}{(s+1)^3} \]
 Controllore \underline{PID}: $ C(s) = K\left(1 + T_d s + \frac{1}{T_i s}\right)$
@@ -389,7 +438,11 @@ Controllore \underline{PID}: $ C(s) = K\left(1 + T_d s + \frac{1}{T_i s}\right)$
 
 \[\framebox{$C(s) = 0.5657 \left( 1 + \frac{1}{2}s + \frac{1}{2s}\right) $}\]
 
-\section{esercizio 2}
+\subsection{Esercizio 2}
+\textit{Un sistema a tempo discreto \`e in evoluzione livera (ingresso identicamente nullo) e la trasformata zeta dell'uscita \'e
+    \[ Y_{lib}(z) = \frac{1}{\left(z -\frac{1}{2}\right)^2(z^2+1)} \]
+Determinare la corrispondente evoluzione livera $y_{lib}(k)$, per $k \ge 0$.}
+\bigbreak
 \[ y_{lib}(2) = \frac{1}{(z - \frac{1}{2}) ^2 (z^2 + 1)}  = \frac{1}{\left(z - \frac{1}{2}\right)^2(z -j)(z + j)} \]
 
 \[ \mathcal{Z}^{-1}[ y_{lib}(z)] = y_{lib}(K) \quad , \quad K \ge 0 \]
@@ -416,89 +469,117 @@ $n$ \'e la molt di P
 
 \[ C_2 = \cancel{(z - j)^1} \]
 
-\section{Esercitazione 12}
+
+$Y_{lib}(z) = \frac{1}{\left( z-\frac{1}{2} \right)^2(z^2 +1)} = \frac{1}{\left(z-\frac{1}{2}\right)^2(z-j)(z+j)}$
+
 \subsection{Esercizio 3}
+\textit{Dato un sistema in retroazione, dove $P(s) = \frac{10}{s(s+10)}$, Determinare per quali $K \in \mathbb{R}$ il sistema in retroazione \`e asintoticamente stabile.
+Utilizzare come intervallo di campionamento $T = 0.05 s$}\\
 
-Viene assegnato il sistema in retroazione
-\[ P(s) = \frac{1}{s(s+10)} \]
-Traovare i valori di $K \in \mathbb{R}$ tale che il sistema \'e asintoticamente stabile
-
-Prima cosa da fare discretizzare l'impianto
+Prima cosa da fare discretizzare l'impianto: (lezione 20 slide 15)
 
 \[ P_d(z) = \frac{z-1}{z} \mathcal{Z}\left[ \frac{P(s)}{s}, T\right] \]
 
 
-\[ \frac{P(s)}{s} = \frac{10}{s^2 (s+10)} = \frac{C_{1,1}}{s^2} + \frac{C_{1,2}}{s} + \frac{C_{2,1}}{(s+10)} \]
-\[
-    \begin{cases}
-        C_{1,1} = \cancel{s^2} \frac{10}{\cancel{s^2}(s+10)} |_{s=0} = 1\\
-        C_{2,1} = \cancel{(s+10)} \frac{10}{s^2\cancel{(s+10)}} \big|_{s=10} = \frac{1}{10}\\
-        C_{1,2} + C_{2,1} = 0 \Leftrightarrow C_{1,2} = -\frac{1}{10}
-    \end{cases}
-\]
-\[\mathcal{L}^-1\left[ \frac{P(s)}{s}\right] = 1t - \frac{1}{10} + \frac{1}{10} e^{-10t} \qquad t\ge 0 \]
-\[ \mathcal{L}^-1\left[\frac{P(s)}{s}\right]_{t=0.05K} = 0.05K - 0.1 + 0.1 e^{-0.5K} \qquad K\ge 0\]
-\[ P_d{z} = \mathcal{Z}\left[ 0.05K - 0.1 + 0.1 e^{-0.5K} \right]\]
-\[
+Scomposizione in fratti semplici:
+$ \frac{P(s)}{s} = \frac{10}{s^2 (s+10)} = \frac{C_{1,1}}{s^2} + \frac{C_{1,2}}{s} + \frac{C_{2,1}}{(s+10)} $
+
+$ C_{1,1} = s^2 \cdot \frac{10}{s^2(s+10)} \Big|_{s=0} = 1$
+
+$ C_{2,1} = (s + 10) \cdot \frac{10}{s^2(s+10)} = \frac{10}{s^2} \Big|_{s=10} = \frac{1}{10} $
+
+\bigbreak
+
+$n -m  > 1 \Rightarrow \sum Res( \frac{P(s)}{s}, p_i) = 0$
+
+$C_{1,2} + C_{2,1} = 0$
+
+$C_{1,2} = -C_{2,1} = -\frac{1}{10}$
+
+\bigbreak
+Antitrasformo $\frac{P(s)}{s}$:
+
+$\mathcal{L}^{-1}\left[ \frac{1}{s^2} - \frac{1}{10 s} + \frac{1}{10(s+10)} \right] = t - \frac{1}{10} + \frac{1}{10}e^{-10t}$
+
+\bigbreak
+Campionamento del segnale:
+
+$ \mathcal{L}^{-1}\left[\frac{P(s)}{s}\right]_{t=0.05K} = 0.05K - 0.1 + 0.1 e^{-0.5K} \qquad (K\ge 0) $
+
+\bigbreak
+$ P_d(z) = \mathcal{Z}\left[ 0.05K - 0.1 + 0.1 e^{-0.5K} \right] $
+
+\bigbreak
+$
     \begin{rcases}
         \mathcal{Z}[a^k] = \frac{z}{z-a}\\
-        \mathcal{Z}[K1(K)] = \frac{z}{z-1}
-    \end{rcases} \Rightarrow P_s(z) = 0.05\frac{z}{(z-1)^2} -0.1 \frac{z}{z-1} + 0.1\frac{z}{z-06065}
-\]
-\[ P_d(z) = \frac{z-1}{z}P_s(z) = \frac{z-1}{z} \left( 0.05 \frac{z}{(z-1)^2} - 0.1\frac{z}{z-1} + 0.1 \frac{z}{z-0.6065}\right) = \]
-\[P_d(z) = \frac{0.01065 z + 0.009025}{(z-1)(z-0.6065)}\]
-\[ T_{\tilde{r}\tilde{y}} = \frac{L(z)}{1 + L(z)} \quad, \quad L(z) = KP_d(z) \]
+        \mathcal{Z}[K\cdot1(K)] = \frac{z}{z-1}
+    \end{rcases} \Rightarrow P_s(z) = 0.05\frac{z}{(z-1)^2} -0.1 \frac{z}{z-1} + 0.1\frac{z}{z-0.6065}
+$
+
+\bigbreak
+Ricompongo i risoltati, calcolando $P_d(z)$
+
+$P_d(z) = \frac{z-1}{z}P_s(z) = \frac{z-1}{z} \left( 0.05 \frac{z}{(z-1)^2} - 0.1\frac{z}{z-1} + 0.1 \frac{z}{z-0.6065}\right) =
+\frac{0.01065 z + 0.009025}{(z-1)(z-0.6065)} $
+
+\bigbreak
+Dato che \'e un sistema retroazionato, $T_{\tilde{r}\tilde{y}} = \frac{L(z)}{1 + L(z)} \quad, \quad L(z) = KP_d(z)$:
 \[ 1 + L(z) = 0 \Leftrightarrow \framebox{$1 + KP_d(z) = 0$}\]
 
 \[ z^2 + (0.01065K - 1.6065)z + 0.09002K + 0.6065 = 0 \]
-Il sistema \'e asintoticamente stabile se e solo se
+\bigbreak
+Condizioni necessarie e sufficenti per cui il sistema sia asintoticamente stabile (lezione 21 slide 12):
 \begin{enumerate}
     \item $a(1) > 0$
     \item $(-1)^n a(-1) > 0$
     \item $|a_D| < a_n$
 \end{enumerate}
 
+\bigbreak
+Controllo delle condizioni di stabilit\'a asintotica:
 \begin{enumerate}
-    \item
-        \[\cancel{1} + (0.0165K - \cancel{1.6065} + 0.09025K + \cancel{0.6065}) > 0 \Leftrightarrow \framebox{$K>0$}\]
-    \item
-        \[1 + (-0.01065K + 1.6-65 + 0.09025K + 0.6065) > 0 \Leftrightarrow K>-\frac{3.213}{0.0796} = -40.3643\]
-    \item
-        \[| 0.09025K + 0.6065| < 1 \]
-        \[
-            \begin{cases}
-                0.09025K + 0.6065 < 1 ,\quad \text{se} \quad 0.09025K + 0.6065 \ge 0\\
-                -0.09025K - 0.6065 < 1, \quad \text{se} \quad 0.09025K + 0.6065 < 0
-            \end{cases}
-        \]
-        \[
-            \begin{cases}
-                0.09025K + 0.6065 < 1 \quad \text{se} \quad K\ge -6.72022\\
-                -0.09025K - 0.065 < 1 \quad \text{se} \quad K < -6.72022
-            \end{cases}
-        \]
+    \item $\Rightarrow \cancel{1} + (0.0165K - \cancel{1.6065} + 0.09025K + \cancel{0.6065}) > 0 \Leftrightarrow \framebox{$K>0$}$
+    \item $\Rightarrow 1 + (-0.01065K + 1.6-65 + 0.09025K + 0.6065) > 0 \Leftrightarrow K>-\frac{3.213}{0.0796} = -40.3643 $
+    \item $\Rightarrow | 0.09025K + 0.6065| < 1 $
+
+        $
+        \begin{cases}
+            K < 4.360  &per \, K \ge -6.72022\\
+            K > -17.80  &per \, K < -6.72022\\
+        \end{cases}
+        $
 \end{enumerate}
 
-\begin{itemize}
-    \item[(a)] $ K < 4.360 \Rightarrow -6.72022 \le K < 4.360$
-    \item[(b)] $ K > -17.80 \Rightarrow -17.80 < K < -6.72022$
-\end{itemize}
+\bigbreak
+Da cui le condizioni di stabilit\'a:
 
-\[
-\begin{rcases}
-    K> 0\\
-    K > -40.3643\\
-    -6.72022 \le K < 4.360 V -17.90 < K < -6.72022
-\end{rcases} \Rightarrow \framebox{$0<K < 4.360$}
-\]
+$ \begin{cases}
+    0 &< K\\
+    -40.3643 &< K\\
+    -6.72022 &\le K < 4.360 \lor -17.90 < K < -6.72022
+\end{cases} \Rightarrow \framebox{$0<K < 4.360$}
+$
 
 
 \subsection{Es 4}
-\[ C(s) = 20 \frac{s+1}{1+0.1s}\]
-\[ T = 0.01s\]
 
-\[s = \frac{2}{T} \frac{z-1}{z+1} = 200 \frac{z-1}{z+1}\]
-\[ C(z) = 20 \frac{200\frac{z-1}{z+1} + 1}{1 + 20\frac{z-1}{z+1}} = 20 \frac{\frac{200z - 200 + z + 1}{\cancel{z+1}}}{\frac{z+1+20z - 20}{\cancel{z+1}}} = 20\frac{201z - 199}{21 -19} = \frac{4020z- 3880}{21z - 19} = C_d(z)\]
+\textit{Un controllore con rete anticipatrice avente come funzione di trasferimento
+    \[ C(s) = 20 \frac{s+1}{1+0.1s} \]
+    viene implementato per via digitale scegliendo $T = 0.01s$ come tempo di campionamento e il metodo di Tustin per la conversione a tempo discreto.\\
+    Determinare la corrispondente equazione differenziale.
+}
 
-\[ 21\tilde{y}(K) - 19\tilde{y}(K-1) = 4020\tilde{u}(K) - 3989\tilde{u}(K-1)\quad,\quad K \in \mathbb{Z}\]
+\bigbreak
+Da lezione 21 slide 21, si impone $s = \frac{2}{T} \frac{z-1}{z+1} $:
+
+$ s =  \frac{2}{T} \frac{z-1}{z+1} = 200 \frac{z-1}{z+1}$
+
+\bigbreak
+$ C(s) = 20 \frac{s+1}{1+0.1s}  = 20 \frac{200\frac{z-1}{z+1} + 1}{1 + 20\frac{z-1}{z+1}} = 20 \frac{\frac{200z - 200 + z + 1}{\cancel{z+1}}}{\frac{z+1+20z - 20}{\cancel{z+1}}} = 20\frac{201z - 199}{21 -19} = \frac{4020z- 3880}{21z - 19} = C_d(z)$
+
+\bigbreak
+Da cui:
+
+$ 21\tilde{y}(K) - 19\tilde{y}(K-1) = 4020\tilde{u}(K) - 3989\tilde{u}(K-1)\qquad\,con\, K \in \mathbb{Z} $
 \end{document}

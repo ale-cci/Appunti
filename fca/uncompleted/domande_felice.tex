@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+
+\everymath{\displaystyle}
+\title{Domande per Felice}
+\author{FCA}
+
+\begin{document}
+\maketitle{}
+
+\begin{itemize}
+    \item come si fa \textit{Esercitaione 8, Punto C}
+    \item Formula errore relativo
+
+        Errore in risposta ad il gradino unitario: $e_p = \frac{1}{1+K_p}$, con $K_p = \lim\limits_{s\to 0} G(s)$
+    \item Calcolo del margine di fase
+    \item Coma mai viene ignorato il polo nell'origine?
+
+        Il grado di stabilit\'a di $L(s)$ varia al variare di $K$, Dall'esercizio non ignoriamo lo 0 nell'origine, stimiamo solamente quale controllore pu\'o avere (Al variare di $K$) il grado di stabilit\'a $\ge 0.6$ ed entrambe le radici sull'asse reale.
+
+    \item In base a cosa vengono scelti $\alpha_1 \ldots \alpha_n$ e $\beta_1 \ldots \beta_n$ nel progetto di un controllore?
+    \item Esercitaione 11 es 3
+\end{itemize}
+
+\section{Note}
+\begin{itemize}
+    \item Per controllare se $\exists C(s)$ di ordine $n$, che soddisfi certe condizioni, prima calcolare controllore, dopo controllare che il sistema sia stabile asintoticamente
+    \item Margine di fase: chiamati $M_1$ e $M_2$ i punti in cui il diagramma di nyquist interseca l'asse reale con fase $-\pi$, il margine di fase \'e il $\min\{M_1, M_2\}$
+\end{itemize}
+
+\section{Formule}
+Tempo di assestamento: \( T_a = \frac{3}{G_s} \)
+
+Grado di stabilit\'a: Guarda il luogo delle radici
+
+Struttura controllore rete anticipatrice: $K\frac{1 + \tau s}{1 + \alpha \tau s}$
+
+\end{document}
