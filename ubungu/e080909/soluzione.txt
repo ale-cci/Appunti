@@ -1,0 +1,23 @@
+Init maschera processi
+Init socket
+Init signal USR1 & USR2
+Re-enable process mask
+
+while
+	accept incoming connections
+	fork
+		if father continue
+		if child 
+			read service
+			read client numbers 
+
+			if service == sum
+				write sum of client numbers
+			if service == prod
+				write product of client numbers
+				
+
+
+
+
+
