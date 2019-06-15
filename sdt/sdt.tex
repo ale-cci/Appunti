@@ -881,7 +881,6 @@ Per questo motivo, se uno dei due fa \textit{Carrier Sense}, non individua l'alt
 
 \textbf{Wi-Fi Alliance}: Organizzazione non-profit che ha creato il brand ``Wi-Fi'', di cui sono parte molte aziende. Il logo garantisce la compatibilit\'a dei dispositivi con i protocolli ethernet e Wi-Fi.
 
-% Lezione 13/05/19 (di vodafone)
 
 \subsection{Standard 802.11b}
 Utilizza la banda a $2.4 GHz$, soggetta ad interferenze da altri device (come microonde, telefoni cordless..), suddivisa in 11 canali, di cui solo 3 non sovrapposti.
@@ -917,7 +916,7 @@ Ha come vantaggio principale quello di richiedere poca energia.
 
 Utilizza sempre la frequenza portante di $2.4GHz$
 
-\subsection{Bluetoooth}
+\subsection{Bluetoooth 802.15.1}
 Ha come vantaggi principali:
 \begin{itemize}
      \item ridotto costo
@@ -927,10 +926,76 @@ Ha come vantaggi principali:
 \end{itemize}
 
 \subsubsection{Architettura del Protocollo}
+Interfaccia \textbf{Audio} comunica direttamente con la banda base.
 
+Banda base a 79 portanti, utilizza CDMA con hopping sequences, per minimizzare il danneggiamento del segnale provocato dal canale di comunicazione (Interferenza da cammino multiplo).
+
+Nel caso non venga utilizzata l'inerfaccia audio, il Link Manager Protocol si occupa dell'autenticazione e crittografia del segnale trasmesso
+
+SDP, Service Discovery Protocol, si occupa di individuare altri dispositivi che utilizzando bluetooth.
+
+Ogni nodo ha un \textit{Bluetooth Device Address} (\textit{BD\_ADDR}). Il nodo Master determina tutte le frequenze di hopping dei nodi Slave.
+
+Network topology organizzate in:
+\begin{itemize}
+    \item Piconet: Insime di nodi bluetooth sincronizzati con un unico master
+    \item Scatternet: Insieme di piconet
+\end{itemize}
+
+All'interno di una rete, Master e Slaves possono invertirsi i ruoli
+
+\subsection{Formato pacchetto bluetooth}
+\begin{itemize}
+    \item \textbf{Access Code}: [$72 bit$]
+    \item \textbf{Packet Header}: [$54 bit$] Contiene MAC Address, ed altri bit di controllo
+    \item \textbf{Payload}: [$0-2745 bit$] Dati effettivi trasmessi
+\end{itemize}
+
+\subsection{Possibili stati di un dispositivo bluetooth}
+\begin{itemize}
+    \item ACTIVE:  Unicamente identificato da un AM\_ADDR, e sta trasmettendo
+    \item SNIFF: partecipa alla piconet nello SNIFF interval
+    \item HOLD: Tiene solamente attiva la connessione
+    \item PARK: (low-power): Rilascia il suo AM\_ADDRM, rinmanendo per\'o sincronizzato col master
+\end{itemize}
+
+BlueTooth device addressing:
+\begin{itemize}
+    \item BD\_ADDR [$48 bit$]
+    \item AM\_ADDR [$3 bit$]: ACTIVE, HOLD or SNIFF
+    \item PM\_ADDR [$8 bit$]: PARK MODE address, scambiato con AM\_ADDR quando si entra in PARK MODE
+    \item AR\_ADDR [$8 bit$]: usato quando si passa dallo stato PARK a ACTIVE
+\end{itemize}
+
+\section{ZigBee 802.15.4}
+Ideato specialmente per low-rate low-power PANs.
+
+Basato sul `\textit{Garantire time slot ai device nella rete}'
+
+
+\textbf{Beacon-Enabled Mode}: La sincronizzazione tra nodi si effettua tramite pacchetti \textit{beacon}, il tempo disponibile viene suddiviso in superframe. Maggiore complessit\'a nei songoli nodi.
+
+\textbf{Beaconless Mode}: Nessuna sincronizzazione tra nodi, minore complessit\'a nei singoli nodi ma meno efficente rispetto a beacon-mode.
+
+\subsection{Topologia rete}
+I nodi sono raggruppati in PAN, identificate da un \textit{PAN ID}.
+
+Almeno uno dei nodi presenti in ogni PAN, ha il ruolo di coordinatore: Organizza l'inizializzazione dell'intera pan (es. Configurazione del PAN ID), l'associazione dei nodi e delle trasmissioni dei beacon.
+
+Nodi aggiuntivi della rete sono chiamati \textit{end-devices}.
+
+Tutti i nodi sono divisi logicamente in FDD (Full Function Devices) e RFD (Reduced Function Devices). FFD implementano tutte le funzionalit\'a ZigBee e possono comunicare con tutti gli altri nodi nel range trasmissivo
+
+Tutte le topoligie permesse contengono almeno un Coordinatore di rete, e gli RFD, possono essere solamente foglie del grafo, mentre gli FFD possono essere rami o foglie.
+
+Viene utilizzato una low-transmission rate: $20-40 kbps$
+
+%TODO: Modulation slide 209 210
+% specifications & allowed topology
 
 \newpage
 
+% Lezione 13/05/19 (di vodafone)
 \section{5G}
 
 \subsection{Advanteges over 4G}
