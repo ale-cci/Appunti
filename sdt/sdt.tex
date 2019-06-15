@@ -14,7 +14,9 @@
 \usepackage[parfill]{parskip}
 \usepackage[margin=1in]{geometry}
 \usepackage[makeroom]{cancel}
+\pgfplotsset{compat=1.16}
 
+\everymath{\displaystyle}
 \graphicspath{{../}}
 \usepgfplotslibrary{fillbetween}
 \date{2\textsuperscript{o} Semestre 2018/19}
@@ -227,7 +229,7 @@ Abilita, Modifica, Termina sessioni tra applicazioni
 
 Pi\'u connessioni possono essere viste come una singola sessione
 
-distingue i dati che arrivano tra ``application data'' (dati usati dalle applicazioni) e ``session control data''
+Distingue i dati che arrivano tra ``application data'' (dati usati dalle applicazioni) e ``session control data''.
 
 Usa dati dei layer 3\&4 per monitorare la comunicazione tra applicazioni
 
@@ -783,32 +785,150 @@ Procedure:
 \hfill
 
 \newpage
-\section{Protocollo Ethernet CSMA}
+\section{Protocollo Ethernet CSMA/CD}
 
-Se il pacchetto \'e molto lungo rispetto ai tempi di propagazione termina la trasmissione per non intasare la rete.
+\textbf{CSMA/CD}: Carrier Sense Multiple Access, Collision Detection
 
-Con il protocollo ethernet \'e possibile misurare l'energia in un cavo, confrontarla con quella ricevuta per poter identificare facilmente i casi di interferenza
+Si basa sul fatto che le collisioni tra pacchetti vengono riconosciute ed individuate in poco tempo. Quando ne avviene una, la trasmissione del pacchetto viene interrotta.
 
-Principali problemi con il protocollo Wifi:
-\begin{itemize}
-    \item Non \'e possibile utilizzare lo stesso sistema di error-detection siccome la potenza del segnale ricevuto dipende dalla distanza e dalla vicinanza dagli altri utenti
-    \item Il segnale ethernet \'e quasi sempre a bus condiviso
-\end{itemize}
+Dato che il segnale si propaga su un cavo, per determinare le collisioni basta confrontare l'energia del cavo ricevuta, con la potenza di un segnale trasmesso, per poter identificare facilmente un interferenza.
+
+Questo metodo \`e molto efficente soprattutto se le dimensioni del pacchetto sono molto pi\'u lunghe rispetto ai tempi di propagazione.
+
+Purtroppo, non \'e possibile utilizzare lo stesso sistema di error-detection nelle reti wireless, dato che la potenza del segnale ricevuto dipende molto dalla distanza tra gli utenti e la sorgente del segnale, quindi non sempre una bassa potenza di segnale implica l'assenza di collisioni.
+
+\subsection{Struttura di un frame Ethernet}
 
 Struttura frame livello 2:
 \begin{itemize}
-    \item \textbf{Preamble} 8 byte, 7 con 10101010 1 con 10101011; Utilizzati per sincronizzare il ricevitore con il trasmettitore
-    \item \textbf{Destination Address}: Target machine / Broadcast
-    \item \textbf{Source Address}: Source machine MAC address
+    \item \textbf{Preamble}: [8 byte] 7 con pattern 10101010, ed 1 con 10101011; Utilizzati per sincronizzare il ricevitore e trasmettitore
+    \item \textbf{Destination \& Source Address}: [6 byte] Target machine / Broadcast \& Source machine MAC Address
     \item \textbf{Type}: Protocollo di livello 3 (ex: IP)
-    \item \textbf{CRC}: Cycling Redundance Check; Controlla solo se si sono verificati errori, non si occupa della correzione
+    \item \textbf{CRC}: Cycling Redundance Check; Controlla solo se si sono verificati errori, non si occupa della correzione.
+
+        In caso di errore tutto il frame viene scartato
 \end{itemize}
 
 \subsection{Ethernet (Standard IEEE 802.3)}
 
-CSMA/CD 1 Persistent
+CSMA/CD 1 Persistent:
+
+Aspetta fino a quando il canale \'e libero, dopo trasmette immediatamente (\textit{1 Persistent}).
+Quando si verifica una collisione, viene trasmesso un segnale ad alta energia chiamato \textit{Segnale di JAM} (\textit{JAM Signal}).
+
+\subsection{Collision Detection}
+
+Per assicurarsi che le collisioni vengano individuate, \'e richiesto che $2T$ (\textit{Round Trip Time}) sia al pi\'u $51.2\mu s$.
+Da cui, supponendo che si trasmetta a $10Mbps$, la lunghezza di un pacchetto minima deve essere $64b$.
+
+In questo modo ci si assicura che tutti gli host notino la collisione.
+
+\subsection{Binary Exponential Backoff}
+In caso di $N$ collisioni consecutive viene generato un numero casuale $K$ compreso tra $0$ e $2^N$, chiamata $T_s$ l'unit\'a di tempo, prima di trasmettere di nuovo un pacchetto vengono aspettati $K T_s$ secondi.
+
+$T_s = 51.2\mu s$ per il protocollo Ethernet $802.3$
+
+\subsection{Efficenza}
+In condizioni di saturazione:
+
+$t_{prop}$: Tempo massimo di propagazione tra due Nodi nella rete ($T_s$)
+
+$t_{trans}$: Tempo di trasmissione massima di un frame ($1.2 ms$), calcolato come $t_{trans}\frac{D_p}{R}$ ($D_p$ dimensione pacchetto, $R$ bit rate).
+
+\[Eff \approx \frac{1}{1 + 5\frac{t_{prop}}{t_{trans}}} \approx 82.6\%\]
+
+\subsection{Recezione dei Frame}
+Ethernet controller card si occupa di filtrare i frame destinati all'host rispetto a tutti i pacchetti nella rete
+
+Transceiver (Utilizzato nelle reti con topologia a bus) si occupa di:
+\begin{itemize}
+    \item Carrier detection
+    \item Collision detection
+    \item Jamming
+\end{itemize}
+
+Nelle reti con topologia ad hub (stella), i singoli host si occupano di Carrier detection, l'hub centrale di:
+\begin{itemize}
+    \item Collision detection
+    \item Jamming
+\end{itemize}
+
+\section{WiFi CSMA/CA 802.11}
+Collision Sense Multiple Access/Collision Avoidance
+
+
+\begin{enumerate}
+    \item Se il canale \'e occupato e devo trasmettere un frame, Cronometro quanto il canale ci impiega a tornare libero, chiamo questo tempo $T$.
+    \item Appena il canale si libera, prima di trasmettere il frame aspetto lo stesso tempo $T$
+    \item Se il canale torna occupato prima che finisca il mio `countdown', interrompo il `countdown' e lo riprendo appena il canale torna livero.
+    \item Altrimenti trasmetto il frame Immediatamente
+\end{enumerate}
+
+
+\subsection{Hidden and Exposed Terminal Problems}
+Avviene nel caso in cui due o pi\'u nodi riescono a trasmettere alla base station, ma il loro segnale non \'e abbastanza forte da individuarsi a vicenda.
+Per questo motivo, se uno dei due fa \textit{Carrier Sense}, non individua l'altro, e, trasmettendo contemporaneamente generano interferenza alla base station.
+
+\textbf{Soluzioni}:
+\begin{itemize}
+    \item Busy Tone Multiple Access (BTMA): la banda viene divisa in due, una sottobanda viene utilizzata per la trasmissione dati, l'altra per capire quando trasmettere
+    \item Request-To-Send/Clear-To-Send (RTS/CTS): coppia di messaggi di handshake tra device e base station, utilizzati per `detect' di trasmissioni vicine.
+\end{itemize}
+
+
+\subsection{Wi-Fi Trivia}
+\textbf{Wi-Fi}: Wireless Fidelty
+
+\textbf{Wi-Fi Alliance}: Organizzazione non-profit che ha creato il brand ``Wi-Fi'', di cui sono parte molte aziende. Il logo garantisce la compatibilit\'a dei dispositivi con i protocolli ethernet e Wi-Fi.
 
 % Lezione 13/05/19 (di vodafone)
+
+\subsection{Standard 802.11b}
+Utilizza la banda a $2.4 GHz$, soggetta ad interferenze da altri device (come microonde, telefoni cordless..), suddivisa in 11 canali, di cui solo 3 non sovrapposti.
+
+Supporta un data rate massimo idealmente da 1 a 11$Mbps$, ma realisticamente da $4-5Mpbs$ al massimo.
+
+Utilizza il protocollo $DSSS$
+
+\subsection{Standard 802.11g}
+Utilizza sempre la banda a $2.4GHz$, ma ha un raggio di trasmissione pi\'u corto rispetto a \textit{802.11b}. \'E compatibile ancora con lo standard \textit{802.11b}.
+
+\`E piu flessibile siccome cnali multipli possono essere combinati per aumentare il thrughput, ma rimane limitato ad un unico access point.
+
+Idealmente ha un massimo di $54 Mbps$, ma realisticamente $20-25 Mbps$ e $14 Mbps$ se associato con \textit{802.11b}
+
+Utilizza FDD
+\subsection{Standard 802.11a}
+
+Come \textit{802.11g} pi\'u canali possono essere utilizzati per aumentare il thrughput, ma non rimane limitato ad un unico access point.
+
+Il raggio di trasmissione \'e piu corto degli altri due protocolli precedenti.
+
+Utilizza FDD con banda a $5GHz$, ed ha 12 canali, di cui 8 non sovrapposti. Raggiungendo una velocit\'a ideale dai 6 ai $54Mbps$ (Realisticamente $\approx 25 Mbps$)
+\newpage
+\section{Personal Area Network (PAN)}
+Rete di device disposti a distanza ridotta ($\approx 1-10m$), pu\'o essere
+\begin{itemize}
+    \item Cablata: Connessa attraverso USB o BUS
+    \item Wireless: Connessa utilizzando protocolli come Bluetooth, ZigBee, IrDA, etc.
+\end{itemize}
+
+Ha come vantaggio principale quello di richiedere poca energia.
+
+Utilizza sempre la frequenza portante di $2.4GHz$
+
+\subsection{Bluetoooth}
+Ha come vantaggi principali:
+\begin{itemize}
+     \item ridotto costo
+     \item Connessioni ad hoc
+     \item Ideale per trasissione di dati vocali in tempo reale
+     \item Rimuove la necessit'\'a di numerose porte, utilizzate per connessioni cablate
+\end{itemize}
+
+\subsubsection{Architettura del Protocollo}
+
+
 \newpage
 
 \section{5G}
