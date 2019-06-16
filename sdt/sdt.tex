@@ -993,6 +993,112 @@ Viene utilizzato una low-transmission rate: $20-40 kbps$
 %TODO: Modulation slide 209 210
 % specifications & allowed topology
 
+\subsection{Struttura pacchetto}
+\begin{itemize}
+    \item Beacons: usato dal PAN coordinattor
+    \item Data: Usato dai livelli pi\'u alti per trasferire dati
+    \item Achknowledgement: Usato per confermare la corretta recezoine del pacchetto
+    \item MAC command: manage all control information
+\end{itemize}
+
+Utilizza il protocollo CSMA/CA unslotted.
+Tempo d'attesa generato casualmente sull'intervallo $[0, 2^{BE} - 1]$
+
+\subsection{Network Topologies}
+\begin{itemize}
+    \item Star: no router solo un padre
+    \item Tree: Coordinatore della PAN \'e la radice, i router possono diramarsi in router o end device. (energy efficient)
+    \item Mesh: Tutti i nodi possono comunicare, (non applicabile beacon mode)
+\end{itemize}
+
+\section{Cellular Network Dimensioning}
+
+
+Aumentare $K$ ha un impatto sul numero di risorse frequenziali assegnate ad ogni cella.
+
+Le risorse frequenziali sono strettamente legate al numero di utenti gestibili.
+$+K$ a parit\'a di area di cella, meno densit\'a geografica degli utenti
+
+\subsection{Handover/Handoff}
+
+Handover non assistito: gestito da BTS adiacenti
+
+Handover assistito da Mobile station: Mobile Station genera informazioni di controllo per una gestione migliorata dell'handover.
+
+\subsection{Dimensionamento rete cellulare}
+
+$A_{cella} \coloneqq$ Area di una singola cella
+
+Tutte le celle hanno la stessa dimensione. (Non vero per $5G$)
+
+Un Area coperta da una cella richiede maggiore potenza trasmissiva.
+
+Supponendo che $M_{cella}$ sia il numero di risorse frequenziali assegnate ad ogni cella, la densit\'a geografica degli utenti \'e calcolata come:
+\[ u = \frac{M_{cella}}{A_{cella}} \]
+
+Chiamato $M$ il numero complessivo di risorse a disposizione, e $K$ le dimensioni del Kluster:
+\[ M_{cella} = \frac{M}{K} \]
+
+Chiamato $R$ il raggio della cella associata dell'esagono.
+\[ A_{cella} = \frac{6}{2}R^2\frac{\sqrt{3}}{2} \quad \rightarrow \quad
+    u=\frac{M}{K}\frac{2}{3\sqrt{3}R}
+\]
+
+Maggiore \'e il numero di risorse a disposizione, maggiore \'e il numero di utenti gestibili per $Km^2$
+
+\textbf{Distanza di riuso} ($\mathcal{D}$): Distanza tra centri di celle analoghe
+
+\underline{Sperimentalmente} i valori che $K$ pu\'o assumere non snono arbitrari, ma devono rispettare la relazione
+\begin{minipage}{0.5\textwidth}
+\[ K = i^2 + j^2 + ij \qquad\quad
+    \begin{cases}
+    i,j \in \mathbb{N} \\
+    i+j \neq 0
+    \end{cases}
+\]
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+
+\begin{center}
+\begin{tabular}{c c|c}
+    i & j & k\\
+    \hline{}
+    0 & 1 & 1\\
+    0 & 2 & 4\\
+    0 & 3 & 9\\
+    1 & 1 & 3\\
+    1 & 2 & 7\\
+    1 & 3 & 13\\
+    1 & 4 & 21\\
+    2 & 2 & 12\\
+    2 & 3 & 19\\
+    2 & 4 & 28\\
+    3 & 3 & 27\\
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Partendo dal centro di una cella, si arriva ad una cella analoga seguendi i passaggi:
+\begin{enumerate}
+    \item Muoversi $i$ celle seguendo una direzione perpendicolare ad un lato dell'esagono di partenza
+    \item Ruotarsi di $\frac{2}{3}\pi$ in senso (anti)orario
+    \item Muoversi di $j$ celle seguendo il verso della rotazione
+\end{enumerate}
+
+La formula della distanza di riuso tra 3 celle, si calcola (utilizzando il Teorema di Carnot):
+
+\[
+\begin{aligned}
+    \mathcal{D} &= \sqrt{(i\sqrt{3}R)^2 + (j\sqrt{3}R)^2 - 2(i\sqrt{3}R)(j\sqrt{3}R)\cos({\textstyle \frac{2}{3}}\pi) } = \\
+                &= R\sqrt{3i^2 + 3j^2 + 3ij} = \sqrt{3}R\sqrt{i^2 + j^2 + ij} = \framebox{$\sqrt{3K}R$}
+\end{aligned}
+\]
+
+\subsection{Interferenza tra celle adiacenti}
+Siccome \'e schematizzata ad esagono, ci sono al massimo 6 segnali interferenti
+\[ I_i = \frac{\chi}{\mathcal{D}} \]
+
+
 \newpage
 
 % Lezione 13/05/19 (di vodafone)
