@@ -1098,6 +1098,61 @@ La formula della distanza di riuso tra 3 celle, si calcola (utilizzando il Teore
 Siccome \'e schematizzata ad esagono, ci sono al massimo 6 segnali interferenti
 \[ I_i = \frac{\chi}{\mathcal{D}} \]
 
+La distanza dipende dalla cella, $d_{i_{max}} = d_i + r$, mediamente $d_i \approx \mathcal{D}$
+
+
+$I \coloneqq$ Potenza Interferenza complessiva
+
+$I \le \sum\limits^6_{i=1} I_i = 6\frac{\chi}{\mathcal{D}}$
+
+\`E uguale se tutte le celle analoghe di $1^a$ fascia stanno utilizzando la stessa risorsa. Minore se almeno una delle celle analoghe non utilizza la stessa risorsa
+
+\[
+    \frac{C}{I} \ge \frac{\frac{\chi}{R^n}}{6\frac{\chi}{\mathcal{D}^n}} =
+    \frac{1}{6}{\left(\frac{\mathcal{D}}{R}\right)}^n =
+    \frac{1}{6}a^n = \frac{{(\sqrt{3K})}^n}{6}
+\]
+
+$a \coloneqq \frac{D}{R}$
+
+Per aumentare $\snr$ in downlink, considero invece di un antenna omnidirezionale, 3 antenne direttive, ogniuna con diagramma di irradiazione di $120^\circ$. Ad ogniuna delle 3 antenne \'e assegnato $\frac{1}{3}$ delle risorse della cella.
+
+In questo modo:
+\[ {\left(\frac{C}{I}\right)}_{down}  \ge \frac{a^n}{2} = 3\cdot\frac{a^n}{6}\]
+
+In generale su celle tri-settoriali il rapporto aumenta di un fattore compreso tra 2 e 3. Ma comporta un handover sui settori della stessa cella. Al fine di evitare questi costi, si possono considerare siti 3-settoriali, ma richiedono che $K$ sia multiplo di 3.
+
+%TODO Disegno celle trisettoriali
+(X: Disegno Trisettoriale)
+
+\subsection{Calcolo C/I Uplink}
+Utilizziamo come \textbf{assunzione peggiorativa} che la Mobile Station \'e a distanza $R$ dalla BTS.
+
+(X: Disegno posizioni)
+
+Inoltre (\textbf{assunzione peggiorativa}) la mobile station che pu\'o interferire \'e pi\'u vicina possibile ala BTS, \'e eattamente a ditanza $\mathcal{D} - R$, questo implica che la retta che unisce i due centri delle BTS passa per uno spigolo.
+
+\[I_i = \frac{\chi}{d_i^n} \]
+
+considerando l'$I_i$ legata ad una singola Mobile station nella cella
+\[ I = \sum\limits_{i=1}^6 \approx 6\frac{\chi}{{(\mathcal{D} - R)}^n} \]
+
+\[ C = \frac{\chi}{R^n} \quad,\quad {\left(\frac{C}{I}\right)}_{up}
+    = \frac{1}{6}\frac{{(\mathcal{D} - R)}^n}{R^n}
+    = \frac{1}{6}\left(\frac{\mathcal{D}^n}{R^n} -1 \right) = \frac{1}{6}(a^n - 1)
+\]
+
+\subsection{Considerazioni Finali}
+\begin{center}
+\begin{tabular}{c|c|c}
+    & $R\uparrow$ e $K$ cost & $R$ cost e $K\uparrow$\\
+    \hline
+    Potenza trasmissiva  & {\color{red}$\nearrow$}  & -\\
+    Numero di Handoff    & {\color{green}$\searrow$}& -\\
+    Densit\'a geografica & {\color{red}$\searrow$}  & {\color{red}$\searrow$}\\
+    Rapporto C/I         & -                        & {\color{green}$\nearrow$}
+\end{tabular}
+\end{center}
 
 \newpage
 
