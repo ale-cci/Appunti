@@ -1228,8 +1228,62 @@ Voce campionata su smartphone, TRAU rigenera ridondanza
     \item Destinazione
 \end{itemize}
 
+Bande in uplink: $\frac{890}{915} MHz \rightarrow$ Banda di coerenza $25MHz = B$
+
+GSM lavora con sottobande di $200 KHz$ ($B_C$) $\rightarrow$ Numero di sottobande possibili: $\frac{B}{B_C} = \frac{25\cdot10^3 kHz}{200KHz} = 125$. Per essere sicuri di non `sforare' dalla banda a disposizione, ne vengono utilizzate solamente 124.
+
+Ogni sottobanda viene indicata con un ARFCN (\textit{Absolute Radio Frequency Channel Number})
+
+Ogni sottobanda pu\'o essere assegnata fino ad un massimo di 8 utenti. Viene utilizzato un TDMA a 8 slot per ogni sottobanda. Da cui il numero di utenti gestibili: $124*8 = 992$
+
+Ogni time slot viene indicato con TSn
+
+La coppia ARFCN-TSn indica univocamente una risorsa.
+
+Se il \textit{`Passo di Duplice'} \'e costante, basta conoscere la sottobanda in uplink per identificare univocamente anche quella in downlink.
+
+Il vantaggio di utilizzare l'ibrido FDMA/TDMA \'e la possibilit\'a di utilizzare il frequency hopping nel TDMA: Ad ogni utente non viene assegnata solamente una risorsa, ma una serie di risorse $\Rightarrow$ Riduzione danneggiamento comunicazione da sottobane danneggiate.
+
+Per la modulazione del segnale viene utilizzata un GMSK (\textit{Gaussian Minimum Shift Keying}), Un formato di modulazione molto efficente.
+\begin{enumerate}
+    \item Efficenza spettrale superiore a $1 \textit{symbolo}{Hz}$
+    \item Robusta contro l'evanescenza
+    \item Ha un ampiezza costante, viene gestito in modo efficente amplificatori
+    \item Semplice come implementazione
+\end{enumerate}
+
 \subsection{Struttura di uno slot GSM}
-Il midambolo \'e noto al tramettotore ad al ricevitore.
+\begin{center}
+\begin{tikzpicture}
+    [block/.style={rectangle, thick, draw}]
+    \node[block] at (0,0) {$\,3\,$};
+    \node[block] at (1.25,0) {$\qquad57\qquad$};
+    \node[block] at (2.45,0){1};
+    \node[block] at (3.3,0){$\quad26\quad$};
+    \node[block] at (4.15,0){1};
+    \node[block] at (5.35,0) {$\qquad57\qquad$};
+    \node[block] at (6.6,0) {$\,3\,$};
+    \node[block] at (7.55, 0){$\quad8.5\quad$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Multiframe}: Composto da 26 frame, dura 120ms
+
+Ogni \textbf{Frame} \'e composto da 8 slot
+
+Ogni \textbf{Slot} dura $577\mu s$, ed \'e composto da 156.25 bit. Gli 8.25 bit terminali non vengono utilizzate nel frame, per evitare problemi con la sincronizzazione, in questo mod lo slot \'e simmetrico.
+
+
+\begin{itemize}
+    \item Bit di coda [3 bit]: principalmente utilizzati per consentire l'accensione e spegnimento dell'amplificatore di potenza.
+    \item Campi dati [57 bit]: payload
+    \item Stealing flag [1 bit]: quando vanno ad 1, i campi dati vangono utilizzati per il controllo.
+
+        Utilizzati nelle operazioni critiche (handover, cambiaento arfcn-tsn)
+    \item Midambolo
+\end{itemize}
+
+Il \textbf{midambolo} \'e noto al tramettotore ad al ricevitore.
 
 \begin{center}
 \begin{tikzpicture}
@@ -1252,9 +1306,42 @@ Banda del segnale $=\frac{1}{3} \gg$ Banda di Coerenza $\approx \frac{1}{80}$
 
 Su $200KHz$ la risposta in frequenza potrebbe essere quella (figura).
 
+\textbf{Tempo di coerenza}: Legato all'effetto doppler; $f_D$ (Frequenza doppler) $\approx 100Hz$ nel GSM
+
+\[ T_{coer} \approx \frac{9}{16\pi f_D} \approx 1ms \]
+
+\[T_{burst} = T_{slot} = 577 \mu s = 0.57 ms \approx T_{coer}\]
+
+\textbf{Risposa Trasmissiva} ($Rb$) $\approx \frac{114\cdot24}{120\cdot10^{-3}} = 22.8\frac{Kb}{s}$
+
+\subsection{Gerarchia di Segnalazione GSM}
+\begin{itemize}
+    \item Burst-Slot: 577$\mu s$
+    \item Frame (8 Slot): 4.65ms
+    \item Multiframe (26 frame): 120ms
+    \item SuperFrame (51 multiframe): 6.12 s
+    \item HyperFrame (2048 superframe): 3h 24m 57.76s, passato questo interfallo di tempo, tutte le chiavi crittografiche vengono re-inzializzate
+\end{itemize}
+
+
+Tutti le repliche sono caratterizzate da fading, modellizzato con una distribuzione di Rayleigh
+
+
+GSM era progettato per la trasmissione vocali, \'e altamente inefficente per la trasmissione dati.
+
+GPRS:\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
+
+Asimmetria Uplink e Downlink
 
 \section{EDGE 2.7G}
 
+Miglioramento di trasferimento dati a comunicazione pacchetto (enhanced GPRS)
+
+Si appoggia alla rete GSM
+
+Intermedio fra GSM e wideband code division multiple access (W-CDMA) i.e. UMTS
+
+Diversamente da GSM, utilizza il formato di modulazione \textit{8-phase shift keying} (8-PSK). Aumenta l'efficenza spettrale ed il tasso di trasmissione da $115kbps$ a $384kbps$
 
 \newpage
 
