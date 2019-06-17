@@ -52,6 +52,9 @@
 \begin{titlingpage}
 \maketitle
 \end{titlingpage}
+\newpage
+
+\tableofcontents
 
 \newpage
 %% -- Begin --
@@ -1150,35 +1153,111 @@ considerando l'$I_i$ legata ad una singola Mobile station nella cella
     Potenza trasmissiva  & {\color{red}$\nearrow$}  & -\\
     Numero di Handoff    & {\color{green}$\searrow$}& -\\
     Densit\'a geografica & {\color{red}$\searrow$}  & {\color{red}$\searrow$}\\
-    Rapporto C/I         & -                        & {\color{green}$\nearrow$}
+    Rapporto C/I         &                         -& {\color{green}$\nearrow$}
 \end{tabular}
 \end{center}
 
-\newpage
+\section{GSM}
+GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
 
-% Lezione 13/05/19 (di vodafone)
-\section{5G}
+MSS:\@\textit{Mobile Station Subsystem}, Connessione alla rete via interfaccia radio
 
-\subsection{Advanteges over 4G}
+MMI:\@\textit{Man-Machine Interface}
 
+HMI:\@\textit{Human-Machine Interface}
+
+IMEI:\@\textit{International Mobile Equip Identity}
+
+SIM:\@\textit{Subscriber Identity Module}, contiene:
 \begin{itemize}
-    \item Maggiore disponibilit\'a di banda
-    \item Bassa latenza: da 9 a 10 ms; Dovuta alla minore distanza cloud-server\\
-        Multiaccess Edge Computing: Place more computing resource closer to the point of data creation\\
-        Very useful for AR/VR
-
-    \item Maggior numero di dispositivi connessi per km\textsuperscript{2} (1 mln)
-    \item Peak data rate from 1\(Gbs\) to 20\(Gbs\)
-    \item Available spectrum from 3\(GHz\) to 30\(GHz\)
-    \item Higher data traffic; from 7.2 Exabyte/Month to 50 Exabyte/Month
-
+    \item \textit{Mobile Station International Subscriber Directory Number}
+    \item \textit{International Mobile Subscriber Identity}
+        \begin{itemize}
+            \item Utente
+            \item Operatore
+            \item Nazione
+        \end{itemize}
+    \item Chiave segreta utilizzata sia per autenticare i lchiamante sia per cifrare i dati.
+    \item Memoria interna (Conentiene al massimo 256 Numeri di telefono)
 \end{itemize}
 
+BSS:\@\textit{Base Station Subsystem}
 
-Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
+\begin{itemize}
+    \item BTS:\@\textit{Base Transceiver Station}: Hardware per recezione, antenne modem ed amplificatori
+    \item BSC:\@\textit{Base Station Controller}: Gestisce canali radio delle BTS che controlla e mobile station collegate.
+
+        Utilizza frequency hopping per prevenire trasmissione continua su canali `cattivi'
+
+        Gestisce Handoff tra:
+        \begin{itemize}
+            \item Celle Adiacenti
+            \item Stessa Cella
+        \end{itemize}
+\end{itemize}
+
+TRAU:\@\textit{Transcoder Rate Adaptation Unit}, Adattatore codifica vocale usata con codice vocale in rete
+
+Codifica sorgentte vocale telefono (RPE-LTP), compongono la voce ed elimina la ridondanza, campionando il segnale.
+
+PCM:\@\textit{Pluse Code Modulation}
+
+Voce campionata su smartphone, TRAU rigenera ridondanza
+\subsection{Architettura rete GSM}
+\begin{tikzpicture}
+    [blocco/.style={rectangle ,thick ,draw }]
+    \node[left] at (0,0) {Signal};
+
+    \draw[-stealth] (0,0)--(1,0) node[blocco, right]{ADC};
+    \draw[-stealth] (2, 0)--(3,0) node[blocco, right]{Cod. Sorgente};
+    \draw[-stealth] (5.5, 0)--(6.5,0) node[blocco, right]{Cod. Canale};
+    \draw[-stealth] (8.7, 0)--(9.5,0) node[blocco, right]{Costr. Burst};
+    \draw[-stealth] (11.7, 0)--(12,0) node[blocco, right]{Mod. GMSK};
+    \draw[-stealth] (14.3, 0)--(15,0);
+
+    \node[right] at (15,0) {Dest};
+
+\end{tikzpicture}
+
+\begin{itemize}
+    \item ADC:\@\textit{Analog Digital Converter}
+    \item Codifica di sorgente: RPE-LTP (Regular Pulse Excitation Long Term Reduction)
+    \item Codifica di Canale
+    \item Codifica di Sorgente, Rate di codifica $\frac{1}{2}$: Ricevuto in ingresso 1 bit, inserisce ridondanza e manda 2 bit in uscita
+    \item Costruttore di burst
+    \item Destinazione
+\end{itemize}
+
+\subsection{Struttura di uno slot GSM}
+Il midambolo \'e noto al tramettotore ad al ricevitore.
+
+\begin{center}
+\begin{tikzpicture}
+    [block/.style={rectangle, thick, draw}]
+    \node[left] at (0, 0) {$\{x_K\}_{K=1}^{26}$};
+    \draw[-stealth] (0,0)--(1,0) node[block, right]{$H(z)$};
+    \draw[-stealth] (2,0)--(3,0) node[right]{$\{y_K\}_{K=1}^{26}$};
+\end{tikzpicture}
+\end{center}
+
+Per trovare $h_x$ si usa la sequenza nota $y_k = x_k \oplus h_k$.
+
+Dato che la risposta in frequenza del canale varia continuamente nel tempo, il modo migliore per stimarla \'e valutarla a met\'a del pacchetto.
+
+$T_s \coloneqq$ Tempo di simbolo $ = \frac{\text{Durata slot}}{\text{Dimensione Pacchetto}} = \frac{577 \mu s}{156.25} \approx 3.69\mu s$
+
+Banda di coerenza: $\frac{1}{5\sigma}$
+
+Banda del segnale $=\frac{1}{3} \gg$ Banda di Coerenza $\approx \frac{1}{80}$
+
+Su $200KHz$ la risposta in frequenza potrebbe essere quella (figura).
 
 
-5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
+\section{EDGE 2.7G}
+
+
+\newpage
+
 
 % copiare
 \newpage
@@ -1847,4 +1926,29 @@ Configurazione
 In basso a sinistra (sempre 326) Configurazioni personali per ogni utenti, assegnate automaticamente tenendo conto dello stato dell'utente
 
 In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di modulazione
+
+% Lezione 13/05/19 (di vodafone)
+\section{5G}
+
+\subsection{Advanteges over 4G}
+
+\begin{itemize}
+    \item Maggiore disponibilit\'a di banda
+    \item Bassa latenza: da 9 a 10 ms; Dovuta alla minore distanza cloud-server\\
+        Multiaccess Edge Computing: Place more computing resource closer to the point of data creation\\
+        Very useful for AR/VR
+
+    \item Maggior numero di dispositivi connessi per km\textsuperscript{2} (1 mln)
+    \item Peak data rate from 1\(Gbs\) to 20\(Gbs\)
+    \item Available spectrum from 3\(GHz\) to 30\(GHz\)
+    \item Higher data traffic; from 7.2 Exabyte/Month to 50 Exabyte/Month
+
+\end{itemize}
+
+
+
+Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
+
+
+5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
 \end{document}

@@ -35,6 +35,9 @@ case "$1" in
         (cd fca && rm -f *.pdf *.log *.aux)
         rm $PDFDIR/*.log $PDFDIR/*.aux
         ;;
+    "update")
+        cd "$2" && pdflatex -output-directory "$PDFDIR" "$2".tex;;
+
 
     "sync")
         mkdir -p $LOCAL_PDF_DIR

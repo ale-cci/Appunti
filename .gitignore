@@ -5,6 +5,10 @@
 *.fdb_latexmk
 *.pdf
 *.out
+*.ind
+*.idx
+*.ilg
+*.toc
 
 TODO.txt
 
