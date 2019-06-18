@@ -919,7 +919,7 @@ Ha come vantaggio principale quello di richiedere poca energia.
 
 Utilizza sempre la frequenza portante di $2.4GHz$
 
-\subsection{Bluetoooth 802.15.1}
+\section{Bluetoooth 802.15.1}
 Ha come vantaggi principali:
 \begin{itemize}
      \item ridotto costo
@@ -970,6 +970,120 @@ BlueTooth device addressing:
     \item AR\_ADDR [$8 bit$]: usato quando si passa dallo stato PARK a ACTIVE
 \end{itemize}
 
+\section{Protocollo LoRa}
+Tecnologia (LPWAN: Low Power Wide Area Network), Bassto su modulazione CSS nel 2014
+
+Utilizzato a livello industriale per connettere dispositivi (IoT),
+
+Da tenere conto per protocolli utilizzati nell'IoT
+\begin{itemize}
+    \item batteria
+    \item larga copertura
+    \item sicurezza
+    \item costo
+\end{itemize}
+
+\textit{LPWAN}: come reti cellulari ma ottimizzate per \textit{IoT/M2M}, (topologia a stella)
+
+Caratteristiche:
+\begin{itemize}
+    \item Wide range
+    \item Low power
+    \item Low cost
+    \item Low data-rate
+    \item Unlicensed bands
+\end{itemize}
+
+LoRa \'e il livello fisico su cui LoRaWAN lavora; LoRa \'e il livello fisico
+
+Comunicazinoe device-gateway in lora, gateway-network via ip
+
+\subsection{livello fisico}
+Modulazione basata su Chirp Spread Spectrum (CSS): Frequenza Aumenta Progressivamente
+
+Spreading Factor: Quanto un simbolo viene ``allargato'' nel tempo, ogni volta che viene incrementato di 1, raddoppia il tempo di trasmissione ed il consumo di energia
+
+\subsubsection{Composizione frame LoRa}
+\begin{enumerate}
+    \item Preambolo, serve a stimare la frequenza utilizzata e la qualit\'a del canale
+    \item  Inizio della data Unit di livello fisico: Il dispositivo comunica la fine del preambolo per iniziare a trasmettere i dati
+    \item  dati
+\end{enumerate}
+
+Air Time: Quanto deve stare acceso il chip per trasmettere dei dati
+
+$T_{off}$ Duty Cycle: Tempo che `devo stare zitto' dopo aver trasmesso (Duty Cy
+\[ T_{air} = T_S (n_{preamble} + n_{payload} + 4.25 )\]
+\[ T_{off} = T_{air} \left( \frac{1}{d} -1 \right) \]
+
+\subsubsection{Capture Effect}
+Fenomeno associato con FM reception, dove solo il segnale pi\'u forte ( o pi\'u vicino) sar\'a demodulato
+
+\subsection{Livello MAC (LoRaWAN)}
+% Da slide 54
+TTN: Server di rete
+
+Esistono 3 tipi di classi
+\begin{itemize}
+    \item \textbf{A}: Sensori alimentati a batteria (A sta per supportati da \underline{all} devices) pi\'u efficenti dal punto di vista energetico, uplink regolato da Aloha
+    \item \textbf{B}: (Attuatori alimentati a batteria) \underline{Beacon}, sincronizzazione tra nodi e gw tramite beaco
+    \item \textbf{C}: Attuatori alimentati a rete elettrica in \underline{Continuous} listening
+\end{itemize}
+
+Per i dispositivi di classe A c'\'e una finestra di downlink dopo ogni trasmissione; Dopo $t_1$ secondi, apre una receiving slot a stessa frequenza e spreading factor della trasmissione
+
+Se riceve un pacchetto di downlink finisce la trasmissione col gateway
+
+Se non lo riceve, dopo $t_1 + 1$ secondi apre una nuova frequenza di trasmissione con SF e altro prestabiliti
+
+Siccome utilizza Slotted Aloha ci deve essere una perfetta sincronizzazione tra end-device e gateway
+
+Tra i messaggi pi\'u importanti trasmiessi ci sono i MAC Commands, utilizzati per impostare potenza, spreading factor $\ldots$
+
+
+Adaptive Data Rate: Cambia Spreading factor per ottimizzare l'energia consumata, algoritmo attuale si basa su una stima dell'SNR dagli ultimi pacchetti ricevuti
+
+\subsection{Architettura di rete e Sicurezza}
+\begin{center}
+(X: Immagine slide 63)
+\end{center}
+
+Quando un nodo trasmette, tutti i gateway nel range trasmissivo ricevono un pacchetto; \'e il server che sceglie quale pacchetto prendere in considerazione, in base alla potenza del segnale ricevuto
+
+$\ldots$
+
+Network server:
+\begin{itemize}
+    \item Gestisce le join
+    \item Controlla che non ci siano pacchetti duplicati
+    \item Decide a quale gateway inviare messaggio di downlink
+\end{itemize}
+
+Application Server: Riceve i pacchetti, schedula le risposte e decripta il payload
+
+Per identificare i nodi univocamente:
+\begin{itemize}
+    \item DeviceEUI: Indirizzo a 64 bit come mac address
+    \item DevAddr: indirizzo 32 bit generato da Network (Parallelo dell'IP)
+    \item AppEUI: identificato univocamente
+    \item Fport: Identifica univicamente (App/server) parallelo di TCP/IP
+\end{itemize}
+
+% Schema slide 74: Come avviene la cifratura (AES a 128b)
+% 75: integrity check (server conosce tutte le chiavi di sessione)
+
+\subsection{Concludendo}
+
+\begin{itemize}
+    \item Lunghe distanze
+    \item Lunga durata della batteria
+    \item cheap devices
+    \item infrastruttura semplice
+\end{itemize}
+
+Scalabilit\'a ridotta
+
+$\ldots$
 \section{ZigBee 802.15.4}
 Ideato specialmente per low-rate low-power PANs.
 
@@ -1157,7 +1271,7 @@ considerando l'$I_i$ legata ad una singola Mobile station nella cella
 \end{tabular}
 \end{center}
 
-\section{GSM}
+\section{GSM (2G)}
 Global System for Moblile Communication. \`E organizzato in una struttura fortemente gerarchica.
 
 Introduce per la prima volta sul mercato una trasmissione dati dii tipo digitale. Portando enormi vantaggi rispetto ai precedenti sistemi cellulari.
@@ -1370,7 +1484,7 @@ GSM era progettato per la trasmissione vocali, \'e altamente inefficente per la 
 
 
 
-\section{EDGE 2.7G}
+\section{EDGE (2.7G)}
 \textit{Enhanced Data rates for GSM Evolution}
 
 GPRS (2.5G):\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
@@ -1382,7 +1496,6 @@ Miglioramento di trasferimento dati a comunicazione pacchetto (enhanced GPRS)
 Si appoggia alla rete GSM
 
 Intermedio fra GSM e wideband code division multiple access (W-CDMA) i.e. UMTS
-
 Utilizza il formato di modulazione QAM16/QAM32 invece di \textit{8-phase shift keying} (GSM). Aumenta l'efficenza spettrale ed il tasso di trasmissione da $171.2kbps$ a $473.6kbps$
 
 \newpage
@@ -1390,7 +1503,7 @@ Utilizza il formato di modulazione QAM16/QAM32 invece di \textit{8-phase shift k
 
 % copiare
 \newpage
-\section{UMTS}
+\section{UMTS (3G)}
 \textit{Universal Mobile Telecommunication System}
 
 Alla fine lo standard che doveva prendere piede era IMT-2000. Tutte le entit\'a cercarono di spingere le proprie soluzioni significative rispetto alla 2\textsuperscript{a} generazione $\rightarrow$ dovevano reggere applicazioni multimediali.
@@ -1577,7 +1690,7 @@ Idea del 3G:\@ Delegare all'esterno pi\'u responsabilit\'a ed intelligenza, ment
 \textbf{UTRAN} $\rightarrow$ formata da vari RNS, ogniuno dei quali \'e formato da diversi Node B. Ogni Node B gestisce un certo numero di \notate{\text{celle (da 3 a 6)}}{1}{\text{In ogni cella \'e supportato FDD e TDD}}
 
 \begin{samepage}
-\section{Architettura UTRAN}
+\subsection{Architettura UTRAN}
 \textit{UMTS Terrestrial Radio Area Network}
 
 \begin{figure}[h]
@@ -1631,8 +1744,11 @@ Con LTE il traffico vocale inizia ad essere deflesso sul traffico dati (Whatsapp
 
 Parte integrante dell'UMTS, ma prevede numerose modifiche:
 \begin{itemize}
-    \item Utilizza OFDM (\textit{Orthogonal Frequency Division Multiplexing}) per il downlink e Single-Carrier FDMA per l'uplink (al posto del W-CDMA)
+    \item Resource Scheduling in Uplink e Downlinkm
+
+        Utilizza OFDM (\textit{Orthogonal Frequency Division Multiplexing}) per il downlink e Single-Carrier FDMA per l'uplink (al posto del W-CDMA)
     \item Ha un efficenza spettrale 3 volte superiore alla versione precedente
+    \item Trasport layer tutto orientato ad IP, fondamentale per rendere possibile assegnazione dinamica delle risorse
 \end{itemize}
 
 \subsection{LTE performance requirements}
@@ -1671,65 +1787,61 @@ Parte integrante dell'UMTS, ma prevede numerose modifiche:
 
 Latenza $\coloneqq$ Round trip delay
 
-Struttura 4G: Core Network + parte di controllo; Scompare l'RNC $\rightarrow$ Prima semplificazione rispetto alla 3\textsuperscript{a} generazione
-
-\subsection{LTE/SAE Key features}
-
-SAE $\coloneqq$ System Artchitecture Evolution
-
-\textbf{E-UTRAN}: Evolved UTRAN, parte d'accesso
-
-\textbf{eNB}: Evolved Node B, parlano direttamente con un Gateway
-
-Esistono due tipologie di Gateway
-
-\textbf{P-GW}: Packed Data Network Gateway
-
-\textbf{EPC}: Evolved Packet Core
-
-Architettura semplice dal punto di vista dell'user plane: 3 passi perraggiungere l'esterno
-
-A livello di controllo gli eNB si collegano all'MME \textit{Mobility management entity}
-
-HLR (Home location register) e VLR vengono integrati nell'HSS
-
-PCRF, si occupa della tariffazione
-
+\subsection{LTE Architecture}
+\textit{High Speed OFDM Packet Access}/\textit{Evolved UTRAN}, due termini per indicare la stessa cosa.
 % image 1
 \begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{img/sdt/eutran}
     \centering
-    \includegraphics[width=0.8\textwidth]{img/sdt/arch_lte}
-    \caption{Architettura LTE}
+    \caption{Architettura E-UTRAN}
     \label{fig:lte_architecture}
 \end{figure}
 
+%SAE $\coloneqq$ System Artchitecture Evolution
 
-Si pu\'o notare la sudivisione tra piu livelli nell'architettura dell'LTE (Figura~\ref{fig:lte_architecture})
+\textbf{enodeB}: Evolved Node B, parlano direttamente con un Gateway (MME), prende il posto del nodeB ed RNC. L'obbiettivo \'e semplificare la struttura, riducendo la latenza e ridurre l'esposizione all'interferenza radio.
+enodeB Contiene uno scheduler che assegna le risorse a tutti gli utenti connessi.
 
-LTE in uplink viene utilizzato SC-FDMA, in downlink OFDMA
-
-HARQ: Garantisce ritrasmissione selettiva di pacchetti persi
-
-Da punto di vista dell'accesso, si concentra tutto sugli eNB
-
+Delegando le capacit\'a gestionali all'enodeB il sistema diventa pi\'u semplice e reattivo.
 Ruoi delegati all'eNB
 \begin{itemize}
     \item Resource Scheduling
     \item QoS Aware
-    \item Autoconfigurante, idea: installare eNB e lui doveva autoconfigurarsi rispetto alla sua posizione nella rete
+    \item Autoconfigurarsi rispetto alla posizione nella rete
 \end{itemize}
+
+Esistono due tipologie di Gateway
+
+La \textit{Core Network} del 3GPP LTE, si chiama SAE (\textit{System Architecture Evolution}).
+\'E la diretta evoluzione della core network utilizzata nel GPRS, ma pi\'u semplificata, ed ha un maggiore thrughput ed una minore latenza.
+
+\subsubsection{EPC}
+\textit{Evolved Packet Core}, composto da:
+\begin{figure}[h]
+    \includegraphics[width=0.8\textwidth]{img/sdt/Evolved_Packet_Core}
+    \centering
+\end{figure}
+
+\begin{itemize}
+    \item MME (\textit{Mobility Management Entity}): Responsabile della gestione utenti (Autenticazione attraverso HSS, Ritrasmissione dati, Generazione Identit\'a temporanee)
+
+        HARQ (\textit{Hybrid Automatic Repeat Request}, H/H+): Algoritmo di error detection, Cerca di accelerare il pi\'u possibile la trasmissione, non interrompendo il flusso
+
+        PCRF (\textit{Policy and Changing Rules Function}): Software che si occupa della tariffazione
+    \item HSS (\textit{Home Subscriber Server}, database centrale. Basato sul HLR ed AuC (\textit{Authentication Center}).
+
+        Sostituisce HLR e VLR
+
+\end{itemize}
+
+
+Architettura semplice dal punto di vista dell'user plane: 3 passi raggiongere l'esterno
+
+Da punto di vista dell'accesso, si concentra tutto sugli eNB
+
 
 \begin{itemize}
     \item Scompare completamente il CS domain, viene tutto orientato al Packet Switching
-    \item IETF: Internet Engeneering Task Force, si occupa di standardizzare qualsiasi protocollo legato ad internet,
-
-        fondalmente libera, per proporre qualcosa di nuovo vengono richiesti degli RFC (Request For Comments)
-
-        Si occupano di sviluppare i protocolli, non di come vengono trasmessi i dati
-
-        Entra lo standard (MIP-v6, i.e. IPv6)
-
-        4G considerava gi\'a di supportare protocolli per ``IP in mobilit\'a''
 
     \item  Prepared for Non-3GPP Access
 
@@ -1737,161 +1849,17 @@ Ruoi delegati all'eNB
         ma anche da access point WiFi
 \end{itemize}
 
-\subsection{Key Features}
+% \textbf{IETF}: Internet Engeneering Task Force, si occupa di standardizzare qualsiasi protocollo legato ad internet,
+% fondamentalmente libera, per proporre qualcosa di nuovo vengono richiesti degli RFC (Request For Comments)
+%
+% Si occupano di sviluppare i protocolli, non di come vengono trasmessi i dati
 
-\begin{itemize}
-    \item al posto di NodeB arriva eNB
-    \item Scompare RNC
-        Delegando le capacit\'a gestionali all'eNB, il sistema diventa pi\'u semplice e reattivo
-    \item Transport Layer (trasporto informazione): tutto diventa orientato all'IP
-
-    \item Resource Scheduling in Uplink e Downlink
-
-        eNB Contiene uno scheduler che assegna le risorse a tutti gli utenti connessi
-\end{itemize}
-
-Idea fondamentale per rendere possibile assegnazione dinamica delle risorse
-
-\textbf{Sistemi multiportante}
-% slide 282
-Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
-
-$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
-Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
-
-\textbf{OFDM}: Orthogonal Frequency Division Moldulation
-
-\textbf{HARQ} (H, H+):  Hybrid Authomatic Retransmission reQuest
-Cercare di accelerare il pi\'u possibile la trasmissione, non interrompendo il flusso
-
-\subsection{LTE key parameters}
-
-Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
-Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
-
-Protocolli di accesso multiplo e modelli di scheduling sono identici,
-
-\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
 
 In Uplink, anche se ogniuno ha una singola antenna, nel caso di Cooperazione viene creata una \textit{Antenna Array} $\rightarrow$ Multiuser Collaborative MIMO (Mai implementata)
 
 Uplink max: $75Mbps$
 
 %Appunti Mon 27 May 2019 10:23:18 AM CEST
-\section{Protocollo LoRa}
-Tecnologia (LPWAN: Low Power Wide Area Network), Bassto su modulazione CSS nel 2014
-
-Utilizzato a livello industriale per connettere dispositivi (IoT),
-
-Da tenere conto per protocolli utilizzati nell'IoT
-\begin{itemize}
-    \item batteria
-    \item larga copertura
-    \item sicurezza
-    \item costo
-\end{itemize}
-
-\textit{LPWAN}: come reti cellulari ma ottimizzate per \textit{IoT/M2M}, (topologia a stella)
-
-Caratteristiche:
-\begin{itemize}
-    \item Wide range
-    \item Low power
-    \item Low cost
-    \item Low data-rate
-    \item Unlicensed bands
-\end{itemize}
-
-LoRa \'e il livello fisico su cui LoRaWAN lavora; LoRa \'e il livello fisico
-
-Comunicazinoe device-gateway in lora, gateway-network via ip
-
-\subsection{livello fisico}
-Modulazione basata su Chirp Spread Spectrum (CSS): Frequenza Aumenta Progressivamente
-
-Spreading Factor: Quanto un simbolo viene ``allargato'' nel tempo, ogni volta che viene incrementato di 1, raddoppia il tempo di trasmissione ed il consumo di energia
-
-\subsubsection{Composizione frame LoRa}
-\begin{enumerate}
-    \item Preambolo, serve a stimare la frequenza utilizzata e la qualit\'a del canale
-    \item  Inizio della data Unit di livello fisico: Il dispositivo comunica la fine del preambolo per iniziare a trasmettere i dati
-    \item  dati
-\end{enumerate}
-
-Air Time: Quanto deve stare acceso il chip per trasmettere dei dati
-
-$T_{off}$ Duty Cycle: Tempo che `devo stare zitto' dopo aver trasmesso (Duty Cy
-\[ T_{air} = T_S (n_{preamble} + n_{payload} + 4.25 )\]
-\[ T_{off} = T_{air} \left( \frac{1}{d} -1 \right) \]
-
-\subsubsection{Capture Effect}
-Fenomeno associato con FM reception, dove solo il segnale pi\'u forte ( o pi\'u vicino) sar\'a demodulato
-
-\subsection{Livello MAC (LoRaWAN)}
-% Da slide 54
-TTN: Server di rete
-
-Esistono 3 tipi di classi
-\begin{itemize}
-    \item \textbf{A}: Sensori alimentati a batteria (A sta per supportati da \underline{all} devices) pi\'u efficenti dal punto di vista energetico, uplink regolato da Aloha
-    \item \textbf{B}: (Attuatori alimentati a batteria) \underline{Beacon}, sincronizzazione tra nodi e gw tramite beaco
-    \item \textbf{C}: Attuatori alimentati a rete elettrica in \underline{Continuous} listening
-\end{itemize}
-
-Per i dispositivi di classe A c'\'e una finestra di downlink dopo ogni trasmissione; Dopo $t_1$ secondi, apre una receiving slot a stessa frequenza e spreading factor della trasmissione
-
-Se riceve un pacchetto di downlink finisce la trasmissione col gateway
-
-Se non lo riceve, dopo $t_1 + 1$ secondi apre una nuova frequenza di trasmissione con SF e altro prestabiliti
-
-Siccome utilizza Slotted Aloha ci deve essere una perfetta sincronizzazione tra end-device e gateway
-
-Tra i messaggi pi\'u importanti trasmiessi ci sono i MAC Commands, utilizzati per impostare potenza, spreading factor $\ldots$
-
-
-Adaptive Data Rate: Cambia Spreading factor per ottimizzare l'energia consumata, algoritmo attuale si basa su una stima dell'SNR dagli ultimi pacchetti ricevuti
-
-\subsection{Architettura di rete e Sicurezza}
-\begin{center}
-(X: Immagine slide 63)
-\end{center}
-
-Quando un nodo trasmette, tutti i gateway nel range trasmissivo ricevono un pacchetto; \'e il server che sceglie quale pacchetto prendere in considerazione, in base alla potenza del segnale ricevuto
-
-$\ldots$
-
-Network server:
-\begin{itemize}
-    \item Gestisce le join
-    \item Controlla che non ci siano pacchetti duplicati
-    \item Decide a quale gateway inviare messaggio di downlink
-\end{itemize}
-
-Application Server: Riceve i pacchetti, schedula le risposte e decripta il payload
-
-Per identificare i nodi univocamente:
-\begin{itemize}
-    \item DeviceEUI: Indirizzo a 64 bit come mac address
-    \item DevAddr: indirizzo 32 bit generato da Network (Parallelo dell'IP)
-    \item AppEUI: identificato univocamente
-    \item Fport: Identifica univicamente (App/server) parallelo di TCP/IP
-\end{itemize}
-
-% Schema slide 74: Come avviene la cifratura (AES a 128b)
-% 75: integrity check (server conosce tutte le chiavi di sessione)
-
-\subsection{Concludendo}
-
-\begin{itemize}
-    \item Lunghe distanze
-    \item Lunga durata della batteria
-    \item cheap devices
-    \item infrastruttura semplice
-\end{itemize}
-
-Scalabilit\'a ridotta
-
-$\ldots$
 
 \section{OFDM}
 Consente di avere portanti multiple $\rightarrow$ Combatte in maniera efficace l'evanescenza da cammini multipli
@@ -1959,6 +1927,20 @@ Idea OFDM: Impacchettare densit\'e spettrali di potenza mantenendo ortogonalit\'
 
 
 \subsection{OFDM ad accesso multiplo}
+\textbf{Sistemi multiportante}
+% slide 282
+Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
+
+$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
+Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
+
+
+Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
+Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
+
+Protocolli di accesso multiplo e modelli di scheduling sono identici,
+
+\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
 
 Diversi approcci:
 \begin{enumerate}
@@ -2043,4 +2025,19 @@ In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di 
 Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
 
 5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
+
+\textbf{Sistemi multiportante}
+% slide 282
+Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
+
+$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
+Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
+
+
+Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
+Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
+
+Protocolli di accesso multiplo e modelli di scheduling sono identici,
+
+\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
 \end{document}
