@@ -1158,28 +1158,65 @@ considerando l'$I_i$ legata ad una singola Mobile station nella cella
 \end{center}
 
 \section{GSM}
-GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
+Global System for Moblile Communication. \`E organizzato in una struttura fortemente gerarchica.
 
+Introduce per la prima volta sul mercato una trasmissione dati dii tipo digitale. Portando enormi vantaggi rispetto ai precedenti sistemi cellulari.
+\begin{itemize}
+    \item Pi\'u velocit\'a di trasmissione  grazie alle tecniche di compressione dei dati e codifica di sorgente.
+    \item Introduzione delle funzioni di sicurezza e cifratura
+    \item Introduce un grande numero di servizi grazie all'aumento della velocit\'a di trasmissione (es. SMS)
+\end{itemize}
+
+% GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
+
+\begin{wrapfigure}{R}{0.5\textwidth}
+\includegraphics[width=0.5\textwidth]{img/sdt/architettura_uts}
+\caption{Architettura GSM}
+\centering
+\end{wrapfigure}
+
+\bigbreak
 MSS:\@\textit{Mobile Station Subsystem}, Connessione alla rete via interfaccia radio
 
 MMI:\@\textit{Man-Machine Interface}
 
 HMI:\@\textit{Human-Machine Interface}
 
+Access Network:
+\begin{itemize}
+    \item BTS: Base Transceiver Station
+    \item BSC: Base Station Controller (Gestisce Handover)
+\end{itemize}
+
+Core Network:
+\begin{itemize}
+    \item MSC: Mobile Switching Center, commutazione circuito
+    \item SGSN: Interfaccia commutaizione pacchetto
+\end{itemize}
+
+
 IMEI:\@\textit{International Mobile Equip Identity}
 
-SIM:\@\textit{Subscriber Identity Module}, contiene:
+HLR:\@\textit{Home Location Register}, Database s cui un gestore GSM memorizza permanentemente i dati relativi agli utenti sottoscritti (IMSI, MSISDN)
+
+VLR:\@\textit{Visitor Location Register}, Mantiene aggiornate le informazioni sulla mobile Station (IMSI, MSISDN, HLR, TMSI, Stato Mobile Station, Location Area Identity)
+
+SIM:\@\textit{Subscriber Identity Module}, ha come scopo principale quello di fornire l'autenticazione ed autorizzazione per accedere alla rete. Non contiene all'interno il numero di telefono, perch\'e associato all' \textit{IMSI}. Contiene:
+
 \begin{itemize}
-    \item \textit{Mobile Station International Subscriber Directory Number}
-    \item \textit{International Mobile Subscriber Identity}
+    \item IMSI: \textit{International Mobile Subscriber Identity}, Numero univoco associato ad ogni utente, mandato da un dispositivo della rete (molto raramente) a HLR e VLR. Composto da:
         \begin{itemize}
             \item Utente
             \item Operatore
             \item Nazione
         \end{itemize}
-    \item Chiave segreta utilizzata sia per autenticare i lchiamante sia per cifrare i dati.
+        Per garantire riservatezza agli utenti viene inviato al suo posto un TMSI (\textit{Temporary MSI}) casualmente generato.
+    \item Chiave segreta utilizzata sia per autenticare il chiamante sia per cifrare i dati.
     \item Memoria interna (Conentiene al massimo 256 Numeri di telefono)
 \end{itemize}
+
+
+\textit{Mobile Station International Subscriber Directory Number} (MSISDN): Identifica univocamente l'untente nel piano di numerazione della rete telefonica del gestore.
 
 BSS:\@\textit{Base Station Subsystem}
 
@@ -1294,7 +1331,9 @@ Il \textbf{midambolo} \'e noto al tramettotore ad al ricevitore.
 \end{tikzpicture}
 \end{center}
 
-Per trovare $h_x$ si usa la sequenza nota $y_k = x_k \oplus h_k$.
+Per trovare $h_k$ si usa la sequenza nota $y_k = x_k \oplus h_k$.
+
+$h_k$: Channel Impulse Response
 
 Dato che la risposta in frequenza del canale varia continuamente nel tempo, il modo migliore per stimarla \'e valutarla a met\'a del pacchetto.
 
@@ -1329,11 +1368,14 @@ Tutti le repliche sono caratterizzate da fading, modellizzato con una distribuzi
 
 GSM era progettato per la trasmissione vocali, \'e altamente inefficente per la trasmissione dati.
 
-GPRS:\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
 
-Asimmetria Uplink e Downlink
 
 \section{EDGE 2.7G}
+\textit{Enhanced Data rates for GSM Evolution}
+
+GPRS (2.5G):\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
+
+Asimmetria Uplink e Downlink
 
 Miglioramento di trasferimento dati a comunicazione pacchetto (enhanced GPRS)
 
@@ -1341,7 +1383,7 @@ Si appoggia alla rete GSM
 
 Intermedio fra GSM e wideband code division multiple access (W-CDMA) i.e. UMTS
 
-Diversamente da GSM, utilizza il formato di modulazione \textit{8-phase shift keying} (8-PSK). Aumenta l'efficenza spettrale ed il tasso di trasmissione da $115kbps$ a $384kbps$
+Utilizza il formato di modulazione QAM16/QAM32 invece di \textit{8-phase shift keying} (GSM). Aumenta l'efficenza spettrale ed il tasso di trasmissione da $171.2kbps$ a $473.6kbps$
 
 \newpage
 
@@ -1349,8 +1391,7 @@ Diversamente da GSM, utilizza il formato di modulazione \textit{8-phase shift ke
 % copiare
 \newpage
 \section{UMTS}
-La terza generazione GSM in europa IS-95 negli Stati uniti, Capirono che la telefonia cellulare era un fenomeno di massa.
-Discussero per avere una terza generazione unica.
+\textit{Universal Mobile Telecommunication System}
 
 Alla fine lo standard che doveva prendere piede era IMT-2000. Tutte le entit\'a cercarono di spingere le proprie soluzioni significative rispetto alla 2\textsuperscript{a} generazione $\rightarrow$ dovevano reggere applicazioni multimediali.
 
@@ -1378,39 +1419,33 @@ Interfaccia radio \textbf{WCDMA} $\rightarrow$ Bande pi\'u larghe del CDMA class
 
 Con il TDD c'\'e pi\'u flessibilit\'a
 
-% \begin{tabular}{||c|c||}
-%     \hline
-%     GSM & a\\
-%     GPRS & b
-%     \hline
-% \end{tabular}
-
-\subsection{Tasso di trasmissione}
-\begin{itemize}
-    \item \textbf{GSM} $\rightarrow$ traffico dati $36 \frac{Kb}{s}$
-    \item \textbf{GPRS} $\rightarrow$ Potenziale a livello fisico che arrivava fino a $171.2\frac{Kb}{s}$ (teorico)
-    \item \textbf{EDGE} $\rightarrow 553.6\frac{Kb}{s}$
-    \item \textbf{UTRA} (a livello teorico) $\rightarrow 1920\frac{Kb}{s}$
-\end{itemize}
-
-
+\begin{wrapfigure}{R}{0.3\textwidth}
+\begin{tabular}{c c}
+    Generazione & Kb/s\\
+    \hline
+    GSM & 36\\
+    GPRS &171.2\\
+    EDGE &473.6\\
+    UTRA &1920\\
+\end{tabular}
+\centering
+\caption{Velocit\'a trasmissioni}
+\end{wrapfigure}
 
 
 \subsection{Differenze tra W-CDMA e GSM }
-
+\textit{Wideband Code Division Multiple Access}, lavora su coppia di canali a banda larga ($5Mhz$). Pu\'o essere utilizzato sia in modalit\'a TDD che FDD.
 \begin{itemize}
-    \item  Maggiore spaziatura tra plrtanti
+    \item Maggiore spaziatura tra portanti
     \item Maggiore frequenza di controllo
 
 \end{itemize}
 
-\subsection{frequenza di controllo} nel GSM non importa la potenza relativa delle trasmissioni, perche ogniuno ha la sua frequenza $\rightarrow$ non ci sono interferenze
-
-Con la 3\textsuperscript{a} generazione viene introdotto un controllo in potenza
+Nel GSM non c'\'e bisogno di un controllo di potenza, siccome ogni utente ha la sua frequenza. Non accade lo stesso dal 3G, per questo motivo viene introdotta una frequenza di controllo
 
 
 \subsection{Controllo qualit\'a}
-legato alla pianificazione delle reti (dipende dal numero di celle per kluster e come vangono distribuite le risorse) Con la 3\textsuperscript{a} generazione nascono gli algoritmi di gestione delle risorse
+Legato alla pianificazione delle reti (dipende dal numero di celle per kluster e come vangono distribuite le risorse) Con la 3\textsuperscript{a} generazione nascono gli algoritmi di gestione delle risorse
 
 
 \subsection{Diversit\'a di frequenza}
@@ -2032,10 +2067,7 @@ In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di 
 
 \end{itemize}
 
-
-
 Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
-
 
 5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
 \end{document}
