@@ -1443,40 +1443,34 @@ Con il TDD c'\'e pi\'u flessibilit\'a
 
 Nel GSM non c'\'e bisogno di un controllo di potenza, siccome ogni utente ha la sua frequenza. Non accade lo stesso dal 3G, per questo motivo viene introdotta una frequenza di controllo
 
-
-\subsection{Controllo qualit\'a}
-Legato alla pianificazione delle reti (dipende dal numero di celle per kluster e come vangono distribuite le risorse) Con la 3\textsuperscript{a} generazione nascono gli algoritmi di gestione delle risorse
-
-
-\subsection{Diversit\'a di frequenza}
-Serve per prevenire Fading nel canale;
+\textbf{Diversit\'a di frequenza}: Serve per prevenire Fading nel canale
 \begin{itemize}
     \item \textbf{GSM} utilizzava frequency hopping
     \item \textbf{W-CDMA} siccome il canale \'e molto grande la banda non viene completamente distrutta (notch); Vengono sfruttati con ricevitori \textbf{Rake}
 \end{itemize}
 
-\subsection{dati e pacchetto}
-
+Per trasmissione dati e pacchetto:
 \begin{itemize}
     \item GSM pu\'o assegnare all'utente pi\'u time slot successivi
-    \item con \textbf{$3g$} viene potenziato lo scheduling per la trasmissione dei pacchetti $\rightarrow$ il sistema assegna pi\'u risorse per aumentare la velocit\'a di trasmissione in downlonk
+    \item 3G potenzia lo scheduling per la trasmissione dei pacchetti: il sistema assegna pi\'u risorse per aumentare la velocit\'a di trasmissione in downlonk (\textit{HSDPA} e \textit{HSUPA})
 \end{itemize}
 
 % image 1
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=3in]{img/diversi_cammini.jpg}
-    \caption{Diversit\'a di cammino}
-\end{figure}
+
 \subsection{Diversit\'a di trasmissione in downlink}
 
+\begin{wrapfigure}{R}{2in}
+    \includegraphics[width=2in]{img/diversi_cammini.jpg}
+    \centering
+    \caption{Diversit\'a di cammino}
+\end{wrapfigure}
 Antenne multiple in trasmissione ed antenna unica in recezione $\rightarrow$ diversit\'a di trasmissione
 
 Usando antenne multiple in recezione, aumenta la velocit\'a di canale esponenzialmente; (Con \textbf{5G} verranno utilizzate almeno 2 antenne per device)
 
 
 % Desegno 115
-Per garantire l'ottimizzazione dell'assegnazione delle assegnazzione delle risorse $\rightarrow$ 4G intrpduce il concetto di ``negoziazione'' delle risorse attraverso \textit{Radio Bearer} $\rightarrow$ Canale di trasporto che consente  di negoziare dati (date bearer) o caratteristiche a livello fisico (Signal bearer)
+Per garantire l'ottimizzazione dell'assegnazione delle assegnazzione delle risorse $\rightarrow$ 3G intrpduce il concetto di ``negoziazione'' delle risorse attraverso \textit{Radio Bearer} $\rightarrow$ Canale di trasporto che consente  di negoziare dati (date bearer) o caratteristiche a livello fisico (Signal bearer)
 
 Gli attributi definiti da questi pacchetti di controllo riguardano:
 
@@ -1487,9 +1481,9 @@ Gli attributi definiti da questi pacchetti di controllo riguardano:
 \end{enumerate}
 
 $\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \textbf{QoS} \textit{Quality of Service}
-
 \begin{samepage}
     \subsection{Classi di QoS di UMTS}
+    \textbf{Classi di QoS}:\@\textit{Quality of Service} (conversazionale, streaming, interattiva, background), legato alla pianificazione delle reti (dipende dal numero di utenti per cella). Introdotto nella terza generazione.
     \begin{itemize}
         \item \textbf{Conversazionale}: applicazione principale per voce, videogiochi e videotelefonia;
             \begin{itemize}
@@ -1583,93 +1577,71 @@ Idea del 3G:\@ Delegare all'esterno pi\'u responsabilit\'a ed intelligenza, ment
 \textbf{UTRAN} $\rightarrow$ formata da vari RNS, ogniuno dei quali \'e formato da diversi Node B. Ogni Node B gestisce un certo numero di \notate{\text{celle (da 3 a 6)}}{1}{\text{In ogni cella \'e supportato FDD e TDD}}
 
 \begin{samepage}
-\subsection{Interfacce Considerate nello Standard}
+\section{Architettura UTRAN}
+\textit{UMTS Terrestrial Radio Area Network}
+
+\begin{figure}[h]
+\includegraphics[width=0.8\textwidth]{img/sdt/architettura_utran}
+\centering
+\end{figure}
+
+
+Con UTRAN si indica l'insieme dei Node-B e dei Radio Network Controller (RNC), che formano la rete d'accesso radio nello standard UMTS. Contiene:
+
 \begin{itemize}
-    \item \framebox{UU} $\rightarrow$ Interfaccia telefono e Node B, ha il compito di
+    \item Interfaccia \textbf{Iu}: Connette RNC alla Core Network (CN). Pi\'u nello specifico viene detta:
+        \begin{itemize}
+            \item \textbf{Iu-CS} (Circuit Switching) per traffico vocale (connessione con dominuo a circuito)
+            \item \textbf{Iu-PS} (Packet Swtiching)  per traffico dati (connessione con dominio a pacchetto)
+        \end{itemize}
+
+    \item Interfaccia \textbf{Uu}: Interfaccia telefono e Node B, ha il compito di
         \begin{itemize}
             \item trasportare i servizi per l'utente
             \item Gestione della mobilit\'a: Trasporto delle informazioni necessarie
         \end{itemize}
-    \item \framebox{IU} $\rightarrow$ Interfacciamento tra \textit{UTRAN} e \textit{Core Network}
-        \begin{itemize}
-            \item \textbf{Iu-CS} Circuit Switching $\rightarrow$ per traffico vocale
-            \item \textbf{Iu-PS} Packet Swtiching $\rightarrow$ per traffico dati
-        \end{itemize}
-        \item \framebox{Iub} $\rightarrow$ Interfaccia di collegamento fra Node B ed il proprio RNC
-        \item \framebox{Iur} $\rightarrow$ Collega RNC appeartenenti a diversi RNS
-            \begin{figure}[h]
-                \centering
-                \includegraphics[width=6in]{img/architettura_uts.jpg}
-                \caption{Architettura UTS}
-            \end{figure}
 
+    \item Interfaccia \textbf{Iub}: Interfaccia di collegamento fra Node B ed il proprio RNC
+    \item Interfaccia \textbf{Iur}: Collega RNC appeartenenti a diversi RNS
 \end{itemize}
+
 
 \end{samepage}
 
-La novit\'a a livello architetturale dell'UMTS \'e la presenza degli RNC nella \textit{UTRAN} $\Rightarrow$ \underline{RNC} gestisce tutte le funzionalit\'a lato utente:
-\begin{itemize}
-    \item Mobilit\'a
-    \item Assegnazione risorse
-\end{itemize}
+La novit\'a a livello architetturale dell'UMTS \'e la presenza degli RNC nella UTRAN . Ogni RNC gestisce tutte le funzionalit\'a lato utente (Mobilit\'a e Assegnazione risorse) senza il bisogno di fare richieste alla Core Network.
 
-Senza passare da core network
-
-\underline{Node B}
+Compito del \textbf{Node B}:
 \begin{itemize}
-    \item Realizza le trasmissioni radio (modulazione, potenza trasmissiva, gestire il controllo di potenza)
+    \item Realizzare le trasmissioni radio (modulazione, potenza trasmissiva, gestire il controllo di potenza)
     \item Riceve dal proprio RNC le indicazioni sulle risore da assegnare agli utenti
-
     \item Effettuare misure sulla potenza e QoS
 \end{itemize}
 
 
 % Drift and Serving RNC
-% Slide 255
-\textbf{HSPA} High Sped Packet Access
-
-Dispositivi di generazioni successive devono garantire il funzionamento delle generazioni precedenti fino a quando non vengono dismesse
-
 % Lezione 21 - 5 -19
 \section{LTE (4G)}
+\textit{Long Term Evolution}
 
-% slide 261
-% slide 262
+Vuole promuovere l'utilizzzo della \textit{banda larga} in mobilit\'a, con l'obbiettivo di raggiungere velocit\'a di connessioni wireless superiori anche ad 1Gbit/s.
 
 Machine to machine legata ad IOT (dovrebbe rimanere piccola siccome i dati trasmessi sono pochi)
 
-Con LTE le comunicazioni dati iniziano ad essere deflesse sulla comunicazione dati
+Con LTE il traffico vocale inizia ad essere deflesso sul traffico dati (Whatsapp, Skype etc.)
 
-% slide 263
-% slide 264
-
-Obbiettivo \textbf{LTE}: supportare sempre pi\'u traffico dati
-
-3GPP creata per generare un potenziale standard per la 4\textsuperscript{a} generazione
-
-\subsection{Motivation for LTE}
+Parte integrante dell'UMTS, ma prevede numerose modifiche:
 \begin{itemize}
-    \item Higher data rates $\Rightarrow$ More spectral efficiency
-    \item  Sistema completamente ottimizzato per packet switching non \textit{Commutazione per circuito}
-    \item Higher quality service
-
-        Aumentare l'esperienza di always on
-
-        Suddivisione logica  tra \textit{User Plane} e \textit{Control Plane} (Non visibile all
-        utente)
-    \item Infrastruttura pi\'u economica
-
-        Semplificazione architettura con riduzione elementi in rete
+    \item Utilizza OFDM (\textit{Orthogonal Frequency Division Multiplexing}) per il downlink e Single-Carrier FDMA per l'uplink (al posto del W-CDMA)
+    \item Ha un efficenza spettrale 3 volte superiore alla versione precedente
 \end{itemize}
-
 
 \subsection{LTE performance requirements}
 \begin{itemize}
-    \item Data rate con picchi di $100\frac{Mb}{s}$, massima banda assegnabile ad un utente $20MHz$
+    \item Data rate con picchi di 100 Mb/s, massima banda assegnabile ad un utente $20MHz$
 
-        Da 3\textsuperscript{a} Generazione ci si \'e accorti che il traffico \'e asimmetrico, downlink \'e molto pi\'u utilizzato rispetto all' uplink, per questo motivo, l'efficenza spettrale dell'uplink \'e la met\'a rispetto a quella del downlink
+        Dalla terza generazione ci si \'e accorti che il traffico \'e asimmetrico, downlink \'e molto pi\'u utilizzato rispetto all' uplink, per questo motivo, l'efficenza spettrale dell'uplink \'e dimezzata rispetto a quella del downlink
 
-    \item Cell range ideale di qualche Km, idealmente si puntava ad avere celle di $30$ e $100Km$ di raggio
+    \item Cell range ideale di qualche Km, idealmente si puntava ad avere celle di 30/100 Km di raggio
 
     \item Cell Capacity fino a 200 utenti attivi per cella
     \item Mobilit\'a (Sistema ottimizzato per basse mobilit\'a)
@@ -1702,6 +1674,7 @@ Latenza $\coloneqq$ Round trip delay
 Struttura 4G: Core Network + parte di controllo; Scompare l'RNC $\rightarrow$ Prima semplificazione rispetto alla 3\textsuperscript{a} generazione
 
 \subsection{LTE/SAE Key features}
+
 SAE $\coloneqq$ System Artchitecture Evolution
 
 \textbf{E-UTRAN}: Evolved UTRAN, parte d'accesso
@@ -1725,7 +1698,7 @@ PCRF, si occupa della tariffazione
 % image 1
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1.8in]{placeholder.jpg}
+    \includegraphics[width=0.8\textwidth]{img/sdt/arch_lte}
     \caption{Architettura LTE}
     \label{fig:lte_architecture}
 \end{figure}
