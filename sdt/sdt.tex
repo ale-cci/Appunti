@@ -1289,7 +1289,7 @@ considerando l'$I_i$ legata ad una singola Mobile station nella cella
 \section{GSM (2G)}
 Global System for Moblile Communication. \`E organizzato in una struttura fortemente gerarchica.
 
-Introduce per la prima volta sul mercato una trasmissione dati dii tipo digitale. Portando enormi vantaggi rispetto ai precedenti sistemi cellulari.
+Introduce per la prima volta sul mercato una trasmissione dati di tipo digitale. Portando enormi vantaggi rispetto ai precedenti sistemi cellulari.
 \begin{itemize}
     \item Pi\'u velocit\'a di trasmissione  grazie alle tecniche di compressione dei dati e codifica di sorgente.
     \item Introduzione delle funzioni di sicurezza e cifratura
@@ -1302,7 +1302,6 @@ Introduce per la prima volta sul mercato una trasmissione dati dii tipo digitale
 \centering
 \caption{Architettura GSM (GPRS)}
 \end{figure}
-% GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
 
 \bigbreak
 MSS:\@\textit{Mobile Station Subsystem}, Connessione alla rete via interfaccia radio
@@ -1499,7 +1498,7 @@ GSM era progettato per la trasmissione vocali, \'e altamente inefficente per la 
 
 
 
-\section{EDGE (2.7G)}
+\section{EDGE ed Evolved EDGE(2.7G)}
 \textit{Enhanced Data rates for GSM Evolution}
 
 GPRS (2.5G):\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
@@ -1508,8 +1507,11 @@ Miglioramento di trasferimento dati a comunicazione pacchetto (enhanced GPRS)
 
 Si appoggia alla rete GSM
 
-Intermedio fra GSM e wideband code division multiple access (W-CDMA) i.e. UMTS
-Utilizza il formato di modulazione QAM16/QAM32 invece di \textit{8-phase shift keying} (GSM). Aumenta l'efficenza spettrale ed il tasso di trasmissione da $171.2kbps$ a $473.6kbps$
+Intermedio fra GSM e wideband code division multiple access (W-CDMA) i.e. UMTS (3G)
+
+EDGE ottimizza la trasmissione dati utilizzando il formato di modulazione 8PSK, portando il bit rate ad un tasso di trasmissione di $\approx 172 kbps$
+
+\textit{Evolved Edge} \'e la diretta ottimzzazione di EDGE, il cambiando ancora il formato di modulazione da 8PSK a QAM16/QAM23 il tasso di trasmissione sale da $172 kbps$ a $\approx473kbps$
 
 \newpage
 
@@ -1952,19 +1954,17 @@ L'OFDM non \'e ideale per l'accesso multiplo con pi\'u utenti, per questo motivo
 
 Per l'accesso multiplo l'OFDM pu\'o essere combinato come:
 \begin{itemize}
-    \item TDD: Non ottimale per un alto traffico in rete
-    \item OFDMA: \textit{Orthogonal Frequency Division Multiple Acces}
+    \item TDMA: Non ottimale per un alto traffico in rete
+    \item FDMA: \textit{Orthogonal Frequency Division Multiple Acces}
 \end{itemize}
 
 \subsection{OFDMA}
 
 % slide 282
-Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
+Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda.
 
-$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
+Approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
 Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
-
-Assegna gruippi di sottoportanti dell'OFDM agli utenti, basandosi su quanto BitRate richiedono gli utenti.
 
 Rimane sempre inefficente per alto traffico. La soluzione a questo problema \'e assegnare non solo sottoportanti, ma \textit{Blocchi di risorse} composti da sottopotanti su intervalli di tempo.
 
@@ -1973,36 +1973,21 @@ Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richies
 
 Protocolli di accesso multiplo e modelli di scheduling sono identici,
 
-\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
 
 Diversi approcci:
 \begin{enumerate}
-    \item slide 309 (Un unico trasmettitore)
-    \item TDMA (Trasmettitori multipli)
+    \item OFDMA-TDMA
 
         Limitato:
         Se solo uno deve trasmettere, molte risorse rimangono inutilizzzate
 
+    \item OFDMA-FDD
         Introdotto il concetto di blocco di risorse:
         Posso assegnare le risorse in modo diverso in base alle esigenze deglu utenti (Slide 311)
 
         12 sottoportanti formano un blocco di risorse
 
 \end{enumerate}
-Le sottoportanti vengono assegnate in base alla risposta dei vari utenti sul canale di comunicazione
-
-(slide 319):
-Superficie gialla presa in un istante temporale (proiezione su asse z-frequenza): Come cambia la risposta in frequenza del canale all'avanzare del tempo, cambia in modo regolare
-
-Blu: per un altro utente (non sono uguali giallo-blu)
-
-La base station ad un certo istante guarda le risposte in frequenza ed in base ad esse sceglie a quale utente assegnare le sottofrequenze
-
-(Scheduling utilizzato nei sistemi di $4^a$ generazione, tipicamente funzionano in modalit\'a TDD, (Trasmissioni suddivise in Uplink e Downlink). Tra le due fasi c\'e una fase di negoziazione, dove vengono riassegnate le risorse per il successivo Uplink/Downlink
-
-Utilizza efficentemente le risorse del canale
-
-LTE utilizza OFDMA in Downlink; Per l'Uplink SC-FDMA
 
 \subsection{SC-FDMA}
 \textit{Single Carrier Frequency Division Multiple Access}
@@ -2011,43 +1996,37 @@ LTE utilizza OFDMA in Downlink; Per l'Uplink SC-FDMA
     \centering
 \end{figure}
 
-Funziona molto bene per valori relativamente bassi di PAPR
+Utilizza efficentemente le risorse del canale
+
+Si addata all'interferenza. Le sottoportanti vengono assegnate in base alla risposta dei vari utenti sul canale di comunicazione
+
+Viene utilizzato il prefisso ciclico come intervallo di guardia.
 
 Ogni sottoportante contiene informazioni su tutti i simboli trasmessi
 
-PAPR: Peack to Average Power Ratio (Rapporto di potenza fra picco e media), Caratterizza la qualit\'a del segnale trasmesso
+Funziona molto bene per valori relativamente bassi di PAPR (\textit{Peak to Average Power Ratio}, caratterizza la qualit\'a del segnale trasmesso)
 
-(Slide 318) Come Viene implementato l'OFDMA nell'LTE
+(slide 319): Risposta al canale di due utenti (Giallo e Blu).
+
+La base station sceglie a quali frequenze assegnare ad ogni utente, in base alla loro risposta al canale.
+
+(Scheduling utilizzato nei sistemi di $4^a$ generazione, tipicamente funzionano in modalit\'a TDD, (Trasmissioni suddivise in Uplink e Downlink). Tra le due fasi c\'e una fase di negoziazione, dove vengono riassegnate le risorse per il successivo Uplink/Downlink
+
 
 $5G$ Inizier\'a a funzionare utilizzando l'OFDMA come formato di modulazione
 
-(323) Durada di uno slot in base alla grandezza del prefisso ciclico
 
-LTE modalit\'a FDD (325)
+\subsection{Stuttura di uno slot LTE}
+Ogni frame dura 10ms. Ogni frame \'e diviso in 10 subframe. Ogni subframe \'e diviso in 2 slot, ogniuno di durata 0.5ms.
 
-LTE modalit\'a TDD (326)
-Configurazione
-\begin{itemize}
-    \item Downlink
-    \item Sincronizzazione
-    \item Uplink
-    \item Uplink
-    \item Uplink
-    \item Downlink
-    \item Sincronizzazione
-    \item Uplink
-    \item Uplink
-    \item Uplink
-\end{itemize}
+Gli slot sono composti da 6 o 7 simboli OFDM, in base a se viene usato il prefisso ciclico esteso o meno.
 
-In basso a sinistra (sempre 326) Configurazioni personali per ogni utenti, assegnate automaticamente tenendo conto dello stato dell'utente
+EUTRAN \'e organizzata in blocchi di risorse (12 sottoportanti). \'E compito dello scheduler assegnare questi blocchi a canali fisici di fferenti utenti. Ogni cella deve contenere dai 6 ai 110 bloccchi di risorse.
 
 In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di modulazione
 
 % Lezione 13/05/19 (di vodafone)
-\section{5G}
-
-\subsection{Advanteges over 4G}
+\section{5G, Advanteges over 4G}
 
 \begin{itemize}
     \item Maggiore disponibilit\'a di banda
@@ -2065,19 +2044,4 @@ In un blocco di risorse non \'e detto che venga utilizzato lo stesso formato di 
 Non acora pienamente utilizzato, verr\'a utilizzato maggiormente con \textit{IOT}
 
 5G will become the backbone of Smart Cities, diriverless car… (IOT, Industria 4.0)
-
-\textbf{Sistemi multiportante}
-% slide 282
-Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
-
-$\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
-Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
-
-
-Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
-Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
-
-Protocolli di accesso multiplo e modelli di scheduling sono identici,
-
-\textbf{OFDMA} legato all'OFDM, Include anche il livello fisico
 \end{document}
