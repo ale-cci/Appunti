@@ -534,11 +534,17 @@ Utilizzando gli stessi approcci di una rete cablata, su una rete wireless, si ma
 
 Soluzioni:
 \begin{itemize}
-    \item TDMA: Reserves time slots
-    \item FDMA: Reserves Frequencies
-    \item CDMA: Reserves Expansion Codes
-    \item Random Access Techniques
+    \item TDMA \textit{Time Division Multiple Access}: Reserves time slots
+    \item FDMA \textit{Frequency Division Multiple Access}: Reserves Channel Frequencies
+    \item CDMA \textit{Code Division Multiple Access}: Reserves Expansion Codes
+    \item Random Access Techniques: es. Aloha
 \end{itemize}
+
+\begin{figure}[h]
+    \includegraphics[width=0.8\textwidth]{img/sdt/comp_ftcdma}
+    \centering
+    \caption{f/t/c-dma comparison}
+\end{figure}
 
 \subsection{FDMA}
 Frequency Division Multiple Access: Utenti suddivisi in frequenza
@@ -1155,6 +1161,11 @@ Supponendo che $M_{cella}$ sia il numero di risorse frequenziali assegnate ad og
 \[ u = \frac{M_{cella}}{A_{cella}} \]
 
 
+\begin{wrapfigure}{R}{0.3\textwidth}
+    \includegraphics[width=0.3\textwidth]{img/sdt/distanza_riuso}
+    \centering
+    \caption{Distanza di riuso\label{dist-riuso}}
+\end{wrapfigure}
 Chiamato $M$ il numero complessivo di risorse a disposizione, e $K$ le dimensioni del Kluster:
 \[ M_{cella} = \frac{M}{K} \]
 
@@ -1165,14 +1176,8 @@ Chiamato $R$ il raggio della cella associata dell'esagono.
 
 Maggiore \'e il numero di risorse a disposizione, maggiore \'e il numero di utenti gestibili per $Km^2$
 
+\textbf{Distanza di riuso} ($\mathcal{D}$): Distanza tra centri di celle analoghe (Figura \ref{dist-riuso})
 
-\textbf{Distanza di riuso} ($\mathcal{D}$): Distanza tra centri di celle analoghe
-
-\begin{figure}[h]
-    \includegraphics[width=0.2\textwidth]{img/sdt/distanza_riuso}
-    \centering
-    \caption{Distanza di riuso con i=2, j=1}
-\end{figure}
 \underline{Sperimentalmente} i valori che $K$ pu\'o assumere non snono arbitrari, ma devono rispettare la relazione
 
 \begin{minipage}{0.5\textwidth}
@@ -1286,8 +1291,9 @@ considerando l'$I_i$ legata ad una singola Mobile station nella cella
 \end{tabular}
 \end{center}
 
-\section{GSM (2G)}
-Global System for Moblile Communication. \`E organizzato in una struttura fortemente gerarchica.
+\section{GSM e GPRS (2G)}
+\subsection{GSM}
+\textit{Global System for moblile Communication}. \`E organizzato in una struttura fortemente gerarchica.
 
 Introduce per la prima volta sul mercato una trasmissione dati di tipo digitale. Portando enormi vantaggi rispetto ai precedenti sistemi cellulari.
 \begin{itemize}
@@ -1296,40 +1302,7 @@ Introduce per la prima volta sul mercato una trasmissione dati di tipo digitale.
     \item Introduce un grande numero di servizi grazie all'aumento della velocit\'a di trasmissione (es. SMS)
 \end{itemize}
 
-
-\begin{figure}[h]
-\includegraphics[width=0.7\textwidth]{img/sdt/gprs}
-\centering
-\caption{Architettura GSM (GPRS)}
-\end{figure}
-
-\bigbreak
-MSS:\@\textit{Mobile Station Subsystem}, Connessione alla rete via interfaccia radio
-
-MMI:\@\textit{Man-Machine Interface}
-
-HMI:\@\textit{Human-Machine Interface}
-
-Access Network:
-\begin{itemize}
-    \item BTS: Base Transceiver Station
-    \item BSC: Base Station Controller (Gestisce Handover)
-\end{itemize}
-
-Core Network:
-\begin{itemize}
-    \item MSC: Mobile Switching Center, commutazione circuito
-    \item SGSN: Interfaccia commutaizione pacchetto
-\end{itemize}
-
-
-IMEI:\@\textit{International Mobile Equip Identity}
-
-HLR:\@\textit{Home Location Register}, Database s cui un gestore GSM memorizza permanentemente i dati relativi agli utenti sottoscritti (IMSI, MSISDN)
-
-VLR:\@\textit{Visitor Location Register}, Mantiene aggiornate le informazioni sulla mobile Station (IMSI, MSISDN, HLR, TMSI, Stato Mobile Station, Location Area Identity)
-
-SIM:\@\textit{Subscriber Identity Module}, ha come scopo principale quello di fornire l'autenticazione ed autorizzazione per accedere alla rete. Non contiene all'interno il numero di telefono, perch\'e associato all' \textit{IMSI}. Contiene:
+Nasce la SIM:\@\textit{Subscriber Identity Module}, ha come scopo principale quello di fornire l'autenticazione ed autorizzazione per accedere alla rete. Non contiene all'interno il numero di telefono, perch\'e associato all' \textit{IMSI}. Contiene:
 
 \begin{itemize}
     \item IMSI: \textit{International Mobile Subscriber Identity}, Numero univoco associato ad ogni utente, mandato da un dispositivo della rete (molto raramente) a HLR e VLR. Composto da:
@@ -1343,11 +1316,21 @@ SIM:\@\textit{Subscriber Identity Module}, ha come scopo principale quello di fo
     \item Memoria interna (Conentiene al massimo 256 Numeri di telefono)
 \end{itemize}
 
+Immediatamente dopo, appoggiandosi alle tecnologie del GSM, nasce GPRS (2.5G). Per questo l'architettura viene chiamata GSM-GPRS.
 
-\textit{Mobile Station International Subscriber Directory Number} (MSISDN): Identifica univocamente l'untente nel piano di numerazione della rete telefonica del gestore.
+\subsection{GPRS}
+\textit{General Packet Radio Service}
+\begin{figure}[h]
+\includegraphics[width=0.7\textwidth]{img/sdt/gprs}
+\centering
+\caption{Architettura GSM/GPRS}
+\end{figure}
 
-BSS:\@\textit{Base Station Subsystem}
+\bigbreak
 
+Suddiviso in due layer:
+
+Access Network (BSS \textit{Base Station Subsystem}):
 \begin{itemize}
     \item BTS:\@\textit{Base Transceiver Station}: Hardware per recezione, antenne modem ed amplificatori
     \item BSC:\@\textit{Base Station Controller}: Gestisce canali radio delle BTS che controlla e mobile station collegate.
@@ -1359,20 +1342,36 @@ BSS:\@\textit{Base Station Subsystem}
             \item Celle Adiacenti
             \item Stessa Cella
         \end{itemize}
+    \item TRAU: \textit{Transcoder and Rate Adoption Unit}, adatta la codifica di sorgente utilizzata dalla mobile station alla codifica utilizzata dalla NSS, trasmettendo dati attraverso PCM (\textit{Pulse Code Modulation})
+
+    Codifica sorgente vocale telefono (RPE-LTP), compongono la voce ed elimina la ridondanza, campionando il segnale.
+
+    Si occupa anche del procedimento inverso, riaggiungendo ridondanza.
 \end{itemize}
 
-TRAU:\@\textit{Transcoder Rate Adaptation Unit}, Adattatore codifica vocale usata con codice vocale in rete
+Core Network (NSS \textit{Network Switching Subsystem}):
+\begin{itemize}
+    \item MSC: Mobile Switching Center, commutazione circuito
+    \item GMSC: \textit{Gateway Mobile Switching Center}, MSC che si interfaccia con la rete esterna
 
-Codifica sorgentte vocale telefono (RPE-LTP), compongono la voce ed elimina la ridondanza, campionando il segnale.
+            ls GMSC e le MSC sono tutte collegate tra loro e framano una rete di comunicazione interna
+    \item SGSN: Interfaccia commutaizione pacchetto
+    \item HLR:\@\textit{Home Location Register}, Database s cui un gestore GSM memorizza permanentemente i dati relativi agli utenti sottoscritti (IMSI, MSISDN)
 
-PCM:\@\textit{Pluse Code Modulation}
+    \item VLR:\@\textit{Visitor Location Register}, Mantiene aggiornate le informazioni sulla mobile Station (IMSI, MSISDN, HLR, TMSI, Stato Mobile Station, Location Area Identity)
+    \item EIR: \textit{Equipment Identity Register}, Database di IMEI e SIM degli utenti abbonati
 
-Voce campionata su smartphone, TRAU rigenera ridondanza
-\subsection{Architettura rete GSM}
+    IMEI:\@\textit{International Mobile Equip Identity}, identifica univocamente una mobile station.
+
+    \item AuC: \textit{Authentication Center}, Autorizza l'assegnazione delle risorse ad una mobile station
+\end{itemize}
+
+ISDN, PSDN: Si occupano della traiffazione
+
+\subsection{Segnale GSM}
 \begin{tikzpicture}
     [blocco/.style={rectangle ,thick ,draw }]
     \node[left] at (0,0) {Signal};
-
     \draw[-stealth] (0,0)--(1,0) node[blocco, right]{ADC};
     \draw[-stealth] (2, 0)--(3,0) node[blocco, right]{Cod. Sorgente};
     \draw[-stealth] (5.5, 0)--(6.5,0) node[blocco, right]{Cod. Canale};
@@ -1587,11 +1586,6 @@ Per trasmissione dati e pacchetto:
 
 \subsection{Diversit\'a di trasmissione in downlink}
 
-\begin{wrapfigure}{R}{2in}
-    \includegraphics[width=2in]{img/diversi_cammini.jpg}
-    \centering
-    \caption{Diversit\'a di cammino}
-\end{wrapfigure}
 Antenne multiple in trasmissione ed antenna unica in recezione $\rightarrow$ diversit\'a di trasmissione
 
 Usando antenne multiple in recezione, aumenta la velocit\'a di canale esponenzialmente; (Con \textbf{5G} verranno utilizzate almeno 2 antenne per device)
@@ -1609,7 +1603,6 @@ Gli attributi definiti da questi pacchetti di controllo riguardano:
 \end{enumerate}
 
 $\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \textbf{QoS} \textit{Quality of Service}
-\begin{samepage}
     \subsection{Classi di QoS di UMTS}
     \textbf{Classi di QoS}:\@\textit{Quality of Service} (conversazionale, streaming, interattiva, background), legato alla pianificazione delle reti (dipende dal numero di utenti per cella). Introdotto nella terza generazione.
     \begin{itemize}
@@ -1679,22 +1672,24 @@ $\Rightarrow$ Tutto questo porta all'introduzione del concetto di classe  di \te
             Hanno la minore priorit\'a rispetto alle altre classi di traffico
 
     \end{itemize}
-\end{samepage}
 % Disegno 117
-Sistema UMBS \'e di fatto formato da 2 sottoinsiemi (che sono l'evoluzione del BSS e NSS)
+Sistema UMTS \'e di fatto formato da 2 sottoinsiemi (che sono l'evoluzione del BSS e NSS)
 
 \textbf{NSS} $\rightarrow$ \textit{Core Network} (CN) $\rightarrow$ autenticazione utenti connessi, commutazione autenticazione connessione, interconnessione verso reti esterne (di altri provider o internet)
 
 \textbf{BSS} $\rightarrow$ \textit{UMTS} Radio Access Network (\textit{UTRAN})
 
+\subsection{Architettura UTRAN}
+\textit{UMTS Terrestrial Radio Area Network}
+\begin{figure}[h]
+\includegraphics[width=0.8\textwidth]{img/sdt/architettura_utran}
+\centering
+\end{figure}
+
 
 Nella fase iniziale del $3G$ coesistenza di sistemi di 2\textsuperscript{a} e 3\textsuperscript{a} generazione
 
 Con la 3\textsuperscript{a} generazione si inizia ad affiancare la rete d'accesso con la rete d'accesso \textit{UTRAN}
-
-\textbf{CS}: Circuit switching
-
-\textbf{PS}: Packet Switching
 
 \textbf{RNC}: Radio network Controller $\rightarrow$ novit\'a introdotta dalla 3G, Collegati con interfaccia \textbf{Iur}, idealmente sono tutti connessi tra loro
 
@@ -1703,16 +1698,6 @@ Idea del 3G:\@ Delegare all'esterno pi\'u responsabilit\'a ed intelligenza, ment
 %Disegno 118
 
 \textbf{UTRAN} $\rightarrow$ formata da vari RNS, ogniuno dei quali \'e formato da diversi Node B. Ogni Node B gestisce un certo numero di \notate{\text{celle (da 3 a 6)}}{1}{\text{In ogni cella \'e supportato FDD e TDD}}
-
-\begin{samepage}
-\subsection{Architettura UTRAN}
-\textit{UMTS Terrestrial Radio Area Network}
-
-\begin{figure}[h]
-\includegraphics[width=0.8\textwidth]{img/sdt/architettura_utran}
-\centering
-\end{figure}
-
 
 Con UTRAN si indica l'insieme dei Node-B e dei Radio Network Controller (RNC), che formano la rete d'accesso radio nello standard UMTS. Contiene:
 
@@ -1734,8 +1719,6 @@ Con UTRAN si indica l'insieme dei Node-B e dei Radio Network Controller (RNC), c
 \end{itemize}
 
 
-\end{samepage}
-
 La novit\'a a livello architetturale dell'UMTS \'e la presenza degli RNC nella UTRAN . Ogni RNC gestisce tutte le funzionalit\'a lato utente (Mobilit\'a e Assegnazione risorse) senza il bisogno di fare richieste alla Core Network.
 
 Compito del \textbf{Node B}:
@@ -1745,6 +1728,16 @@ Compito del \textbf{Node B}:
     \item Effettuare misure sulla potenza e QoS
 \end{itemize}
 
+\subsection{Architettura Core Network}
+\begin{figure}[h]
+    \includegraphics[width=0.7\textwidth]{img/sdt/umts_cn}
+    \centering
+    \caption{Struttura Completa UMTS}
+\end{figure}
+
+\textbf{PSTN}:  \textit{Public Switched Telephone Network}
+
+\textbf{PLMN}: \textit{Public Land Mobile Network}
 
 % Drift and Serving RNC
 % Lezione 21 - 5 -19
@@ -1840,7 +1833,7 @@ La \textit{Core Network} del 3GPP LTE, si chiama SAE (\textit{System Architectur
 \begin{itemize}
     \item MME (\textit{Mobility Management Entity}): Responsabile della gestione utenti (Autenticazione attraverso HSS, Ritrasmissione dati, Generazione Identit\'a temporanee)
 
-        HARQ (\textit{Hybrid Automatic Repeat Request}, H/H+): Algoritmo di error detection, Cerca di accelerare il pi\'u possibile la trasmissione, non interrompendo il flusso
+        HARQ (\textit{Hybrid Automatic Repeat Request}): Algoritmo di error detection, Cerca di accelerare il pi\'u possibile la trasmissione, non interrompendo il flusso
 
         PCRF (\textit{Policy and Changing Rules Function}): Software che si occupa della tariffazione
     \item HSS (\textit{Home Subscriber Server}, database centrale. Basato sul HLR ed AuC (\textit{Authentication Center}).
@@ -1869,10 +1862,10 @@ Da punto di vista dell'accesso, si concentra tutto sugli eNB
 %
 % Si occupano di sviluppare i protocolli, non di come vengono trasmessi i dati
 
-
-In Uplink, anche se ogniuno ha una singola antenna, nel caso di Cooperazione viene creata una \textit{Antenna Array} $\rightarrow$ Multiuser Collaborative MIMO (Mai implementata)
-
 Uplink max: $75Mbps$
+
+Da 3.5G: HASPA+ \textit{High Speed Packet Access+} conosciuto anche come H+, vengono utilizzate per la prima volta antenne multiple in Uplink e downlink (MIMO \textit{Multiple Input Multiple Output})
+
 
 
 %\section{LTE Frame Structure}
