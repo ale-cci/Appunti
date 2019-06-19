@@ -17,7 +17,8 @@
 \pgfplotsset{compat=1.16}
 
 \everymath{\displaystyle}
-\graphicspath{{../}}
+\graphicspath{{../}{img/sdt}}
+
 \usepgfplotslibrary{fillbetween}
 \date{2\textsuperscript{o} Semestre 2018/19}
 \title{Sistemi di Telecomunicazione}
@@ -1153,6 +1154,7 @@ Un Area coperta da una cella richiede maggiore potenza trasmissiva.
 Supponendo che $M_{cella}$ sia il numero di risorse frequenziali assegnate ad ogni cella, la densit\'a geografica degli utenti \'e calcolata come:
 \[ u = \frac{M_{cella}}{A_{cella}} \]
 
+
 Chiamato $M$ il numero complessivo di risorse a disposizione, e $K$ le dimensioni del Kluster:
 \[ M_{cella} = \frac{M}{K} \]
 
@@ -1163,9 +1165,16 @@ Chiamato $R$ il raggio della cella associata dell'esagono.
 
 Maggiore \'e il numero di risorse a disposizione, maggiore \'e il numero di utenti gestibili per $Km^2$
 
+
 \textbf{Distanza di riuso} ($\mathcal{D}$): Distanza tra centri di celle analoghe
 
+\begin{figure}[h]
+    \includegraphics[width=0.2\textwidth]{img/sdt/distanza_riuso}
+    \centering
+    \caption{Distanza di riuso con i=2, j=1}
+\end{figure}
 \underline{Sperimentalmente} i valori che $K$ pu\'o assumere non snono arbitrari, ma devono rispettare la relazione
+
 \begin{minipage}{0.5\textwidth}
 \[ K = i^2 + j^2 + ij \qquad\quad
     \begin{cases}
@@ -1287,13 +1296,13 @@ Introduce per la prima volta sul mercato una trasmissione dati dii tipo digitale
     \item Introduce un grande numero di servizi grazie all'aumento della velocit\'a di trasmissione (es. SMS)
 \end{itemize}
 
-% GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
 
-\begin{wrapfigure}{R}{0.5\textwidth}
-\includegraphics[width=0.5\textwidth]{img/sdt/architettura_uts}
-\caption{Architettura GSM}
+\begin{figure}[h]
+\includegraphics[width=0.7\textwidth]{img/sdt/gprs}
 \centering
-\end{wrapfigure}
+\caption{Architettura GSM (GPRS)}
+\end{figure}
+% GSM:\@\textit{Goup Special Mobil}\'e organizzato in stuttura fortemente gerarchica
 
 \bigbreak
 MSS:\@\textit{Mobile Station Subsystem}, Connessione alla rete via interfaccia radio
@@ -1494,8 +1503,6 @@ GSM era progettato per la trasmissione vocali, \'e altamente inefficente per la 
 \textit{Enhanced Data rates for GSM Evolution}
 
 GPRS (2.5G):\@\textit{General Pachet Radio Service}, Consente ai telefoni di collegarsi a reti dati. Si appoggia alla rete di accesso GSM (TDMA/FDMA), per trasmettere dati con TCP/IP, ad un utente possono essere assegnati pi\'u slot di uno stesso sottocanale.
-
-Asimmetria Uplink e Downlink
 
 Miglioramento di trasferimento dati a comunicazione pacchetto (enhanced GPRS)
 
@@ -1865,8 +1872,11 @@ In Uplink, anche se ogniuno ha una singola antenna, nel caso di Cooperazione vie
 
 Uplink max: $75Mbps$
 
-%Appunti Mon 27 May 2019 10:23:18 AM CEST
 
+%\section{LTE Frame Structure}
+
+
+%Appunti Mon 27 May 2019 10:23:18 AM CEST
 \section{OFDM}
 \textit{Orthogonal Frequency Division Multiplexing}, tecnica di trasmissione che consesnte un tipo di modulazione a multi-portante, i.e. utilizza un numero elevato di sottoportanti tra loro ortogonali.
 
