@@ -1877,30 +1877,7 @@ Uplink max: $75Mbps$
 
 
 %Appunti Mon 27 May 2019 10:23:18 AM CEST
-\section{OFDM}
-\textit{Orthogonal Frequency Division Multiplexing}, tecnica di trasmissione che consesnte un tipo di modulazione a multi-portante, i.e. utilizza un numero elevato di sottoportanti tra loro ortogonali.
-
-\begin{figure}[h]
-    \includegraphics[width=0.8\textwidth]{img/sdt/ofdm_transmitter}
-    \centering
-    \caption{Trasmettitore OFDM}
-\end{figure}
-
-Ogni portante \'e modulata attraverso una modulazione di tipo convenzionale (es. QPSK) con basso symbol rate.
-
-Il vantaggio primario dell'OFDM rispetto agli schemi a singola portante \'e l'abilit\'a di comunicare anche in condizioni pessime di canale. Mantenere un basso symbol rate permette di rudurre l'interferenza intersimbolica grazie ad intervalli di guardia. Fintanto che tutti i segnali e le loro repliche da cammino multiplo rientrano  nel periodo di guardia, non c\'e interferenza intersimbolo.
-
-La trasmissione viene divisa in N flussi paralleli, poi fatta passare per un codificatore di costallazione ed un modulatore elementare.
-Tutti gli N flussi vengono creati allo stesso istante, poi passati ai modulatori, che possono modulare il segnale in sottoportanti equamente distanziate tra loro (Per l'LTE questa distanza \'e $\approx$ 15KHz).
-
-Le sottoportanti sono scelte in modo da essere ortogonali tra loro, riducendo cosi la mutua inteferenza.
-Ortogonalit\'a significa anche un elefata efficienza spettrale, a parit\'a di BitRate.
-
-La codifica del segnale \'e basata sull'FFT inversa, (a recezione per riottenere il segnale baster\'a riapplicare FFT).
-
-La suddivisione ortogonale delle frequenze richiede un precisa sincronizzazione tra trasmettitore e ricevitore, richiede quindi un aumento di complessit\'a nel ricevitore.
-
-Un modo per ridurre l'\textbf{interferenza inter simbolo} \'e l'utilizzo trasmettere nel periodo di guardia la parte iniziale o finale del simbolo successivo (CP \textit{Cycling Prefix}) o precedente (CS \textit{Cycling Suffix}).
+\section{Modulazione a Portante Multipla}
 \subsection{Pulse shaping and spectrum}
 Slide 293
 
@@ -1920,6 +1897,8 @@ Ricevitori \textbf{RAKE} Sfruttano l'evanescenza da cammini multipli per potenzi
 $1^a$ soluzione intuitiva (296): Aggiungere un periodo di guardia (GP): Ritardo tra trasmissione dei simboli
 Risolve solo interferenza intersimbolica, non danneggia simboli successivi
 
+Un modo per ridurre l'\textbf{interferenza inter simbolo} \'e l'utilizzo trasmettere nel periodo di guardia la parte iniziale o finale del simbolo successivo (CP \textit{Cycling Prefix}) o precedente (CS \textit{Cycling Suffix}).
+
 L'elaborazione dei segnali diventa molto pi\'u semplice, ma \'e lento, siccome il periodo di Guardia \'e tempo non utilizzato $\rightarrow$ Non efficente
 
 Un altro problema lo si ha se si manifestano ritardi pi\'u alti del periodo di guardia
@@ -1935,30 +1914,59 @@ Suffisso ciclico: Lo stesso solo che prende la prima parte e la mette alla fine 
 La percentuale del tempo in cui viene trasmesso un simbolo di dati
 \[ E = \frac{T_{SYMBOL}}{T_{SYMBOL} + T_{CP}} \]
 
-\subsection{Multi Carrier Modulation}
-
-Generalizzazione FDMA
-
-Esistono ancora le sottobande, ma vengono assegnate tutte ad un unico utente, su ogni sottobanda viene trasmesso un segnale
-
-Per evitare di perdere risorse, si cercano di fare le sottobande pi\'u vicine possibili, ma se sono troppo vicine si rischia l'interferenza da portanti adiacenti
 
 \subsection{OFDM}
-Impulso utilizzato: Rettangolare
+\textit{Orthogonal Frequency Division Multiplexing}, tecnica di trasmissione che consesnte un tipo di modulazione a multi-portante, i.e. utilizza un numero elevato di sottoportanti tra loro ortogonali.
 
-Densit\'a spettrale in potenza $\propto$ al quadrato della sinc
+\begin{figure}[h]
+    \includegraphics[width=0.8\textwidth]{img/sdt/ofdm_transmitter}
+    \centering
+    \caption{Trasmettitore OFDM}
+\end{figure}
+
+Ogni portante \'e modulata attraverso una modulazione di tipo convenzionale (es. QPSK) con basso symbol rate.
+
+Portanti ortogonali significa che alla frequenza centrale della sottoportante non c'\'e ACI: \textit{Interferenza da portante adiacente} (Figura: \ref{ofdm-sub}).
+\begin{wrapfigure}{R}{0.5\textwidth}
+    \includegraphics[width=0.5\textwidth]{img/sdt/ofdm-subcarriers}
+    \centering
+    \caption{Sottoportanti OFDM\label{ofdm-sub}}
+\end{wrapfigure}
 
 Idea OFDM: Impacchettare densit\'e spettrali di potenza mantenendo ortogonalit\'a e sfruttando gli zeri delle sinc (305)
 
+Il vantaggio primario dell'OFDM rispetto agli schemi a singola portante \'e l'abilit\'a di comunicare anche in condizioni pessime di canale, assegnando ad ogni utente frequenze personalizzate.
 
-\subsection{OFDM ad accesso multiplo}
-\textbf{Sistemi multiportante}
+La trasmissione viene divisa in N flussi paralleli, poi fatta passare per un codificatore di costallazione ed un modulatore elementare.
+Tutti gli N flussi vengono creati allo stesso istante, poi passati ai modulatori, che possono modulare il segnale in sottoportanti equamente distanziate tra loro il giusto per evitare interferenze tra canali portanti (Per l'LTE questa distanza \'e $\approx$ 15KHz).
+
+Per evitare di perdere risorse, si cercano di fare le sottobande pi\'u vicine possibili, ma se sono troppo vicine si rischia l'interferenza da portanti adiacenti
+
+Parallelizzando il segnale e trasmettendo valori costanti su ogni sottobanda, si risolve il problema del periodo di guardia. Inoltre, mantenendo un basso symbol rate, viene garantita un alta efficenza spettrale.
+
+La codifica del segnale \'e basata sull'FFT inversa, (a recezione per riottenere il segnale baster\'a riapplicare FFT).
+
+La suddivisione ortogonale delle frequenze richiede un precisa sincronizzazione tra trasmettitore e ricevitore, richiede quindi un aumento di complessit\'a nel ricevitore.
+
+L'OFDM non \'e ideale per l'accesso multiplo con pi\'u utenti, per questo motivo l'OFDM Puro viene utilizzato solamente per servizi di broadcast.
+
+Per l'accesso multiplo l'OFDM pu\'o essere combinato come:
+\begin{itemize}
+    \item TDD: Non ottimale per un alto traffico in rete
+    \item OFDMA: \textit{Orthogonal Frequency Division Multiple Acces}
+\end{itemize}
+
+\subsection{OFDMA}
+
 % slide 282
 Con CDMA veniva assegnata tutta la banda e si sperava che i notch fossero pochi rispetto alla grandezza di banda,
 
 $\Rightarrow$ approccio pi\'u efficente, dividere banda in pi\'u bande piccole ed assegnarne un diverso numero ad un unico utente:
 Vengono assegnate solo quelle dove il canale ha una `buon' risposta, in modo da utilizzare al massimo possibile ogni porzinoe di banda
 
+Assegna gruippi di sottoportanti dell'OFDM agli utenti, basandosi su quanto BitRate richiedono gli utenti.
+
+Rimane sempre inefficente per alto traffico. La soluzione a questo problema \'e assegnare non solo sottoportanti, ma \textit{Blocchi di risorse} composti da sottopotanti su intervalli di tempo.
 
 Ogni risorsa frequenziale prende il nome di \textbf{Resource Block}, e corrsiponde ad una sottobanda di $180KHz$.
 Vengono assegnati tra i 6 ed i 100 blocchi di risorse in base al tipo di richiesta
@@ -1996,9 +2004,16 @@ Utilizza efficentemente le risorse del canale
 
 LTE utilizza OFDMA in Downlink; Per l'Uplink SC-FDMA
 
-\textbf{SC-FDMA Single Carrier Frequency Division Multiple Access}
+\subsection{SC-FDMA}
+\textit{Single Carrier Frequency Division Multiple Access}
+\begin{figure}[h]
+    \includegraphics{img/sdt/sc_fdma}
+    \centering
+\end{figure}
 
 Funziona molto bene per valori relativamente bassi di PAPR
+
+Ogni sottoportante contiene informazioni su tutti i simboli trasmessi
 
 PAPR: Peack to Average Power Ratio (Rapporto di potenza fra picco e media), Caratterizza la qualit\'a del segnale trasmesso
 
