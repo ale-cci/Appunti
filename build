@@ -41,7 +41,7 @@ case "$1" in
 
     "sync")
         mkdir -p $LOCAL_PDF_DIR
-        ln -t "$LOCAL_PDF_DIR" "$PDFDIR"/*.pdf
+        ln -st "$LOCAL_PDF_DIR" "$PDFDIR"/*.pdf
         ;;
 esac
 

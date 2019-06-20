@@ -936,13 +936,22 @@ Ha come vantaggi principali:
 \end{itemize}
 
 \subsubsection{Architettura del Protocollo}
+\begin{itemize}
+    \item Bluetooth Radio: qua vengono processati i segnali radio.
+    \item Baseband: Abilita collegamento tra dispositivi in una piconet.
+    \item LMP: Responsabile dell'organizzazione, collegamento e controllo tra dispositivi bluetooth, scambio e controllo delle chiavi.
+    \item L2CAP: Esegue multiplexing dei protocolli di livello superiore.
+    \item RFCOMM
+    \item TCS BIN
+    \item SDP: Service Discovery Protocol, si occupa di individuare ed avere informazioni sugli altri dispositivi che utilizzando bluetooth.
+    \item AUDIO: Ha la funzione di codificare il segnale audio attraverso due possibili codifiche: PCM (\textit{Pulse Code Modulation}) e CVSD (\textit{Continuous Variable Slope Delta Modulation})
+\end{itemize}
 Interfaccia \textbf{Audio} comunica direttamente con la banda base.
 
 Banda base a 79 portanti, utilizza CDMA con hopping sequences, per minimizzare il danneggiamento del segnale provocato dal canale di comunicazione (Interferenza da cammino multiplo).
 
 Nel caso non venga utilizzata l'inerfaccia audio, il Link Manager Protocol si occupa dell'autenticazione e crittografia del segnale trasmesso
 
-SDP, Service Discovery Protocol, si occupa di individuare altri dispositivi che utilizzando bluetooth.
 
 Ogni nodo ha un \textit{Bluetooth Device Address} (\textit{BD\_ADDR}). Il nodo Master determina tutte le frequenze di hopping dei nodi Slave.
 
@@ -950,9 +959,10 @@ Network topology organizzate in:
 \begin{itemize}
     \item Piconet: Insime di nodi bluetooth sincronizzati con un unico master
     \item Scatternet: Insieme di piconet
+
+        All'interno di una scatternet, Il master di una piconet pu\'o a sua volta essere uno slave
 \end{itemize}
 
-All'interno di una rete, Master e Slaves possono invertirsi i ruoli
 
 \subsection{Formato pacchetto bluetooth}
 \begin{itemize}
