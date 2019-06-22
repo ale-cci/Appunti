@@ -1,7 +1,7 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-##For the lazy one:
+## For the lazy one:
 
 * [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf)
 
@@ -9,7 +9,7 @@
 
 * [Esercitazioni Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
 
-##How can modify a pdf?
+## How can modify a pdf?
 
 I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle rispettive cartelle.
 
@@ -24,7 +24,7 @@ Esempio: se voglio aggiornare il file *pdf/elettronica.pdf* dopo aver modificato
 ./build update elettronica
 ```
 
-##How can i contribute?
+## How can i contribute?
 
 * Correggendo errori di ortografia e/o concettuali
 
