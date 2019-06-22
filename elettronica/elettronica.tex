@@ -17,7 +17,7 @@
 \author{ale-cci}
 \title{Appunti Elettronica 18/19}
 
-\graphicspath{{../}{../img/elettronica}}
+\graphicspath{{../}{../img/}{../img/elettronica/}}
 \ctikzset{bipoles/length=1.2cm}
 \pgfplotsset{compat=1.16}
 
@@ -123,11 +123,12 @@ $\rho = -qn +qp - qN_A + qN_D$
 \]
 
 \[
-    n_{1,2} = \frac{(N_D - N_A) \pm \sqrt{N_A - N_D)^2 + 4n_i^2(T)}}{2}
+    n_{1,2} = \frac{(N_D - N_A) \pm \sqrt{{(N_A - N_D)}^2} + 4n_i^2(T)}{2}
 \]
-\[ \begin{cases}
-        n= \frac{(N_D - N_A) + \sqrt{(N_A - N_D)^2 + 4n_i^2(T)}}{2}\\
-        p= \frac{(N_A - N_D) + \sqrt{(N_A - N_D)^2 + 4n_i^2(T)}}{2}\\
+\[
+    \begin{cases}
+        n= \frac{(N_D - N_A) + \sqrt{{(N_A - N_D)}^2 + 4n_i^2(T)}}{2}\\
+        p= \frac{(N_A - N_D) + \sqrt{{(N_A - N_D)}^2 + 4n_i^2(T)}}{2}\\
     \end{cases}
 \]
 
@@ -199,7 +200,7 @@ Dato che $E\neq 0$ ed $E \propto d\Phi$, se $n_1 \neq n_2 \Rightarrow \Phi_1 \ne
 
 \begin{center}
     \begin{circuitikz}
-        \draw (0, 0) to[empty diode] (2, 0);
+        \draw(0, 0) to[empty diode] (2, 0);
     \end{circuitikz}
 \end{center}
 
@@ -228,7 +229,7 @@ Se gli effetti delle brusche variazioni sono trascurabili rispetto alla dimensio
 \section{Utilizzo del diodo}
 
 \begin{circuitikz}
-    \draw (0, 0) to [empty diode, v=$V_d$, i=$I$] (3,0) to [R, v=$V_u$] (3,-2) to [short] (0, -2) to [american voltage source] (0, 0);
+    \draw(0, 0) to [empty diode, v=$V_d$, i=$I$] (3,0) to [R, v=$V_u$] (3,-2) to [short] (0, -2) to [american voltage source] (0, 0);
 \end{circuitikz}
 $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 
@@ -250,15 +251,77 @@ $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 
 \section{Transistor}
 \subsection{Transistor BJT}
+Idea di base: Per creare un invertitore basta utilizzare un interrutttore
+
+\begin{figure}[h]
+    \begin{circuitikz}
+        \draw(0, 0) to[empty diode, v=$V_{D1}$, -*, i=$I_1$] (-2, 0);
+        \draw(0, 0) to[empty diode, v=$V_{D2}$, -*, i=$I_2$] (2, 0);
+        \draw(0, -1) to[short, *-, i=$I$] (0, 0);
+    \end{circuitikz}
+    \centering
+    \caption{Transistor}
+\end{figure}
+
+Nel caso in cui $V_{D1} > 0$ e $V_{D2} < 0$ segue che:
+\begin{itemize}
+    \item $I_{D1} \gg 0$ il diodo 1 \'e polarizzato in diretta
+    \item $I_{D2} < 0$ il diodo 2 \'e polarizzato in inversa
+\end{itemize}
+
+\begin{figure}[h]
+\includegraphics[width=2in]{placeholder}
+\centering
+\caption{Costruzione di un transistore col silicio\label{trans_bjt}}
+\end{figure}
+
+$\omega$ \'e la lunghezza dell'area drogata p (Vedi figura~\ref{trans_bjt}):
+
+per valori di $\omega$ grandi e $V_{D1} > 0$ e $V_{D2} < 0$: $I_1 \approx I$ e $I_2 \approx 0$.
+
+per valori di $\omega$ piccolo e $V_{D1} > 0$ e $V_{D2} < 0$: $I_1 \gg 0\approx I$ e $I_2 \ll 0$; $I_1 \approx -I_2$ e $I \approx 0$.
+
+
 \subsection{Modello di transistore}
 \subsection{Modello Ebers e Moll}
-\subsection{Studio regioni di polarizzazione del transistore}
-\begin{itemize}
-    \item Polarizzazione Inversa (attiva)
-    \item Regione di Saturazione
-    \item Regione di Interdizione (Transistor OFF)
-    \item Regione Normale
-\end{itemize}
+\begin{figure}[h]
+    \begin{circuitikz}
+        \draw(0, 0) to[empty diode, v=$V_{D1}$, i=$I_1$] (-2, 0) to[short, -*] (-3, 0);
+        \draw(0, 0) to[empty diode, v=$V_{D2}$, i=$I_2$] (2, 0)  to[short, -*] (3, 0);
+        \draw(0, -1) to[short, *-, i=$I$] (0, 0);
+        \draw(-2, 0)-- (-2, 1) to[american controlled current source, invert] (2, 1)-- (2,0);
+    \end{circuitikz}
+    \centering
+\end{figure}
+
+Dalle leggi di Kirkoff possiamo ricavare il seguente sistema di equazioni:
+\[
+    \begin{cases}
+        I_E = (I_{BES} + I_S) (\exp(\frac{V_{BE}}{V_T}) - 1) - I_S ( \exp(\frac{V_{BC}}{V_T}) -1 )\\
+        I_C = I_S ( \exp(\frac{V_{BC}}{V_T}) -1 ) - (I_{BCS} + I_S) (\exp(\frac{V_{BC}}{V_T}) - 1)\\
+        I_B = I_{BES} (\exp(\frac{V_{BE}}{V_T}) - 1) + I_{BCS} (\exp(\frac{V_{BC}}{V_T}) -1 )
+    \end{cases}
+\]
+Studio il modello nelle varie regioni di polarizzazione
+\subsubsection{Regione Normale}
+\[
+    \begin{rcases}
+        V_{BE} > 0\\
+        V_{BC} < 0
+\end{rcases} \rightarrow e^{\frac{V_{BE}}{V_T}} \gg 1 \gg e^{\frac{V_{BC}}{V_T}}
+\]
+
+Da cui otteniamo
+\[
+    \begin{cases}
+        I_E \approx (I_S + I_{BES}) (\exp(\frac{V_{BC}}{V_T}) -1) \\
+        I_C \approx I_S (\exp(\frac{V_{BE}}{V_T} -1 )) \\
+        I_B \approx I_{BES} ( \exp(\frac{V_{BE}}{V_T} -1 ))\\
+    \end{cases}
+\]
+
+Tutte le correnti dipendono esponenzialmente dalla stessa tensione: sono proporzionali tra loro.
+
 \subsection{Transistor in un circuito}
 \subsection{Emettitore Comune}
 \subsection{Effetto Early}
@@ -294,10 +357,10 @@ $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 \newpage
 \section{Modello n-Mosfet}
 \begin{circuitikz}
-    \draw (0, 0) to[short, *-] (0.2, 0)
-    node[nmos, anchor=G](nm){};
+    \draw(0, 0) to[short, *-] (0.2, 0)
+    node[nmos, anchor=G] (nm){};
     \draw(nm.S) node[eground]{};
-    \draw(nm.D) to[short, *-] ++(0, -0.2);
+    \draw(nm.D) to[short, *-] ++ (0, -0.2);
 \end{circuitikz}
 
 \subsection{Studio Margine di Immunit\'a ai disturbi}
@@ -323,7 +386,7 @@ $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 
 %NOTE: Da qui in poi iniziano gli appunti presi a lezione
 
-%\include{appunti_diodo}
+% \include{appunti_diodo}
 \include{appunti_21-05-19}
 \include{appunti_22-05-19}
 \include{appunti_23-05-19}
