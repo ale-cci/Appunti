@@ -1,14 +1,33 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-## Disclaimer:
-Nel caso (Molto probabile) che mancasse qualcosa negli appunti, ditemi un quel.
-## Struttura:
+##For the lazy one:
 
-* /ubungu : Esercitazioni di Sistemi Operativi
+* [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf)
 
-* /pdf : File tex compilati (Non sempre aggiornati all'ultima versione)
+* [Immagini e foto esercizi Mike](https://github.com/ale-cci/Appunti/tree/master/img)
 
-* /img : Immagini usate nei pdf/esercizi mike
+* [Esercitazioni Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
+
+##How can modify a pdf?
+
+I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle rispettive cartelle.
+
+Ad esempio il sorgente pdf/elettronica.pdf e' elettronica/elettronica.tex
+
+Dopo averlo modificato per compilarlo basta eseguire lo script [build](https://github.com/ale-cci/Appunti/blob/master/build) che si trova nella root del progetto.
 
 
+Esempio: se voglio aggiornare il file *pdf/elettronica.pdf* dopo aver modificato il file *elettronica/elettronica.tex*, basta che venga eseguito da terminale il comando
+
+```
+./build update elettronica
+```
+
+##How can i contribute?
+
+* Correggendo errori di ortografia e/o concettuali
+
+* Aggiungendo parti di appunti mancanti
+
+* oppure scrivendomi su cosa aggiungere al mio indirizzo *alecrd98@gmail.com*
