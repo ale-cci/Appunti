@@ -11,11 +11,11 @@
 
 ## How can modify a pdf?
 
-**NOTA**: richiede pdflatex installato
+**NOTA**: richiede *pdflatex* installato
 
-I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle rispettive cartelle.
+I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle cartelle con il loro stesso nome.
 
-Ad esempio il sorgente pdf/elettronica.pdf e' elettronica/elettronica.tex
+Ad esempio il sorgente di *pdf/elettronica.pdf* e' *elettronica/elettronica.tex*
 
 Dopo averlo modificato per compilarlo basta eseguire lo script [build](https://github.com/ale-cci/Appunti/blob/master/build) che si trova nella root del progetto.
 
