@@ -5,10 +5,17 @@
 *.fdb_latexmk
 *.pdf
 *.out
+*.toc
+*.ilg
+*.ind
+*.idx
 
 TODO.txt
 
 
 !pdf/*.pdf
 placeholder.jpg
+
+ubungu/extra/alema
+ubungu/extra/ff
 
