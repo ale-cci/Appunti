@@ -2,17 +2,21 @@
 *.log
 *.fls
 *.synctex.gz
+*.synctex(busy)
 *.fdb_latexmk
 *.pdf
 *.out
+*.toc
+*.ilg
 *.ind
 *.idx
-*.ilg
-*.toc
 
 TODO.txt
 
 
 !pdf/*.pdf
 placeholder.jpg
+
+ubungu/extra/alema
+ubungu/extra/ff
 

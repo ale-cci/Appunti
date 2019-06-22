@@ -13,14 +13,281 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 
-\graphicspath{{../}}
+
+\author{ale-cci}
+\title{Appunti Elettronica 18/19}
+
+\graphicspath{{../}{../img/elettronica}}
 \ctikzset{bipoles/length=1.2cm}
 \pgfplotsset{compat=1.16}
 
+% No paragraph default indentation
+\setlength\parindent{0pt}
+\hfuzz=3pt
+
+\everymath{\displaystyle}
 \begin{document}
+\maketitle{}
+\tableofcontents{}
+\newpage
+
+\section{Introduzione}
+Due atomi vicini tra loro si influiscono avicenda, variando il diagramma dell'energia.
+Le pripriet\'a di esclusione continuano a valere anche per gli atomi.
+
+Se non viene fornita energia al sistema, vengono occupate le vande pi\'u basse.
+
+In condizioni di equilibrio, (no scambio energetico), i livelli al di sotto del \textbf{livello di Fermi} sono tutti occupati dagli elettroni, diversamente quelli al di sopra sono tutti liberi.
+
+Fornire calore equivale ad aumentare l'energia
+
+Materiale isolante: Bande totalmente piene o totalmente vuote
+
+Materiale conduttore: 1 Banda Parzialmente occupata
+
+p = densit\'a di lacune: lacune / volume
+
+n = densit\'a elettroni: elettroni liberi / volume
+
+
+Evento di generazione elettrone lacuna: avviene quando \'e assorbita energia. Per il principio di conservazione esiste anche l'evento opposto: evento di ricombinazione di una coppia elettrone lacuna
+
+
+G = tasso di generazione = $\frac{\text{Numero di coppie generate}}{\text{tempo}\cdot\text{volume}}$
+
+R = tasso di ricombinazione = $\frac{\text{Numero di coppie ricombinate}}{\text{tempo}\cdot\text{volume}}$
+
+Alla saturazioe G = R
+
+
+Elettrone di legame \'e debolmente legato al nucleo, se riceve sufficente energia si livera
+
+Materiali della $5^a$ colonna sono detti donatori, se messi insieme ad atomi della $4^a$ colonna 1 elettrone viene ceduto senza generare lacune
+
+Materiali della $3^a$ colonna sono detti accettori per motivo opposto.
+
+\subsection{28/02/19}
+Corrente: carica negativa in movimento
+
+Atomo donatore: Atomo della 5a colonna inserito per drogare
+
+$N_D$ concentrazione di atomi donatori
+
+$T\coloneqq$ Temperatura
+
+In un semiconduttore instrinseco, non drogato: $n = p = n_i(T)$
+
+\textbf{Legge di azione di massa}: $n\cdot p = n_i^2(T)$, vale sia per materiali intrinseci che per estrinseci (all'equilibrio)
+
+\[
+\begin{rcases}
+    G = R\\
+    G = g(T)
+    R = p\cdot n \cdot r(T)
+\end{rcases} \Rightarrow
+g(T) = p\cdot n\cdot r(T)
+\]
+\[ p\cdot n = \frac{g(T)}{r(T)} = n_i(T)\]
+
+Dato un semiconduttore uniforme caratterizzato da $N_A$ e $N_D$:
+
+Risulta complessivamente neutro $\rightarrow Q_{tot} = 0$
+
+Siccome \'e uniforme vale per ogni partizione del semiconduttore
+
+$Q_{tot} = 0 \xrightarrow{uniforme} \rho = 0$ ($\rho$ densit\'a di carica)
+
+La temperatura ambiente \'e sufficente per considerare che gli atomi Accettori abbiano catturato un elettrone (Analogamente possiamo considerare che gli atomi donatori aggiano tutti donato)
+
+$\rho = -qn +qp - qN_A + qN_D$
+
+\[
+    \begin{cases}
+        \rho = q(N_D - N_A + p -n) = 0 & \text{(Condizione di Uniformit\'a)}\\
+        pn = n_i^2(T) & \text{(Condizione di equilibrio)}
+    \end{cases}
+\]
+
+\[
+    \begin{cases}
+        p = \frac{n_i^2(T)}{n}\\
+        N_D - N_A + \frac{n_i^2(T)}{n} - n = 0
+    \end{cases}
+\]
+
+\[
+    \begin{cases}
+        p = \frac{n_i^2(T)}{n}\\
+        n^2 + (N_A - N_D) n - n_i^2(T) = 0
+    \end{cases}
+\]
+
+\[
+    n_{1,2} = \frac{(N_D - N_A) \pm \sqrt{N_A - N_D)^2 + 4n_i^2(T)}}{2}
+\]
+\[ \begin{cases}
+        n= \frac{(N_D - N_A) + \sqrt{(N_A - N_D)^2 + 4n_i^2(T)}}{2}\\
+        p= \frac{(N_A - N_D) + \sqrt{(N_A - N_D)^2 + 4n_i^2(T)}}{2}\\
+    \end{cases}
+\]
+
+Nel caso in cui $N_D \gg N_A, n_i$
+\[
+    \begin{cases}
+        n \approx \frac{N_D + \sqrt{N_D^2}}{2} = N_D\\
+        p \approx \frac{n_i^2}{N_D}
+    \end{cases}
+\]
+
+%TODO
+\textit{Da collegare alla parte che segue + Aggiungere immagini}
+
+\[
+    \begin{cases}
+        F = -qE\\
+        F = ma
+    \end{cases} \rightarrow q = -\frac{qE}{m}
+\]
+
+Chiamata $\mu_N$ la mobilit\'a elettronica:
+\[
+    \begin{cases}
+        V_n = -\mu_N E\\
+        V_n = \frac{dx}{dt}
+    \end{cases} \Rightarrow dx = -\mu_N E dt
+\]
+\[
+    \begin{cases}
+        I = \frac{dQ}{dt} \\
+        dQ = -qn\cdot dV\\
+        dV = S\cdot dx
+    \end{cases} \Rightarrow I = -\frac{qn\cdot dV}{dt} = -qnS(-\mu_N E) \frac{\cancel{dt}}{\cancel{dt}} = qnS\mu_N E
+\]
+
+%TODO
+\section{Studio di un Semiconduttore Drogato all'equilibrio}
+\textit{Aggiungere altre immagini}
+\[ Jp = \frac{I}{S} = q\mu_p E \]
+
+
+\[ J = J_n + J_p = q\mu_N n E + q \mu_p p E\]
+All'equilibrio $J_n = J_p = 0$, La concentrazione di elettroni non \'e costante!
+
+\[ dQ_1 = -\frac{1}{2} S q n_1 dx \]
+\[ dQ_2 = -\frac{1}{2} S q n_2 dx \]
+
+$\frac{1}{2}$  Perch\'e solo il 50\% \'e diretto nella direzione considerata
+
+\[ I = \frac{dQ}{dt} = \frac{-\frac{1}{2}Sqn_1V_{th}dt + \frac{1}{2}Sdxn_2qV_{th}dt}{dt}  = \frac{1}{2} SqV_{th}(n_2- n_1) \neq 0 \rightarrow\text{Assurdo}\]
+
+La carica si distribuisce equamente. Alla distrubuzione delle cariche si genera un campo elettrico
+
+\[ J_n= qDn\frac{dn}{dt} \]
+All'equilibrio $J_n = q \mu_n E + qDn\frac{dn}{dx} = 0$
+
+Dato che $E\neq 0$ ed $E \propto d\Phi$, se $n_1 \neq n_2 \Rightarrow \Phi_1 \neq \Phi_2$
+
+\[ J_n = -q \mu_n n \frac{d\Phi}{dx} + q \frac{KT}{q} n \frac{dn}{dx} = 0 \]
+\[ q\mu_n n \frac{d\Phi}{dx} = q\frac{KT\mu_n}{q}\frac{dn}{dx} \]
+\[ \frac{q}{KT}\frac{d\Phi}{dx} = \frac{1}{n}\frac{dn}{dx} \]
+\[ \int\frac{q}{KT}d\Phi = \int\frac{1}{n}dn \]
+\[ \ln(n)\Big|_{n_1}^{n_2} = \frac{q}{KT}\Phi\Big|_{\Phi_1}^{\Phi_2} \]
+\[ \ln\left(\frac{n_2}{n_1}\right) = \frac{q}{KT} (\Phi_2 - \Phi_1 ) \]
+\[ \ln\left(\frac{n(x)}{n_0}\right) = \frac{q}{KT}\Phi(x) \]
+
+\section{Studio della giunzione di un diodo all'equilibrio}
+
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) to[empty diode] (2, 0);
+    \end{circuitikz}
+\end{center}
+
+Il semiconduttore \'e drogato in modo da avere una brusca variazione di droganti
+
+%TODO: Aggiungere i grafici
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot[color=red, domain=-10:0]{0};
+        \addplot[color=red, domain=0:10]{1};
+    \end{axis}
+\end{tikzpicture}
+
+
+Presupposti per lo studio:
+\begin{enumerate}
+    \item Campo esterno nullo
+    \item Distrubuzione dei droganti a gradino
+\end{enumerate}
+
+Se gli effetti delle brusche variazioni sono trascurabili rispetto alla dimensione di un diodo, allora esistono due coordinate $\omega_n$ e $\omega_p$, a partire dalle quali possiamo trascurare gli effetti di perturbazine sulla giunzione.
+
+\subsection{Calcolo di $\omega_n$ e $\omega_p$}
+
+
+\section{Utilizzo del diodo}
+
+\begin{circuitikz}
+    \draw (0, 0) to [empty diode, v=$V_d$, i=$I$] (3,0) to [R, v=$V_u$] (3,-2) to [short] (0, -2) to [american voltage source] (0, 0);
+\end{circuitikz}
+$ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
+
+
+\section{Modello a soglia del diodo}
+\subsection{Raddrizzatore a singola semionda}
+\subsection{Limitatore di tensione superiore}
+\subsection{Limitatore di tensione superiore ed inferiore}
+\section{Elaborazione di pi\'u segnali}
+\subsection{Circuito di rilevatore di massimo OR}
+\subsection{Circuito di rilevatore di minimo AND}
+\subsection{Raddrizzatore a doppia semionda}
+\section{Studio di un raddrizzatore a singola semionda con un condensatore}
+\section{Diodo in regime dinamico}
+\subsection{Modello a soglia dinamico di un diodo}
+\subsection{Risposta al gradino in discesa del circuito raddrizzatore a singola semionda}
+\subsection{Risposta al gradino in salita del circuito raddrizzatore a singola semionda}
+\section{Riassunto diodo}
+
+\section{Transistor}
+\subsection{Transistor BJT}
+\subsection{Modello di transistore}
+\subsection{Modello Ebers e Moll}
+\subsection{Studio regioni di polarizzazione del transistore}
+\begin{itemize}
+    \item Polarizzazione Inversa (attiva)
+    \item Regione di Saturazione
+    \item Regione di Interdizione (Transistor OFF)
+    \item Regione Normale
+\end{itemize}
+\subsection{Transistor in un circuito}
+\subsection{Emettitore Comune}
+\subsection{Effetto Early}
+\subsection{Utilizzo Transistor BJT}
+\subsubsection{Studio Circuito in Ambito Analogico}
+\subsubsection{Studio Circuito in Ambito Digitale}
+\subsubsection{Confronto diodo e BJT}
+\section{Modello BJT Semplificato}
+\section{Logica RTL}
+\subsection{Studio Immunit\'a ai disturbi}
+\subsection{Studio del ruomore che eccede $N_M$}
+\subsection{Errore del modello a soglia}
+\subsection{Generalizzazione $V_H$, $V_L$, $N_H$, Esclusione Logica}
+\subsection{Porte NOR a logica RTL}
+\subsection{Nor a N Ingressi}
+\subsection{Studio FAN-OUT Logica RTL}
+\subsection{Modello Generale (a controllo di carica)}
+\subsection{Risposta al gradino in salita dell'invertitore RTL}
+\subsection{Risposta al gradino in discesa dell'invertitore RTL}
+\section{Logica TTL}
+\subsection{Funzioni Logiche a pi\'u ingressi}
+\subsection{Studio della catatteristica dell'invertitore TTL}
+\section{Logica ECL}
 
 % \include{parte_a}
 % \include{quaderno}
+
+
+%NOTE: Da qui in poi iniziano gli appunti presi a lezione
 
 %\include{appunti_diodo}
 \include{appunti_21-05-19}
@@ -295,9 +562,13 @@ La porta analogica \'e piu veloce e meno ingombrante di quella digitale, ma non 
         I_R = \frac{V_i - V^-}{R}
         I_D = IS \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
     \end{rcases}\rightarrow
-    \frac{V_i}{RI_s} = \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right) \rightarrow e^{\frac{(V^- - V_u)}{V_T}} = \frac{V_i}{RI_S} + 1
+    \frac{V_i}{RI_s} = \left(e^{\frac{(V^- - V_u)}{V_T}} - 1\right)
+\]
+\[
+    e^{\frac{(V^- - V_u)}{V_T}} = \frac{V_i}{RI_S} + 1
     \xrightarrow{\ln} \ln\left(e^{-\frac{V_u}{V_T}}\right) = \ln\left( \frac{V_i}{RI_S} + 1\right)
 \]
+\bigbreak
 \[ V_u = -V_T \ln\left( \frac{V_i}{RI_S -1} \right) \]
 (Grafico: Amplificatore logaritmico)
 
@@ -853,7 +1124,9 @@ Classificazione tra memorie:
         \begin{itemize}
             \item (MP) Rom (Mask Programmable); Programmate in fabbrica
 
-            \item \textbf{FP ROM} (Field Programmable ROM); Programmata dall'utente Genericamente chiamata (PROM: Rom Programmabile)
+            \item \textbf{FP ROM} (Field Programmable ROM); Programmata dall'utente
+
+                Genericamente chiamata (PROM: Rom Programmabile)
         \end{itemize}
     \item RWM: Read Write Memory
         \begin{itemize}
