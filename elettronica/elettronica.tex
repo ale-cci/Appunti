@@ -282,7 +282,41 @@ $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 \subsection{Funzioni Logiche a pi\'u ingressi}
 \subsection{Studio della catatteristica dell'invertitore TTL}
 \section{Logica ECL}
+% Parte 3
+\section{Funzioni Logiche a pi\'u Ingressi}
+\subsection{NOR/OR}
+\section{Studio del generatore di corrente (Generatore a specchio di corrente)}
+\section{Studio del generatore di tensione costante}
+\section{p-MOSFET}
+\section{Studio Grandezze Fondamentali}
+\section{Equazioni Caratteristiche n-MOSFET}
+\section{Invertitore n-MOS a carico positivo}
+\newpage
+\section{Modello n-Mosfet}
+\begin{circuitikz}
+    \draw (0, 0) to[short, *-] (0.2, 0)
+    node[nmos, anchor=G](nm){};
+    \draw(nm.S) node[eground]{};
+    \draw(nm.D) to[short, *-] ++(0, -0.2);
+\end{circuitikz}
 
+\subsection{Studio Margine di Immunit\'a ai disturbi}
+\subsection{Analisi Bipolo N-Mos connesso a diodo}
+\subsection{Invertitore n-mos a carico saturato}
+\section{n-Mos a soglia negativa}
+\section{p-Mosfet}
+\section{Modello p-MOSFET ad arricchimento}
+\section{Invertitore n-Mos con a carico P-MOS e $V_G = 0$}
+\section{Tecnologia C-MOS}
+\section{Invertitore C-MOS}
+\section{Funzione a pi\'u ingressi (n-MOS)}
+\section{Funzione a pi\'u ingressi (c-MOS)}
+\section{Funzione Arbitraria C-MOS Ratioless}
+\section{Studio Circuito Dinamico}
+\section{Analisi tempo di propagazione}
+\section{Transistor n-MOS in Parallelo}
+\section{Transistor n-MOS in Serie}
+\section{Potenza C-MOS In regime Dinamico}
 % \include{parte_a}
 % \include{quaderno}
 
