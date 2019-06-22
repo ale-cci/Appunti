@@ -11,6 +11,8 @@
 
 ## How can modify a pdf?
 
+**NOTA**: richiede pdflatex installato
+
 I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle rispettive cartelle.
 
 Ad esempio il sorgente pdf/elettronica.pdf e' elettronica/elettronica.tex
