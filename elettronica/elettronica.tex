@@ -66,6 +66,10 @@ Materiali della $5^a$ colonna sono detti donatori, se messi insieme ad atomi del
 
 Materiali della $3^a$ colonna sono detti accettori per motivo opposto.
 
+Un \textit{portatore di carica} \'e una particella mobile dotata di carica, solitamente carica elettrica.
+
+Nei semiconduttori, la carica elettrica \'e trasportata da elettroni e lacune. I portatori di carica pi\'u abbondanti vengono detti \textit{maggioritari}. Essi sono elettroni nel caso di semiconduttori a drogaggio di tipo n, e lacune  per il drogaggio di tipo p.
+
 \subsection{28/02/19}
 Corrente: carica negativa in movimento
 
@@ -196,13 +200,16 @@ Dato che $E\neq 0$ ed $E \propto d\Phi$, se $n_1 \neq n_2 \Rightarrow \Phi_1 \ne
 \[ \ln\left(\frac{n_2}{n_1}\right) = \frac{q}{KT} (\Phi_2 - \Phi_1 ) \]
 \[ \ln\left(\frac{n(x)}{n_0}\right) = \frac{q}{KT}\Phi(x) \]
 
-\section{Studio della giunzione di un diodo all'equilibrio}
+\section{Studio della giunzione pn all'equilibrio}
 
 \begin{center}
     \begin{circuitikz}
         \draw(0, 0) to[empty diode] (2, 0);
     \end{circuitikz}
 \end{center}
+
+% TODO: Aggiungere circuito per polarizzazione diretta ed inversa
+Un diodo a giunzione p-n permette alle cariche elettriche di scorrere in una direzione ma non in quella opposta. Quando la giunzione p-n \'e polarizzata direttamente, la differenza di potenziale sulla giunzione diminuisce e questo fa si che possa scorrere una corrente apprezzabile verso il catodo. Quando \'e polarizzata in inversa, invece la barrierea di potenziale alla giunzione aumenta e la correte iversa che pu\'o scorrere verso l'anodo \'e bassa.
 
 Il semiconduttore \'e drogato in modo da avere una brusca variazione di droganti
 
@@ -244,24 +251,63 @@ $ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
 \subsection{Raddrizzatore a doppia semionda}
 \section{Studio di un raddrizzatore a singola semionda con un condensatore}
 \section{Diodo in regime dinamico}
+In \textit{polarizzazione diretta} la giunzione non \'e svuotat, in quanto predominano la diffusione rispetto al trascinamento, ci sono molti portatori
+
+% In \textit{polarizzazione inversa} invece, il modello \'e accurato, in quanto $\phi$
 \subsection{Modello a soglia dinamico di un diodo}
 \subsection{Risposta al gradino in discesa del circuito raddrizzatore a singola semionda}
 \subsection{Risposta al gradino in salita del circuito raddrizzatore a singola semionda}
 \section{Riassunto diodo}
 
 \section{Transistor}
-\subsection{Transistor BJT}
-Idea di base: Per creare un invertitore basta utilizzare un interrutttore
+3 terminali (B,E,C) e tre correnti, ($I_B$, $I_E$, $I_C$) per convensione prese entranti nel transistor, quindi positive.
 
-\begin{figure}[h]
+La corrente di emettritore ($I_E$) \'e composta da una corrente di lacune $I_{pE}$ ed una di elettroni $I_{nE}$, entrambe con verso entrante nella base (Le lacune essendo positive passano da emettitore a base, mentre gli elettroni passano da base ad emettitore, ma il verso della corrente \'e lo stesso per entrambe).
+
+Da cui $I_{BE} = I_{pE} + I_{nE}$
+
+\begin{figure}[H]
     \begin{circuitikz}
-        \draw(0, 0) to[empty diode, v=$V_{D1}$, -*, i=$I_1$] (-2, 0);
-        \draw(0, 0) to[empty diode, v=$V_{D2}$, -*, i=$I_2$] (2, 0);
-        \draw(0, -1) to[short, *-, i=$I$] (0, 0);
+        \draw(0, 0) to[empty diode, v=$V_{BE}$, i=$I_{BE}$] (-2, 0) to[short, -*] (-3, 0) node[above]{E};
+        \draw(0, 0) to[empty diode, v=$V_{BC}$, i=$I_{BC}$] (2, 0)  to[short, -*] (3, 0) node[above]{C};
+        \draw(0, -1) node[right]{B} to[short, *-, i=$I$] (0, 0) ;
     \end{circuitikz}
     \centering
-    \caption{Transistor}
 \end{figure}
+
+\[ I_E = I_{BES} (\exp(\frac{V_{BE}}{V_T}) -1 )\]
+\[ I_{BC} = I_{BCS} (\exp(\frac{V_{BC}}{V_T}) -1) \]
+\textit{Effetto Transistore}: Una giunzione polarizzata in inversa \'e sede di forti correnti se associata ad una giunzione polarizzata in diretta che le sta vicino
+
+\subsection{Transistor BJT}
+\textit{Bipolar Junction Transistor}.
+Idea di base: Per creare un invertitore basta utilizzare un interrutttore
+
+il funzionamento da interruttore \\'e legato a due particolari stati del transistor: quello di saturazione (ON) e quello di interdizione (OFF)
+
+Nella saturazione le due giunzioni sono polarizzate direttamente.
+
+Il tempo impiegato dal dispositivo per il passaggio da uno stato ad un altro \'e notevole. Nel caso ideale il transistor passa tra lo stato ON e lo stato OFF istantaneamente.
+
+\begin{figure}[H]
+    \begin{circuitikz}
+        \draw(0, 0)  to[empty diode, v=$V_{D1}$, -*, i=$I_1$] (-2, 0) node[above]{E};
+        \draw(0, 0) to[empty diode, v=$V_{D2}$, -*, i=$I_2$] (2, 0) node[above]{C};
+        \draw(0, -1) node[left]{B} to[short, *-, i=$I$] (0, 0);
+    \end{circuitikz}
+    \begin{circuitikz}
+        \draw(0,0) node[npn, rotate=-90, xscale=-1](tr){};
+        \draw(tr.B) node[left]{B};
+        \draw(tr.E) node[above]{E};
+        \draw(tr.C) node[above]{C};
+    \end{circuitikz}
+    \centering
+\end{figure}
+\begin{itemize}
+    \item B: Base
+    \item E: Emettitore
+    \item C: Collector
+\end{itemize}
 
 Nel caso in cui $V_{D1} > 0$ e $V_{D2} < 0$ segue che:
 \begin{itemize}
@@ -269,7 +315,7 @@ Nel caso in cui $V_{D1} > 0$ e $V_{D2} < 0$ segue che:
     \item $I_{D2} < 0$ il diodo 2 \'e polarizzato in inversa
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[width=2in]{placeholder}
 \centering
 \caption{Costruzione di un transistore col silicio\label{trans_bjt}}
@@ -284,7 +330,7 @@ per valori di $\omega$ piccolo e $V_{D1} > 0$ e $V_{D2} < 0$: $I_1 \gg 0\approx 
 
 \subsection{Modello di transistore}
 \subsection{Modello Ebers e Moll}
-\begin{figure}[h]
+\begin{figure}[H]
     \begin{circuitikz}
         \draw(0, 0) to[empty diode, v=$V_{D1}$, i=$I_1$] (-2, 0) to[short, -*] (-3, 0);
         \draw(0, 0) to[empty diode, v=$V_{D2}$, i=$I_2$] (2, 0)  to[short, -*] (3, 0);
@@ -321,6 +367,23 @@ Da cui otteniamo
 \]
 
 Tutte le correnti dipendono esponenzialmente dalla stessa tensione: sono proporzionali tra loro.
+
+\[ \frac{I_C}{I_E} = \frac{I_S (\exp(\frac{V_{BE}}{V_T} -1 )}{(I_S + I_{BES})(\exp(\frac{V_{BE}}{V_T} -1)} = \frac{I_S}{I_S+I_BES} = \alpha_F < 1 \]
+
+$I_C = \alpha_F I_E$ con $\alpha = \frac{I_S}{I_S + I_{BES}}$
+
+$\alpha_F$ \'e chiamata \textit{Efficienza di emettitore}. Quando \'e uguale ad 1 la corrente che entra dal collettore esce uquale dall'emettitore.
+
+\[ I_B = I_{BES}(\exp(\frac{V_{BE}}{V_t}) -1) + I_S (\exp(\frac{V_{BE}}{V_T}) -1) - I_S (\exp(\frac{V_{BE}}{V_T}) -1) = I_E - I_C \]
+
+\subsubsection{Polarizzazione Inversa}
+\[
+    \begin{rcases}
+        V_{BE} < 0\\
+        V_{BC} > 0
+    \end{rcases} \rightarrow
+    e^{\frac{V_{BE}}{V_T}} \ll 1 \ll e^{\frac{V_{BC}}{V_T}}
+\]
 
 \subsection{Transistor in un circuito}
 \subsection{Emettitore Comune}
