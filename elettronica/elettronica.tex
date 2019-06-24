@@ -34,7 +34,7 @@
 
 \section{Introduzione}
 Due atomi vicini tra loro si influiscono a vicenda, variando il diagramma dell'energia.
-Le pripriet\'a di esclusione continuano a valere anche per gli atomi.
+Le proprietà di esclusione continuano a valere anche per gli atomi.
 
 Se non viene fornita energia al sistema, vengono occupate le bande pi\'u basse.
 
@@ -46,9 +46,9 @@ Materiale isolante: Bande totalmente piene o totalmente vuote
 
 Materiale conduttore: 1 Banda Parzialmente occupata
 
-p = densit\'a di lacune: lacune / volume
+p = densità di lacune: lacune / volume
 
-n = densit\'a elettroni: elettroni liberi / volume
+n = densità elettroni: elettroni liberi / volume
 
 
 Evento di generazione elettrone lacuna: avviene quando \'e assorbita energia. Per il principio di conservazione esiste anche l'evento opposto: evento di ricombinazione di una coppia elettrone lacuna
@@ -395,7 +395,30 @@ $\alpha_F$ \'e chiamata \textit{Efficienza di emettitore}. Quando \'e uguale ad 
     \item Collettore Comune
 \end{itemize}
 
+\begin{circuitikz}
+    \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B](tr){};
+    \draw(O |- tr.E) to[short, *-] (tr.E);
+    \draw(tr.C) to[short, -*] ++(1,0) coordinate(e);
+    \draw(tr.E) to[short, -*] (e |- tr.E);
+\end{circuitikz}
+
+\begin{circuitikz}
+    \draw(0, 0) coordinate(O) to[short, *-] (0.5, 0) node[npn, anchor=E, rotate=-90, xscale=-1](tr){};
+    \draw(tr.C) to[short, -*] ++(0.5, 0) coordinate(e);
+    \draw(O |- tr.B) to[short, *-*] (e |- tr.B);
+\end{circuitikz}
+
+\begin{circuitikz}
+    \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B, yscale=-1](tr){};
+    \draw(tr.E) to[short, -*] ++(1, 0) coordinate(e);
+    \draw(O |- tr.C) to[short, *-*] (e |- tr.C);
+\end{circuitikz}
+
+Studiamo solo l'\textbf{Emettitore Comune} perché \'e quello più utilizzato nei circuiti digitali
+
 \subsubsection{Emettitore Comune}
+
+\textbf{Porta d'ingresso}: Studio al variare di $V_{BE}$, tenendo costante $V_{CE}$
 
 \begin{circuitikz}
     \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B](tr){};
@@ -441,25 +464,80 @@ $\alpha_F$ \'e chiamata \textit{Efficienza di emettitore}. Quando \'e uguale ad 
             V_{BE} < 0
         \end{rcases} \Rightarrow I_B \approx -I_{BES} - I_{BCS}
         \]
+
         Non c'\'e effetto transistore
+        \[
+            \begin{cases}
+                I_B = -I_{BES} - I_{BCS}\\
+                V_{BE} < 0
+            \end{cases}
+        \]
     \item Regione di Saturazione
+        \[
+            \begin{rcases}
+                V_{BE} > 0 \\
+                B_{BC} = V_{BE} - V_{CE} > 0
+            \end{rcases} \Rightarrow V_{BE} > V_{CE}
+        \]
+
+        $I_B = I_{BES}(\exp(\frac{V_{BE}}{V_T}) - 1) + I_{BCS} ( \exp(\frac{V_{BE} - V_{CE}}{V_T} - 1)$
+
+        Siccome $V_{BE} > V_{CE} > 0$, allora possiamo trascurare i -1.
+
+        $I_B = \left(I_{BES} + \frac{I_{BCS}}{e^{\frac{V_{CE}}{V_T}}}\right) e^{\frac{V_{BE}}{V_T}} \rightarrow$ Esponenziale in funzione di $V_{BE}$. Al diminuire di $V_{CE}$ cresce la costante moltiplicativa.
+
 \end{itemize}
 
-\subsubsection{Base Comune}
-\begin{circuitikz}
-    \draw(0, 0) coordinate(O) to[short, *-] (0.5, 0) node[npn, anchor=E, rotate=-90, xscale=-1](tr){};
-    \draw(tr.C) to[short, -*] ++(0.5, 0) coordinate(e);
-    \draw(O |- tr.B) to[short, *-*] (e |- tr.B);
-\end{circuitikz}
+\textbf{Studio Porta di uscita}: Studio al variare di $V_{CE}$, tenendo $V_{BE}$ costante.
 
-\subsubsection{Collettore Comune}
-\begin{circuitikz}
-    \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B, yscale=-1](tr){};
-    \draw(tr.E) to[short, -*] ++(1, 0) coordinate(e);
-    \draw(O |- tr.C) to[short, *-*] (e |- tr.C);
-\end{circuitikz}
+\begin{itemize}
+    \item Regione Normale
+        \[
+            \begin{rcases}
+                V_{BE} > 0\\
+                V_{BC} = V_{BCE} - V_{CE}
+            \end{rcases} \Rightarrow 0 < V_{BE} < V_{CE}
+        \]
+
+        $I_C \approx I_S \left( e^{\frac{V_{BE}}{V_T}} -1\right) \rightarrow$ Retta costante al variare di $V_{CE}$ dato che $V_{BE}$ cotante.
+
+        Il confine della regione normale con la regione di saturazione si ha per $V_{BE} = V_{CE}$
+
+        $I_{C_{\text{confine}}} = I_S \left( e^{\frac{V_{CE}}{V_T}} -1\right) \rightarrow$ Esponenziale di confine
+
+
+        In regione normale il transistore si comporta come un generatore di corrente ideale, controllato da tensione $V_{BE}$
+
+    \item Interdizione
+        \[
+            \begin{rcases}
+                V_{BE} < 0\\
+                V_{BC} < 0
+            \end{rcases} \Rightarrow I_C \approx -I_S + (I_S + I_{BCS}) = I_{BCS} \approx 0
+        \]
+        Non c'\'e effetto transistore
+
+    \item Saturazione
+        \[
+            \begin{rcases}
+                V_{BE} > 0\\
+                V_{BC} = V_{BE} - V_{CE} > 0
+            \end{rcases}\Rightarrow V_{BE} > V_{CE}
+        \]
+
+        $I_S e^{\frac{V_{BE}}{V_T}} = (I_S + I_{BCS})\frac{e^{\frac{V_{BE}}{V_T}}}{e^\frac{V_{CE}}{V_T}}$
+
+        $e^{\frac{V_{CE}}{V_T}} = \frac{I_S + I_{BCS}}{I_S} = \frac{1}{\alpha_R}$
+
+        $V_{CE} = V_T \log\frac{1}{\alpha R} \approx 200 mV \rightarrow$ valore della tensione per cui $I_C = 0$
+
+\end{itemize}
+
+In uscita, il transistor BJT si comporta, in regione normale, come un generatore di corrente ideale, in cui $I_C = \beta_F I_B$, se si trascura l'effetto Early.
 
 \subsection{Effetto Early}
+In realt\'a si ha che la funzione $I_C(V_{CE}$, quando il transistor \'e in regione Normale, non \'e costante, ma debolmente crescente.
+
 \subsection{Utilizzo Transistor BJT}
 \subsubsection{Studio Circuito in Ambito Analogico}
 \subsubsection{Studio Circuito in Ambito Digitale}
