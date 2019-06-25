@@ -3,10 +3,10 @@ set -e
 
 PDFDIR="$PWD/pdf"
 LOCAL_PDF_DIR="$HOME/pdfs/NOTE"
+mkpdf="pdflatex -output-directory $PDFDIR"
 
 build_pdfs() {
     mkdir -p pdf
-    mkpdf="pdflatex -output-directory $PDFDIR"
 
     echo "Building Elettronica..."
     (cd elettronica && $mkpdf elettronica.tex >/dev/null)
@@ -17,7 +17,7 @@ build_pdfs() {
     echo "Building FCA..."
     (cd fca && $mkpdf fca.tex >/dev/null)
 
-    echo "Building FCA (Dogmario)"
+    # echo "Building FCA (Dogmario)"
     # (cd fca && $mkpdf dogmario.tex >/dev/null)
 }
 
@@ -38,6 +38,9 @@ case "$1" in
     "update")
         cd "$2" && pdflatex -output-directory "$PDFDIR" "$2".tex;;
 
+    "dogmi")
+        cd elettronica && $mkpdf dogmario_elettronica.tex
+        ;;
 
     "sync")
         mkdir -p $LOCAL_PDF_DIR

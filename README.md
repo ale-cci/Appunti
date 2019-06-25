@@ -1,6 +1,9 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
+## Contains:
+
+
 ## Useful Links:
 
 * [PDF e foto esercitazioni](https://github.com/ale-cci/Appunti/tree/master/pdf)
