@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+
+\title{Esercitazione 5}
+
+\author{ale-cci}
+\begin{document}
+\section{Esercizio 1}
+Studiare la stabilit\'a di un sistema avente funzione di trasferimento
+\[ G(s) = \frac{b(s)}{a(s)} = \frac{7s^4 + 4s^3 + 5s^2 + 8s + 12}{s^6 + 3s^5 + 10s^4 + 24s^3 + 32 s^2 + 48 s + 32}\]
+
+(sia noto che $a(s)$ e $b(s)$ sono coprimi fra loro).
+
+equazione caratteristica: $s^6 + 3s^5 + 10s^4 + 24s^3 + 32 s^2 + 48 s + 32 = 0$
+
+Calcolo la stabilit\'a di $G(s)$ con la tabella di Routh:
+
+\begin{tabular}{c|c c c c c}
+        6 & 1 & 10 & 32 & 32 & 0\\
+        5 & 3 & 24 & 48 & 0  & 0\\
+        4 &
+\end{tabular}
+
+\end{document}

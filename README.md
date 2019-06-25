@@ -1,27 +1,30 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-## Useful Links:
+## Content:
 
-* [PDF e foto esercitazioni](https://github.com/ale-cci/Appunti/tree/master/pdf)
+* [appunti, dogmari ed esercizi di elettronica](https://github.com/ale-cci/Appunti/tree/master/elettronica)
 
-* [Esercitazioni Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
+* [appunti di sistemi di telecomunicazione](https://github.com/ale-cci/Appunti/tree/master/elettronica)
+
+* [appunti (poco affidabili) ed esercitazioni di fca di Mike](https://github.com/ale-cci/Appunti/tree/master/elettronica)
+
+* [Esercitazioni, consegne extra e qualche appunto di Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
 
 ## How can modify a pdf?
 
-**NOTA**: richiede *pdflatex* installato
+Tutti i sorgenti dei pdf sono dento la cartella *_tex* dello stesso pdf.
 
-I sorgenti dei [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf) sono nelle cartelle con il loro stesso nome.
-
-Ad esempio il sorgente di *pdf/elettronica.pdf* e' *elettronica/elettronica.tex*
+Ad esempio il sorgente di *elettronica/elettronica.pdf* è *elettronica/_tex/elettronica.tex*
 
 Dopo averlo modificato per compilarlo basta eseguire lo script [build](https://github.com/ale-cci/Appunti/blob/master/build) che si trova nella root del progetto.
 
+Esempio: se voglio aggiornare il file *elettronica/elettronica.pdf* dopo aver modificato il file *elettronica/_tex/elettronica.tex*, basta che venga eseguito il comando
 
-Esempio: se voglio aggiornare il file *pdf/elettronica.pdf* dopo aver modificato il file *elettronica/elettronica.tex*, basta che venga eseguito da terminale il comando
+**NOTA**: richiede *pdflatex* installato
 
 ```
-./build update elettronica
+./build elettronica
 ```
 
 ## How can i contribute?

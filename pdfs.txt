@@ -1,0 +1,5 @@
+fca/_tex/fca.tex
+fca/_tex/dogmario.tex
+sdt/_tex/sdt.tex
+elettronica/_tex/elettronica.tex
+elettronica/_tex/dogmario.tex

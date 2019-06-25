@@ -1,50 +1,18 @@
 #!/usr/bin/env sh
-set -e
-
-PDFDIR="$PWD/pdf"
-LOCAL_PDF_DIR="$HOME/pdfs/NOTE"
-mkpdf="pdflatex -output-directory $PDFDIR"
-
-build_pdfs() {
-    mkdir -p pdf
-
-    echo "Building Elettronica..."
-    (cd elettronica && $mkpdf elettronica.tex >/dev/null)
-
-    echo "Building SDT..."
-    (cd sdt && $mkpdf sdt.tex >/dev/null)
-
-    echo "Building FCA..."
-    (cd fca && $mkpdf fca.tex >/dev/null)
-
-    # echo "Building FCA (Dogmario)"
-    # (cd fca && $mkpdf dogmario.tex >/dev/null)
-}
+LIST=pdfs.txt
 
 case "$1" in
-    "pdf")
-        build_pdfs
-
-        printf "\nFile creadted:\n"
-        ls -1X "$PDFDIR"/*.pdf
+    "-l")
+        cat "$LIST"
         ;;
-
-    "clean")
-        (cd elettronica && rm -f *.pdf *.log *.aux)
-        rm -f *.pdf *.log *.aux
-        (cd fca && rm -f *.pdf *.log *.aux)
-        rm $PDFDIR/*.log $PDFDIR/*.aux
+    -*)
+        echo "Unrecognized Option $1"
         ;;
-    "update")
-        cd "$2" && pdflatex -output-directory "$PDFDIR" "$2".tex;;
-
-    "dogmi")
-        cd elettronica && $mkpdf dogmario_elettronica.tex
-        ;;
-
-    "sync")
-        mkdir -p $LOCAL_PDF_DIR
-        ln -st "$LOCAL_PDF_DIR" "$PDFDIR"/*.pdf
-        ;;
+    *)
+        grep "$1" "$LIST" | while read -r file
+    do
+        echo "Building $file..."
+        (cd "$(dirname "$file")" && pdflatex "$(basename "$file")" && mv ./*.pdf ..)
+    done
+    ;;
 esac
-

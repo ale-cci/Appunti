@@ -1,0 +1,63 @@
+\subsection{Ex Lez 20 Slide 16}
+
+\subsubsection{Parte 1}
+
+\[
+    y_0(K+2) = y(K+1) - 0.24y(K) + u(K+2)\\
+\]
+\bigbreak
+\(
+    a_ny(K) + a_{N-1}y(K-1) + \cdots +a_o y(K-1) = b_n u(K-n +m) + b_{n-1} u(K-n+m-1) + \cdots + b_o u(K-n)
+\)
+
+\(
+\Leftrightarrow H(z) = \frac{b_mz^{n} + b_{m-1}z^{m-1}+ \cdots + b_o}{a_mz^n + a_{n-1}z^{n-1}+a_0}
+\)
+\bigbreak
+
+\(
+\begin{cases}
+a_n \neq 0\\
+b_m \neq 0 \\
+m \le n
+a_0 \lor b_0 \neq 0
+\end{cases}
+\)
+
+\[
+\begin{split}
+K \leftarrow K-1\\
+y(K) = y(K-1) - 0.24 y(k-2) + u(K)\\
+y(K) - y(K-1) + 0.24 y(K-2) = u(k)
+\end{split}
+\]
+
+\begin{enumerate}
+    \item $K-2 = K - n \Rightarrow n = 2$
+    \item $K = K - n + m \Rightarrow 0 = -n + m \qquad m = n = 2$
+\end{enumerate}
+
+
+Grado di relativit\'a $g = m-n = 0$
+
+\begin{align*}
+Y(z) = -Z^{-1} Y(z) + 0.24 Z^{-2} Y(z) = U(z)\\
+Y(z) \cdot (1-Z^{-1} + 0.24 Z^{-2}) =  U(z)\\
+Y(z) = \frac{1}{1-Z-1 + 0.24 Z^{-2}}U(z) = \frac{Z^{-2}}{Z^2 - z + 0.24} U(z)\\
+n = 2, m=2 \Rightarrow \rho = n - m = 0
+\end{align*}
+
+\subsubsection{Parte 3}
+\[
+\begin{split}
+    Z[ a^{k-1} 1(K-1)] = \frac{1}{z-a}\\
+    Z[ (K-1) a^{k-2} 1(K-1)] = \frac{1}{(z-a)^2}\\
+    H(z) = Z(h(K)) = \frac{1}{z-1} -
+    \frac{5}{2} \frac{1}{\left( z - \frac{1}{2}\right)} - 7 \frac{1}{z-\frac{1}{z - \frac{1}{2}}} = \\
+    \cdots = \frac{z^2 +1}{z^3 -2z^2 + \frac{5}{4} z - \frac{1}{4}}
+\end{split}
+\]
+\[
+    y(K) - 2y(K-1) + \frac{5}{4}y(K-2) - \frac{1}{4}y(K-3) = u(K-1) + u(K-3)
+\]
+
