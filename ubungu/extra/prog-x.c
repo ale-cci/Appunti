@@ -1,4 +1,4 @@
-/* Corradi Alessandro - 284026 */
+/* ale-cci */
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
