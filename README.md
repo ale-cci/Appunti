@@ -1,11 +1,9 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-## For the lazy one:
+## Useful Links:
 
-* [PDF](https://github.com/ale-cci/Appunti/tree/master/pdf)
-
-* [Immagini e foto esercizi Mike](https://github.com/ale-cci/Appunti/tree/master/img)
+* [PDF e foto esercitazioni](https://github.com/ale-cci/Appunti/tree/master/pdf)
 
 * [Esercitazioni Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
 

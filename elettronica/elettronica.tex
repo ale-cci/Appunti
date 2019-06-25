@@ -32,6 +32,7 @@
 \tableofcontents{}
 \newpage
 
+
 \section{Introduzione}
 Due atomi vicini tra loro si influiscono a vicenda, variando il diagramma dell'energia.
 Le proprietà di esclusione continuano a valere anche per gli atomi.
@@ -536,10 +537,28 @@ Studiamo solo l'\textbf{Emettitore Comune} perché \'e quello più utilizzato ne
 In uscita, il transistor BJT si comporta, in regione normale, come un generatore di corrente ideale, in cui $I_C = \beta_F I_B$, se si trascura l'effetto Early.
 
 \subsection{Effetto Early}
-In realt\'a si ha che la funzione $I_C(V_{CE}$, quando il transistor \'e in regione Normale, non \'e costante, ma debolmente crescente.
+Fenomeno dovuto alla variazione di tensione fra Base e Collettore.
+In realtà si ha che la funzione $I_C(V_{CE}$, quando il transistor \'e in regione Normale, non \'e costante, ma debolmente crescente:
+\[ I_C \approx I_S\left(e^{\frac{V_{BE}}{V_T}} -1 \right)\left(1 + \frac{V_{CE}}{V_A}\right) \]
+
+$V_A$ Prende il nome di \textit{tensione di Early}, ed ha valori tipicamente comprese tra 10/200 V.
+
+In regione normale la giunzione BE \'e polarizzata in diretta, mentre la giunzione BC \'e polarizzata in inversa.
 
 \subsection{Utilizzo Transistor BJT}
+Transistore non può lavorare in regione normale.
+
+
+
 \subsubsection{Studio Circuito in Ambito Analogico}
+La caratteristica statica presenta tre tratti differenti:
+
+\begin{itemize}
+    \item OFF: Tensione di uscita costante
+    \item SAT: Tensione di uscita costante
+    \item RN: Tensione di uscita cala all'aumentare di $V_i$: $\frac{d Vu}{dV_i} < 0$
+\end{itemize}
+
 \subsubsection{Studio Circuito in Ambito Digitale}
 \subsubsection{Confronto diodo e BJT}
 \section{Modello BJT Semplificato}
