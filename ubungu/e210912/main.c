@@ -1,8 +1,3 @@
-/* 
- * Nome: Alessandro
- * Cognome: Corradi
- * Matricola: 284026
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,7 +25,7 @@ int main(int argc, const char* argv[]) {
 	sa.sin_family = AF_INET;
 	sa.sin_port   = htons(PORT);
 	sa.sin_addr.s_addr = INADDR_ANY;
-	
+
 	printf("Initializing server...\n");
 	init(&sigset);
 	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -81,7 +76,7 @@ int main(int argc, const char* argv[]) {
 		close(cfd);
 	}
 
-	
+
 	return EXIT_SUCCESS;
 }
 
