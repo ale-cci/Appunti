@@ -1,9 +1,6 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-## Contains:
-
-
 ## Useful Links:
 
 * [PDF e foto esercitazioni](https://github.com/ale-cci/Appunti/tree/master/pdf)
@@ -34,3 +31,5 @@ Esempio: se voglio aggiornare il file *pdf/elettronica.pdf* dopo aver modificato
 * Aggiungendo parti di appunti mancanti
 
 * oppure scrivendomi su cosa aggiungere al mio indirizzo *alecrd98@gmail.com*
+
+
