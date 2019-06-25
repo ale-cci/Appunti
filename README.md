@@ -1,7 +1,7 @@
 # Sostanzialmente i miei Appunti
 ### Author: ale-cci
 
-## Content:
+## PDF & Other Stuff:
 
 * [appunti, dogmari ed esercizi di elettronica](https://github.com/ale-cci/Appunti/tree/master/elettronica)
 
