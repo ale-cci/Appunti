@@ -1,15 +1,16 @@
 \documentclass{article}
-\usepackage{circuitikz}
+\usepackage[oldvoltagedirection]{circuitikz}
+\usepackage{multirow}
 \usepackage{mathtools}
 \usepackage[margin=1in]{geometry}
 
 \ctikzset{bipoles/length=2.4cm}
 
 \begin{document}
-\section{DIODO}
+\section*{DIODO}
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
-        \draw(0, 0) to[diode] (4, 0);
+        \draw(0, 0) to[diode, v=$V_D$] (4, 0);
     \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
@@ -23,7 +24,7 @@
 
 
 
-\section{BJT}
+\section*{BJT}
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
@@ -58,7 +59,7 @@
 \end{minipage}
 
 \bigbreak%
-\section{MOSFET N-MOS}
+\section*{MOSFET N-MOS}
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
@@ -96,7 +97,7 @@
 \end{minipage}
 
 \bigbreak%
-\section{P-MOS}
+\section*{P-MOS}
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
