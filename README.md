@@ -5,9 +5,9 @@
 
 * [appunti, dogmari ed esercizi di elettronica](https://github.com/ale-cci/Appunti/tree/master/elettronica)
 
-* [appunti di sistemi di telecomunicazione](https://github.com/ale-cci/Appunti/tree/master/elettronica)
+* [appunti di sistemi di telecomunicazione](https://github.com/ale-cci/Appunti/tree/master/sdt)
 
-* [appunti (poco affidabili) ed esercitazioni di fca di Mike](https://github.com/ale-cci/Appunti/tree/master/elettronica)
+* [appunti (poco affidabili)](https://github.com/ale-cci/Appunti/tree/master/fca) ed [esercitazioni di fca di Mike](https://github.com/ale-cci/Appunti/tree/master/fca/esercizi)
 
 * [Esercitazioni, consegne extra e qualche appunto di Sistemi Operativi](https://github.com/ale-cci/Appunti/tree/master/ubungu)
 
