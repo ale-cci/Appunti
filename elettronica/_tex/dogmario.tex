@@ -2,7 +2,7 @@
 \usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{multirow}
 \usepackage{mathtools}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 
 \ctikzset{bipoles/length=2.4cm}
 
@@ -60,7 +60,6 @@
 
 \bigbreak%
 \section*{MOSFET N-MOS}
-Trasferisce uno 0 forte: $V_L = 0V$
 
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
@@ -76,6 +75,7 @@ Trasferisce uno 0 forte: $V_L = 0V$
     \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+    Trasferisce uno 0 forte: $V_L = 0V$
     \begin{itemize}
         \item OFF
             \[ I_{DS} = 0 \qquad \text{per}\, V_{GS} < V_{Tn} \]
@@ -100,7 +100,6 @@ Trasferisce uno 0 forte: $V_L = 0V$
 
 \bigbreak%
 \section*{MOSFET P-MOS}
-Trasferisce 1 forte $V_H = V_{CC}$
 
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
@@ -116,6 +115,7 @@ Trasferisce 1 forte $V_H = V_{CC}$
     \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+    Trasferisce 1 forte $V_H = V_{CC}$
     \begin{itemize}
         \item OFF
             \[ I_{SD} = 0 \qquad \text{per}\, V_{SG} < |V_{TP}| \]
