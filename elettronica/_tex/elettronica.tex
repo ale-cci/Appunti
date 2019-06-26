@@ -860,12 +860,86 @@ Bisogna trovare i punti di intersezione della caratteristica ingresso-uscita con
 Il punto C soddisfa anch'esso entrambe le caratteristiche ma è una condizione di precaria stabilità, realisticamente è impossibile lavorare in quel punto.
 %TODO: leggere il resto che manca
 
-\subsection{Porte NOR a logica RTL}
+\subsection{Porte OR a logica RTL}
 \begin{tikzpicture}
+    \draw (0, 0) node[left] {$V_1$} to[diode, l=$D_1$, *-] (2, 0) --(2, -1);
+    \draw (0, -1) node[left]{$V_2$} to[diode, l=$D_2$, *-] (2, -1)
+            node[circ, right]{$V_u$}
+            to[R, l=$R$] (2, -3) node[eground]{};
 \end{tikzpicture}
 
+Basta che uno dei due diodi si accenda che l'uscita si porta al valore alto
+
+\subsection{Porta NOR a logica RTL}
+\begin{minipage}{0.6\textwidth}
+\begin{tikzpicture}
+    \draw (0, 0) node[above] {$V_{i_1}$}
+            to[R, l=$R_B$, i=$I_B$, *-] (2,0)
+            node[npn, anchor=B](tl){};
+    \draw(tl.E) node[eground]{};
+    \draw(tl.C) node[circ, left]{$V_u$} to[R, l=$R_C$, i<=$I_C$, -*] ++(0, 2);
+    \draw(tl.C) to[short, i=$I_{C_2}$] ++(2,0)
+        node[npn, anchor=C, xscale=-1](tr){};
+    \draw(tr.E) node[eground]{};
+    \draw(tr.B) to[R, l=$R_B$, i<=$I_B$, -*] ++(2, 0)
+            node[above]{$V_{i_2}$};
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{tabular}{cc|c|c}
+    &$V_{i_1}$ & $V_{i_2}$ & $V_u$\\
+    \hline
+    \textcircled{1} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{2} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{3} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{4} &$V_L$ & $V_L$ & $V_H$\\
+\end{tabular}
+\end{minipage}
+
+Ipotesi: $V_i$ può assumere solo 2 valori: $V_L = V_{CE_{SAT}}$ e $V_H = V_{CC}$
+
+\begin{enumerate}
+    \item
+        \[
+            \begin{rcases}
+                \begin{aligned}
+                &V_{i1} = V_L = V_{CE_{SAT}} < V_\gamma &&\Rightarrow T_1 \,\text{off} &&\Rightarrow I_{C1 = 0}\\
+                &V_{i2} = V_L = V_{CE_{SAT}} < V_\gamma &&\Rightarrow T_2 \,\text{off} &&\Rightarrow I_{C2 = 0}
+                \end{aligned}
+            \end{rcases} \quad I_C = 0 \Rightarrow V_u = V_{CC}
+        \]
+    \item
+        %TODO: Circuito equivalente (Invertitore RTL
+        \[
+            \begin{aligned}
+                &V_{i1} < V_\gamma &&\Rightarrow T_1 \,\text{off} &&\Rightarrow I_{C1} = 0\\
+                &V_{i2} = V_{CC} &&\Rightarrow T_2 \,\text{on} &&\Rightarrow V_{CE2} = V_{CE_{SAT}}
+            \end{aligned}
+        \]
+
+    \item Analogo di \textcircled{2}
+    \item
+        \[
+            \begin{rcases}
+                V_{i1} = V_{CC} \Rightarrow T_1 on, V_{CE1} = V_{CE_{SAT}}\\
+                V_{i2} = V_{CC} \Rightarrow T_1 on, V_{CE2} = V_{CE_{SAT}}
+            \end{rcases} \quad V_u = V_{CE_{SAT}}
+        \]
+\end{enumerate}
+
+Un invertitore RTL si può vedere come un NOR ad un solo ingresso
+% TODO: Inserire resto dei calcoli invertitore
+
 \subsection{Nor a N Ingressi}
+%TODO: Schema multipli nor
+
+La famiglia RTL è una famiglia completa dove l'elemento principale è la porta logica NOR. Per qualsiasi funzione logica che si voglia realizzare è costruibile attraverso porte NOR.
+
+Tutte le proprietà dell'invertitore, sono riconducibili alla porta NOR che è un invertitore messo in parallelo con altri, Quindi per studiare le proprietà dei circuiti NOR RTL, basta studiare il NOT.
+
 \subsection{Studio FAN-OUT Logica RTL}
+FAN OUT: Insieme delle porte connesse in uscita
+
 \subsection{Modello Generale (a controllo di carica)}
 \subsection{Risposta al gradino in salita dell'invertitore RTL}
 \subsection{Risposta al gradino in discesa dell'invertitore RTL}
