@@ -392,28 +392,32 @@ $\alpha_F$ \'e chiamata \textit{Efficienza di emettitore}. Quando \'e uguale ad 
 \subsection{Metodi di connessione}
 \begin{itemize}
     \item Emettitore Comune
+
+        \begin{circuitikz}
+            \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B](tr){};
+            \draw(O |- tr.E) to[short, *-] (tr.E);
+            \draw(tr.C) to[short, -*] ++(1,0) coordinate(e);
+            \draw(tr.E) to[short, -*] (e |- tr.E);
+        \end{circuitikz}
+
     \item Base Comune
+
+        \begin{circuitikz}
+            \draw(0, 0) coordinate(O) to[short, *-] (0.5, 0) node[npn, anchor=E, rotate=-90, xscale=-1](tr){};
+            \draw(tr.C) to[short, -*] ++(0.5, 0) coordinate(e);
+            \draw(O |- tr.B) to[short, *-*] (e |- tr.B);
+        \end{circuitikz}
+
     \item Collettore Comune
+
+        \begin{circuitikz}
+            \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B, yscale=-1](tr){};
+            \draw(tr.E) to[short, -*] ++(1, 0) coordinate(e);
+            \draw(O |- tr.C) to[short, *-*] (e |- tr.C);
+        \end{circuitikz}
+
 \end{itemize}
 
-\begin{circuitikz}
-    \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B](tr){};
-    \draw(O |- tr.E) to[short, *-] (tr.E);
-    \draw(tr.C) to[short, -*] ++(1,0) coordinate(e);
-    \draw(tr.E) to[short, -*] (e |- tr.E);
-\end{circuitikz}
-
-\begin{circuitikz}
-    \draw(0, 0) coordinate(O) to[short, *-] (0.5, 0) node[npn, anchor=E, rotate=-90, xscale=-1](tr){};
-    \draw(tr.C) to[short, -*] ++(0.5, 0) coordinate(e);
-    \draw(O |- tr.B) to[short, *-*] (e |- tr.B);
-\end{circuitikz}
-
-\begin{circuitikz}
-    \draw(0, 0) coordinate(O) to[short, *-] (1, 0) node[npn, anchor=B, yscale=-1](tr){};
-    \draw(tr.E) to[short, -*] ++(1, 0) coordinate(e);
-    \draw(O |- tr.C) to[short, *-*] (e |- tr.C);
-\end{circuitikz}
 
 Studiamo solo l'\textbf{Emettitore Comune} perché \'e quello più utilizzato nei circuiti digitali
 
@@ -556,11 +560,33 @@ La caratteristica statica presenta tre tratti differenti:
 \begin{itemize}
     \item OFF: Tensione di uscita costante
     \item SAT: Tensione di uscita costante
-    \item RN: Tensione di uscita cala all'aumentare di $V_i$: $\frac{d Vu}{dV_i} < 0$
+    \item Regione Normale:
+        Tensione di uscita cala all'aumentare di $V_i$: $\frac{d Vu}{dV_i} < 0$
+
+        \[ V_U = V_{CC} - R I_S \left( e^{\frac{V_I}{V_T}} -1\right) \]
+        \[ I_{C_0}(V_{I_0}) = I_S \left( e^{\frac{V_{I_0}}{V_T}} -1 \right)  \approx I_S e^{\frac{V_{I_0}}{V_T}} \]
+        \[ \frac{dV_u}{dV_i} \Big|_{V_I = V_{I_0}}=  -\frac{R}{V_T} I_S e^{\frac{V_{I_0}}{V_T}} \approx -R\frac{I_{C_0}}{V_T}\]
+
 \end{itemize}
 
 \subsubsection{Studio Circuito in Ambito Digitale}
+Si lavora solo con due valori: $V_H$ e $V_L$
+
+Il circuito digitale, in quanto lavora nei tratti in cui $\frac{dV_U}{dV_i} \to 0$,  Attenua il rumore.
+In un circuito analogicom vengono riprodotte anche le piccole variazioni del segnale.
+
+
+Il circuito digitale pu\o sopprimere il rumore, rigenerando il segnale di partenza.
+
 \subsubsection{Confronto diodo e BJT}
+Il transistor rispetto al diodo permette di
+\begin{enumerate}
+    \item costruire un invertitore
+    \item costruire circuiti resistenti al rumore
+\end{enumerate}
+
+\textbf{Analisi delle correnti}
+
 \section{Modello BJT Semplificato}
 \section{Logica RTL}
 \subsection{Studio Immunit\'a ai disturbi}
