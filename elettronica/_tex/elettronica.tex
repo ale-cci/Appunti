@@ -573,7 +573,7 @@ La caratteristica statica presenta tre tratti differenti:
 Si lavora solo con due valori: $V_H$ e $V_L$
 
 Il circuito digitale, in quanto lavora nei tratti in cui $\frac{dV_U}{dV_i} \to 0$,  Attenua il rumore.
-In un circuito analogicom vengono riprodotte anche le piccole variazioni del segnale.
+In un circuito analogico vengono riprodotte anche le piccole variazioni del segnale.
 
 
 Il circuito digitale pu\o sopprimere il rumore, rigenerando il segnale di partenza.
@@ -585,17 +585,361 @@ Il transistor rispetto al diodo permette di
     \item costruire circuiti resistenti al rumore
 \end{enumerate}
 
-\textbf{Analisi delle correnti}
+\textbf{Aspetto critico: Analisi delle correnti}
+%TODO
 
 \section{Modello BJT Semplificato}
+%TODO: Aggiungere anche la parte del modello complessivo
+Si cerca di applicare la stessa semplificazione fatta sul diodo (modello a soglia), tenendo conto però dell'effetto transistore.
+
+\begin{minipage}[t]{0.47\textwidth}
+    \begin{center}
+        \textbf{Ingresso}
+    \end{center}
+    %TODO: Grafico
+
+    Famiglia di esponenziali, sovrapposte fino a quando il transistore si trova in regione normale, si distaccano un po' quando va in saturazione
+
+    Stessa approssimazione della caratteristica statica del diodo
+
+    \begin{itemize}
+        \item OFF
+            \[
+                \begin{cases}
+                    V_{BE} < V_\gamma\\
+                    I_{B} = 0
+                \end{cases}\Rightarrow I_C = 0
+            \]
+        \item ON (Regione Normale/Saturazione)
+            \[
+                \begin{cases}
+                    V_{BE} = V_\gamma\\
+                    I_B > 0
+                \end{cases}
+            \]
+    \end{itemize}
+
+\end{minipage}\quad
+\begin{minipage}[t]{0.50\textwidth}
+    \begin{center}
+        \textbf{Uscita}
+    \end{center}
+    %TODO: Grafico
+
+    Curve della tensione costanti in regione normale, decrescenti in saturazione.
+    \begin{itemize}
+        \item OFF
+            \[
+                \begin{cases}
+                    V_{CE} > V_{CE_{SAT}}\\
+                    I_C = \beta_F I_B  \qquad \text{(costante)}
+                \end{cases}
+            \]
+        \item ON (Regione Normale/ Saturazione)
+            \[
+                \begin{cases}
+                    V_{CE} = V_{CE_{SAT}} \\
+                    I_C < \beta_F I_B
+                \end{cases}
+            \]
+
+            NOTA: La corrente $I_C$ può anche essere negativa
+    \end{itemize}
+\end{minipage}
+
+
 \section{Logica RTL}
-\subsection{Studio Immunit\'a ai disturbi}
-\subsection{Studio del rumore che eccede $N_M$}
+\textit{Resistor Transistor Logic}
+
+%TODO: Circuito invertitore + grafico
+Studio Invertitore con il modello a soglia
+
+\begin{minipage}{0.5\textwidth}
+    \begin{tikzpicture}
+        \draw(0, 0) node[eground](G){} node[npn, anchor=E](tr){};
+        \draw(tr.B) to[R, -*, l=$R_B$, i<=$I_B$] ++(-2, 0) node[left]{$V_i$};
+        \draw(tr.C) to[short, -*] ++(0.2, 0) node[right]{$V_u$};
+        \draw(tr.C) to[R, -*, i<=$I_C$] ++(0, 3) node[right]{$V_u$};
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{tikzpicture}
+        \begin{axis}[
+                xmin=-1,
+                axis lines = middle,
+                xlabel=$V_i$,
+                ylabel=$V_u$,
+                ymax=2.5,
+                ymin=0
+            ]
+            \addplot[domain=-8:2, color=red]{2};
+            \addplot[domain=2:3.8, color=red]{4-x};
+            \addplot[domain=3.8:8, color=red]{0.2};
+        \end{axis}
+    \end{tikzpicture}
+\end{minipage}
+
+\subsubsection*{Studio del modello a soglia}
+\begin{itemize}
+    \item T OFF
+        \[
+            \begin{rcases}
+                V_{BE} < V_\gamma\\
+                I_B = 0\\
+                I_B = \frac{V_i - V_{BE}}{R_B} = 0 \rightarrow V_i = V_{BE}
+            \end{rcases}
+            V_i < V_\gamma
+        \]
+
+        \[ V_u = V_{CC} \]
+    \item T RN
+        \[
+            \begin{rcases}
+                V_{BE} = V_\gamma\\
+                V_u = V_{CC} - R_C I_C\\
+                I_C = \beta_F I_B\\
+                I_B = \frac{V_i - V_{BE}}{R_B}
+            \end{rcases} \Rightarrow V_U = V_{CC} - R_C \beta_F \frac{V_i - V_\gamma}{R_B}
+        \]
+    \item T SAT
+        \[
+            \begin{rcases}
+                V_{CE} = V_{CE_{SAT}}\\
+                V_{CE} = V_u
+            \end{rcases} \Rightarrow V_u = V_{CE_{SAT}}
+        \]
+    \item T INV
+        \[
+            \begin{rcases}
+                V_{BE} < 0 &\rightarrow V_B < V_E\\
+                V_{BC} > 0 &\rightarrow V_B > V_C
+            \end{rcases}\qquad
+            \begin{aligned}
+                V_E &> V_B > V_C\\
+                V_C &< V_B < 0
+            \end{aligned}
+        \]
+
+        Non può accadere perché usiamo o valori alti o valori bassi, entrambi positivi.
+\end{itemize}
+% TODO: finish section + add graphics
+
+Utilizzi del circuito:
+\begin{itemize}
+    \item Analogico: Amplificatore
+
+        Comportamento dato dalla pendenza rettilinea in modulo > 1, permette di avere un amplificatore senza distorsione.
+
+        Siccome la pendenza della retta \'e decrescente viene detto  \textit{amplificatore invertente}: Variazioni positive nell'ingresso corrispondono a variazioni negative nell'uscita.
+
+        \[ |A_V | \propto \frac{R_C}{R_B} \]
+
+        $A_V$ dipende solo da componenti esterne al transistore, (eccetto $\beta_F$ che è costante, caratteristica del processo di fabbricazione)
+
+        Se una delle due resistenze $R_C$ o $R_B$ fosse variabile, otterremmo un \textit{amplificatore a guadagno variabile}.
+    \item Digitale
+
+        Utilizzato come invertitore. Per essere classificato come un \textit{buon invertitore} deve soddisfare:
+
+        \begin{center}
+            \begin{tabular}{c|c}
+                IN & OUT \\
+                \hline
+                0 & 1\\
+                1 & 0
+            \end{tabular} $\Rightarrow$
+            \begin{tabular}{c|c}
+                $V_i$ & $V_u$ \\
+                \hline
+                $V_L$ & $V_H$\\
+                $V_H$ & $V_L$
+            \end{tabular}
+        \end{center}
+\end{itemize}
+
+
+\subsubsection*{Studio Immunità ai disturbi}
+$V_H - V_L$: Escursione logica
+
+Possiamo riconoscere 3 regioni diverse:
+\begin{itemize}
+    \item $|A_V| > 1$
+    \item Due regioni con $|A_V| = 0$
+\end{itemize}
+Entrambe le regioni con $|A_V| = 0$ funzionano come "attenuanti", nel caso in cui la tensione in ingresso sia troppo alta/bassa a causa di un disturbo.
+
+% TODO: Aggiungere grafico dell'invertitore
+\begin{itemize}
+    \item $V_U = V_H$ per tutti i valori di $V_i < V_\gamma$, non solo per $V_i = V_L = V_{CE_{SAT}}$
+    \item $V_U = V_L$ per tutti i valori di $V_i > V_i^*$, non solo per $V_i = V_{CC} = V_H$
+\end{itemize}
+
+La distanza tra valore nominale e valore peggiore consentito è l'ampiezza del massimo disturbo tollerato dal circuito.
+
+$ N_{ML} = V_{IL_{MAX}} - V_L $: margine di immunità ai disturbi per segnali bassi ($\approx 0.55V$)
+
+$N_{MH} = V_H - V_{IH_{MIN}}$: Margine di immunità ai disturbi per segnali alti
+
+Margine di immunità ai disturbi del circuito: $N_M = \min \{N_{ML}, N_{MH} \}$
+
+Per avere un margine ai disturbi ottimale, devo fare in modo che $V_{IH_{MIN}} - V_{IL_{MAX}}$ sia più piccolo possibile: cioè $|A_V| \gg 1$
+
+%TODO: Parte finale + grafico
+
+\subsubsection*{Studio per rumore che eccede $N_M$}
+Per studiare facciamo riferimento ad una serie di invertitori a cascata:
+
+\begin{center}
+\begin{tikzpicture}
+    \draw (0, 0) node[american not port](n1){}
+        (1.5, 0) node[american not port](n2){}
+        (3, 0) node[american not port](n3){}
+        (n1.out) -- (n2.in)
+        (n2.out) -- (n3.in);
+\end{tikzpicture}
+\end{center}
+
+%TODO: Fine sezione
+
 \subsection{Errore del modello a soglia}
+\begin{tikzpicture}
+    \draw (0, 0) node[eground]{}
+        node[npn, anchor=E](tr){};
+    \draw (tr.B) to[short, -*] ++(-1, 0) node[left]{$V_i$};
+    \draw(tr.C) to[short, -*] ++(0.5, 0) node[right]{$V_u$};
+    \draw(tr.C) to [R, -*, l=$R$, i<=$I_C$] ++(0, 2) node[right]{$V_{CC}$};
+\end{tikzpicture}
+
+Il modello a soglia non funziona perché la corrente di ingresso supera dagli intervalli considerati nelle ipotesi del modello a soglia. Quindi $V$ non è costante a $V_\gamma$
+
+Per usare il modello a soglia bisogna che la corrente che circola su una giunzione deve circolare almeno su una resistenza (o qualcosa di simile)
+
 \subsection{Generalizzazione $V_H$, $V_L$, $N_H$, Esclusione Logica}
-\subsection{Porte NOR a logica RTL}
+\begin{tikzpicture}
+    \draw (0, 0) node[eground]{}
+        node[npn, anchor=E](tr){};
+    \draw (tr.B) to[short, -*] ++(-1, 0) node[left]{$V_i$};
+    \draw(tr.C) to[short, -*] ++(0.5, 0) node[right]{$V_u$};
+    \draw(tr.C) to [R, -*, l=$R$, i<=$I_C$] ++(0, 2) node[right]{$V_{CC}$};
+\end{tikzpicture}
+
+In questo circuito non c'è una netta differenza tra $V_L$ e $V_H$: Serve un criterio analiticamente corretto per determinare $V_L$, $V_H$ ed $|A_V|$.
+
+Considerando che l'uscita di un invertitore sarà l'ingresso di un invertitore successivo facciamo ancora riferimento alla rete di invertitori in cascata: L'ingresso degli stadi pari coincide con l'uscita degli stadi dispari, e viceversa.
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xmin=-0.2,
+        xmax = 2,
+        ymin=-0.2,
+        ymax=2,
+        axis lines = middle,
+        unit vector ratio = 1 1 1,
+        xticklabels={,,},
+        yticklabels={,,},
+        ]
+        \addplot[color=red, domain=0:1.5]{((-x+0.7)*1.8)^3 + 0.7};
+        \addplot[color=blue, domain=0:1.5, samples=200]{0.7 - (1/1.8)*((x-0.7)/abs(x - 0.7))*(abs(x - 0.7)^(1/3))};
+    \end{axis}
+\end{tikzpicture}
+
+Quando gli invertitori pari sono connessi a quelli dispari devono funzionare solo i punti che appartengono ad entrambi i luoghi dei punti
+
+Il circuito può lavorare in 3 modi diversi:
+\begin{itemize}
+    \item tutti gli stadi hanno $V_i = V_H$ e $V_u = V_L$ e tutti gli stadi dispari $V_i = V_L$ e $V_u = V_H$
+    \item tutti gli stadi pari hanno $V_i = V_L$ e $V_u = V_H$ e tutti quelli dispari $V_i = V_H$ e $V_u = V_L$
+    \item tutti gli stadi hanno $V_I = V_H = V_{TL}$
+\end{itemize}
+% TODO: Leggere e prendere in considerazione se inserire il resto discorso con figura dubbia
+
+Per calcolare $V_L$ e $V_H$ (nominale) su una generica caratteristica bisogna imporre che l'uscita di una porta deve essere l'ingresso della successiva.
+
+Bisogna trovare i punti di intersezione della caratteristica ingresso-uscita con la sua duale
+
+Il punto C soddisfa anch'esso entrambe le caratteristiche ma è una condizione di precaria stabilità, realisticamente è impossibile lavorare in quel punto.
+%TODO: leggere il resto che manca
+
+\subsection{Porte OR a logica RTL}
+\begin{tikzpicture}
+    \draw (0, 0) node[left] {$V_1$} to[diode, l=$D_1$, *-] (2, 0) --(2, -1);
+    \draw (0, -1) node[left]{$V_2$} to[diode, l=$D_2$, *-] (2, -1)
+            node[circ, right]{$V_u$}
+            to[R, l=$R$] (2, -3) node[eground]{};
+\end{tikzpicture}
+
+Basta che uno dei due diodi si accenda che l'uscita si porta al valore alto
+
+\subsection{Porta NOR a logica RTL}
+\begin{minipage}{0.6\textwidth}
+\begin{tikzpicture}
+    \draw (0, 0) node[above] {$V_{i_1}$}
+            to[R, l=$R_B$, i=$I_B$, *-] (2,0)
+            node[npn, anchor=B](tl){};
+    \draw(tl.E) node[eground]{};
+    \draw(tl.C) node[circ, left]{$V_u$} to[R, l=$R_C$, i<=$I_C$, -*] ++(0, 2);
+    \draw(tl.C) to[short, i=$I_{C_2}$] ++(2,0)
+        node[npn, anchor=C, xscale=-1](tr){};
+    \draw(tr.E) node[eground]{};
+    \draw(tr.B) to[R, l=$R_B$, i<=$I_B$, -*] ++(2, 0)
+            node[above]{$V_{i_2}$};
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{tabular}{cc|c|c}
+    &$V_{i_1}$ & $V_{i_2}$ & $V_u$\\
+    \hline
+    \textcircled{1} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{2} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{3} &$V_L$ & $V_L$ & $V_H$\\
+    \textcircled{4} &$V_L$ & $V_L$ & $V_H$\\
+\end{tabular}
+\end{minipage}
+
+Ipotesi: $V_i$ può assumere solo 2 valori: $V_L = V_{CE_{SAT}}$ e $V_H = V_{CC}$
+
+\begin{enumerate}
+    \item
+        \[
+            \begin{rcases}
+                \begin{aligned}
+                &V_{i1} = V_L = V_{CE_{SAT}} < V_\gamma &&\Rightarrow T_1 \,\text{off} &&\Rightarrow I_{C1 = 0}\\
+                &V_{i2} = V_L = V_{CE_{SAT}} < V_\gamma &&\Rightarrow T_2 \,\text{off} &&\Rightarrow I_{C2 = 0}
+                \end{aligned}
+            \end{rcases} \quad I_C = 0 \Rightarrow V_u = V_{CC}
+        \]
+    \item
+        %TODO: Circuito equivalente (Invertitore RTL
+        \[
+            \begin{aligned}
+                &V_{i1} < V_\gamma &&\Rightarrow T_1 \,\text{off} &&\Rightarrow I_{C1} = 0\\
+                &V_{i2} = V_{CC} &&\Rightarrow T_2 \,\text{on} &&\Rightarrow V_{CE2} = V_{CE_{SAT}}
+            \end{aligned}
+        \]
+
+    \item Analogo di \textcircled{2}
+    \item
+        \[
+            \begin{rcases}
+                V_{i1} = V_{CC} \Rightarrow T_1 on, V_{CE1} = V_{CE_{SAT}}\\
+                V_{i2} = V_{CC} \Rightarrow T_1 on, V_{CE2} = V_{CE_{SAT}}
+            \end{rcases} \quad V_u = V_{CE_{SAT}}
+        \]
+\end{enumerate}
+
+Un invertitore RTL si può vedere come un NOR ad un solo ingresso
+% TODO: Inserire resto dei calcoli invertitore
+
 \subsection{Nor a N Ingressi}
+%TODO: Schema multipli nor
+
+La famiglia RTL è una famiglia completa dove l'elemento principale è la porta logica NOR. Per qualsiasi funzione logica che si voglia realizzare è costruibile attraverso porte NOR.
+
+Tutte le proprietà dell'invertitore, sono riconducibili alla porta NOR che è un invertitore messo in parallelo con altri, Quindi per studiare le proprietà dei circuiti NOR RTL, basta studiare il NOT.
+
 \subsection{Studio FAN-OUT Logica RTL}
+FAN OUT: Insieme delle porte connesse in uscita
+
 \subsection{Modello Generale (a controllo di carica)}
 \subsection{Risposta al gradino in salita dell'invertitore RTL}
 \subsection{Risposta al gradino in discesa dell'invertitore RTL}
