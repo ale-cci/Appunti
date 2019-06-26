@@ -7,7 +7,8 @@
 \ctikzset{bipoles/length=2.4cm}
 
 \begin{document}
-\section*{DIODO}
+\subsection*{DIODO}
+
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \draw(0, 0) to[diode, v=$V_D$] (4, 0);
@@ -24,7 +25,7 @@
 
 
 
-\section*{BJT}
+\subsection*{BJT}
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
@@ -59,8 +60,7 @@
 \end{minipage}
 
 \bigbreak%
-\section*{MOSFET N-MOS}
-Trasferisce uno 0 forte: $V_L = 0V$
+\subsection*{MOSFET N-MOS}
 
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
@@ -76,6 +76,7 @@ Trasferisce uno 0 forte: $V_L = 0V$
     \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+    Trasferisce uno 0 forte: $V_L = 0V$
     \begin{itemize}
         \item OFF
             \[ I_{DS} = 0 \qquad \text{per}\, V_{GS} < V_{Tn} \]
@@ -99,7 +100,7 @@ Trasferisce uno 0 forte: $V_L = 0V$
 \end{minipage}
 
 \bigbreak%
-\section*{MOSFET P-MOS}
+\subsection*{MOSFET P-MOS}
 Trasferisce 1 forte $V_H = V_{CC}$
 
 \begin{minipage}{0.4\textwidth}
