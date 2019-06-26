@@ -60,6 +60,8 @@
 
 \bigbreak%
 \section*{MOSFET N-MOS}
+Trasferisce uno 0 forte: $V_L = 0V$
+
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
@@ -97,7 +99,9 @@
 \end{minipage}
 
 \bigbreak%
-\section*{P-MOS}
+\section*{MOSFET P-MOS}
+Trasferisce 1 forte $V_H = V_{CC}$
+
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
@@ -122,7 +126,7 @@
                 I_{SD} = \beta\left((V_{SG} - |V_{TP}|)V_{SD} - \frac{V_{SN}^2}{2}\right)
                 \qquad\text{per}
                 \begin{cases}
-                    V_{SD} < V_{GS} - |V_{TP}|\\
+                    V_{SD} < V_{SG} - |V_{TP}|\\
                 V_{SG} \ge |V_TP|
                 \end{cases}
             \]

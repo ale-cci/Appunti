@@ -1,0 +1,4 @@
+run: main.c
+	gcc -o run main.c
+	./run 100
+	
