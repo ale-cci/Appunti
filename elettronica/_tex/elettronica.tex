@@ -573,7 +573,7 @@ La caratteristica statica presenta tre tratti differenti:
 Si lavora solo con due valori: $V_H$ e $V_L$
 
 Il circuito digitale, in quanto lavora nei tratti in cui $\frac{dV_U}{dV_i} \to 0$,  Attenua il rumore.
-In un circuito analogicom vengono riprodotte anche le piccole variazioni del segnale.
+In un circuito analogico vengono riprodotte anche le piccole variazioni del segnale.
 
 
 Il circuito digitale pu\o sopprimere il rumore, rigenerando il segnale di partenza.
@@ -585,11 +585,78 @@ Il transistor rispetto al diodo permette di
     \item costruire circuiti resistenti al rumore
 \end{enumerate}
 
-\textbf{Analisi delle correnti}
+\textbf{Aspetto critico: Analisi delle correnti}
+%TODO
 
 \section{Modello BJT Semplificato}
+%TODO: Aggiungere anche la parte del modello complessivo
+Si cerca di applicare la stessa semplificazione fatta sul diodo (modello a soglia), tenendo conto però dell'effetto transistore.
+
+\begin{minipage}[t]{0.47\textwidth}
+    \begin{center}
+        \textbf{Ingresso}
+    \end{center}
+    %TODO: Grafico
+
+    Famiglia di esponenziali, sovrapposte fino a quando il transistore si trova in regione normale, si distaccano un po' quando va in saturazione
+
+    Stessa approssimazione della caratteristica statica del diodo
+
+    \begin{itemize}
+        \item OFF
+            \[
+                \begin{cases}
+                    V_{BE} < V_\gamma\\
+                    I_{B} = 0
+                \end{cases}\Rightarrow I_C = 0
+            \]
+        \item ON (Regione Normale/Saturazione)
+            \[
+                \begin{cases}
+                    V_{BE} = V_\gamma\\
+                    I_B > 0
+                \end{cases}
+            \]
+    \end{itemize}
+
+\end{minipage}\quad
+\begin{minipage}[t]{0.50\textwidth}
+    \begin{center}
+        \textbf{Uscita}
+    \end{center}
+    %TODO: Grafico
+
+    Curve della tensione costanti in regione normale, decrescenti in saturazione.
+    \begin{itemize}
+        \item OFF
+            \[
+                \begin{cases}
+                    V_{CE} > V_{CE_{SAT}}\\
+                    I_C = \beta_F I_B  \qquad \text{(costante)}
+                \end{cases}
+            \]
+        \item ON (Regione Normale/ Saturazione)
+            \[
+                \begin{cases}
+                    V_{CE} = V_{CE_{SAT}} \\
+                    I_C < \beta_F I_B
+                \end{cases}
+            \]
+
+            NOTA: La corrente $I_C$ può anche essere negativa
+    \end{itemize}
+\end{minipage}
+
+
 \section{Logica RTL}
-\subsection{Studio Immunit\'a ai disturbi}
+\textit{Resistor Transistor Logic}
+
+%TODO: Circuito invertitore + grafico
+Studio Invertitore con il modello a soglia
+
+
+
+\subsection{Studio Immunità ai disturbi}
 \subsection{Studio del rumore che eccede $N_M$}
 \subsection{Errore del modello a soglia}
 \subsection{Generalizzazione $V_H$, $V_L$, $N_H$, Esclusione Logica}
