@@ -2,8 +2,8 @@
 \usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{multirow}
 \usepackage{mathtools}
-\usepackage[margin=1in]{geometry}
-
+\usepackage[margin=0.5in]{geometry}
+\pagestyle{plain}
 \ctikzset{bipoles/length=2.4cm}
 
 \begin{document}
@@ -100,8 +100,7 @@
 \end{minipage}
 
 \bigbreak%
-\subsection*{MOSFET P-MOS}
-Trasferisce 1 forte $V_H = V_{CC}$
+\section*{MOSFET P-MOS}
 
 \begin{minipage}{0.4\textwidth}
     \begin{tikzpicture}
@@ -117,6 +116,7 @@ Trasferisce 1 forte $V_H = V_{CC}$
     \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+    Trasferisce 1 forte $V_H = V_{CC}$
     \begin{itemize}
         \item OFF
             \[ I_{SD} = 0 \qquad \text{per}\, V_{SG} < |V_{TP}| \]

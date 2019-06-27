@@ -941,9 +941,124 @@ Tutte le proprietà dell'invertitore, sono riconducibili alla porta NOR che è u
 FAN OUT: Insieme delle porte connesse in uscita
 
 \subsection{Modello Generale (a controllo di carica)}
+Per il principio di sovrapposizione degli effetti, si può considerare l'effetto reattivo complessivo come somma dei due effetti reattivi stimati in regione normale ed inversa.
+
+\begin{minipage}{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}
+    \draw (0, -1) to[short, *-, i=$I_B$] (0, 0)
+            to[diode] (-2, 0)
+            -- (-2, 1)
+            to[american controlled current source] (0, 1)
+            -- (0, 0)
+            to[diode] (2,0)
+            --(2, 1)
+            to[american controlled current source] (0, 1)
+            --(0, 2)
+            to[C, l_=$Q_F$] (-2,2)
+            to[short, i_=$\frac{dQ_F}{dt}$] (-2, 1);
+        \draw (0, 2) to[C, l=$Q_R$] (2, 2)
+            to[short, i=$\frac{dQ_R}{dt}$](2,1);
+        \draw (-2, 0) to[short, -*, i=$I_E$] (-3, 0);
+        \draw (2, 0) to[short, -*, i<=$I_C$] (3, 0);
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\[
+    \begin{cases}
+        I_C = \frac{Q_F}{\tau_F} -\frac{Q_R}{\alpha_R \tau_R} - \frac{dQ_R}{dt}\\
+        I_E = \frac{Q_F}{\alpha_F \tau_F}  - \frac{Q_R}{\tau_R} + \frac{dQ_F}{dt}\\
+        I_B = \frac{Q_F}{\tau_{BF}} + \frac{Q_R}{\tau_{BR}} + \frac{dQ_F}{dt} + \frac{dQ_R}{dt}
+    \end{cases}
+\]
+\end{minipage}
+
+\bigbreak%
+Esattamente come dal modello di Ebers e Moll, dove la carica dipende esponenzialmente da $V_{BE}$ e $V_{BC}$
+
+% TODO: Aggiungere grafici del modello a soglia
+
+Il modello trascura la componente di carica di svuotamento.
+
 \subsection{Risposta al gradino in salita dell'invertitore RTL}
+Bisogna analizzare se l'aumento di $R_B$ (di conseguenza la diminuzione di $I_B$) provochi problemi dinamici.
+
+\begin{tikzpicture}
+        \draw(0, 0) node[above]{$V_i$} to[R, l=$R_B$, *-] (2, 0) node[npn, anchor=B, scale=2](tr){};
+        \draw(tr.B) -- (tr.B |- tr.E) to[C] (tr.E) node[eground]{};
+        \draw(tr.B) -- (tr.B |- tr.C) to[C] (tr.C)
+            to[R, l=$R_C$, i<=$I_C$, -*] ++(0, 2);
+        \draw(tr.C) to[short, -*] ++(0.5, 0) node[right]{$V_u$};
+\end{tikzpicture}
+% TODO: Aggiungere grafici del transitorio
+
+\begin{itemize}
+    \item \underline{$ t < 0$} (Zona \textcircled{A})
+        \[
+            \begin{rcases}
+                I_B = 0\\
+                I_B = \frac{V_i - V_{BE}}{R_B}
+            \end{rcases} V_i = V_{BE} \rightarrow Q_F = 0
+        \]
+        \[
+            \begin{rcases}
+                I_C = 0
+                I_C = \frac{V_{CC} - V_u}{R_C}
+            \end{rcases} V_u = V_{CC}
+        \]
+    \item \underline{$ t \to +\infty$} (Zona \textcircled{D})
+        \[
+            V_i = V_{CC} \Rightarrow V_u = V_{CE_{SAT}}
+        \]
+    \item \underline{$t \ge 0$} (Da Zona \textcircled{A} a \textcircled{B})
+
+        \bigbreak%
+        \begin{minipage}{0.45\textwidth}
+            \begin{center}
+                Zona A:
+            \end{center}
+
+           $
+                \begin{cases}
+                    &Q_F = 0\\
+                    &V_{BE} = 0\\
+                    &Q_R = 0\\
+                    &I_C = \cancel{\frac{Q_F}{\tau_F}} - \cancel{\frac{Q_R}{\alpha_R \tau_R}} - \cancel{\frac{dQ_R}{dt}} = 0
+                \end{cases}
+           $
+
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \begin{center}
+                Zona B:
+            \end{center}
+
+           $
+                \begin{cases}
+                    Q_F = 0\\
+                    Q_R  = 0\\
+                    V_{BE} = V_\gamma
+                \end{cases}
+            $
+        \end{minipage}
+
+        $Q_F = Q_R = 0$ in tutto il tratto orizzontale: La carica è nulla e costante, le correnti sono nulle e costanti, Quindi è un transitorio istantaneo.
+    \item \underline{$t > 0$} (Tratto da \textcircled{B} a \textcircled{C})
+    \item \underline{$t > t_C$} (Tratto da \textcircled{C} a \textcircled{D})
+
+        Apparentemente insignificante dato che $V_u$ è già $V_{CE_{SAT}}$, ma la carica $Q_R$ che inizia ad aumentare sarà significativa sulla risposta al gradino in discesa
+\end{itemize}
+
+
+
 \subsection{Risposta al gradino in discesa dell'invertitore RTL}
+    %TODO: Copiare lo stesso circuito di prima
+
 \section{Logica TTL}
+    La logica RTL ha il problema del dimensionamento della resistenza $R_B$.
+
+   %TODO: Resto della logica RTL
 \subsection{Funzioni Logiche a pi\'u ingressi}
 \subsection{Studio della caratteristica dell'invertitore TTL}
 \section{Logica ECL}
