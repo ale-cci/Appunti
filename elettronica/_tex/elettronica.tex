@@ -1059,9 +1059,155 @@ Bisogna analizzare se l'aumento di $R_B$ (di conseguenza la diminuzione di $I_B$
     La logica RTL ha il problema del dimensionamento della resistenza $R_B$.
 
    %TODO: Resto della logica RTL
+    Sostituisco $R_B$ con un componente non lineare: BJT
+
+    \begin{circuitikz}
+        \draw(0, 0) node[above]{$V_i$} to[short, *-] (0.5, 0) node[npn, anchor=E,  rotate=-90, scale=2](t1){};
+        \draw(t1.B) to[R, -*, l=$R_B$, i<=$I_{B1}$] ++(0, 2) node[right](vcc){$V_{CC}$};
+        \draw(t1.C) node[npn, anchor=B, scale=2](t2){};
+        \draw(t2.E) node[eground]{};
+        \draw(t2.C) to[R, l=$R_C$, -*] (t2.C |- vcc) node[right]{$V_{CC}$};
+        \draw(t2.C) -- ++(0.2, 0) node[circ, right]{$V_u$};
+    \end{circuitikz}
+
+    \[
+        \begin{rcases}
+        I_{B2} = -I_{C1}
+        I_{B2} > 0
+    \end{rcases} \Rightarrow I_{C1} < 0
+    \]
+
+    $T_1$ non può essere in regione normale, perché $I_{C1} < 0$
+
+    \begin{itemize}
+        \item \underline{$T_2$ OFF} (Primo tratto della caratteristica statica)
+
+            \[
+                \begin{cases}
+                    I_{C2} = 0\\
+                    V_u = V_{CC} - R_C I_{C2} = V_{CC}\\
+                \end{cases}
+                \begin{cases}
+                    V_{BE2} < V_\gamma\\
+                    I_{B2} = 0\\
+                    I_{B2} = - I_{C1}
+                \end{cases} \Rightarrow I_{C1} = 0
+            \]
+
+            Ipotizzando \underline{$T_1$ OFF}:
+            \[
+                \begin{rcases}
+                    I_{B1} = 0\\
+                    V_{BE1} < V_\gamma
+                \end{rcases} V_{CC} - \cancel{R_B I_{B2}} - V_{BE1} = V_i \Rightarrow V_{BE1} = V_{CC} - V_i
+            \]
+            \[ V_i > V_{CC} - V_\gamma \]
+
+            Ma
+            \[ V_i + V_{CE1} - V_{BE2} = 0 \Rightarrow V_i + V_{CE1} V_{BE2} < V_\gamma \]
+            \[ V_i < V_\gamma - V_{CE1} \]
+
+            Ipotesi contrastanti: $T_1$ è ON
+
+            \underline{$T_1$ ON}
+            \[
+                \begin{cases}
+                    V_{CE1} = V_{CE_{SAT}}\\
+                    V_i + V_{CE1} - V_{BE2} = 0\\
+                    V_{BE2} = V_i + V_{CE_{SAT}} < V_\gamma
+                    V_i < V_\gamma - V_{CE_{SAT}}
+                \end{cases}
+            \]
+            \[
+                \begin{cases}
+                    I_{C1} < \beta_F I_{B1}\\
+                    V_{CC} - R_B I_{B1} - V_{BE1} = V_i\\
+                    V_{BE1} = V_\gamma
+                \end{cases}
+            \]
+
+            Da cui $I_{B1} = \frac{V_{CC} - V_\gamma - V_i}{R_B} > 0$ e $I_{C1} = 0$ quindi è soddisfatta la condizione di $T_1$ SAT:
+
+            Per $V_i < V_\gamma - V_{CE_{SAT}}$ : $V_u = V_{CC}$
+
+        \item \underline{$T_2$ SAT} ($3^o$ tratto della caratteristica)
+
+            \[
+                \begin{cases}
+                    V_U = V_{CE_{SAT}}\\
+                    I_{B2} > 0 \rightarrow I_{C1} < 0
+                \end{cases}
+            \]
+            \[
+                \begin{rcases}
+                    V_{BE1} = V_\gamma\\
+                    V_{CE1} = V_{CE_{SAT}}\\
+                    I_{B1} > 0\\
+                    V_{BE2} = V_\gamma
+                \end{rcases}
+                \begin{aligned}
+                    &V_{CC} - R_B I_{B1} - V_{BE1} = V_i\\
+                    &I_{B1} = \frac{V_{CC} - V_\gamma - V_i } {R_B} > 0
+                \end{aligned} \Rightarrow V_i < V_{CC} - V_\gamma
+            \]
+
+            Ma questo contrasta con $V_i = V_H = V_{CC}$, quindi $T_2$ non può andare in saturazione.
+
+        \item $T_1$ in Polarizzazione Inversa
+            %TODO: T1 polarizzato in inversa
+    \end{itemize}
+
 \subsection{Funzioni Logiche a pi\'u ingressi}
+%TODO: + margine di immunità ai disturbi
+
+\subsubsection*{Studio della potenza dissipata}
+Deve essere più piccola possibile, per richiedere poca energia e dissipare meno calore.
+
+$I_{CC}$ Corrente erogata dal generatore
+
+Potenza dissipata: $P_{D} = V_{CC} I_{CC}$
+
+\begin{itemize}
+    \item $V_i = V_L \Rightarrow T_{OFF} \Rightarrow I_{CC} = 0 \Rightarrow  P_{CC} = 0$
+
+    \item $V_i = V_H \Rightarrow T_{ON} \Rightarrow I_{CC} > 0 \Rightarrow P_{CC} > 0$
+\end{itemize}
+
+Se $V_i$ rimane costante a valore alto, il consumo di potenza statica è diverso da zero.
+
+Rete di \textit{PULL-UP}: se la corrente $I_C$ è nulla, l'uscita ha un valore alto.
+Quando il transistor è acceso, scorre corrente sulla resistenza, abbassando il potenziale, ottenendo un uscita bassa.
+
+\textit{Pull-Up} Attivo $\Rightarrow$ \textit{Pull-Down} Spento: uscita bassa
+
+\textit{Pull-Down} Attivo $\Rightarrow$ \textit{Pull-Up} Spento: uscita alta
+
+
+La potenza viene dissipata perché la rete di \textit{Pull-Up} è passiva. Non si può spegnere quando il \textit{Pull-Down} è acceso
+
+%TODO: Atri due circuiti con entrambi pull-up attivo
+
 \subsection{Studio della caratteristica dell'invertitore TTL}
+%TODO: Studio circuito enorme
+
 \section{Logica ECL}
+\textit{Logica ad emettitore comune o logica differenziale}
+
+\begin{tikzpicture}
+    \draw (0, 0) node[eground]{} to[isource] (0, 1) -- ++(-1, 0) node[npn, anchor=E](t1){};
+    \draw (t1.C) to[short, -*] ++(0.5, 0) node[right]{$V_u$};
+    \draw(t1.C) to[R, l=$R_C$, -o] ++(0, 2) node[above]{$V_{CC}$};
+    \draw (0, 1) -- ++(1, 0) node[npn, xscale=-1, anchor=E](t2){};
+    \draw(t2.C) to[R, l=$R_C$, -o] ++(0, 2) node[above]{$V_{CC}$};
+    \draw (t1.B) to[short, -*] ++(-0.2, 0) node[above]{$V_i$};
+    \draw (t2.B) to[short, -*] ++(0.2, 0) node[above]{$V_{REF}$};
+\end{tikzpicture}
+
+\[ I_{E1} + I_{E2} = I_0 > 0 \]
+
+$T_1$ e $T_2$ non possono essere simultaneamente spenti
+%TODO: Finire il resto
+
 % Parte 3
 \section{Funzioni Logiche a pi\'u Ingressi}
 \subsection{NOR/OR}

@@ -4,29 +4,45 @@
 \usepackage{mathtools}
 \usepackage[margin=0.5in]{geometry}
 \pagestyle{plain}
-\ctikzset{bipoles/length=2.4cm}
+\ctikzset{bipoles/length=2.0cm}
 
 \begin{document}
 \subsection*{DIODO}
 
-\begin{minipage}{0.4\textwidth}
+\begin{minipage}{0.2\textwidth}
     \begin{tikzpicture}
-        \draw(0, 0) to[diode, v=$V_D$] (4, 0);
+        \draw(0, 0) to[diode, v=$V_D$, i=$I_D$] (0, -3);
     \end{tikzpicture}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
-    \[
-    \begin{cases}
-        I_D = 0 & \text{per} \, V_D < V_\gamma\\
-        V_D = V_\gamma & \text{per}\, I_D > 0
-    \end{cases}
-    \]
+\begin{minipage}{0.8\textwidth}
+    \begin{minipage}{0.5\linewidth}
+        \begin{center}
+            OFF
+        \end{center}
+        \[
+            \begin{cases}
+                I_D = 0\\
+                V_D < V_\gamma
+            \end{cases}
+        \]
+    \end{minipage}
+    \begin{minipage}{0.5\linewidth}
+        \begin{center}
+            ON
+        \end{center}
+        \[
+            \begin{cases}
+                V_D = V_\gamma \\
+                I_D > 0
+            \end{cases}
+        \]
+    \end{minipage}
 \end{minipage}
 
 
 
 \subsection*{BJT}
-\begin{minipage}{0.4\textwidth}
+\begin{minipage}{0.2\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
         \def\coord(#1){node[circle, red, draw, inner sep=1pt,pin={[red, overlay, inner
@@ -37,7 +53,7 @@
         \path(tr.B) \coord(B) (tr.E) \coord(E) (tr.C) \coord(C);
     \end{tikzpicture}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.8\textwidth}
     \begin{itemize}
         \item OFF
             \[ I_B = I_C = I_E = 0 \qquad\qquad \text{per} V_{BE} < V_\gamma \]
@@ -62,7 +78,7 @@
 \bigbreak%
 \subsection*{MOSFET N-MOS}
 
-\begin{minipage}{0.4\textwidth}
+\begin{minipage}{0.2\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
         \def\coord(#1){node[circle, red, draw, inner sep=1pt,pin={[red, overlay, inner
@@ -75,7 +91,7 @@
               (tnmos.D) \coord(D);
     \end{tikzpicture}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.8\textwidth}
     Trasferisce uno 0 forte: $V_L = 0V$
     \begin{itemize}
         \item OFF
@@ -102,7 +118,7 @@
 \bigbreak%
 \section*{MOSFET P-MOS}
 
-\begin{minipage}{0.4\textwidth}
+\begin{minipage}{0.2\textwidth}
     \begin{tikzpicture}
         \def\coord(#1){coordinate(#1)}
         \def\coord(#1){node[circle, red, draw, inner sep=1pt,pin={[red, overlay, inner
@@ -115,7 +131,7 @@
               (tnmos.D) \coord(D);
     \end{tikzpicture}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.8\textwidth}
     Trasferisce 1 forte $V_H = V_{CC}$
     \begin{itemize}
         \item OFF
