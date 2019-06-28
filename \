@@ -1277,50 +1277,11 @@ Soluzioni:
     \begin{itemize}
         \item \underline{a vuoto} ($I_{REF} = 0$)
 
-            \[
-            \begin{rcases}
-                V_{CC} - R_1 I_1 = V_{REF}\\
-                V_{REF} = R_2 I_2\\
-                I_1 = I_2
-            \end{rcases} \Rightarrow V_{REF} = V_{CC} \frac{R_2}{R_1 + R_2}
-            \]
-        \item \underline{A carico} ($I_{REF} > 0$)
-
-            \[
-                \begin{rcases}
-                    I_1 = I_2 + I_{REF}\\
-                    V_{CC} - R_1 I_1 = V_{REF}\\
-                    V_{REF} = R_2 I_2
-                \end{rcases} \Rightarrow V_{REF} = \frac{R_2}{R_1 + R_2} (V_{CC} - R_1 I_{REF})
-            \]
+            \begin{gather}
+            \end{gather}
     \end{itemize}
-
-    Se $I_{REF}$ costante, la caduta $R_1 I_{REF}$ non dovrebbe avere problemi: $V_{REF} < V_{CC}$ e deve essere costante
-    Per poter usare il circuito, viene è richiesto che $I_1$ e $I_2 \gg I_{REF}$ in modo da poter \textit{saturare?} la corrente $I_{REF}$
-
-    $I_1$ ed $I_2$ grandi dissipano molta potenza statica.
 \end{minipage}
 
-\begin{itemize}
-    \item $1^a$ Soluzione:
-
-        Si diminuisce $I_{REF}$ per evitare di ridurre le resistenze $R_1$ e $R_2$, ed aumentare notevolmente correnti $I_1$, $I_2$ e potenza dissipata.
-
-    \item $2^a$ Soluzione:
-
-    Si aumenta la corrente tenendo una resistenza costante
-
-\end{itemize}
-
-Differenze condensatore ed n-MOS:
-\begin{itemize}
-    \item Condensatore:
-        Cariche si dispongono sulla superficie dell'armatura
-    \item n-MOS:
-        Cariche positive sono solo sull'armatura metallica
-
-        Cariche negative (uguali in modulo a quelle positive), hanno una componente distribuita nel volume dell'area della zona svuotata, ed una componente superficiale di carica mobile
-\end{itemize}
 \section{p-MOSFET}
 \section{Studio Grandezze Fondamentali}
 \section{Equazioni Caratteristiche n-MOSFET}
