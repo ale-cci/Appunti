@@ -1312,7 +1312,19 @@ Soluzioni:
 
 \end{itemize}
 
-Differenze condensatore ed n-MOS:
+\section{MOSFET}
+\textit{Metal-Oxide Semiconductor Field Effect Transistor}
+
+Semiconduttore drogato al quale sono applicati 3 terminali: \textit{Gate, Source} e \textit{Drain}.
+
+L'applicazione di una tensione al gate permette di controllare il passaggio di cariche tra source e drain.
+
+A seconda del drogaggio del semiconduttore, prende il nome di \textit{pMOSFET}(pMOS) ed \textit{nMOSFET} (nMOS)
+
+\section{N-MOS}
+
+
+\subsection{Differenze condensatore ed n-MOS}
 \begin{itemize}
     \item Condensatore:
         Cariche si dispongono sulla superficie dell'armatura
@@ -1321,6 +1333,36 @@ Differenze condensatore ed n-MOS:
 
         Cariche negative (uguali in modulo a quelle positive), hanno una componente distribuita nel volume dell'area della zona svuotata, ed una componente superficiale di carica mobile
 \end{itemize}
+
+\subsection{Comportamento qualitativo n-MOS}
+
+\begin{figure}[h]
+    \includegraphics[width=3in]{mosfet}
+    \centering
+    \caption{mosfet}
+\end{figure}
+
+Con $V_{GB} > 0$ si crea un canale conduttivo e l'isolamento con il substrato, la cui resistenza dipende da $V_{GB}$. $I_G = 0$ perché è corrente che attraversa un isolante.
+
+Con $V_{DS}$ si fa scorrere una corrente $I_D$
+
+Per raccogliere gli elettroni dal Souce al Drain si usa un bacino di raccolta, dove i contatti sono immersi in una zona di tipo \textit{n}.
+
+$ V_{DS} > 0 \Rightarrow I_D > 0$
+
+Per avere $V_{GB} > 0$ si mette $V_B = 0$ ( B a terra)
+
+Per avere $V_{GS} > 0 $ si mette $V_S = 0$ ( S a terra)
+
+Transistori \textit{p-MOSFET} ed \textit{n-MOSFET} sono uguali simmetricamente, a parte che
+\begin{itemize}
+    \item per \textit{n-MOSFET}: $ \sigma_n = q \mu_n n $
+    \item per \textit{p-MOSFET} $ \sigma_p = q \mu p $
+\end{itemize}
+\[ \sigma_n > \sigma_p \]
+
+($\mu_n$ è 2/3 volte $\mu_p$)
+
 \section{p-MOSFET}
 \section{Studio Grandezze Fondamentali}
 \section{Equazioni Caratteristiche n-MOSFET}
