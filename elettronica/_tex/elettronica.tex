@@ -1357,29 +1357,243 @@ Per avere $V_{GS} > 0 $ si mette $V_S = 0$ ( S a terra)
 Transistori \textit{p-MOSFET} ed \textit{n-MOSFET} sono uguali simmetricamente, a parte che
 \begin{itemize}
     \item per \textit{n-MOSFET}: $ \sigma_n = q \mu_n n $
-    \item per \textit{p-MOSFET} $ \sigma_p = q \mu p $
+    \item per \textit{p-MOSFET} $ \sigma_p = q \mu_p p $
 \end{itemize}
 \[ \sigma_n > \sigma_p \]
 
 ($\mu_n$ è 2/3 volte $\mu_p$)
 
-\section{p-MOSFET}
-\section{Studio Grandezze Fondamentali}
+%TODO: Pagine storte
+
+
 \section{Equazioni Caratteristiche n-MOSFET}
+%TODO: Disegno n-mos
+Sulla corrente $I_D$ agiscono due fattori:
+\begin{itemize}
+    \item All'aumentare di $V_G$ umenta la carica nel canale, quindi aumenta $I_D$ %TODO: Aumentare o diminuire di V_G?
+    \item Con $V_D - V_S$ determino il trascinamento della carica di canale, se $V_D - V_S$ aumenta, allora aumenta anche $I_D$
+\end{itemize}
+
+Calcolo quindi $I_D ( V_{GS}, V_{DS})$
+
+%TODO: Immagine 3d mos
+
+Ipotesi:
+\begin{itemize}
+    \item $E_y$ costante
+    \item trasporto lungo il canale prevalentemente ohmico: $\frac{dns}{dy} = 0$
+\end{itemize}
+\[
+    \begin{aligned}
+    &I_D = q \mu_n n E_y S\\
+    &E_y = -\frac{d\varphi}{dy} \Rightarrow \int_0^L E_y dy = -\int_{\varphi(0)}^{\varphi(L)} d\varphi
+    \end{aligned}
+\]
+Siccome per ipotesi $E_y$ costante $\Rightarrow E_y L = -V_{DS} \Rightarrow E_y = -\frac{V_{DS}}{L}$
+
+\[
+\begin{aligned}
+    I_D &= \int_S q \mu_n n E_y dS = \int_0^{+\infty} q\mu_n n(x) \frac{E_y}{L} w dx
+        &=\frac{w \mu_n V_{DS}}{L} \int_0^{+\infty} - qn(x) dx
+\end{aligned}
+\]
+
 \section{Invertitore n-MOS a carico positivo}
+Dato che la caratteristica d'uscita del nMOS è uguale a quella del BJT, si possono fare gli stessi circuiti ma con corrente d'ingresso nulla. In questo modo si risolvono i problemi legati al Fan-out.
+
+\begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{circuitikz}
+            \draw(0, 0) to[R, *-] (2, 0) node[npn, anchor=B](tr){};
+            \draw(tr.E) node[eground]{};
+            \draw(tr.C) to[R, -*] ++(0, 2);
+        \end{circuitikz}
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{circuitikz}
+            \draw(0, 0) to[R, *-] (2, 0) node[nmos, anchor=B](tr){};
+            \draw(tr.E) node[eground]{};
+            \draw(tr.C) to[R, -*] ++(0, 2);
+        \end{circuitikz}
+    \end{center}
+\end{minipage}
+
 \newpage
 \section{Modello n-Mosfet}
 \begin{circuitikz}
-    \draw(0, 0) to[short, *-] (0.2, 0)
+\draw(0, 0) to[short, *-] (0.2, 0)
     node[nmos, anchor=G] (nm){};
     \draw(nm.S) node[eground]{};
     \draw(nm.D) to[short, *-] ++ (0, -0.2);
 \end{circuitikz}
+$I_G = 0$
+
+\begin{itemize}
+    \item \underline{Transistor OFF}
+
+        $V_{GS} < V_TT \rightarrow Q_i = 0 \rightarrow I_D = 0$
+
+        $V_T$ serve per il caricare il canale e svuotare la regione sottostante
+    \item \underline{Regime lineare (triodo)}
+
+        $\begin{cases}
+            V_{GS} > V_T\\
+            V_{DS} < V_{GS} - V_T\\
+            I_D = C_{ox}\mu_n \frac{w}{L} \left\{ (V_{GS} - V_T) V_{DS} - \frac{V_{DS}^2}{2}\right\}
+        \end{cases}$
+
+    \item \underline{Regione di Saturazione (Pinch-OFF)}
+
+        $\begin{cases}
+            V_{DS} > V_{GS} - V_T \\
+            V_{GS} > V_T \\
+            V_{DS_{MAX}} = V_{GS} - V_T
+        \end{cases}$
+
+        $I_{D_{MAX}} = C_{ox} \mu_n \frac{w}{L} \left\{ (V_{GS} - V_T) V_{DS_{MAX}} - \frac{V_{DS_{MAX}}^2}{2}\right\}$
+    \item \underline{lineare (triodo)}
+
+        $\begin{cases}
+            V_{GS} > V_{DS} + V_T \rightarrow V_i > V_u + V_T\\
+            V_u = V_{DD} - R I_D\\
+            I_D = \beta_n \left\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\right\}\\
+            I_D = \frac{V_{DD} - V_u}{R}
+        \end{cases}$
+\end{itemize}
+
+Eguagliando le due equazioni si trova la caratteristica del nMOS:
+%TODO: Grafico n-MOS
 
 \subsection{Studio Margine di Immunit\'a ai disturbi}
+Per avere un margine di immunità ai disturbi serve un tratto di caratteristica il cui guadagno di modulo maggiore di 1.
+
+\begin{minipage}{0.4\textwidth}
+    \begin{center}
+\begin{tikzpicture}
+    \draw(0, 0) node[eground]{} node[nmos, anchor=S](tr){};
+    \draw(tr.D) to[R, -*, l=$R$] ++(0, 2) node[right]{$V_{DD}$};
+    \draw(tr.G) to[short, -*] ++(-0.5, 0) node[above]{$V_i$};
+    \draw(tr.D) to[short, -*] ++(0.5, 0) node[right]{$V_u$};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+    \[
+        \begin{cases}
+            V_{DD} = 3.5V\\
+            V_T = 0.6V\\
+            R = 10 K\Omega\\
+            \beta_n = 1 \frac{mA}{V^2}
+        \end{cases}
+    \]
+\end{minipage}
+
+Calcolo del margine di immunità ai disturbi
+%TODO
 \subsection{Analisi Bipolo N-Mos connesso a diodo}
+\begin{itemize}
+    \item M OFF
+    \item M ON
+\end{itemize}
+
+Cortocircuitare G con D impone il MOS a lavorare in Saturazione
+
+A V bassa, la rete si comporta come R elevata
+
+A V crescente R diminuisce
+
 \subsection{Invertitore n-mos a carico saturato}
+\begin{tikzpicture}
+    \draw(0, 0) node[eground]{} node[nmos, anchor=S](nm){};
+    \draw(nm.G) to[short, -*] ++(-0.5, 0) node[above]{$V_i$};
+    \draw(nm.D) to[short, -*] ++(0.5, 0) node[above]{$V_u$};
+    \draw(nm.D)  node[nmos, anchor=S](nm2){};
+    \draw(nm2.G) --(nm2.G |- nm2.D) --(nm2.D);
+    \draw(nm2.D) to[short, -o] ++(0, 0.5) node[right]{$V_{DD}$};
+\end{tikzpicture}
+
+Il circuito viene chiamato "a carico saturato" perché quando $M_2$ lavora in saturazione
+
+Per costruzione $I_{D1} = I_{S2} = I_D2 \Rightarrow I_{D1} = I_{D2}$
+
+Valida in qualunque regione: $V_{GS2} = V_{DS2} = V_{DD} - V_u$
+
+\begin{itemize}
+    \item $M_2$ OFF:
+       $
+       \begin{cases}
+           V_{GS_2} = V_{DD} - V_u < V_T \Rightarrow V_u > V_{DD} - V_T\\
+           I_{D_2} = 0
+       \end{cases}
+       $
+   \item $M_2$ ON, SAT:
+       $I_D = \frac{\beta_2}{2} (V_{GS_2} - V_)^2 = \frac{\beta_2}{2} (V_{DD} - V_T - V_u)^2$
+\end{itemize}
+
+Guardando la caratteristica si puo vedere che il carico è un circuito invertitore perché la curva di carico che ha lo stesso andamento della resistenza.
+
+%TODO: Grafico 'caratteristiche di M2 al variare di VGS1
+Studio della caratteristica del circuito:
+\begin{itemize}
+    \item $M_1$ OFF:
+
+        $\begin{rcases}
+            V_{GS1} < V_T\\
+            V_{FS1} = V_i
+        \end{rcases} \quad V_i < V_T$
+
+        $\begin{rcases}
+            I_{D1} = 0\\
+            I_{D2} = I_{D1}
+        \end{rcases} \quad I_{D2} = 0$
+
+        Questo significa che verso massa c'è un trascinamento (NO Pull-Down),
+        ed il transistore $M_2$ è spento
+
+        %TODO: Finire sezione
+    \item $M_1$ ON, SAT
+
+        $\begin{rcases}
+            V_{GS1} < V_{DS1} + V_T\\
+            V_{GS1} = V_i\\
+            V_{DS1} = V_u
+        \end{rcases} \qquad V_u > V_i - V_t$
+
+        Lare rete  di Pull Down non cambia, quindi il risultato è uguale
+
+        $I_{D1} = \frac{\beta_1}{2}(V_i - V_T)^2 > 0$  (Dato che $V-i > V_T$)
+    \item $_1$ ON, LIN:  $V_i > V_u - V_T$
+\end{itemize}
+
+\subsection*{Caratteristiche per avere $V_u(V_i)$ rettilinea}
+%TODO:
+
+\subsubsection{Difetti del circuito}
+\begin{itemize}
+    \item Caratteristica RATIOED:
+    \item Non si può sfruttare tutta la tensione disponibile
+\end{itemize}
+
+
 \section{n-Mos a soglia negativa}
+\begin{minipage}{0.5\textwidth}
+    \begin{center}
+        Enhancement
+    \end{center}
+    Quando $V_G = V_T$ si forma il canale. Al crescere della tensione applicata aumenta la concentrazione superficiale di elettroni fino a che $n_s \approx N_A$ (Cioè $V_G = V_{T0}$)
+\end{minipage}
+\begin{minipage}{0.5\textiwdth}
+    \begin{center}
+        Depletion
+    \end{center}
+\end{minipage}
+%TODO: Transitori ad arricchimento e svuotamento
+
+\section{Invertitore n-MOS con a carico n-MOS a svuotamento}
+Indipendentemente dal fan-out $I_{D1} = I_{D2}$
+
 \section{p-Mosfet}
 \section{Modello p-MOSFET ad arricchimento}
 \section{Invertitore n-Mos con a carico P-MOS e $V_G = 0$}
