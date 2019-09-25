@@ -176,4 +176,279 @@ DECODER: ad $n$ ingresi corrispondono $2^n$ uscite
 
 %TODO: foto multiplexer a 8 canali con 3 var di selezione del canale Aggiungendo valori della funzione con carry out guarda foto
 Il decoder sta in corrispondenza con le espressioni canoniche, il multiplexer sta un corrispondenza con le espressioni generali.
+
+
+\section{25 Sep 2019, 14:46}
+%TODO: Immagine 1
+
+%\begin{center}
+%\begin{figure}[h]
+%    \includegraphics[width=0.4\textwidth]{reti_shannon.png}
+%    \centering
+%    \caption{Reti combinatorie equivalenti per il Th. di Shannon}
+%\end{figure}
+%\end{center}
+
+
+\begin{itemize}
+    \item{Il segnale RC ($RC_0$ e $RC_1$) dipendono da $n-1$ variabili. e non da $n$ variabili.}
+    \item{$RC_0$ e $RC_1$ potrebbero essere semplificabili}
+\end{itemize}
+
+Una funzione di n variabili pu\'o essere espressa come una combinazione di due funzioni di n-1 variabili attraverso un Multiplexer.
+\[f(x_1, x_2, \ldots, x_n) = \bar{x_1}\bar{x_2} f(0, 0, \ldots, x_n) + \bar{x_1} x_2 f(0, 1, \ldots, x_n) + x_1 \bar{x_2} f(1, 0, \ldots, x_n) + x_1 x_2 f(1, 1, \ldots, x_n)\]
+
+Funzione semplificata di due variabili con Th.\ di Shannon.
+%TODO: Immagine 2
+
+
+\begin{minipage}{0.4\textwidth}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|}
+     ab cd & 00 & 01 & 11 & 10\\
+     \hline
+     00 &  0 & 1 & 0 & 0\\
+     \hline
+     01 & 1 & 1 & 1 & 1\\
+     \hline
+     11 & 1 & 0 & 1 & 1\\
+     \hline
+     01 & 0 & 1 & 0 & 0\\
+     \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\[
+    \begin{split}
+        f_0 &= \bar{C} D\\
+        f_1 &= 1\\
+        f_3 &= C + \bar{D}\\
+        f_2 &= \bar{C} D
+    \end{split}
+\]
+\end{minipage}
+
+% TODO: Raggruppamenti prima mappa k ogni riga
+% TODO: Raggruppamenti seconda mappa k meta con riga orizzontale
+
+\begin{minipage}{0.4\textwidth}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|}
+     ab cd & 00 & 01 & 11 & 10\\
+     \hline
+     00 &  0 & 1 & 0 & 0\\
+     \hline
+     01 & 1 & 1 & 1 & 1\\
+     \hline
+     11 & 1 & 0 & 1 & 1\\
+     \hline
+     01 & 0 & 1 & 0 & 0\\
+     \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\[
+    \begin{split}
+        f_0 &= B + \bar{C} D\\
+        f_1 &= B \bar{D} + BC + \bar{B}\bar{C}D
+    \end{split}
+\]
+\end{minipage}
+
+Supponendo di dover realizzare la funzione con un multiplexer a 4 vie, utilizzando esclusivamente un mux e non altri componenti:
+
+%TODO: Immagine  (3 mux a 4 vie)
+
+Nel caso in cui fossimo partiti dalle variabili $CD$:
+
+%TODO: Stessa mappa k con raccoglimenti verticali
+\[
+    \begin{split}
+        f_0 &= B\\
+        f_1 &= \bar{A} + \bar{B} = \bar{A\cdot B}\\
+        f_2 &= B\\
+        f_3 &= B
+    \end{split}
+\]
+
+\begin{itemize}
+    \item Espressione canonica SP
+        \begin{itemize}
+            \item AND per mintermini + OR
+            \item Decoder + or
+        \end{itemize}
+    \item Espressione canonica PS
+        \begin{itemize}
+            \item OR per Maxtermini + AND
+            \item Decoder a NAND + AND
+        \end{itemize}
+    \item Espressione generale SP e PS: MuX
+    \item Espressione parziali: (1 MUx + altro)
+\end{itemize}
+
+\begin{tabular}{c c c| c c}
+    a & b & c & Sum & Count\\
+    \hline
+    0 & 0 & 0 & 0 & 0\\
+    0 & 0 & 1 & 1 & 0\\
+    0 & 1 & 0 & 1 & 0\\
+    0 & 1 & 1 & 0 & 1\\
+    1 & 0 & 0 & 1 & 0\\
+    1 & 0 & 1 & 0 & 1\\
+    1 & 1 & 0 & 0 & 1\\
+    1 & 1 & 1 & 1 & 1\\
+\end{tabular}
+
+
+$\text{Count} = \bar{a}b c + a\bar{b} c + a b \bar{c} + a b c = \bar{a} b c + a \bar{b} c + ab$
+
+\[
+    \begin{cases}
+        N_{op} = 5\\
+        N_m = 3 \cdot 4 + 4 = 16
+    \end{cases} \to
+    \begin{cases}
+        N_{op} = 4\\
+        N_m = 11
+    \end{cases}
+\]
+
+Definiamo come \textbf{distanza di Hamming} ($\mathcal{D}_H$) il numero di bit che differiscono in 2 configurazioni binarie
+
+Es: $\mathcal{D}_H ( 1 1 0, 1 1 1) = 1$
+
+Se $\mathcal{D}_H (C_i, C_j) = 1 \Rightarrow C_i\, \text{e}\, C_j$ sono \textbf{adiacenti}.
+
+% Slide 20
+
+% TODO: Raggruppa come in figura 4
+
+\begin{tabular}{c|c|c|c|c|}
+    a / b c & 00 & 01 & 11 & 10\\
+    \hline
+    0 & 0 & 0 & 1 & 0\\
+    \hline
+    1 & 0 & 1 & 1 &  1\\
+    \hline
+\end{tabular}
+
+Raggruppamento rettangolare di 2 caselle $2^1$ caselle ($2^k = 2^1$) (Raggruppamento di ordine 1)
+
+% Slide 23
+$C_{out} = I_1 + I_2 + I_3 = ac + ab + bc$ \qquad($N_{op} = 4 , N_m = 9$)
+
+
+%TODO: raggruppa come in figura 5
+\begin{minipage}{0.4\textwidth}
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|}
+            ab cd & 00 & 01 & 11 & 10\\
+            \hline
+            00 &  0 & 1 & 0 & 0\\
+            \hline
+            01 & 1 & 1 & 1 & 1\\
+            \hline
+            11 & 1 & - & 1 & 1\\
+            \hline
+            01 & 0 & 1 & 0 & 0\\
+            \hline
+        \end{tabular}
+
+        $E =0$
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|}
+            ab cd & 00 & 01 & 11 & 10\\
+            \hline
+            00 &  - & 0 & 0 & -\\
+            \hline
+            01 & 1 & 0 & - & 0\\
+            \hline
+            11 & 1 & - & 1 & -\\
+            \hline
+            01 & 0 & 1 & 0 & -\\
+            \hline
+        \end{tabular}
+
+        $E = 1$
+    \end{center}
+\end{minipage}
+$Z(a, b, c, d ,e) $
+
+'-' rappresenta una condizione di indifferenza.
+
+Nei raggruppamenti prendo in considerazione le variabili che rimangono costanti
+
+\[
+    Z(a, b, c, d ,e) = b\bar{e} + \bar{c}d\bar{e} + b \bar{c}\bar{d} + a \bar{c}d + ab
+\]
+
+
+$N_{lett} = 13$, ingressi del primo livello
+
+$N_{op} = 6$, numero mintermini + 1
+
+$N_m = 18$, tutte le lettere che compaiono + mintermini
+
+% TODO: Raggruppa come in figura 6
+\subsection{Sintesi prendendo in considerazione gli zeri}
+Uno 0 di una funzione \'e un maxtermine, ed esprime un solo 0. L'obbiettivo \'e costruire termini somma (Implicati)
+
+\begin{minipage}{0.4\textwidth}
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|}
+            ab cd & 00 & 01 & 11 & 10\\
+            \hline
+            00 &  0 & 1 & 0 & 0\\
+            \hline
+            01 & 1 & 1 & 1 & 1\\
+            \hline
+            11 & 1 & - & 1 & 1\\
+            \hline
+            01 & 0 & 1 & 0 & 0\\
+            \hline
+        \end{tabular}
+
+        $E =0$
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|}
+            ab cd & 00 & 01 & 11 & 10\\
+            \hline
+            00 &  - & 0 & 0 & -\\
+            \hline
+            01 & 1 & 0 & - & 0\\
+            \hline
+            11 & 1 & - & 1 & -\\
+            \hline
+            01 & 0 & 1 & 0 & -\\
+            \hline
+        \end{tabular}
+
+        $E = 1$
+    \end{center}
+\end{minipage}
+
+\[ Z = (B + \bar{C})(A + \bar{D} + \bar{E})(\bar{C} + D + \bar{E})(B + D) = (B \downarrow \bar{C}) \downarrow (A\downarrow \bar{D}\downarrow\bar{E})\downarrow(\bar{C}\downarrow D\downarrow \bar{E})\downarrow (B\downarrow D)\]
+
+$N_{op} = 5$
+
+$N_{m} = 14$
+
+Sintesi di $Z(A, B, C, D, E) $
+
+\begin{itemize}
+    \item mediante soli MUX a 4 vie
+    \item 1 porta logica + MUX a 4 vie
+\end{itemize}
+
+%TODO: figura 6
+
 \end{document}
+

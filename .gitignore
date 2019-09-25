@@ -9,12 +9,15 @@
 *.ilg
 *.ind
 *.idx
+*.pem
 
 TODO.txt
 
+login*.sh
 
 */_tex/*.pdf
 
+scripts
 ubungu/extra/alema
 ubungu/extra/ff
 

@@ -150,4 +150,19 @@
     \end{itemize}
 \end{minipage}
 
+\newpage{}
+\subsection*{N-mos in serie}
+\begin{minipage}{0.2\textwidth}
+    \begin{tikzpicture}
+        \draw (0, 0) node[eground]{} node[nmos, anchor=S](m1){$M_1$};
+        \draw (m1.D) node[nmos, anchor=S](m2){$M_2$};
+        \draw(m2.D) to[short, -o] ++(0, 0.1) node[left]{$V_{DD}$};
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.8\textwidth}
+    \[
+        \beta_{eq} = \frac{\beta_1 \beta_2}{\beta_1 + \beta_2}
+    \]
+\end{minipage}
+
 \end{document}
