@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{graphicx}
+\usepackage{karnaugh-map}
 \setlength\parindent{0pt}
 
 \title{Reti Logiche}
@@ -14,6 +15,7 @@
 \maketitle{}
 23 Sep 2019, 16:14
 \section{Propiet\'a delle reti loiche}
+
 
 \begin{itemize}
     \item{Intrconnessione}
@@ -204,18 +206,15 @@ Funzione semplificata di due variabili con Th.\ di Shannon.
 
 \begin{minipage}{0.4\textwidth}
 \begin{center}
-\begin{tabular}{c|c|c|c|c|}
-     ab cd & 00 & 01 & 11 & 10\\
-     \hline
-     00 &  0 & 1 & 0 & 0\\
-     \hline
-     01 & 1 & 1 & 1 & 1\\
-     \hline
-     11 & 1 & 0 & 1 & 1\\
-     \hline
-     01 & 0 & 1 & 0 & 0\\
-     \hline
-\end{tabular}
+    \begin{karnaugh-map}[4][4][1][$C D$][$A B$]
+        \minterms{1,4,5,6,7,12,15,14,9}
+        \autoterms[0]
+
+        \implicant{0}{2}
+        \implicant{4}{6}
+        \implicant{12}{14}
+        \implicant{8}{10}
+    \end{karnaugh-map}
 \end{center}
 \end{minipage}
 \begin{minipage}{0.4\textwidth}
@@ -229,23 +228,15 @@ Funzione semplificata di due variabili con Th.\ di Shannon.
 \]
 \end{minipage}
 
-% TODO: Raggruppamenti prima mappa k ogni riga
-% TODO: Raggruppamenti seconda mappa k meta con riga orizzontale
-
 \begin{minipage}{0.4\textwidth}
 \begin{center}
-\begin{tabular}{c|c|c|c|c|}
-     ab cd & 00 & 01 & 11 & 10\\
-     \hline
-     00 &  0 & 1 & 0 & 0\\
-     \hline
-     01 & 1 & 1 & 1 & 1\\
-     \hline
-     11 & 1 & 0 & 1 & 1\\
-     \hline
-     01 & 0 & 1 & 0 & 0\\
-     \hline
-\end{tabular}
+    \begin{karnaugh-map}[4][4][1][$C D$][$A B$]
+        \minterms{1,4,5,6,7,12,15,14,9}
+        \autoterms[0]
+
+        \implicant{0}{6}
+        \implicant{12}{10}
+    \end{karnaugh-map}
 \end{center}
 \end{minipage}
 \begin{minipage}{0.4\textwidth}
@@ -323,16 +314,15 @@ Se $\mathcal{D}_H (C_i, C_j) = 1 \Rightarrow C_i\, \text{e}\, C_j$ sono \textbf{
 
 % Slide 20
 
-% TODO: Raggruppa come in figura 4
-
-\begin{tabular}{c|c|c|c|c|}
-    a / b c & 00 & 01 & 11 & 10\\
-    \hline
-    0 & 0 & 0 & 1 & 0\\
-    \hline
-    1 & 0 & 1 & 1 &  1\\
-    \hline
-\end{tabular}
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$bc$][$a$]
+    \minterms{3,5,6,7}
+    \autoterms[0]
+    \implicant{5}{7}
+    \implicant{7}{6}
+    \implicant{3}{7}
+\end{karnaugh-map}
+\end{center}
 
 Raggruppamento rettangolare di 2 caselle $2^1$ caselle ($2^k = 2^1$) (Raggruppamento di ordine 1)
 
@@ -340,44 +330,24 @@ Raggruppamento rettangolare di 2 caselle $2^1$ caselle ($2^k = 2^1$) (Raggruppam
 $C_{out} = I_1 + I_2 + I_3 = ac + ab + bc$ \qquad($N_{op} = 4 , N_m = 9$)
 
 
-%TODO: raggruppa come in figura 5
-\begin{minipage}{0.4\textwidth}
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|}
-            ab cd & 00 & 01 & 11 & 10\\
-            \hline
-            00 &  0 & 1 & 0 & 0\\
-            \hline
-            01 & 1 & 1 & 1 & 1\\
-            \hline
-            11 & 1 & - & 1 & 1\\
-            \hline
-            01 & 0 & 1 & 0 & 0\\
-            \hline
-        \end{tabular}
+\begin{center}
+    \begin{karnaugh-map}[4][4][2][$cd$][$ab$][$E$]
+        \minterms{1,4,5,6,7,12,14,15,9}
+        \indeterminants{13}
 
-        $E =0$
-    \end{center}
-\end{minipage}
-\begin{minipage}{0.4\textwidth}
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|}
-            ab cd & 00 & 01 & 11 & 10\\
-            \hline
-            00 &  - & 0 & 0 & -\\
-            \hline
-            01 & 1 & 0 & - & 0\\
-            \hline
-            11 & 1 & - & 1 & -\\
-            \hline
-            01 & 0 & 1 & 0 & -\\
-            \hline
-        \end{tabular}
+        %E = 1
+        \minterms{20,28,25,31}
+        \indeterminants{16,18,30,26,29,23}
+        \autoterms[0]
 
-        $E = 1$
-    \end{center}
-\end{minipage}
-$Z(a, b, c, d ,e) $
+        \implicant{1}{9}
+        \implicant{4}{14}
+        \implicant{12}{14}[0,1]
+        \implicant{13}{9}[0,1]
+        \implicant{4}{12}[0,1]
+    \end{karnaugh-map}
+\end{center}
+$Z(a, b, c, d ,e)$
 
 '-' rappresenta una condizione di indifferenza.
 
@@ -398,42 +368,22 @@ $N_m = 18$, tutte le lettere che compaiono + mintermini
 \subsection{Sintesi prendendo in considerazione gli zeri}
 Uno 0 di una funzione \'e un maxtermine, ed esprime un solo 0. L'obbiettivo \'e costruire termini somma (Implicati)
 
-\begin{minipage}{0.4\textwidth}
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|}
-            ab cd & 00 & 01 & 11 & 10\\
-            \hline
-            00 &  0 & 1 & 0 & 0\\
-            \hline
-            01 & 1 & 1 & 1 & 1\\
-            \hline
-            11 & 1 & - & 1 & 1\\
-            \hline
-            01 & 0 & 1 & 0 & 0\\
-            \hline
-        \end{tabular}
+\begin{center}
+    \begin{karnaugh-map}[4][4][2][$cd$][$ab$][$E$]
+        \minterms{1,4,5,6,7,12,14,15,9}
+        \indeterminants{13}
 
-        $E =0$
-    \end{center}
-\end{minipage}
-\begin{minipage}{0.4\textwidth}
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|}
-            ab cd & 00 & 01 & 11 & 10\\
-            \hline
-            00 &  - & 0 & 0 & -\\
-            \hline
-            01 & 1 & 0 & - & 0\\
-            \hline
-            11 & 1 & - & 1 & -\\
-            \hline
-            01 & 0 & 1 & 0 & -\\
-            \hline
-        \end{tabular}
+        %E = 1
+        \minterms{20,28,25,31}
+        \indeterminants{16,18,30,26,29,23}
+        \autoterms[0]
 
-        $E = 1$
-    \end{center}
-\end{minipage}
+        \implicantcorner[0,1]
+        \implicantedge{3}{2}{11}{10}[0,1]
+        \implicant{17}{23}
+        \implicant{19}{22}
+    \end{karnaugh-map}
+\end{center}
 
 \[ Z = (B + \bar{C})(A + \bar{D} + \bar{E})(\bar{C} + D + \bar{E})(B + D) = (B \downarrow \bar{C}) \downarrow (A\downarrow \bar{D}\downarrow\bar{E})\downarrow(\bar{C}\downarrow D\downarrow \bar{E})\downarrow (B\downarrow D)\]
 
