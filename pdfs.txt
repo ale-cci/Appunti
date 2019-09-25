@@ -3,3 +3,4 @@ fca/_tex/dogmario.tex
 sdt/_tex/sdt.tex
 elettronica/_tex/elettronica.tex
 elettronica/_tex/dogmario.tex
+reti_logiche/_tex/reti_logiche.tex
