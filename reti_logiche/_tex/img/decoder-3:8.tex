@@ -1,0 +1,72 @@
+\begin{circuitikz}[scale=0.7]
+    \node at (0, 0) [ocirc](x1){}  (0, 0) node[above]{$X_1$};
+    \node at (0.5, 0) [ocirc](x2){}  (0.5, 0) node[above]{$X_2$};
+    \node at (1, 0) [ocirc](x3){} (1, 0) node[above]{$X_3$};
+
+    \draw (2, -0.5) node[american and port, anchor=in 1, number inputs=3](N1){};
+    \draw (2, -2.5) node[american and port, anchor=in 1, number inputs=3](N2){};
+    \draw (2, -4.5) node[american and port, anchor=in 1, number inputs=3](N3){};
+    \draw (2, -6.5) node[american and port, anchor=in 1, number inputs=3](N4){};
+    \draw (2, -8.5) node[american and port, anchor=in 1, number inputs=3](N5){};
+    \draw (2, -10.5) node[american and port, anchor=in 1, number inputs=3](N6){};
+    \draw (2, -12.5) node[american and port, anchor=in 1, number inputs=3](N7){};
+    \draw (2, -14.5) node[american and port, anchor=in 1, number inputs=3](N8){};
+
+    %\draw (0.5, 0) node[anchor=south]{$x_2$} --(0 |- N8.in 2);
+    %\draw (1, 0) node[anchor=south](x3){$x_3$} --(1, -14.5);
+    \draw (x1) --(x1 |- N8.in 1);
+    \draw (x2) --(x2 |- N8.in 2);
+    \draw (x3) --(x3 |- N8.in 3);
+
+    \draw (x1 |- N1.in 1) to[short, *-] (N1.in 1);
+    \draw (x2 |- N1.in 2) to[short, *-] (N1.in 2);
+    \draw (x3 |- N1.in 3) to[short, *-] (N1.in 3);
+
+    \draw (x1 |- N2.in 1) to[short, *-] (N2.in 1);
+    \draw (x2 |- N2.in 2) to[short, *-] (N2.in 2);
+    \draw (x3 |- N2.in 3) to[short, *-] (N2.in 3);
+
+    \draw (x1 |- N3.in 1) to[short, *-] (N3.in 1);
+    \draw (x2 |- N3.in 2) to[short, *-] (N3.in 2);
+    \draw (x3 |- N3.in 3) to[short, *-] (N3.in 3);
+
+    \draw (x1 |- N4.in 1) to[short, *-] (N4.in 1);
+    \draw (x2 |- N4.in 2) to[short, *-] (N4.in 2);
+    \draw (x3 |- N4.in 3) to[short, *-] (N4.in 3);
+
+    \draw (x1 |- N5.in 1) to[short, *-] (N5.in 1);
+    \draw (x2 |- N5.in 2) to[short, *-] (N5.in 2);
+    \draw (x3 |- N5.in 3) to[short, *-] (N5.in 3);
+
+    \draw (x1 |- N6.in 1) to[short, *-] (N6.in 1);
+    \draw (x2 |- N6.in 2) to[short, *-] (N6.in 2);
+    \draw (x3 |- N6.in 3) to[short, *-] (N6.in 3);
+
+    \draw (x1 |- N7.in 1) to[short, *-] (N7.in 1);
+    \draw (x2 |- N7.in 2) to[short, *-] (N7.in 2);
+    \draw (x3 |- N7.in 3) to[short, *-] (N7.in 3);
+
+    \draw (x1 |- N8.in 1) to[short, *-] (N8.in 1);
+    \draw (x2 |- N8.in 2) to[short, *-] (N8.in 2);
+    \draw (x3 |- N8.in 3) to[short, *-] (N8.in 3);
+
+    \node at (N1.bin 1) [ocirc, left]{};
+    \node at (N1.bin 2) [ocirc, left]{};
+    \node at (N1.bin 3) [ocirc, left]{};
+
+    \node at (N2.bin 1) [ocirc, left]{};
+    \node at (N2.bin 2) [ocirc, left]{};
+
+    \node at (N3.bin 1) [ocirc, left]{};
+    \node at (N3.bin 3) [ocirc, left]{};
+
+    \node at (N4.bin 1) [ocirc, left]{};
+
+    \node at (N5.bin 2) [ocirc, left]{};
+    \node at (N5.bin 3) [ocirc, left]{};
+
+    \node at (N6.bin 1) [ocirc, left]{};
+    \node at (N6.bin 3) [ocirc, left]{};
+
+    \node at (N7.bin 3) [ocirc, left]{};
+\end{circuitikz}

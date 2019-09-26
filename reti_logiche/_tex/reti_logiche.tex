@@ -1,18 +1,23 @@
 \documentclass{article}
 \usepackage[oldvoltagedirection]{circuitikz}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1in, headheight=14pt]{geometry}
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{karnaugh-map}
+\usepackage{fancyhdr}
 \setlength\parindent{0pt}
 
 \title{Reti Logiche}
 \author{}
 \graphicspath{{img/}}
 
+\pagestyle{fancy}
+
 \begin{document}
+
 \maketitle{}
+
 23 Sep 2019, 16:14
 \section{Propiet\'a delle reti loiche}
 
@@ -85,12 +90,12 @@ Metodo somma di prodotti: prendo solo righe con 1, le scrivo come prodotti e le 
 
 \[
     \begin{rcases}
-        f_3 = \bar{x_1} x_2 x_3\\
-        f_5 = x_1 \bar{x_2} x_3\\
-        f_6 = x_1 x_2 \bar{x_3}\\
+        f_3 = \overline{x_1} x_2 x_3\\
+        f_5 = x_1 \overline{x_2} x_3\\
+        f_6 = x_1 x_2 \overline{x_3}\\
         f_7 = x_1 x_2 x_3
     \end{rcases}
-    f =  \bar{x_1} x_2 x_3 + x_1 \bar{x_2} x_3 +  x_1 x_2 \bar{x_3} + x_1 x_2 x_3
+    f =  \overline{x_1} x_2 x_3 + x_1 \overline{x_2} x_3 +  x_1 x_2 \overline{x_3} + x_1 x_2 x_3
 \]
 
 Applicbile a qualsiasi tabella combinatoria ( Espressione canonica \textit{sum of products} SP)
@@ -104,11 +109,11 @@ Le variabili compaiono in forma vera se compaiono come zeri, vengono prese in fo
 \[
     \begin{rcases}
         s_0 = x_1 x_2 x_3\\
-        s_1 = x_1 x_2 \bar{x_3}\\
-        s_2 = x_1 \bar{x_2} x_3\\
-        s_4 = \bar{x_1} x_2 x_3
+        s_1 = x_1 x_2 \overline{x_3}\\
+        s_2 = x_1 \overline{x_2} x_3\\
+        s_4 = \overline{x_1} x_2 x_3
     \end{rcases}
-    S =  (x_1 x_2 x_3)(x_1 x_2 \bar{x_3})(x_1 \bar{x_2} x_3)(\bar{x_1} x_2 x_3)
+    S =  (x_1 x_2 x_3)(x_1 x_2 \overline{x_3})(x_1 \overline{x_2} x_3)(\overline{x_1} x_2 x_3)
 \]
 
 % Equivalenza espressioni booleane - Reti Combinatorie (Slide 50)
@@ -117,12 +122,13 @@ Si riescono a sintetizzare reti pi\'u ottimizzate attraverso le mappe di Karnugh
 
 N letterari: si applica su soltanto al max 2 livelli. Conta il numero di morsetti del $1^o$ livello (somma: $N_{let}$ = 12, prodotto 12, altro 6)
 
+\newpage
 \section{24 Sep 2019,  9:02}
 % Definizione min e max termine slide: reti combinatorie parte 2
 Prendendo in considerazione l'esempio del Full-Adder (slide 4)
 \subsection{Espressione canonica \textit{SoP} delle funzioni $S_0$ e $C_1$}
-$S_0 = \bar{x_0} \bar{y_0} c_1 + \bar{x_0} y_0 \bar{c_0} + x_0 \bar{y_0} \bar{c_0} + x_0 y_0 c_0 = m_1 + m_2 + m_4 + m_7 = \sum m_3(1, 2, 4, 7)$\\
-$C_1 = \bar{x_0} y_0 c_0 + x_0 \bar{y_0} c_0 + x_0 y_0 \bar{c_0} + x_0 y_0 c_0 = m_3 + m_5 + m_6 + m_7 = \sum m_3(3, 5, 6, 7)$
+$S_0 = \overline{x_0} \overline{y_0} c_1 + \overline{x_0} y_0 \overline{c_0} + x_0 \overline{y_0} \overline{c_0} + x_0 y_0 c_0 = m_1 + m_2 + m_4 + m_7 = \sum m_3(1, 2, 4, 7)$\\
+$C_1 = \overline{x_0} y_0 c_0 + x_0 \overline{y_0} c_0 + x_0 y_0 \overline{c_0} + x_0 y_0 c_0 = m_3 + m_5 + m_6 + m_7 = \sum m_3(3, 5, 6, 7)$
 
 Un modo pi\'u preciso sarebbe: $S(x_0, y_0, c_0) $, esplicitando l'ordine in cui vengono prese le variabili
 
@@ -131,7 +137,7 @@ $\sum m_3$ indica la sommatoria dei mintermini di 3 variabili
 
 \subsection{Espressione canonica \textit{PoS}}
 
-$S_0 (x_0, y_0, c_0) = (x_0 + y_0 + c_0) (x_0 + \bar{y_0} + \bar{c_0}) (\bar{x_0} + y_0 + \bar{c_0}) (\bar{x_0} + \bar{y_0} + c_0) = M_0 M_3 M_5 M_6 = \prod M_3(0, 3, 5, 6)$
+$S_0 (x_0, y_0, c_0) = (x_0 + y_0 + c_0) (x_0 + \overline{y_0} + \overline{c_0}) (\overline{x_0} + y_0 + \overline{c_0}) (\overline{x_0} + \overline{y_0} + c_0) = M_0 M_3 M_5 M_6 = \prod M_3(0, 3, 5, 6)$
 
 
 \subsection{Teorema di Shannon}
@@ -144,12 +150,12 @@ Dall'espressione di una funzione riusciamo a riottenere la somma dei mintermini,
 \[
     \begin{split}
         z &= x_1 x_2 + x_1 x_3 + x_2 x_3 = \\
-         &= \bar{x_1} ( 0 \cdot x_2 + 0 x_3 + x_2 x_3) + x_1 (1 x_2 + 1 x_3 + x_2 x_3) = \\
-         &= \bar{x_1} (x_2 x_3) + x_1 (x_2 + x_3 + x_2 x_3) = \\
-         &= \bar{x_2} (x_1 (0 x_3) + x_1 (0 + x_3 + 0 x_3)) + x_2 (\bar{x_1} (1 x_3) + x_1 (1 + x_2 + 1 x_3)) =\\
-         &= \bar{x_2} (x_1 x_3) + x_2 (\bar{x_1} x_3 + x_1) =\\
-         &= \bar{x_3} (\bar{x_2} x_1 0 + x_2 \bar{x_1} 0 + x_2 x_1) + x_3 (\bar{x_2} x_1 1 + x_2 \bar{x_1} 1 + x_2 x_1) =\\
-         &= \bar{x_2} x_2 x_1 + x_3 \bar{x_2} x_1 + x_3 x_2 \bar{x_1} + x_3 x_2 x_1 =\\
+         &= \overline{x_1} ( 0 \cdot x_2 + 0 x_3 + x_2 x_3) + x_1 (1 x_2 + 1 x_3 + x_2 x_3) = \\
+         &= \overline{x_1} (x_2 x_3) + x_1 (x_2 + x_3 + x_2 x_3) = \\
+         &= \overline{x_2} (x_1 (0 x_3) + x_1 (0 + x_3 + 0 x_3)) + x_2 (\overline{x_1} (1 x_3) + x_1 (1 + x_2 + 1 x_3)) =\\
+         &= \overline{x_2} (x_1 x_3) + x_2 (\overline{x_1} x_3 + x_1) =\\
+         &= \overline{x_3} (\overline{x_2} x_1 0 + x_2 \overline{x_1} 0 + x_2 x_1) + x_3 (\overline{x_2} x_1 1 + x_2 \overline{x_1} 1 + x_2 x_1) =\\
+         &= \overline{x_2} x_2 x_1 + x_3 \overline{x_2} x_1 + x_3 x_2 \overline{x_1} + x_3 x_2 x_1 =\\
          &= m_3 + m_5 + m_6 + m_7
   \end{split}
   \]
@@ -159,14 +165,14 @@ Le leggi di de morgan dimostrano che le famiglie (And-Not) e (Or-Not) sono funzi
 
 % TODO: Immagine circuito
 % TODO: Immagine decoder con mintermini
+\begin{figure}[ht]
+    \input{img/decoder-3:8.tex}
+    \centering
+    \caption{Decoder 3:8 ad AND}
+\end{figure}
 
 DECODER: ad $n$ ingresi corrispondono $2^n$ uscite
 
-\begin{figure}[h]
-    \includegraphics[width=0.4\textwidth]{decoder}
-    \centering
-    \caption{decoder}
-\end{figure}
 % TODO: Immagine decoder con MAXTERMINI (Decoder 3:8 a OR)
 % TODO: De morgan con OR (ingresso al centro negato) -> AND negati invertiti
 % Simbolo nand si puo fare con frecce
@@ -180,17 +186,9 @@ DECODER: ad $n$ ingresi corrispondono $2^n$ uscite
 Il decoder sta in corrispondenza con le espressioni canoniche, il multiplexer sta un corrispondenza con le espressioni generali.
 
 
+\newpage
 \section{25 Sep 2019, 14:46}
 %TODO: Immagine 1
-
-%\begin{center}
-%\begin{figure}[h]
-%    \includegraphics[width=0.4\textwidth]{reti_shannon.png}
-%    \centering
-%    \caption{Reti combinatorie equivalenti per il Th. di Shannon}
-%\end{figure}
-%\end{center}
-
 
 \begin{itemize}
     \item{Il segnale RC ($RC_0$ e $RC_1$) dipendono da $n-1$ variabili. e non da $n$ variabili.}
@@ -198,7 +196,7 @@ Il decoder sta in corrispondenza con le espressioni canoniche, il multiplexer st
 \end{itemize}
 
 Una funzione di n variabili pu\'o essere espressa come una combinazione di due funzioni di n-1 variabili attraverso un Multiplexer.
-\[f(x_1, x_2, \ldots, x_n) = \bar{x_1}\bar{x_2} f(0, 0, \ldots, x_n) + \bar{x_1} x_2 f(0, 1, \ldots, x_n) + x_1 \bar{x_2} f(1, 0, \ldots, x_n) + x_1 x_2 f(1, 1, \ldots, x_n)\]
+\[f(x_1, x_2, \ldots, x_n) = \overline{x_1}\overline{x_2} f(0, 0, \ldots, x_n) + \overline{x_1} x_2 f(0, 1, \ldots, x_n) + x_1 \overline{x_2} f(1, 0, \ldots, x_n) + x_1 x_2 f(1, 1, \ldots, x_n)\]
 
 Funzione semplificata di due variabili con Th.\ di Shannon.
 %TODO: Immagine 2
@@ -220,10 +218,10 @@ Funzione semplificata di due variabili con Th.\ di Shannon.
 \begin{minipage}{0.4\textwidth}
 \[
     \begin{split}
-        f_0 &= \bar{C} D\\
+        f_0 &= \overline{C} D\\
         f_1 &= 1\\
-        f_3 &= C + \bar{D}\\
-        f_2 &= \bar{C} D
+        f_3 &= C + \overline{D}\\
+        f_2 &= \overline{C} D
     \end{split}
 \]
 \end{minipage}
@@ -242,8 +240,8 @@ Funzione semplificata di due variabili con Th.\ di Shannon.
 \begin{minipage}{0.4\textwidth}
 \[
     \begin{split}
-        f_0 &= B + \bar{C} D\\
-        f_1 &= B \bar{D} + BC + \bar{B}\bar{C}D
+        f_0 &= B + \overline{C} D\\
+        f_1 &= B \overline{D} + BC + \overline{B}\overline{C}D
     \end{split}
 \]
 \end{minipage}
@@ -258,7 +256,7 @@ Nel caso in cui fossimo partiti dalle variabili $CD$:
 \[
     \begin{split}
         f_0 &= B\\
-        f_1 &= \bar{A} + \bar{B} = \bar{A\cdot B}\\
+        f_1 &= \overline{A} + \overline{B} = \overline{A\cdot B}\\
         f_2 &= B\\
         f_3 &= B
     \end{split}
@@ -293,7 +291,7 @@ Nel caso in cui fossimo partiti dalle variabili $CD$:
 \end{tabular}
 
 
-$\text{Count} = \bar{a}b c + a\bar{b} c + a b \bar{c} + a b c = \bar{a} b c + a \bar{b} c + ab$
+$\text{Count} = \overline{a}b c + a\overline{b} c + a b \overline{c} + a b c = \overline{a} b c + a \overline{b} c + ab$
 
 \[
     \begin{cases}
@@ -354,7 +352,7 @@ $Z(a, b, c, d ,e)$
 Nei raggruppamenti prendo in considerazione le variabili che rimangono costanti
 
 \[
-    Z(a, b, c, d ,e) = b\bar{e} + \bar{c}d\bar{e} + b \bar{c}\bar{d} + a \bar{c}d + ab
+    Z(a, b, c, d ,e) = b\overline{e} + \overline{c}d\overline{e} + b \overline{c}\overline{d} + a \overline{c}d + ab
 \]
 
 
@@ -385,7 +383,7 @@ Uno 0 di una funzione \'e un maxtermine, ed esprime un solo 0. L'obbiettivo \'e 
     \end{karnaugh-map}
 \end{center}
 
-\[ Z = (B + \bar{C})(A + \bar{D} + \bar{E})(\bar{C} + D + \bar{E})(B + D) = (B \downarrow \bar{C}) \downarrow (A\downarrow \bar{D}\downarrow\bar{E})\downarrow(\bar{C}\downarrow D\downarrow \bar{E})\downarrow (B\downarrow D)\]
+\[ Z = (B + \overline{C})(A + \overline{D} + \overline{E})(\overline{C} + D + \overline{E})(B + D) = (B \downarrow \overline{C}) \downarrow (A\downarrow \overline{D}\downarrow\overline{E})\downarrow(\overline{C}\downarrow D\downarrow \overline{E})\downarrow (B\downarrow D)\]
 
 $N_{op} = 5$
 
