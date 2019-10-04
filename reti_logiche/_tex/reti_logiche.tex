@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \setlength\parindent{0pt}
 
+\usetikzlibrary{calc}
 \title{Reti Logiche}
 \author{}
 \graphicspath{{img/}}
@@ -17,6 +18,8 @@
 \begin{document}
 
 \maketitle{}
+
+
 
 23 Sep 2019, 16:14
 \section{Propiet\'a delle reti loiche}
@@ -443,12 +446,10 @@ Operatore NOR: $x_1 \downarrow x_2 \downarrow \ldots \downarrow x_n = \overline{
     \end{scope}
     \begin{scope}
         \ctikzset{tripoles/american nand port/height=1}
-        \draw (0, 0) node[american nand port, number inputs=4](p1){} -- ++(1, 0) -- (coll.in 6);
-        \draw (0, 2) node[american nand port, number inputs=4](p2){} -- ++(1, 0) -- (coll.in 5);
-        \draw (0, 4) node[american nand port, number inputs=4](p3){} -- ++(1, 0) -- (coll.in 4);
-        \draw (0, 6) node[american nand port, number inputs=4](p4){} -- ++(1, 0) -- (coll.in 3);
-        \draw (0, 8) node[american nand port, number inputs=4](p5){} -- ++(1, 0) -- (coll.in 2);
-        \draw (0, 10) node[american nand port, number inputs=4](p6){} -- ++(1, 0) -- (coll.in 1);
+        \foreach \i in {1,...,6}
+        {
+            \draw (0, {10 -(\i -1) * 2}) node[american nand port, number inputs=4](p\i){} -- ++(1, 0) -- (coll.in \i);
+        }
     \end{scope}
 
     \draw (p1.in 1) node[left]{$\overline{X_4}$};
@@ -716,6 +717,207 @@ $N_{lett} = N_{lett_a} + N_{lett_b} + N_{lett_c} = 9 + 12 +4 = 25$
     \item Partire sempre dal MUX che pilota l'uscita
 \end{itemize}
 
+\newpage{}
+\section{Lezione 02 Oct 2019, 14:41}
+\subsection{Analisi di reti combinatorie con porte logiche anche multilivello}
 
+Utilizzo delle espresisoni variabili
+\[
+    \begin{split}
+        F_1 &= T \cdot \overline{D} + \overline{c}\\
+        F_2 &= F_1 + w \overline{A} D\\
+        T &= a \uparrow \overline{b} = \overline{a} + b\\
+        W &= (a \uparrow \overline{b}) + c\\
+        \hline
+        F_1 &= (\overline{a} + b) \cdot \overline{D} + \overline{c} = \overline{A}\overline{D} + B \overline{D} + \overline{c}\\
+        F_2 &= \overline{A} \overline{D} + B \overline{D} + \overline{C} \overline{A} D + \overline{A}CD
+    \end{split}
+\]
+
+%TODO: immagine 1
+\begin{center}
+\begin{karnaugh-map}[4][4][1][$AB$][$CD$]
+    \maxterms{10,3,7,15,11}
+    \autoterms[1]
+\end{karnaugh-map}
+\begin{karnaugh-map}[4][4][1][$AB$][$CD$]
+    \maxterms{10,15,11}
+    \autoterms[1]
+\end{karnaugh-map}
+\end{center}
+
+\[ F_1 = (\overline{C} + \overline{D})(\overline{A} + B + \overline{C})  = (\overline{C} \downarrow \overline{D})\downarrow(\overline{A} \downarrow B \downarrow \overline{C})\]
+
+\[ F_2 = (\overline{C} + \overline{D} + \overline{A}) (\overline{A} + B + \overline{C}) = = (\overline{C} \downarrow \overline{D} \downarrow \overline{A})\downarrow(\overline{A} \downarrow B \downarrow \overline{C}) \]
+
+$N_{lett} = 3 + 3 + 4 = 10 $
+
+
+\subsection{Analisi di reti combinatorie con componenti MSI}
+\[ Z = \overline{A} f_0 + A f_1 \]
+\[ f_0 = BC \oplus \overline{B}C  = \overline{(BC)}\overline{B} C + BC \overline{(\overline{B}C)} = \ldots = C\]
+\[ f_1 = \overline{B}\overline{C}\overline{D} + \overline{(B \overline{C}) A} = \overline{B}\overline{C}\overline{D}  + \overline{B} + C + \overline{A} = \overline{B} + C + \overline{A}\]
+
+\[ Z = \overline{A} C + A (\overline{A} + \overline{B} + C) = C + A \overline{B}\]
+
+%TODO: Immagine secondo circuito con decoder e mux
+\begin{center}
+    \begin{karnaugh-map}[4][2][1][$AB$][$C$]
+        \minterms{1,3,5,4,7}
+        \autoterms[0]
+        \implicant{2}{6}
+        \implicantedge{0}{0}{2}{2}
+    \end{karnaugh-map}
+\end{center}
+\[ F = (\overline{B} + C)(A + C)\]
+
+\subsection{Sintesi con espressione a due livelli}
+%TODO: Immagine 3, rete a + livelli (3 and 1 or) (realizzazione and-or)
+\begin{circuitikz}
+    \draw (0, 0) node[american and port](a1){};
+    \draw (0, 1.5) node[american and port](a2){};
+    \draw (0, 3) node[american and port](a3){};
+    \draw (2, 1.5) node[american or port, number inputs=3](or){};
+    \draw (a1.out) -- (or.in 3);
+    \draw (a2.out) -- (or.in 2);
+    \draw (a3.out) -- (or.in 1);
+\end{circuitikz}
+%TODO: Realizzazione or-and
+\begin{circuitikz}
+    \draw (0, 0) node[american or port](a1){};
+    \draw (0, 1.5) node[american or port](a2){};
+    \draw (0, 3) node[american or port](a3){};
+    \draw (2, 1.5) node[american and port, number inputs=3](or){};
+    \draw (a1.out) -- (or.in 3);
+    \draw (a2.out) -- (or.in 2);
+    \draw (a3.out) -- (or.in 1);
+\end{circuitikz}
+%TODO: Realizzazione nor-nor
+\begin{circuitikz}
+    \draw (0, 0) node[american nor port](a1){};
+    \draw (0, 1.5) node[american nor port](a2){};
+    \draw (0, 3) node[american nor port](a3){};
+    \draw (2, 1.5) node[american nor port, number inputs=3](or){};
+    \draw (a1.out) -- (or.in 3);
+    \draw (a2.out) -- (or.in 2);
+    \draw (a3.out) -- (or.in 1);
+\end{circuitikz}
+
+And-Or , Or-And, Nor-Nor
+
+\begin{karnaugh-map}[4][2]
+    \minterms{0,2,3,7}
+    \autoterms[0]
+    \implicant{3}{7}
+    \implicantedge{0}{0}{2}{2}
+\end{karnaugh-map}
+$ Z = \overline{a}\overline{c} + bc = (\overline{a} \uparrow \overline{c}) \uparrow (b \uparrow c) $
+
+\begin{karnaugh-map}[4][2]
+    \minterms{0,2,3,7}
+    \autoterms[0]
+    \implicantedge{4}{4}{6}{6}
+\end{karnaugh-map}
+$ Z = (\overline{a} + c) (b + \overline{c}) = (\overline{a} \downarrow c) \downarrow (b \downarrow \overline{c}) $
+
+
+\begin{karnaugh-map}[4][2]
+    \minterms{4,1,5,6}
+    \autoterms[0]
+\end{karnaugh-map}
+$ Z_2 = a \overline{c} + \overline{b} c $
+
+\begin{karnaugh-map}[4][4][1]
+    \minterms{0,2,5,12,13,9,10}
+    \indeterminants{1,3,15,8}
+    \autoterms[0]
+    \implicant{12}{9}
+    \implicant{5}{15}
+    \implicantcorner[0]
+\end{karnaugh-map}
+Espressioni a due livelli generalizzate
+
+SP: $z = \overline{b}\overline{d} + a \overline{c} + bd$
+
+NAND-NAND: $Z = (\overline{b}\uparrow{d})\uparrow(a \uparrow \overline{c})\uparrow (b \uparrow d)$
+
+OR-AND: $Z = (\overline{b} + \overline{c})(\overline{c} + \overline{d}) (a + \overline{b} + d)$
+
+NOR-NOR: $Z = (\overline{b} \downarrow{c}) \downarrow(\overline{c} \downarrow \overline{d}) \downarrow (a \downarrow \overline{b} \downarrow d)$
+
+AND -NOR: $Z = (bc) \downarrow (cd) \downarrow (\overline{a} v \overline{d})$
+
+NAND-AND: $Z = (b \uparrow c) (c\uparrow d) (\overline{a} \uparrow b \uparrow {d})$
+
+OR NAND: $Z = (b + d) \uparrow (\overline{b} + \overline{d} \uparrow (\overline{a} + c)$
+
+NOR-OR: $Z = (b \downarrow d) + (\overline{b} \downarrow \overline{d}) + (\overline{a} \downarrow c)$
+
+\subsection{Alee}
+\begin{center}
+\begin{karnaugh-map}[4][2]
+    \minterms{0,3,2,7}
+    \autoterms[0]
+\end{karnaugh-map}
+\end{center}
+%TODO: Immagine circuito
+
+$ Z = \overline{a} \overline{c} + bc $
+
+Per passare dalla configurazione 010 a 111 ci si impega del tempo. In un breve lasso di tempo le variabili che cambiano assumono valori diversi (es. 010 $\to$ 011 $\to$ 111)
+
+Nel caso in: 010 $\to$ 011 $\to$ 111, $Z$ rimane costante. Nel caso 010 $\to$ 110 $\to$ 111, $Z$ potrebbe presentare un glitch (guarda mappa k). Lo scenario viene detto di \textit{Multiple Input Change}.
+
+Questi `glitch' vengono chiamati \textbf{Alee}.
+
+\subsection{Single input change}
+\begin{karnaugh-map}[4][2]
+    \minterms{0,3,7,2}
+    \autoterms[0]
+    \implicantedge{0}{0}{2}{2}
+    \implicant{3}{7}
+\end{karnaugh-map}
+
+$abc = 011 \to abc = 010$
+%TODO: Immagine con blocchi di ritardo
+
+Se $\tau_1 + \tau_3 > \tau_4$: allora
+%TODO immainge andamento z ---_----
+
+Alea Statica: Possibilità che un segnale che deve restare costante abbia un breve transitorio al livello opposto (= possibilità di glitch)
+
+Alea Statica di 1: Il segnale dovrebbe restare costante ad 1
+
+Alea Statica di 0: il segnale deve restare costante a 0
+
+Alea Dinamica: il segnale che deve cambiare (da 0 a 1 o da 1 a 0) ma lo fa a rischio di più variazioni (c'è una serie di rimbalzi).
+
+\subsection{Teoremi}
+\begin{itemize}
+    \item T1: I circuiti logici derivati da espressioni SP normali sono privi di alee statiche "0"
+    \item T2: I circuiti logici derivati da espressioni PS normali sono privi di alee statiche "1"
+    \item Corollario: Valgono anche per espressioni a due livelli generalizzate
+    \item T3: Rilevazione alee statiche
+            \begin{itemize}
+                \item (SP) Un espressione contiene un'alea statica se ci sono 2 mintermini adiacenti non coperti dal medesimo implicante.
+                \item (PS) Un espressione contiene un'alea statica se ci sono 2 maxterm adiacenti non coperti dal medesimo implicato.
+            \end{itemize}
+            \begin{karnaugh-map}[4][2]
+                \minterms{0,2,3,7}
+                \autoterms[0]
+                \implicant{1}{5}
+                \implicantedge{4}{4}{6}{6}
+                \implicant{4}{5}
+            \end{karnaugh-map}
+
+            Un'espressione normale SP non contiene prodotti in cui compare due volte la stessa variabile.
+
+            Un'espressione normale PS non contiene somme in cui compare due volte la stessa variabile.
+    \item T4: Le espressioni SP e PS normali sono prive di alee dinamiche.
+\end{itemize}
+
+L'alea dinamica può nascere nelle reti a più (di 2) livelli per effetto di alee statiche nei livelli a monte. La cura consiste nell'eliminare le alee statiche tra coppie di livelli.
+
+%TODO: Stesso disegno con tau + terzo termine per evitare alee
 
 \end{document}
