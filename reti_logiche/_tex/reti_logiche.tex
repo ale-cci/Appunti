@@ -20,6 +20,8 @@
 \maketitle{}
 
 
+\newcommand{\n}[1]{\overline{#1}}
+
 
 23 Sep 2019, 16:14
 \section{Propiet\'a delle reti loiche}
@@ -46,30 +48,46 @@ La funzione di uscita della rete dipende da ingresso corrente e stato interno de
 % Figura slide 40: Modello di mealy, funzioni caratteristiche, (quelle sopra)
 \begin{circuitikz}
     \draw (0, 0) node[anchor=east]{x} -- (1, 0) to[twoport, t=$f$, >, number inputs=2] (2, 0) -- (3, 0) node[anchor=west]{z};
+    \node at (1, -1) [draw, number inputs=2](t){test};
 \end{circuitikz}
 
-Nelle reti logiche combinatorie manca la dipendena dal tempo (slide 41)
+Nelle reti combinatorie manca la dipendenza dal tempo. Non è necessario il riassunto finito della storia passata: \textit{non c'è uno stato interno}.
+Questo vuol dire che le uscite dipendono esclusivamente dalla configurazione presente sui segnali di ingresso.
 
-Reti sequenziali corrispondono al modello generale, contengono retroazione e ritardi
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[anchor=east]{$x$}--(1, 0) to[twoport, t=$f$, >] (2, 0)--(3, 0) node[anchor=west]{$Z(t) = f(x(t))$};
+\end{circuitikz}
+\end{center}
 
+
+Diversamente le reti sequenziali corrispondono ad un modello generale, le retroazioni e ritardi sono dei meccanismi per la memorizzazione dello stato.
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) node[generic, number inputs=2, t=$f$](f){};
+        % TODO: figura a slide 43 blocco 1
+    \end{circuitikz}
+\end{center}
+
+Una rete che non riceve ingressi dall'esterno viene chiamata autonoma, il suo comportamente può essere descritto come:
+\begin{itemize}
+    \item Costante: $y(t) = y(t+1)$
+    \item Ciclico (si le uscite della rete si ripetono dopo un intervallo finito e fisso di tempo)
+\end{itemize}
 % Figura slide 43: Blocco f corisponde ad una rete combinatoria
 % Ingresso non cambia facendo cambiare l'uscita, cambia facendo variare le variabili di stato. Una rete di questo modo viene chiamata "Modello di Moore"
 % Una rete di questo tipo e' ancora una rete sequenziale
-
-%es:
-Rete senza ingressi provenienti dall'eseterno viene chiamata: rete autonoma.  ($y(t) = y(t+1)$: la rete \'e costante).
-Altra alternativa \'e un comportamento ciclico.
 
 %%% Guarda se togliere
 Se:
 $z = f(x)$ e $Y= g(x, y)$: rete combinatoria, dipende solo da $z$
 
 
-Rete sequenziale con ingresso non attaccato a $g$ \'e rete combinatoria (sostituire con figura)
+%Rete sequenziale con ingresso non attaccato a $g$ \'e rete combinatoria (sostituire con figura)
 
-Rete sequenziale con uscita non attaccata a $g$ \'e rete combinatoria (sostituire con figura)
+%Rete sequenziale con uscita non attaccata a $g$ \'e rete combinatoria (sostituire con figura)
 
-Sintesi multiuscita pg. 29 slide \_2\_RetiCombinatorie\_I\_parte
+%Sintesi multiuscita pg. 29 slide \_2\_RetiCombinatorie\_I\_parte
 
 Numero funzioni di $n$ variabili $F(n) = 2^{2^n}$, slide 30
 
@@ -87,20 +105,18 @@ Numero funzioni di $n$ variabili $F(n) = 2^{2^n}$, slide 30
         1 & 1 & 0 & 1\\
         1 & 1 & 1 & 1\\
     \end{tabular}
+    \[
+        \begin{rcases}
+            f_3 = \n{x_1} x_2 x_3\\
+            f_5 = x_1 \n{x_2} x_3\\
+            f_6 = x_1 x_2 \n{x_3}\\
+            f_7 = x_1 x_2 x_3
+        \end{rcases}
+        f =  \n{x_1} x_2 x_3 + x_1 \n{x_2} x_3 +  x_1 x_2 \n{x_3} + x_1 x_2 x_3
+    \]
 \end{center}
 
 Metodo somma di prodotti: prendo solo righe con 1, le scrivo come prodotti e le sommo
-
-\[
-    \begin{rcases}
-        f_3 = \overline{x_1} x_2 x_3\\
-        f_5 = x_1 \overline{x_2} x_3\\
-        f_6 = x_1 x_2 \overline{x_3}\\
-        f_7 = x_1 x_2 x_3
-    \end{rcases}
-    f =  \overline{x_1} x_2 x_3 + x_1 \overline{x_2} x_3 +  x_1 x_2 \overline{x_3} + x_1 x_2 x_3
-\]
-
 Applicbile a qualsiasi tabella combinatoria ( Espressione canonica \textit{sum of products} SP)
 
 
