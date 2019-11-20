@@ -1,3 +1,4 @@
+# MYSQL Cheatsheet
 ### Domain Creation
 ```sql
 CREATE DOMAIN Age AS SMALLINT
