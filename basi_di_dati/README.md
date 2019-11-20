@@ -175,4 +175,4 @@ WHERE (name, surname) IN
 )
 ```
 
-
+[more here](https://devhints.io/mysql) and [here](http://www.mysqltutorial.org/mysql-cheat-sheet.aspx)
