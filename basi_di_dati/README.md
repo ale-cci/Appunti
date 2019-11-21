@@ -100,13 +100,14 @@ FROM employee
 WHERE surname LIKE ("ross_" OR "%ossi") AND surname IS NOT NULL
 ```
 
-### Distinct
+### Distinct and Order by
 ```sql
 SELECT DISTINCT name
 FROM student
 WHERE surname="aleotti"
-ORDER BY name
+ORDER BY name [ASC|DESC]
 ```
+Default order is **ascending**, for **descending** order put a `-` in front of the field. Otherwise specify `ASC` or `DESC`.
 
 ### Aggregation and Grouping
 Available operators are **COUNT**, **SUM**, **MAX**, **MIN**, **AVG**
