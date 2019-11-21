@@ -74,8 +74,8 @@ ALTER TABLE table_name DROP COLUMN attribute_name;
 ```sql
 DROP [SCHEMA|DOMAIN|TABLE|VIEW|ASSERTION] element_name [RESTRICT|CASCADE]
 ```
-**RESTRICT:** Do not execute the command on empty objects.
-**CASCADE:** Delete object and all its dependencies recursively
+`RESTRICT` Does not execute the command on empty objects,
+`CASCADE` deletes object and all its dependencies recursively
 
 ### Select
 ```sql
@@ -83,6 +83,7 @@ SELECT username AS name
 FROM students AS st
 WHERE st.age < 25 OR st.surname="red"
 ```
+Select all fields of a table with `table_name.*`
 
 ### Join
 ```sql
