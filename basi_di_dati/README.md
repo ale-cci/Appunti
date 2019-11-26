@@ -129,6 +129,17 @@ FROM employee
     FROM employee
 ```
 
+### Limit and Reverse Order
+```sql
+SELECT name
+FROM employee
+ORDER BY -id
+LIMIT 10
+```
+Returns the last 10 added Employee names
+
+
+
 ### Nested Queries
 ```sql
 SELECT em.name, em.surname
