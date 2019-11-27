@@ -1,0 +1,105 @@
+\documentclass{paper}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+
+\title{Basi di dati}
+\author{ale-cci}
+
+\begin{document}
+\lstset{language=SQL}
+\maketitle
+
+\section{Definizioni Generali}
+Una \textbf{chiave} è un gruppo di attributi che identifica univocamente una relazione, essa è legata allo schema di una relazione, non ai valori in esso contenuti.
+Una \textbf{superchiave minimale} è l'insieme di attributi di cui nessun sottogruppo di esso può essere considerato come \textbf{chiave}.
+
+Ogni relazione per definizione ha una chiave.
+
+Una chiave viene detta \textbf{primaria} se non può assumere valori nulli.
+
+Un \textbf{Vincolo di integrità relazionale} fra $X$ attributi di $R_1$ e $R_2$ è soddisfatto se tutte le tuple ''istanze`` di $X$ compaiono come chiave primaria su $R_2$
+\section{Algebra relazionale}
+\begin{itemize}
+    \item \textit{Union} ($r_1 \cup r_2$), \textit{Intersezione}, \textit{Differenza} tra insiemi
+    \item \textit{Ridenominazione} (AS), \textit{Selezione} (Where), \textit{Proiezione} (Select)
+    \item Join Naturale, Theta Join
+\end{itemize}
+
+\section{Selezioni ($\sigma$)}
+
+Data una relazione $r$ ed una condizione da soddisfare $F$, la selezione produce una nuova relazione,
+formata dal sottinsieme delle tuple di $r$ che soddisfano $F$.
+
+Si indica con $\sigma_F(r)$ o $SEL_F(r)$, dove $F$ è una condizione da verificare ed $r$ la relazione a cui è applicata la selezione.
+
+In MySql la selezione è l'operatore \textbf{WHERE}
+
+\section{Proiezioni ($\prod$)}
+Data una relazione $r(X)$ e $Y \subseteq X$, la proiezione di $r$ su $Y$ si indica con:
+
+\begin{center}
+    $\prod_Y(r)$ oppure $\text{PROJ}_Y(r)$
+\end{center}
+
+Ed è l'insieme di tuple su $Y$ ottenute dalle tuple di valori di $r$.
+
+Una proiezione ha un numero di tuple \textbf{minore o uguale} rispetto alla relazione a cui è applicata.
+
+Il numero tuple è \textbf{uguale} se e solo se $Y$ è superchiave per $r$
+
+In mysql le proiezioni sono rappresentate attraverso i parametri specificati a select
+
+In MySql le proiezioni sono le colonne selezionate attraverso l'operatore \textbf{SELECT}
+
+\section{Join ($\diamond$)}
+\[
+    r_1 \diamond r_2 = \{ t\,\text{su}\,X_1 X_2 \, | \,  t[X_1] \in r_1 \wedge t[X_2]\,\text{in}\, r_2\}
+\]
+Ottenuto concatenando ogni tupla della prima relazione con ogni tupla della seconda, in cui gli attributi comuni hanno lo stesso valore.
+\[
+\begin{split}
+    \prod_{X_1} (R_1 \diamond R_2) \subseteq R_1\\
+    \prod_{X_2} (R_1 \diamond R_2) \subseteq R_2
+\end{split}
+\]
+Proiettando i risulatati del Join su una delle due relazioni, ne ottengo un sottinsieme, quindi se tento di ricostruire la relazione iniziale ho una perdita di informazine.
+
+Scomponendo lo schema di una relazione $R$ in due sottoschemi tale che $R(X), X = X_1 \cup X_2$ , si ha che $R$ è contenuta nella relazione, risultato del \textit{join} fra le proiezioni di $R$.
+
+Il \textbf{Theta-Join} viene usato per correlare attributi con nome diverso (i.e. $X_1 \cap X_2 = \emptyset$)
+
+$r_1 \diamond_F r_2 = \sigma_F(r_1 \diamond r_2)$ con $F$ Attributo da selezionare, se $F$ è una condizione di uguaglianza fra attributi, allora viene detto \textbf{Equi-Join}
+\section{Interrogazioni (Query)}
+Una interrogazione è una funzione $E(r)$ che applicata ad istanze $r$ di una base di dati produce una relazione su un dato insieme di attributi $X$.
+
+In altre parole L'applicazione di una Selezione insieme a Proiezione e/o Join.
+
+\section{Viste}
+Diverse rappresentazioni per gli stessi dati, si dividono in:
+\begin{itemize}
+    \item Relazioni di base: hanno un contenuto autonomo, originariamente contenuto nella base di dati
+    \item Relazioni derivate: Relazioni il cui contenuto è funzione del contenuto di altre relazioni
+    \item Relazioni Virtuali: Definite attraverso query scritte, non realmente presenti all'interno del database, ma utilizzabili come se lo fossero. Devono essere rivalutate ogni volta.
+    \item viste materializzate: Relazini virtuali inserite dentro il database. Sono immediatamente disponibili, ma devono essere aggiornate insieme al cambiamento dei dati all'interno del database.
+\end{itemize}
+
+Vantaggi delle liste sono:
+\begin{itemize}
+    \item Permettono di mostrare solo le parti del database interessate agli utenti
+    \item Query molto complesse possono essere definite come viste, rendendolo più leggibili
+    \item È possibile definire diritti d'accesso anche per una singola vista
+    \item Dato che forniscono un livello d'astrazione, in caso di modifiche allo schema del database,
+        le vecchie relazioni possono essere ancora ricalcolate, consentendo l'uso di applicazioni che
+        fanno riferimento al vecchio schema
+\end{itemize}
+
+\textbf{Dominio}: Tipo di dato
+
+\textbf{Vincoli interrelazionali}: Vincoli che coinvolgono piu tabelle foreign key, on delete (cascade, set null, no action)
+
+\textbf{Vincoli intrarelazionali}: Vincoli applicati su campi, (es: not null, unique...)
+
+\section{Interrogazioni Nidificate (SubQuery)}
+Guarda dogmario SQL nella sezinoe SubQuery
+\end{document}
