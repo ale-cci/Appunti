@@ -92,7 +92,7 @@ FROM students AS st
 JOIN exam ON exam.student_register=st.register
 WHERE st.name="bob" OR (st.mark <= 17 AND st.mark <> 3)
 ```
-Other Join are **inner**, **right [outer]**, **left [outer]**, **full [outer]**, default value is **inner**.
+Other Join are **inner**, **right [outer]**, **left [outer]**, **full [outer]**, **cross** default value is **inner**.
 
 ### Like and Null
 ```sql
@@ -187,5 +187,8 @@ WHERE (name, surname) IN
     WHERE st.age > s1.age
 )
 ```
+
+```sql
+SELECT *, (SELECT name FROM student st
 
 [more here](https://devhints.io/mysql) and [here](http://www.mysqltutorial.org/mysql-cheat-sheet.aspx)
