@@ -189,6 +189,8 @@ WHERE (name, surname) IN
 ```
 
 ```sql
-SELECT *, (SELECT name FROM student st
+SELECT *, (SELECT name FROM student st WHERE st.name='bob')
+FROM exam e
+```
 
 [more here](https://devhints.io/mysql) and [here](http://www.mysqltutorial.org/mysql-cheat-sheet.aspx)
