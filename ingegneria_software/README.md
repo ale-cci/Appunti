@@ -138,6 +138,7 @@ Pattern applied to recognize sentences or the syntax of a language.
 Iterator interface, composed by a `begin`, `next` and a way to recognize the end of the iteration.
 Exposes the elements contained in an object (Usually [Composite Pattern](#composite-pattern)). Without exposing its structure.
 
+
 #### Observer Pattern
 Requires an `Observable` object and an `observer`. The `observer` register itself to the `Observable` and the `Observable` when changes notifies the `observer`
 ```python
@@ -166,6 +167,17 @@ Specifies how something should be done, it's plugged into a larger object or met
 #### Visitor Pattern
 Encapsulates an operation to apply to an iterator. (Ex. The map function)
 
+#### Client-Server Architecture
+- **Thin Client:** strongly dependent from the server
+- **Fat Client:** Almost server independent
+- **Three tier Architecture** Client connected to the server. The server is connected with the database
+
+#### Pipe and filter Architecture
+Series of component (filters) that process an input stream and produces an output stream.
+Component are connected together with a pipe.
+```sh
+echo "DCBA\n4321" | tac | rev
+```
 
 ### Model View Controller
 - Model contains the data
