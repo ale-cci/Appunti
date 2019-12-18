@@ -1,7 +1,3 @@
-### TODO
-- [ ] Index page
-- [ ] Sequence diagrams
-
 # Software Engineering
 - **Modularity:**
     Code is decomposed in one or more independent units, called modules, such that
