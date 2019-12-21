@@ -1,22 +1,4 @@
 # MYSQL Cheatsheet
-### Domain Creation
-```sql
-CREATE DOMAIN Age AS SMALLINT
-DEFAULT 0
-CHECK ( value >= 0 AND value <= 120)
-```
-
-### Domain Alteration
-```sql
-ALTER DOMAIN domain_name
-{
-    SET DEFAULT default_value |
-    DROP DEFAULT |
-    ADD CONSTRAINT constraint_definition |
-    DROP CONSTRAINT constraint_name
-}
-```
-
 
 ### Schema Definition
 ```sql
