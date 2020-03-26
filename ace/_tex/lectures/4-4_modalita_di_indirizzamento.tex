@@ -1,0 +1,110 @@
+% Lezione 4.4 Modalità di indirizzamento, continuo di lezione precedente
+\documentclass[../ace.tex]{subfiles}
+
+\begin{document}
+\section{Modalità di Indirizzamento}
+\subsection{Formato di Istruzione}
+Per definire un' istruzione all'interno del linguaggio, è necessario definire:
+il \textbf{codice operativo} (numero operandi espliciti), gli operandi ed il risultato
+e l'indirizzo della prossima istruzione.
+Per salvare tutte queste caratteristiche in memoria, diventa fondamentale definire
+un formato in cui codificare e decodificare l'istruzione.
+
+\subsection{Modalità di indirizzamento}
+La modalità di indirizzamento decide come indicare l'indirizzo in memoria in
+cui prendere i dati.
+
+Indipendentemente dal tipo di memoria utilizzata (lineare, segmentata...) e dal tipo di
+operazione da effettuare, per indicare all'istruzione richiesta dove trovare l' operando,
+posso:
+\begin{itemize}
+    \item passarlo attraverso un registro
+    \item passarne il valore all'istruzione (modalità immediata)
+    \item leggerlo dalla memoria
+\end{itemize}
+
+Quello che cambia tra le varie ISA sono quante e quanto complesse sono le operazioni per
+l' accesso alla memoria.
+Più modalità di indirizzamento ho più diventa facile l'accesso, ma allo stesso tempo aumenta
+la complessità della rete logica.
+
+Esistono diverse opzioni per quanto riguarda alla lettura dell' operando dalla memoria.
+In caso di accesso \textbf{diretto} viene indicato l'indirizzo a cui prendere il dato in memoria.
+Diversamente se viene utilizzata una modalità di indirizzamento \textbf{indiretta} viene indicato
+l'indirizzo di memoria dell' operando in un registro.
+\\
+Entrambi gli approcci diretto ed indiretto possono combinarsi nella modalità di indirizzamento
+\textbf{base} dove il registro base utilizzato come offset è unito ad un indirizzo diretto per trovare
+la posizione in memoria dell' operando.
+
+Esiste un ulteriore versione non implementata in tutte le ISA chiamato \textbf{indiciato}: indico
+due registri e l'indirizzo in memoria dell' operando è la somma dei due registri.
+Viene chiamato in questo modo perché il primo registro funziona da registro base, mentre il
+secondo si comporta da indice (es. Accesso ai dati di un vettore).
+
+Altre tipologie di indirizzamento, (meno frequentemente adottate dalle ISA) sono: L'accesso
+\textbf{indiretto} dove viene indicata la cella di memoria contenente l'indirizzo dell' operando,
+la modalità di indirizzamento \textbf{scalato} che si comporta esattamente come l' indiciato,
+ma viene specificato un ulteriore valore di offset, e per finire le modalità di \textbf{autoincremento} e
+\textbf{autodecremento}, le quali funzionano esattamente come la modalità d'accesso tramite registro,
+solo che dopo la letture il valore contenuto nel registro viene automaticamente incrementato o
+decrementato.
+
+\begin{figure}[!h]
+    \centering
+    \begin{tabu}{|c|c|}
+        \hline
+        Tramite registro & \lstinline{mov BL AL} \\
+        \hline
+        Immediato & \lstinline{mov BL, 12} \\
+        \hline
+        Diretto & \lstinline{mov AX, [12]} \\
+        \hline
+        Indiretto tramite registro & \lstinline{mov AX, [BX]}\\
+        \hline
+        Indiretto tramite indice & \lstinline{mov AX, [SI]}\\
+        \hline
+    \end{tabu}
+    \caption{Rispettive istruzioni Assembly}
+\end{figure}
+Le modalità di accesso possono essere combinate: \lstinline{mov AX [12 + BX + SI]}.
+
+\warning{
+    Se nella modalità di indirizzamento è presente il registro \textbf{BP}, il segmento di riferimento
+    sarà \textbf{SS} (l'indirizzo è relativo allo stack), altrimenti il riferimento sarà sempre \textbf{DS}
+    (segmento dati).
+}
+Se si vuole comunque accedere ad un altro segmento di memoria, è possibile effettuare un segment override,
+specificando il segmento di memoria dove si vuole accedere: \lstinline{mov AX, [CX:BX + 5]}.
+
+\subsection{Modi di indirizzamento nel trasferimento di controllo}
+Con questo nome si intende come indicare il valore del program counter (o instruction pointer) al momento di
+un salto.
+\\
+Normalmente viene indicato in modo diretto dalla istruzione di jump, e può essere espresso sia in modo assoluto,
+che in modo relativo.
+Nell' ISA Intel è disponibile anche gli indirizzamenti intrasegment ed intersegment, sia in modo diretto che indiretto.
+
+Vengono chiamati intrasegment i salti che si trovano e terminano nello stesso code segment, mentre intersegment
+i salti che riguardano terminano in un code segment differente da quello di partenza.
+A seconda dei casi si può avere un indirizzamento diretto o indiretto, ovvero viene indicato
+direttamente il termine del salto o l'indirizzo di termine è contenuto in un registro.
+
+\subsection{Modi di indirizzamento I/O}
+Dal punto di vista dell' ISA esistono due metodi di indirizzamento: il \textbf{memory mapped I/O},
+dove gli indirizzi per l'interazione con i dispositivi I/O sono contenuti in memoria,
+e \textbf{separated I/O}, dove gli spazi di indirizzamento I/O sono separati dalla memoria,
+per accedere ai dispositivi ho istruzioni diverse (\lstinline{in} e \lstinline{out}).
+
+Per comunicare con i dispositivi I/O è possibile utilizzare un metodo ad indirizzamento
+diretto: \lstinline{in AL, 100}, ma l'indirizzo massimo è limitato a 256.
+Se si vuole utilizzare indirizzi con valori maggiori a 256, è necessario utilizzare un metodo
+ad indirizzamento tramite registro. Il registro (a 16b) dedicato a queste operazioni è DX.
+
+\subsection{Tipi e struttura degli operandi}
+Sono i tipi di dato supportati dall' ISA. Possono essere di tipo intero (signed/unsigned), floating point
+(single, double o extended precision), caratteri (ascii/unicode), bool o multimediali.
+
+Ed ovviamente è necessario scegliere quali operazioni sono previste dall' ISA per lavorare con
+i tipi di dato supportati.
+\end{document}

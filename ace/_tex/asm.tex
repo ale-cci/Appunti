@@ -1,0 +1,115 @@
+\documentclass{article}
+
+\title{Linguaggi Assembly}
+\begin{document}
+\section{Architettura Logica CPU Intel 8086}
+Processore 'general purpose'
+\\
+16bit: I registri interni, ALU e risultati sono tutti a 16bit
+
+n : numero di registri interni = 16
+
+na : parallelismo bus indirizzi = 20
+
+nb : parallelismo bus dati = 16
+
+
+
+Bus control: Unico punto d'accesso al BUS
+
+Coda di Per fetch: Salva le istruzioni prese durante la fase di fetch in una coda.
+
+EU Control: Unita di controllo, genera tutti i segnali che servono a tutte le altre parti della EU, es: abilitazioni registri, operazioni che l' ALU deve eseguire.
+\\
+Registro di Flag: contengono delle informazioni riguardante lo stato dell'ultima operazione eseguita dall' ALU
+
+IP viene aggiornato allo stesso tempo in cui i dati vengono passati all'EU-Control, (aggiornato solo in caso di salto)
+
+ALU Data BUS: bus interno al processore, utilizzato per passare informazioni tra ALU-I/O e BU
+
+\section{Le 7 Scelte progettuali}
+\subsection{1 - Dove sono memorizzati gli operandi nella CPU}
+
+\begin{enumerate}
+    \item Stack:
+        Memoria gestita a pila (LIFO)
+        \\
+        Indipendente dai registri, utilizzato da JVM
+    \item Accumulatore
+        Unico registro accumulatore, da cui passavano tutte le operazioni
+        \\
+        Problema: Accumulatore è un bottleneck.
+    \item Set di registri
+        Insieme di registri, più o meno ampio. Metodo più utilizzato
+\end{enumerate}
+
+3 Categorie di register
+
+\subsubsection{GPR - General Purpose register}
+8 AX, BX, CX, DX, SI, DI BP, SP
+
+
+Tutti a 16bit. I primi 4 possono essere utilizzati anche a lunghezza più corta, chiamandoli con AL (bit da 0 a 7) per la parte basse ed AH per i bit da 8 a 15, per il caso di AX.
+
+A: Accumulatore, registro base per le operazioni
+
+B: Base, utilizzato quasi per tutte le operazioni.
+\\
+Alcune operazioni richiedono esclusivamente BX.
+C: Counter, unico utilizzabile nei cicli per es. Counter
+\\
+D: Data, utilizzabile per indirizzi di istruzioni IO, ed anche per dati che eccedono i 16bit.
+\\
+SI, DI: Source-Destination Indice
+\\
+BP: Base pointer
+\\
+SP: Stack pointer, points at the top of the stack. Utilizzati per l'accesso ai parametri delle funzioni.
+
+\subsubsection{SR: Segment Register e MR: Miscellaneous register}
+IP: Instruction pointer
+\\
+FLAG: history Flag, registro a 16 bit dove ognuno di essi indica la modalità di funzionamento del software/ stato del sistema
+
+Non si può fare riferimento a registri di FLAG
+
+I flag sono di 2 tipi:
+\begin{itemize}
+    \item Stato:
+        Indicano uno stato, una situazione di un operazione di ALU
+    \item Controllo:
+        Modificati dal programmatore per cambiare il funzionamento della macchina
+\end{itemize}
+
+\begin{itemize}
+    \item OF:
+        Overflow register, segnala quando avviene un overflow
+    \item DF:
+        Direction Flag, Indica se incrementare o decrementare l'indice di lettura
+    \item IE:
+        Interrupt Enable. Permette di specificare sezioni di codice dove ignorare i segnali di interrupt
+    \item TF, TRAP:
+        Utilizzato dai debugger, per eseguire i programmi 1 step alla volta
+    \item SF, SIGN:
+        1 se il risultato di un operazione è negativo
+    \item ZF: ZERO
+        1 se il risultato di un operazione è 0
+    \item AF, AUXILIARY CARRY:
+        Indica la presenza di riporto tra le due parti a 8 bit di AX
+    \item PF: Parity Flag
+        1 quando il numero di 1 nel risultato dell'operazione è pari
+    \item CF: Carry Flag:
+        1 se c'è riporto nell'ultima operazione, utilizzato per fare somme a 32 bit
+\end{itemize}
+
+
+
+\subsection{2 - Con che istruzioni si accede agli operandi}
+\subsection{3 - Modello della memoria}
+\subsection{4 - Formato delle istruzioni}
+Quali sono le istruzioni supportate
+\subsection{5 - Modalità di indirizzamento}
+Come faccio ad utilizzare un dato (es indirizzo di memoria).
+\subsection{6 - Struttura degli operandi}
+\subsection{7 - Operazioni Previste}
+\end{document}

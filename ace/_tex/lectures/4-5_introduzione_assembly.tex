@@ -1,0 +1,64 @@
+% Lezione 4.5 Introduzione al linguaggio Assembly
+% Per questo corso verrà utilizzato NASM come assemblatore e TLINK per linkare il file oggetto in programma binario.
+\documentclass[../ace.tex]{subfiles}
+
+\begin{document}
+\section{Linguaggio Assembly 8086}
+\subsection{In due parole}
+Non è case sensitive.
+\\
+Ogni statement è terminato da \lstinline{\\n}, lo statement può proseguire alla riga successiva solo
+se questa comincia con il carattere \lstinline{&}.
+\\
+Gli identificatori hanno una lunghezza massima di 31 caratteri ed il nome non può iniziare con un numero.
+
+\subsection{Tipi di costante}
+\begin{lstlisting}
+    mov ax, 13              ; decimale, anche 13D
+    mov ax, 13h             ; esadecimale (devono iniziare come un numero)
+    mov ax, 00100B          ; binario
+    mov ax, 13O             ; ottale
+
+    mov ax, 2.34            ; numeri reali
+    mov ax, 112E-3          ; rappresentabili anche in esponenziale
+
+    mov ax, 'T'             ; Costanti carattere
+    mov ax, 'test'          ; o anche stringa
+\end{lstlisting}
+
+\subsection{Istruzioni per il trasferimento dati}
+\begin{lstlisting}
+    mov dest, sorg          ; sposta il contenuto del secondo operando
+                            ; nel primo
+    mov [bx], al            ; salva nell'indirizzo indicato da BX il
+                            ; valore di al
+    xchg dest, sorg         ; scambia il contenuto dei due operandi
+    push w0rd               ; inserisce una word nello stack
+    pop  w0rd               ; estrae una word dallo stack
+    in   accum, porta       ; legge un dato dalla porta specificata
+    out  porta, accum       ; scrive un dato sulla porta specificata
+\end{lstlisting}
+Si ricorda che istruzioni come \lstinline{mov [bx], [si]} non sono permesse perché siccome non
+stiamo utilizzando una macchina \textit{memory-memory}, si può avere al più 1 riferimento alla memoria
+nella stessa istruzione.
+
+Esistono altri trasferimenti non ammessi dalla \lstinline{mov}:
+\begin{itemize}
+    \item \lstinline{mov ds, 100}, modificare direttamente il valore di un registro.
+        Occorre utilizzare un registro general purpose:
+\begin{lstlisting}
+mov ax, 100
+mov ds, ax
+\end{lstlisting}
+
+    \item \lstinline{mov dx, es}, trasferimento da segment register a segment register.
+    \item \lstinline{mov cs, 100}, qualsiasi trasferimento che abbia \cs\ come destinazione.
+        Ovvero cambiare il codice in esecuzione.
+\end{itemize}
+Lo stack pointer \lstinline{sp} parte con valore iniziale 0xffff, ad ogni istruzione \lstinline{push},
+\lstinline{sp} diminuisce di 2, mentre ad ogni \lstinline{pop} aumenta di 2.
+\warning{
+    Quando tolgo i dati dallo stack con {\color{code-keyword}pop}, la cella di memoria non viene azzerata.
+}
+
+\end{document}

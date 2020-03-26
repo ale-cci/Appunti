@@ -1,0 +1,271 @@
+%!TEX program = xelatex
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath}
+\usepackage{subfiles}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tabu}   % tabular with colors
+
+\usepackage{fontspec}
+\setmainfont{Roboto}
+
+
+\definecolor{code-bg}{HTML}{EFF0F1}
+\definecolor{code-keyword}{HTML}{0054A3}
+\definecolor{code-comment}{HTML}{A5ACB2}
+\definecolor{important-box}{HTML}{D1E5F1}
+
+\renewcommand{\familydefault}{\sfdefault}
+\newcommand{\warning}[1]{
+    \begin{center}
+    {
+        \setlength\fboxsep{.5cm}
+        \colorbox{important-box}{
+            \parbox{.8\linewidth}{#1}
+        }
+    }
+    \end{center}
+}
+
+\taburulecolor{code-comment}
+\tabulinesep = 2mm
+
+\titleformat{\section}
+    {\color{black}\Huge}
+    {}
+    {0em}
+    {}[\color{code-comment}\titlerule]
+
+\titlespacing{\section}{0em}{1em}{3em}
+\newcommand{\sectionbreak}{\clearpage}
+
+\titleformat{\subsection}
+    {\color{code-keyword}\large\bfseries}
+    {}
+    {0em}
+    {}
+
+\lstset{
+    language=[x86masm]{Assembler},
+    backgroundcolor=\color{code-bg},
+    basicstyle=\small\ttfamily,
+    commentstyle=\color{code-comment},
+    keywordstyle=\color{code-keyword}\bfseries,
+    showstringspaces=false
+}
+
+\makeatletter
+\def\@maketitle{
+    \null
+    \vfill
+    \begin{center}\leavevmode
+        \normalfont
+        {\LARGE\raggedleft \@author\par}%
+        {\color{code-keyword}\hrulefill\par}
+        {\huge\raggedright \@title\par}%
+        \vskip 1cm
+        %    {\Large \@date\par}%
+    \end{center}%
+    \vfill
+    \null
+    \thispagestyle{empty}%
+    \clearpage
+    \pagenumbering{arabic}
+}
+\makeatother
+
+\let\oldlstinline\lstinline
+\renewcommand{\lstinline}[1]{\colorbox{code-bg}{\oldlstinline{#1}}}
+
+\title{Architettura Calcolatori Elettronici}
+\author{ale-cci}
+
+
+% Document specific commands
+\newcommand{\cs}{\lstinline{cs}}
+
+\begin{document}
+\maketitle{}
+\section{Lezione 2}
+ISA: Instruction Set Architecture, lista id istruzioni disponibili al programmatore utilizzate dal processore
+
+CISC: Complex Instruction Set Computer
+\\
+Facilita la programmazione, fornendo al programmatore un vasto numero di istruzioni possibili\\
+, aumentando però la complessitá a livello di microcodice.
+
+
+RISC: Reduced Set Computer, Ha un ISA più vicina all Hardwere, e piu lontana dal programmantore.
+\\
+Ha un set efficente e limitato di istruzioni, basato sul fatto che solo un ridotto numero di istruzioni è utilizzato.
+\\
+\textit{Confronto 'RISC' e 'CISC' a lezione 3.1 in 20:19}
+
+Memoria Allineata: Accesso più veloce ai ai dati, non efficiente per 'storing' dei dati.
+\\
+Per cercare di accedere il meno possibile alla memoria vengono utilizzati \textbf{Registri}.
+L'architettura RISC utilizza molti registri oriogonali (ogni registro può effettuare ogni operazione),
+mentre CISC utilizza meno registri non ortogonali, ovvero esistono registri specifici per specifiche operazioni.
+\section{Lezione 3}
+CPU: Unità di controllo a stati finiti (fetch, decode, execute)
+
+PC: Program Counter
+
+MR: Memory register
+
+DR: Data register
+
+La memoria si interfaccia con:
+\begin{itemize}
+    \item Bus di indirizzi (solo in input)
+    \item Bus di dati, \\utilizzato sia per leggere che per scrivere i dati sulla memoria
+\end{itemize}
+
+Con $R_{2..n}$ vengono indicati i vari registri
+
+Register File: (slide 43)
+
+\subsection{CPU Monociclo}
+\textbf{Modello Harvard}: Due memorie separate.% Aggiungere descrizione
+
+Richiede due memorie separate, siccome accede due volte alla memoria nello stesso ciclo di clock.
+
+\begin{enumerate}
+    \item fetch: accede alla memoria per leggere istruzioni della CPU
+    \item decode
+    \item execute
+    \item memoria
+\end{enumerate}
+
+Writeback (WB): Il contenuto letto dalla memoria viene scritto su un registro.
+
+Siccome tutte le operazioni vengono eseguite in un unico ciclo di clock, il tempo impiegato da ciascuna istruzione diventa uguale al tempo impiegato dalla 'funzione' più lenta: $T_{mono} = 83 ns$.
+\\
+Il tempo di esecuzione del programma diventa $N \cdot 83ns$
+
+\subsection{Lezione 3.6 - Architettura Multiciclo}
+A differenza della architettura monociclo, in ogni singolo stadio opera in un ciclo di clock.
+Motivato dal fatto che non tutte le istruzioni impiegano lo stesso tempo di esecuzione.
+
+Per calcolare il tempo impiegato da ogni istruzione $\sum{T_{multi}}$.
+A volte $\sum{T_{mutli}} \ge T_{mono}$.
+
+Non richiede più di separare la memoria, dato che l'esecuzione dell'istruzione è separata in più cicli di clock.
+
+\begin{itemize}
+    \item Fetch
+        \begin{itemize}
+            \item Recupero istruzione dalla memoria
+            \item Aumento PC
+                \\
+                Posso usare l'ALU per il fetch ($Pc = Pc + 5$)
+        \end{itemize}
+    \item Decode:
+        Decodifica operandi, Anticipo il calcolo dei registri
+        \\
+        Viene calcolato a prescindere anche il valore di eventuali salti condizionali,
+        sfruttando l'ALU non ancora utilizzata in questo passaggio
+
+    \item Execute:
+        \\
+        Varia da istruzione ad istruzione,
+\end{itemize}
+
+\section{Lezione 4 - Architetture Avanzate}
+Benchmark: Strumento per la valutazione delle prestazioni di esecuzione di un calcolatore
+
+\subsection{Tempo di esecuzione}
+Valuta il tempo di esecuzione della CPU.
+In generale il tempo di CPU, può essere misurato tramite tempo di esecuzione, il modello più semplice per farlo è attraverso il
+\textit{CPI}: Clock per Istruzione (in media),
+
+\begin{itemize}
+    \item $CPI = N_{cc}/N_i$
+    \item $N_{cc}$: Numero di cicli di clock
+    \item $N_i$: Numero delle istruzioni
+\end{itemize}
+
+\[
+\begin{cases}
+    T_{cpu} &= N_{cc} \cdot T_{ck}
+    \\
+    N_{cc} &= N_i \cdot C_{pi}
+\end{cases}
+\]
+
+
+Obbiettivo RISC:
+\\
+Ridurre il clock per instruction, rimuovendo istruzioni non necessarie, ottimizzando il numero ridotto di istruzioni dell'architettura.
+
+\textit{MIPS}: Milioni di istruzioni al secondo $ = N_i / CPU_{time} * 11^6$
+
+\subsection{Pipeline ed Alee}
+\begin{itemize}
+    \item Alee Strutturali: Due blocchi richiedono la stessa risorsa
+    \item Alee di Dato: Un blocco è in attesa di una risorsa prodotta da un altro blocco
+    \item Alee di Controllo: Quando il processore non ha ancora determinato l'indirizzo di un salto condizionato
+\end{itemize}
+
+\subsection{Alee di Dato}
+\begin{itemize}
+    \item \textbf{RAW} \textit{Read After Write}:
+        $B$ ha bisogno di un dato prodotto da $A$, ma $B$ deve leggere il dato prima che $A$ abbia finito di scriverlo.
+        \\
+        Caso più frequente
+    \item \textbf{WAR} \textit{Write After Read}:
+        $B$ deve modificare un dato prima che sia letto da $A$
+    \item \textbf{WAW} \textit{Write After Write}:
+        $B$ deve scrivere un dato prima che $A$ lo abbia scritto.
+\end{itemize}
+
+Prima di poter risolvere un \textit{Alea di Dato}, occorre riconoscerla.
+\\
+Per questo viene prima confrontata la fase di \textit{decode} con quella di \textit{memory}, \textit{execute} e \textit{writeback}.
+
+Oppure occorrono campi specifici sulle pipeline (\textit{latch}), che vanno ad indicare quali registri vengono utilizzati da una determinata istruzione.
+
+\subsubsection{Metodi Risolutivi}
+\begin{itemize}
+    \item \textbf{Stallo}:
+        \\
+        Attendo il termine dell'istruzione (molto penalizzante e da evitare)
+    \item \textbf{Anticipazione}:
+        Produco il dato immediatamente, introducendo.
+        \\
+        Costosa e non banale da realizzare
+    \item \textbf{Sovrapposizione}:
+        Permetto la produzione di 3 risultati in un unico ciclo di clock.
+        \\
+        Sovrappongo le due istruzioni che richiedono la stessa risorsa, e eseguo un istruzione nel fronte di clock di salita,
+        e l'altra nel fronte del clock in discesa.
+        \\
+        Di fatto è come raddoppiare il clock.
+
+    \item \textbf{Riordinamento}:
+        \\
+        Viene cambiato l'ordine di esecuzione delle istruzioni.
+
+\end{itemize}
+
+\subsection{Alee di controllo}
+Avvengono sia in caso di salti condizionati, che in caso di salti\\ incondizionati.
+\\
+È risolvibile inserendo uno \textit{stallo} di 1 ciclo di clock, altrimenti anche attraverso il riordinamento, ma non sempre é possibile.
+
+
+\section{Architettura Supercalcolatori}
+Parallelismo pipelines
+
+\textbf{ROB}: Buffer di riordinamento
+
+
+\subfile{lectures/4-3_modelli-di-memoria}
+\subfile{lectures/4-4_modalita_di_indirizzamento}
+\subfile{lectures/4-5_introduzione_assembly}
+
+\end{document}
