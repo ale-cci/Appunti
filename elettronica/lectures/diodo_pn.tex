@@ -1,0 +1,903 @@
+\documentclass[../elettronica]{subfiles}
+
+\begin{document}
+\section{Diodo a giunzione PN}
+\subsection{Diodo}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[/tikz/circuitikz/bipoles/length=1cm, scale=1.1]
+        \draw
+            (0, 0) node[ground]{}
+            -- (-1, 0)
+            to [american voltage source, v=$V_i$, i=I] (-1, 2)
+            to [diode, v^=$V_d$, i=$I_D$] (+1, 2)
+            to [R, v^=$V_u$](1, 0)
+            -- (0, 0)
+            ;
+    \end{tikzpicture}
+    \caption{Raddrizzatore a singola semionda}
+    \label{circuit:singola_semionda}
+\end{figure}
+
+La dipendenza Corrente-Tensione per il diodo è un circuito esponenziale.
+\\
+La formula $\diodecurrent{V}$ è valida solo per piccoli spostamenti dall'origine.
+\[
+    \lim_{V\to\infty} \diodecurrent{V} = -I_S
+\]
+La corrente di Saturazione $I_S$ assume un valore trascurabile ($\approx 10^{-15}$) rispetto al resto delle correnti misurabili in polarizzazione diretta, per questo diremo che il diodo è spento (D-OFF) in polarizzazione inversa, ed acceso (D-ON) in polarizzazione diretta.
+
+Analizzando il circuito in figura \ref{circuit:singola_semionda}, otteniamo le seguenti relazioni:
+\[
+    \begin{cases}
+        V_i = V_d + V_u
+        \\
+        I_D = \diodecurrent{V_d}
+        \\
+        I = I_D
+    \end{cases}
+\]
+
+% TODO: Calcoli
+Con $V_T$ viene indicata la tensione termica $V_T = K \frac{T}{q}$, dove con $K$ è indicata la costante di Boltzmann, $q$ è la carica elettronica, e $T$ è la temperatura. Misurata con $T = 300K$ (Temperatura ambiente), $V_T \approx 26mV$.
+
+\subsection{Modello a soglia}
+Dato che lavorare con equazioni esponenziali non è così pratico, si preferisce utilizzare un modello più semplice da utilizzare, ma che rispetti sempre il comportamento del diodo.
+
+Tralasciando la regione di breakdown, trattiamo le zone di polarizzazione diretta ed inversa come due tratti lineari, validi rispettivamente per i valori di $V$: $V < V_\gamma$ e $V > V_\gamma$.
+
+\warnbox{
+    \begin{tabular*}{.7\textwidth}{@{\extracolsep{\fill}} cc}
+        \textbf{P. INVERSA (off)} & \textbf{P. DIRETTA (on)}\\
+        $\diodeoffcases{I}{V}$ & $\diodeoncases{I}{V}$\\
+    \end{tabular*}
+}
+Per poter utilizzare questo modello è necessario risolvere il circuito per tutti i possibili stati
+in cui i diodi si possono trovare, indicando anche le relative ipotesi di funzionamento.
+\\ %%
+Il seguenti calcoli riguardano il circuito in figura \ref{circuit:singola_semionda}, utilizzando il modello di approssimazione.
+
+Partendo dall'ipotesi che il diodo sia spento, avremo che $ I = 0$, quindi {\color{code-red}$V_u = 0$}, per $V_u = R\cdot I $.
+Il modello inoltre richiede che $V_d < V_\gamma$, e, utilizzando la prima equazione di Kirchoff alla maglia,
+otteniamo $V_d = V_i - V_u = V_i$. Quindi il diodo è spento per {\color{code-red}$V_i < V_\gamma$}.
+
+Studiando ora la seconda ed ultima ipotesi per questo circuito, diodo acceso, abbiamo che:
+$V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
+
+\[
+    \begin{cases}
+        V_u = R \cdot I\\
+        I \cdot R > 0\\
+        V_u = V_i - V_d
+    \end{cases} \quad \Rightarrow \quad V_i - V_d > 0 \quad \Rightarrow {\color{code-keyword}{V_i > V_d}}
+\]
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, width={.9\textwidth}]
+                \addplot[code-red, domain=-50:0.78]{0};
+                \addplot[code-keyword, domain=0.78:50]{x - 0.78};
+                \node[label={$V_\gamma$},circle,fill,inner sep=1.5pt] at (axis cs: 0.78,0) {};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}%
+    \begin{minipage}[b]{.48\textwidth}
+        \begin{tikzpicture}[
+            declare function={
+                func(\x) = (\x < 0.78) * 0 + (\x > 0.78) * (\x - 0.78);
+            }]
+            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, width={.9\textwidth}]
+                \addplot[code-keyword, samples=30]{func(3*sin(deg(x)))};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\subsection{Circuito limitatore di tensione}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
+        -- (-1, 0)
+        to[american voltage source, v=$V_i$] (-1, 2)
+        to[R, v^=$V_R$] (2, 2)
+        to[diode, v=$V_u$, i=$I$] (2, 0)
+        -- (0.5, 0)
+        node[ground]{}
+        -- (-1, 0);
+    \end{circuitikz}
+\end{figure}
+
+\begin{minipage}[b]{.45\textwidth}
+\begin{tcolorbox}[title=Diodo OFF]
+    \begin{align*}
+        &I = 0 \qquad&\Rightarrow &V_R = 0
+        \\
+        &V_i - \cancel{V_R} - V_u = 0 \qquad &\Rightarrow & {\color{code-red}V_u = V_i}
+        \\
+        &V_u < V_\gamma \qquad&\Rightarrow &{\color{code-red}V_i < V_\gamma}
+    \end{align*}
+\end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+\begin{tcolorbox}[title=Diodo ON]
+    \begin{align*}
+        &V_d = V_\gamma \qquad&\Rightarrow &{\color{code-keyword}V_u = V_\gamma}
+        \\
+        &I\cdot R > 0 \qquad&\Rightarrow & V_i - V_d > 0
+        \\
+        &&& {\color{code-keyword} V_i > V_\gamma}
+    \end{align*}
+\end{tcolorbox}
+\end{minipage}
+
+\noindent Se il segnale in ingresso eccede il valore $V_\gamma$, viene limitato a $V_\gamma$, da questo il nome limitatore di tensione.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymax=2, ymin=-2.5, width={.9\textwidth}]
+                \addplot[code-red, domain=-5:0.78]{x};
+                \addplot[code-keyword, domain=0.78:5]{0.78};
+                \addplot[code-comment, dashed] coordinates {(0.78, -4) (0.78, 1)};
+                \node[label={-45:{$V_\gamma$}},circle,fill,inner sep=1.5pt] at (axis cs: 0.78,0) {};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}%
+    \begin{minipage}[b]{.48\textwidth}
+        \begin{tikzpicture}[
+            declare function={
+                func(\x) = (\x < 0.78) * \x + (\x >= 0.78) * 0.78;
+            }]
+            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymax=2, ymin=-2.5, width={.9\textwidth}]
+                \addplot[code-keyword, samples=30]{func(2*sin(deg(x)))};
+                \addplot [code-comment, dashed]{0.78};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+% Lezione 3
+\newpage
+\subsection{Circuito limitatore inferiore}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0.5, 0) node[ground]{}
+            -- (-1, 0)
+            to[american voltage source, label=$V_i$] (-1, 2.5)
+            to[R, v>=$V_R$] (2, 2.5);
+        \draw (0.5, 0)
+            -- (2, 0)
+            to[battery2, label=$V_b$] (2, 1)
+            to[diode, i=$I$, v=$V_d$] (2, 2.5);
+
+        \draw (3, 2.5) to[open, v^=$V_u$] (3, 0);
+    \end{circuitikz}
+\end{figure}
+
+\begin{tcolorbox}[title=Diodo OFF]
+    \[
+        \diodeoffcases{I}{V_d}
+        \cup
+        \begin{cases}
+            V_i = V_u - V_R
+            \\
+            V_u = V_b - V_d
+        \end{cases}
+        \Rightarrow
+        \begin{cases}
+            {\color{code-keyword}V_i = V_u}
+            \\
+            V_i > V_b - V_\gamma
+        \end{cases}
+    \]
+\end{tcolorbox}
+\begin{tcolorbox}[title=Diodo ON]
+    \[
+        \diodeoncases{I}{V_d}
+        \cup
+        \begin{cases}
+            V_i = V_u - V_R
+            \\
+            V_u = V_b - V_d
+        \end{cases}
+        \Rightarrow
+        \begin{cases}
+            {\color{code-red}V_u = V_b - V_\gamma}
+            \\
+            V_i < V_b - V_\gamma
+        \end{cases}
+    \]
+\end{tcolorbox}
+\noindent Il circuito effettua una limitazione sui valori bassi, e la soglia di intervento è regolabile dal parametro $V_b$.
+
+\begin{figure}[h]
+    \centering
+    \def\vg{3 -\vgamma}
+    \begin{minipage}[b]{.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ymin=-1, ymax=4, width={.9\textwidth}]
+                \addplot [code-keyword, domain=-5:\vg]{\vg};
+                \addplot [code-red, domain=\vg:5]{x};
+                \addplot [code-comment, dashed] coordinates {(\vg, -5) (\vg, 5)};
+                \node[label={0:{$V_\gamma+V_b$}}] at (axis cs:\vg,-0.8) {};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[b]{.48\textwidth}
+        \begin{tikzpicture}[
+            declare function={
+                func(\x) = (\x <= \vg) * (\vg) + (\x > \vg) *\x;
+            }]
+            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, ymax=4, width={.9\textwidth}]
+                \addplot[code-keyword, samples=30]{func(4*sin(deg(x)))};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\subsection{Circuito rivelatore di massimo}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \draw (0, 0) node[circ, label=$V_1$]{}
+            to[diode, label=$D_1$] (3, 0)
+            -- (3, -1)
+            to[R] (3, -3)
+            node[ground]{};
+        \draw (0, -1) node[circ, label=$V_2$]{}
+            to[diode, label=$D_2$] (3, -1)
+            node[circ, label={0:{$V_u$}}]{};
+    \end{tikzpicture}
+\end{figure}
+
+In questo caso, avendo due diodi, ciascuno descritto da un modello lineare a tratti, caratterizzato da due regioni
+distinte, abbiamo quattro regimi di funzionamento differenti.
+\begin{tcolorbox}[title=Relazioni fondamentali]
+    \begin{align*}
+        &V_{d1} = V_1 - V_u
+        \\
+        &V_{d2} = V_2 - V_u
+        \\
+        &V_u = R \cdot I
+        \\
+        &I_1 + I_2 = I
+    \end{align*}
+\end{tcolorbox}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 e D2 OFF]
+        \[\begin{cases}
+            V_u = 0
+            \\
+            V_{1} < V_\gamma
+            \\
+            V_{2} < V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 ON e D2 OFF]
+        \[\begin{cases}
+            V_u = V_{1} - V_\gamma
+            \\
+            V_{1} > V_\gamma
+            \\
+            V_{1} > V_{2}
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 OFF e D2 ON]
+        \[\begin{cases}
+            V_u = V_{2} - V_\gamma
+            \\
+            V_{2} > V_\gamma
+            \\
+            V_{2} > V_{1}
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 ON e D2 ON]
+        \[\begin{cases}
+            V_{1} = V_{2}
+            \\
+            V_{1} > V_\gamma
+            \\
+            V_{2} > V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\noindent Possiamo osservare che quando entrambi i diodi sono spenti, l'uscita è uguale a 0.
+Quando la tensione $V_{1}$ maggiore sia di $V_\gamma$ che di $V_{2}$, la tensione di uscita segue il
+valore di $V_{1}$ a meno di una costante, $V_\gamma$.
+In maniera del tutto analoga, quando $V_{2}$ è maggiore di $V_\gamma$ e $V_{1}$, la tensione di uscita
+segue il valore di $V_{2}$ a meno di una costante, $V_\gamma$.
+\\
+Caso  particolare, quando $V_1$ e $V_2$ sono uguali, e sono entrambi maggiori di $V_\gamma$, allora l'
+uscita segue l'uno o l'altro a meno di una costante.
+
+Possiamo sintetizzare tutto questo, dicendo che $V_u = \max{\big\{0, V_1 - V_\gamma, V_2 - V_\gamma\big\}}$.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ylabel={}, ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot{2*sin(deg(x))};
+                \addplot{2*cos(deg(x))};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot[green]{max(2*sin(deg(x)) - \vgamma, 2*cos(deg(x)) - \vgamma, 0)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\noindent Se si volesse estendere questo circuito per trovare il massimo tra tre ingressi, si potrebbe tranquillamente
+fare aggiungendo un' altro ramo in ingresso.
+
+Nel caso in cui $V_1$ e $V_2$ siano segnali digitali, ovvero che possono solo assumere due valori $V_h$ e $V_l$, il circuito
+si comporta come una porta logica \textbf{OR}.
+
+\newpage
+\subsection{Circuito rivelatore di minimo}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0) node[ground]{}
+        to[battery1, label=$V_b$] (0, 1)
+        to[R] (0, 3)
+        to[diode, label=$D_2$] (-2, 3)
+        node[circ, label={180:$V_2$}]{}
+
+        (0, 3)
+        -- (0, 4)
+        to[diode, n=d1] (-2, 4)
+        node[circ, label={180:$V_1$}]{}
+
+        (d1.s) node[above]{$D_1$}
+        (0, 3) node[circ, label={0:$V_u$}]{}
+        ;
+    \end{circuitikz}
+\end{figure}
+
+\begin{tcolorbox}[title=Relazioni fondamentali]
+    \begin{align*}
+        V_{d1} = V_u - V_1\\
+        V_{d2} = V_u - V_2\\
+        I = I_1 + I_2\\
+        V_R = R \cdot I = V_b - V_u
+    \end{align*}
+\end{tcolorbox}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 e D2 OFF]
+        \[\begin{cases}
+            V_u = V_b\\
+            V_1 > V_b - V_\gamma\\
+            V_2 > V_b - V_\gamma\\
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 ON e D2 OFF]
+        \[\begin{cases}
+            V_u = V_1 + V_\gamma\\
+            V_1 < V_b - V_\gamma\\
+            V_1 < V_2
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 OFF e D2 ON]
+        \[\begin{cases}
+            V_u = V_2 + V_\gamma\\
+            V_2 < V_b - V_\gamma\\
+            V_2 < V_1
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 e D2 ON]
+        \[\begin{cases}
+            V_u = V_1 + V_\gamma\\
+            V_1 = V_2\\
+            V_1 < V_b - V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+Quando entrambi i segnali di ingresso sono superiori a $V_b - V_\gamma$, entrambi i diodi sono spenti e la tensione coincide con $V_b$.
+Se la tensione $V_1$ scende al di sotto di $V_b - V_\gamma$ ed è minore di $V_2$, allora l'uscita segue $V_1$ a meno di una
+costante $V_\gamma$.
+Stesso succede quando $V_2$ scende al di sotto di $V_b - V_\gamma$.
+Se entrambe le tensioni di ingresso hanno lo stesso valore e sono al di sotto di $V_b - V_\gamma$, entrambi i diodi sono accesi
+e l'uscita segue l'uno o l'altro a meno di una costante.
+
+L'uscita $V_u$ può essere vista come $V_u = \min\big\{V_1 + V_\gamma, V_2 + V_\gamma, V_b\big\}$.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ylabel={}, ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot{2*sin(deg(x))};
+                \addplot{2*cos(deg(x))};
+                \addplot{1};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot[green, samples=50]{min(2*sin(deg(x)) + \vgamma, 2*cos(deg(x)) + \vgamma, 1)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+Se si fa riferimento a segnali di tipo digitale, il circuito si comporta come una porta logica \textbf{AND}.
+
+\subsection{Circuito limitatore di tensione superiore ed inferiore}
+Negli ultimi due esempi abbiamo dovuto analizzare quattro casi, uno per ogni zona possibile in cui
+i due diodi del circuito potevano trovarsi. È evidente quindi, che nel caso più generale, con $n$ diodi
+presenti nel circuito, il numero di casi da analizzare crescerebbe come $2^n$.
+Quello che è importante da osservare è che non tutte le combinazioni sono significative dal punto di vista
+fisico.
+Alcune di esse possono essere escluse facendo ragionamenti a priori.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.5]
+        \draw (0, 0) node[ground]{}
+            -- (-1, 0)
+            to[american voltage source, v=$V_i$] (-1, 2)
+            to[R, i=$I$, v^=$V_R$] (1, 2)
+            -- (2, 2)
+            to[diode, label=$D_2$, i=$I_2$] (2, 0)
+            -- (0, 0)
+
+            (1, 0) to[diode, label=$D_1$, i=$I_1$] (1, 2)
+
+            (1, 2) node[circ, label=$V_u$]{};
+
+    \end{circuitikz}
+\end{figure}
+
+\begin{tcolorbox}[title=Equazioni generali]
+    \begin{align*}
+        &V_u + I \cdot R = V_i\\
+        &V_1 = - V_u\\
+        &V_2 = V_u\\
+        &I + I_1 = I_2
+    \end{align*}
+\end{tcolorbox}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 e D2 OFF]
+        \[\begin{cases}
+            V_i = V_u\\
+            V_i < V_\gamma\\
+            V_i > -V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 ON e D2 OFF]
+        \[\begin{cases}
+            V_u = -V_\gamma\\
+            \\
+            V_i < -V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\begin{minipage}[b]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 OFF e D2 ON]
+        \[\begin{cases}
+            V_u = V\gamma\\
+            \\
+            V_i > V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}[t]{.45\textwidth}
+    \begin{tcolorbox}[title=D1 e D2 ON]
+        \color{red}
+        \[\begin{cases}
+            V_u = -V\gamma\\
+            V_u = V\gamma\\
+            \text{Non verificabile}
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot[domain=-\vgamma:\vgamma]{x};
+                \addplot[domain=-5:-\vgamma]{-\vgamma};
+                \addplot[domain=\vgamma:5]{\vgamma};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}[
+                declare function={
+                    func(\x)= (\x < -\vgamma) * (-\vgamma) +
+                                (\x > \vgamma) * \vgamma +
+                                and(\x > -\vgamma, \x < \vgamma) * \x;
+                }]
+            \begin{axis}[ymin=-2.5, ymax=2.5, width=.9\textwidth]
+                \addplot[samples=30] {func(sin(deg(x)))};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+\noindent Al momento dell'impostazione delle equazioni generali, si poteva direttamente notare che $V_1 = -V_2$, quindi entrambi
+i diodi non potevano essere accesi allo stesso tempo.
+\\
+Per modificare le due soglie del raddrizzatore basta mettere in serie nel circuito due generatori di tensione.
+
+\newpage
+\subsection{Raddrizzatore a doppia semionda}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.3]
+        \draw (-1, 0)
+        to[american voltage source, v=$V_i$] (-1, 3)
+        -- (2, 3)
+        to[diode, n=d1] (1, 1.5)
+        node[circ, label={180:$V_u$}]{}
+        to[R, i=$I_R$] (3, 1.5)
+        to[diode, n=d4] (2, 0)
+        to[diode, n=d3] (1, 1.5)
+
+        (3, 1.5) to[diode, n=d2] (2, 3)
+        (-1, 0) -- (2, 0)
+        (3, 1.5) -- ++(0.5, 0) node[ground]{}
+
+        %Labels
+        (d1.s) node[left, label=$D_1$]{}
+        (d2.s) node[right, label={$D_2$}]{}
+        (d3.s) node[right, label={180:$D_3$}]{}
+        (d4.s) node[right, label={-45:$D_4$}]{}
+        ;
+    \end{circuitikz}
+\end{figure}
+
+\noindent Dal numero di diodi presenti nel circuito mi attendo $2^4 = 16$ combinazioni delle regioni di funzionamento del circuito.
+% Lezione 4 a 22 min
+
+\begin{tcolorbox}[title=Equazioni Generali]
+    \begin{align*}
+    &I = I_1 - I_2 = I_3 - I_4\\
+    &V_i = V_1 + V_R + V_4\\
+    &-V_i = V_3 + V_R + V_2\\
+    &I_R = I_2 + I_4\\
+    &I_R = I_3 + I_1\\
+    &V_u + V_1 + V_2 = 0\\
+    &V_u + V_3 + V_4 = 0
+    \end{align*}
+\end{tcolorbox}
+
+\noindent Risolvendo il circuito, otteniamo che le uniche soluzioni che hanno senso fisico sono le seguenti:
+\\[10pt]
+\begin{minipage}{.32\textwidth}
+    \begin{tcolorbox}[title={D1,D4 OFF\\D2,D3 ON}]
+        \[\begin{cases}
+            V_u = -2 V_\gamma - V_i\\
+            \\
+            V_i < -2 V_\gamma\\
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.33\textwidth}
+    \begin{tcolorbox}[title={D1,D2\\D3,D4 OFF}]
+        \[\begin{cases}
+            V_u = 0\\
+            V_i < 2V_\gamma\\
+            V_i > -2 V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.32\textwidth}
+    \begin{tcolorbox}[title={D1,D4 ON\\D2,D3 OFF}]
+        \[\begin{cases}
+            V_u = Vi - 2 V_\gamma\\
+            \\
+            V_i > 2 V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\noindent Il circuito ha un comportamento analogo al raddrizzatore a singola semionda, ha di diverso un tratto a pendenza negativa.
+Ciò significa che per un valore negativo di $V_i < V_\gamma$, l'uscita assume il valore positivo opposto.
+Quindi a differenza del circuito a singola semionda, che taglia la semionda negativa, questo circuito la trasforma in semionda positiva.
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ymin=-2, ymax=4, width=.9\textwidth]
+                \addplot[domain=(-2 * \vgamma):(2*\vgamma)]{0};
+                \addplot[domain=(2 * \vgamma):5]{x-2*\vgamma};
+                \addplot[domain=-5:-2*\vgamma]{-x-2*\vgamma};
+                \addplot[dashed, code-comment] coordinates {(2*\vgamma, 5) (2*\vgamma, -5)};
+                \addplot[dashed, code-comment] coordinates {(-2*\vgamma, 5) (-2*\vgamma, -5)};
+
+                \node[circ,label={-45:{$2V_\gamma$}}] at (axis cs:2*\vgamma,0) {};
+                \node[circ,label={180+45:{$-2V_\gamma$}}] at (axis cs:-2*\vgamma,0) {};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[b]{.45\textwidth}
+        \begin{tikzpicture}[
+            declare function={
+                func(\x) = (\x < -2*\vgamma) * (-\x -2*\vgamma) +
+                (\x > (2*\vgamma)) * (\x -2* \vgamma);
+            }]
+            \begin{axis}[ymin=-2, ymax=4, width=.9\textwidth]
+                \addplot[samples=30] {func(3*sin(deg(x)))};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\noindent Il circuito raddrizzatore a doppia semionda è utilizzato per la trasformazione da corrente alternata a corrente continua.
+
+\newpage
+% Lezione 5
+\subsection{Rivelatore di cresta}
+Quando ho in ingresso un segnale sinusoidale (a valor medio nullo), tutti i circuiti raddrizzatori visti fino ad ora,
+hanno la caratteristica di aver il valor medio della tensione in uscita, maggiore di zero.
+In particolare nel caso del raddrizzatore a doppia semionda, la trasformazione delle semionde negative, contribuisce
+ulteriormente al valor medio risultando in un valore maggiore rispetto al raddrizzatore a singola semionda.
+È stato anche accennato che questi circuiti sono utilizzati per la trasformazione di corrente alternata in corrente continua,
+resta comunque visibile dai grafici, che il segnale ottenuto in uscita dai circuiti è periodico e non
+assimilabile ad un segnale di tensione continua.
+
+Quello che vogliamo ottenere ora è estrarre il valor medio della tensione dal segnale periodico in uscita.
+Attraverso le serie di Fourier possiamo ricostruire una qualunque funzione periodica attraverso una combinazione lineare di
+toni sinusoidali a frequenza decrescente.
+
+In particolare ricordiamo che tra le armoniche ottenute dalla serie di Fourier, l'armonica con frequenza di $0Hz$ rappresenta
+il valor medio del segnale.
+Il nostro obbiettivo diventa quindi quello di isolare la componente continua. Possiamo fare ciò attraverso un filtro
+passa-basso capace di fare passare le componenti a frequenza più bassa, filtrando quelle a frequenza più alta.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw
+            (0, 0) node[ground]{}
+            -- (-1, 0)
+            to [sinusoidal voltage source, v=$V_i$, i=I] (-1, 2)
+            to [diode, v^=$V_d$, i=$I_D$] (+2, 2)
+            node[circ, label=$V_u$]{}
+            to [R, i=$I_R$](2, 0)
+            -- (0, 0)
+
+            (2, 2)
+            -- (3.5, 2)
+            to[capacitor, i=$I_c$] (3.5, 0)
+            -- (2, 0)
+            ;
+    \end{circuitikz}
+    \caption{Raddrizzatore a singola semionda con filtro passa-basso}
+\end{figure}
+
+
+\begin{tcolorbox}[title=Equazioni Generali]
+    \begin{align*}
+        I_D = I_R + I_C\\
+        I_R = \frac{V_u}{R}  \\
+        I_C = C \frac{dV_u}{dt}
+    \end{align*}
+\end{tcolorbox}
+
+\def\toff{t_{\text{off}}}
+\def\wtoff{\omega \toff}
+
+Nel caso del diodo acceso, il termine $\frac{V_u}{R}$, è positivo se $V_u$ è positivo, quindi fino a quando siamo nel $1^\circ$ o $2^\circ$ quadrante.
+Mentre il secondo termine, essendo derivata di $V_u$ è negativa in caso di segnale decrescente. Quindi il diodo è sicuramente acceso
+nell'intervallo $[0;\pi/2]$, mentre è sicuramente spento nell'intervallo $[\pi;\frac{3}{4}\pi]$.
+
+Indichiamo con $\wtoff$ il punto appartenente a $]\pi/2;\pi[$ in cui il diodo passa dallo stato ON allo stato OFF.
+Il punto $\wtoff$ è facilmente calcolabile osservando che corrisponde al punto di spegnimento, quindi dal passaggio di
+$I_D > 0$ a $I_D = 0$.
+
+\begin{tcolorbox}
+    \begin{align*}
+        &\begin{rcases}
+            V_d = V_\gamma\\
+            V_i - V_d - V_u = 0\\
+            V_i = V_M \sin(\omega t)
+        \end{rcases} \Rightarrow
+        \begin{cases}
+            V_u = V_M \sin(\omega t) - \cancelto{\text{trascurabile}}{V\gamma}\\
+            \frac{dV_u}{dt} = V_M\cos(\omega t)\omega
+        \end{cases}
+        \\
+        \\
+        &I_D = \frac{V_M \sin(\omega t)}{R} + C V_M \omega \cos(\omega t)
+        \\
+        \\
+        &\sin(\wtoff) + CR \omega \cos(\wtoff) = 0
+        \\
+    \end{align*}
+\end{tcolorbox}
+
+\noindent Siccome il punto che cerchiamo appartiene all'intervallo $]\pi/2;\pi[$, possiamo tranquillamente dire che
+$\wtoff = \arctan(-CR\omega)$, tenendo presente di prendere la soluzione in tale intervallo. Osserviamo inoltre il
+fatto che per $\omega RC$ crescente, il punto $\wtoff$ tende a $\pi/2$.
+\\
+Per il caso di diodo basta risolvere l'equazione differenziale $\frac{V_u}{R} + C\frac{dV_u}{dt} = 0$, ottenendo:
+\\[10pt]
+\begin{minipage}{.45\textwidth}
+    \begin{tcolorbox}[title=Diodo ON]
+        \[\begin{cases}
+            \tan(\omega t) > - CR\omega\\
+            V_u = V_M \sin(\omega t) - \cancelto{\text{trascurabile}}{V\gamma}
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.45\textwidth}
+    \begin{tcolorbox}[title=Diodo OFF]
+        \[\begin{cases}
+            V_u(t) = V_u(\toff) e^{-\frac{1}{RC}(t - \toff)}\\
+            V_u > V_M \sin (\omega t) - \cancelto{\text{trascurabile}}{V\gamma}
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+\noindent Quindi al momento di spegnimento del diodo, l'andamento della tensione decade seguendo l'andamento di
+un esponenziale negativo.
+
+\begin{figure}[h]
+    \centering
+    \def\tf{5*180/8}
+
+    \begin{tikzpicture}[
+        declare function={
+            vi(\x) = 5*sin(\x);
+            func(\x) = max(
+                    (\x > \tf) * vi(\tf) * exp((\tf - \x)/250),
+                    vi(\tf) * exp((\tf - \x - 360)/250),
+                    vi(\x)
+            ) - \vgamma;
+        }]
+        \begin{axis}[xmin=-1, xmax=10]
+            \addplot [code-red, samples=40, domain=-1:10] {vi(deg(x))};
+            \addplot [code-keyword, samples=100, domain=-1:10] {func(mod(deg(x) + 360, 360))};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent L'effetto della capacità diventa quindi evidente,
+La presenza della capacità fa si che il diodo si spenga prima, tanto prima quanto più elevata la capacità, ed una volta
+che si è spento la tensione non segue più la sinusoide ma un esponenziale decrescente con costante di
+tempo dipendente da RC. Maggiore è il prodotto RC, minore è il decadimento.
+
+L'idea di partenza era quella di trasformare la tensione alternata in tensione continua, e per RC sufficientemente grande,
+siamo in grado di approssimare un generatore di tensione continua.
+
+Questo circuito può essere utilizzato anche come un demodulatore di ampiezza, portando l'uscita a seguire l'andamento
+dell'ampiezza della sinusoide in ingresso.
+
+\newpage
+% Lezione 6
+\subsection{Diodi in regime dinamico}
+Fin'ora abbiamo tracciato delle caratteristiche di trasferimento ingresso-uscita, presupponendo che in ogni istante
+fosse possibile determinare la tensione d'uscita in funzione di quella in ingresso indipendentemente dal tempo, come
+se fosse una relazione statica.
+Ma nel diodo, per passare dalla condizione di polarizzazione diretta, alla condizione di polarizzazione inversa, è necessario
+che avvenga uno spostamento di carica all'interno del dispositivo, ed è impossibile muovere elettrone in tempi nulli.
+Quindi a questo spostamento, che corrisponde alla commutazione di polarizzazione diretta ed inversa, è associato un ritardo.
+
+Vogliamo stimare questo ritardo per capire se i risultati sino ad ora calcolati sono effettivamente realistici o devono
+essere a loro volta corretti alla luce di questa considerazione.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{.45\textwidth}
+        \begin{circuitikz}
+            \draw
+                (0, 0) node[ground]{}
+                -- (-1, 0)
+                to [american voltage source, v=$V_i$, i=I] (-1, 2)
+                to [diode, i=$I_D$] (2, 2)
+                to [R, v^=$V_u$](2, 0)
+                -- (0, 0)
+                ;
+            \draw[blue]
+                (-0.5, 2) -- ++(0, 1.5)
+                to[polar capacitor, color=blue, i=$I_C$] ++(2, 0)
+                -- ++(0, -1.5)
+                ;
+        \end{circuitikz}
+    \end{minipage}
+    \begin{minipage}{.45\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[ylabel=$V$, xlabel=$t$, ymin=-4, ymax=4, xmin=-4, xmax=4]
+                \addplot [code-red] coordinates {(-5, 2) (0, 2)};
+                \addplot [code-red] coordinates {(0, -2) (5, -2)};
+                \addplot [code-keyword] coordinates {(-5, 2-\vgamma) (0, 2-\vgamma)};
+                \addplot [code-keyword] coordinates {(0, 0) (5, 0)};
+
+                \node [right, code-keyword] at (0, 2-\vgamma) {$V_u$};
+                \node [right, code-red] at (0, 2) {$V_i$};
+                \node [above] at (-2, 2) {ON};
+                \node [above] at (2, 0) {OFF};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\noindent Per calcolare il ritardo dobbiamo introdurre un modello nel diodo, che, in aggiunta a quanto descritto fino ad ora,
+tenga conto anche degli effetti di reazione appena introdotti.
+Introduciamo in parallelo al diodo una capacità, che ci permette di simulare il comportamento del diodo in regime
+dinamico.
+La relazione associata alla carica di questo condensatore parassita non è descritta dalla relazione $Q=CV$, ma da una
+relazione non lineare, dove nel primo quadrante segue la relazione esponenziale $Q = Q_s (e^{V_d / V_t} - 1)$.
+È facile osservare che il rapporto $Q/I_D = Q_s/I_s$ è una costante delle dimensioni fisiche di un tempo, che indicheremo genericamente
+con la costante $\tau$.
+Sintetizziamo quindi la regione di funzionamento della capacità in funzione diretta, come $Q=\tau I$.
+
+La stessa relazione non vale in polarizzazione inversa, dove la carica non segue un asintoto, ma ha un' andamento
+simile a quello di una radice quadrata.
+
+Dato che abbiamo approssimato l'andamento della corrente con un andamento lineare a tratti, faremo lo stesso con la carica.
+È del tutto evidente che la qualità di questa approssimazione è meno buona ma ci accontenteremo, mettendo in evidenze i momenti
+in cui questa approssimazione risulterà inadeguata.
+
+
+\begin{minipage}{.45\textwidth}
+    \begin{tcolorbox}[title=Diodo OFF]
+        \[\begin{cases}
+            I_D = 0\\
+            Q = 0\\
+            V_d < V_\gamma
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.45\textwidth}
+    \begin{tcolorbox}[title=Diodo ON]
+        \[\begin{cases}
+            V_D = V_\gamma\\
+            I_D > 0\\
+            Q > 0
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+
+Ed in entrambe è valida $Q = \tau I$.
+
+\noindent Per $t < 0$, il circuito è ancora in regione statica, per questo la derivata della corrente è nulla e valgono ancora le equazioni del diodo in
+regione statica.
+Stesso ragionamento è valido per $t \to \infty$.
+
+\begin{tcolorbox}[title={$t < 0$}]
+\end{tcolorbox}
+
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot coordinates {(-5, 3) (0, 3)};
+    \end{axis}
+\end{tikzpicture}
+
+\end{document}

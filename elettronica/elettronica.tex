@@ -1,0 +1,128 @@
+%!TEX program = xelatex
+\documentclass[a4paper, 10pt]{article}
+
+% Standard packages
+\usepackage{amsmath, wrapfig}
+
+% Installed packages
+\usepackage{subfiles}
+\usepackage[oldvoltagedirection]{circuitikz}
+\usepackage{adjustbox}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{pgfplots}
+\usepackage{cancel}
+\usepackage[many]{tcolorbox} %
+\usepackage{mathtools}
+
+\definecolor{code-bg}{HTML}{EFF0F1}
+\definecolor{code-keyword}{HTML}{0054A3}
+\definecolor{code-comment}{HTML}{A5ACB2}
+\definecolor{important-box}{HTML}{D1E5F1}
+\definecolor{code-red}{HTML}{C08587}
+
+\renewcommand{\familydefault}{\sfdefault}
+\newcommand{\warnbox}[1]{
+    \begin{center}
+    {
+        \setlength\fboxsep{.5cm}
+        \colorbox{important-box}{
+            \parbox{.8\linewidth}{#1}
+        }
+    }
+    \end{center}
+}
+
+\titleformat{\section}
+    {\color{black}\Huge}
+    {}
+    {0em}
+    {}[\color{code-comment}\titlerule]
+
+\titlespacing{\section}{0em}{1em}{3em}
+\newcommand{\sectionbreak}{\clearpage}
+
+\titleformat{\subsection}
+    {\color{code-keyword}\large\bfseries}
+    {}
+    {0em}
+    {}
+
+\makeatletter
+\def\@maketitle{
+    \null
+    \vfill
+    \begin{center}\leavevmode
+        \normalfont
+        {\LARGE\raggedleft \@author\par}%
+        {\color{code-keyword}\hrulefill\par}
+        {\huge\raggedright \@title\par}%
+        \vskip 1cm
+        %    {\Large \@date\par}%
+    \end{center}%
+    \vfill
+    \null
+    \thispagestyle{empty}%
+    \clearpage
+    \pagenumbering{arabic}
+}
+\makeatother
+
+\def\axisdefaultwidth{8cm}
+\def\axisdefaultheight{6cm}
+\pgfplotsset{
+    no markers,
+    axis lines=middle,
+    xtick={\empty},
+    ytick={\empty},
+    compat=1.11,
+    xlabel style={at={(ticklabel* cs:1)},anchor=north west},
+    ylabel style={at={(ticklabel* cs:1)},anchor=south west, rotate=-90},
+    every axis plot/.append style={ultra thick},
+    every axis/.style={scale only axis, unit vector ratio*=1 1 1, xmin=-5, xmax=5, ymin=-5, ymax=5},
+    xlabel=$V_i$,
+    ylabel=$V_u$,
+}
+\tcbset{
+    boxrule=0pt,
+    arc=0mm,
+    colframe=code-bg,
+    colback=code-bg,
+    coltitle=black,
+    fonttitle=\bfseries
+}
+% Formula per corrente diodo
+\def\vgamma{0.78}
+\newcommand{\diodecurrent}[1][V]{%
+    \ensuremath{I_s \big(e^{#1/V_T} -1\big)}%
+}
+\newcommand{\diodeoffcases}[2] {
+    \ensuremath{
+        \begin{cases}
+            #1 = 0
+            \\
+            #2 < V_\gamma
+        \end{cases}
+    }
+}
+
+\newcommand{\diodeoncases}[2] {
+    \ensuremath{
+        \begin{cases}
+            #2 = V_\gamma
+            \\
+            #1 > 0
+        \end{cases}
+    }
+}
+\title{Elettronica 1}
+\author{ale-cci}
+
+\begin{document}
+\maketitle{}
+
+\subfile{lectures/diodo_pn}
+\subfile{lectures/lecture2}
+
+\end{document}
