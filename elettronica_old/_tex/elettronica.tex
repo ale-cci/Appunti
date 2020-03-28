@@ -5,13 +5,14 @@
 \usepackage{float}
 \usepackage{wrapfig}
 \usepackage{graphicx}
-\usepackage[makeroom]{cancel}
-\usepackage[usestackEOL]{stackengine}
 \usepackage{mathtools}
-\usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{multicol}
 \usepackage{tikz}
+\usepackage[makeroom]{cancel}
+\usepackage[usestackEOL]{stackengine}
+\usepackage[oldvoltagedirection]{circuitikz}
 \usepackage{pgfplots}
+\usepackage{subfiles}
 
 
 \author{ale-cci}
@@ -37,7 +38,7 @@
 Due atomi vicini tra loro si influiscono a vicenda, variando il diagramma dell'energia.
 Le proprietà di esclusione continuano a valere anche per gli atomi.
 
-Se non viene fornita energia al sistema, vengono occupate le bande pi\'u basse.
+Se non viene fornita energia al sistema, vengono occupate le bande più basse.
 
 In condizioni di equilibrio, (no scambio energetico), i livelli al di sotto del \textbf{livello di Fermi} sono tutti occupati dagli elettroni, diversamente quelli al di sopra sono tutti liberi.
 
@@ -235,13 +236,35 @@ Se gli effetti delle brusche variazioni sono trascurabili rispetto alla dimensio
 \subsection{Calcolo di $\omega_n$ e $\omega_p$}
 
 
-\section{Utilizzo del diodo}
+\subfile{appunti_diodo.tex}
+\section{Diodo a Giunzione PN}
+%
 
-\begin{circuitikz}
-    \draw(0, 0) to [empty diode, v=$V_d$, i=$I$] (3,0) to [R, v=$V_u$] (3,-2) to [short] (0, -2) to [american voltage source] (0, 0);
-\end{circuitikz}
-$ I = I_s (\exp\left(\frac{V_D}{V_T}\right) -1) $
+\begin{center}
+    \begin{minipage}{0.3\textwidth}
+        \begin{circuitikz}
+            \draw(0, 0)
+            to [empty diode, v=$V_d$, i=$I$] (3,0)
+            to [R, v=$V_u$] (3,-2)
+            to [short] (0, -2)
+            to [american voltage source] (0, 0);
+            \draw (1.5, -2) node[eground]{};
+        \end{circuitikz}
+    \end{minipage}
+    \begin{minipage}{0.6\textwidth}
+        \[
+            \begin{cases}
+                V_i - V_d - V_u = 0
+                \\
+                I_D = I_s \big(e^{\frac{V_d}{V_T}} - 1\big)
+            \end{cases}
+            \\
+            V_i = V_T \ln{(\frac{V_u}{RI_s} + 1)} + V_u
+        \]
+    \end{minipage}
+\end{center}
 
+Dallo studio dell circuito
 
 \section{Modello a soglia del diodo}
 \subsection{Raddrizzatore a singola semi-onda}
