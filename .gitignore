@@ -10,6 +10,7 @@
 *.ind
 *.idx
 *.pem
+*.xdv
 
 TODO.txt
 
@@ -21,3 +22,9 @@ scripts
 ubungu/extra/alema
 ubungu/extra/ff
 
+.SRCINFO
+ace/assembly/*
+!ace/assembly/dosbox.conf
+!ace/assembly/src
+ace/assembly/src/*
+!ace/assembly/src/*.asm
