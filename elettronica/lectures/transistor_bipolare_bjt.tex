@@ -1,8 +1,238 @@
 \documentclass[../elettronica]{subfiles}
 
 \begin{document}
+%Lezione 7
+\newcommand\I[1]{\ensuremath{I_{\text{#1}}}}
+\newcommand\V[1]{\ensuremath{V_{\text{#1}}}}
+\def\vbe{$\V{BE}$}
+
 \section{Transistore bipolare a giunzione BJT}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.5]
+        \draw
+        (0, 0) to[diode, v=$V_{BC}$, i<=$I_C$] (2, 0) node[above]{$C$}
+        (0, 0) to[diode, v=$V_{BE}$, i=$I_E$] (-2, 0) node[above]{$E$}
+        (0, 0) to[short, i<=$I_B$] (0, -1) node[right]{$B$}
+
+        (0, 0) node[circ]{}
+        ;
+    \end{circuitikz}
+    \caption{transistor bipolare}
+    \label{circit:transistor_bjt}
+\end{figure}
+\subsection{Modello di Ebers e Moll}
+Supponiamo che $V_{BE} > 0$ e $V_{BC} < 0$. Questo ci permetterà di dire che il diodo tra base
+ed emettitore è polarizzato in regione diretta ed il diodo tra base e collettore è polarizzato
+in inversa.
+Questo comporta che $I_E > 0$ e $I_C \approx 0$ e, considerando la legge di Kirchoff $I_B + I_C = I_E$,
+abbiamo $I_B \approx I_E$.
+
+Quello che accade se la distanza tra i due diodi è ridotta (che indicheremo con $w$), l'interazione tra
+le loro cariche porta fa cambiare loro comportamento radicalmente, portando a far valere le
+relazioni $I_e \approx -I_c$ e $I_b \approx 0$.
 
 
+Quando $w$ è sufficientemente piccolo, quello che accade è che nel momento in cui il diodo tra base ed emettitore è' polarizzato
+in diretta, ed il diodo tra base e collettore è polarizzato in inversa, la corrente fluisce prevalentemente fra collettore
+ed emettitore a fronte di una corrente di base molto più piccola rispetto alle altre due regioni.
+% 9:40
+
+\begin{wrapfigure}{r}{.4\textwidth}
+    \centering
+    \vspace{-2\baselineskip}
+    \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm]
+        \draw
+        (0, 0)
+        to[short, i=$\I{BC}$] (0.7, 0)
+        to[diode] (2, 0)
+        to[short, i<=$\I{C}$] ++(0.5, 0) node[below]{$C$}
+        (0, 0)
+        to[short, i=$\I{BE}$] (-0.7, 0)
+        to[diode] (-2, 0)
+        to[short, i=$\I{E}$] ++(-0.5, 0) node[above]{$E$}
+        (0, 0) to[short, i<=$\I{B}$] (0, -1) node[right]{$B$}
+
+        (0, 0) node[circ]{}
+        ;
+        \draw[code-red] (2, 0)
+        to[short, i=${\I{t}}$, color=code-red] (2, 1)
+        to[american controlled current source, color=code-red] (-2, 1)
+        -- (-2, 0)
+        ;
+
+        \draw[code-keyword] (-2, 1)
+        -- (-2, 1.8)
+        to[american controlled current source, color=code-keyword] ++(4, 0)
+        -- (2, 1)
+        ;
+    \end{circuitikz}
+\end{wrapfigure}
+\vspace{10pt}
+Possiamo tenere conto di questo comportamento attraverso un generatore aggiuntivo di corrente (riportato in rosso) che aggiunga
+alla corrente prevista dal modello del diodo polarizzata in inversa, correntemente trascurabile, una nuova corrente
+che dipende a sua volta esponenzialmente da \vbe. Chiameremo questa corrente $I_t$: corrente dell'\textbf{effetto transistore}.
+
+\vspace{20pt}
+\begin{tcolorbox}[title={Equazioni caratteristiche transistore}, width=\textwidth]
+    \begin{align*}
+        &\I{BE} = \diodecurrent[\I{BES}]{\V{BE}}\\
+        &\I{BC} = \diodecurrent[\I{BCS}]{\V{BC}}\\
+        &\I{t} = {\color{code-red} \diodecurrent[\I{S}]{\V{BE}}} - {\color{code-keyword} \diodecurrent[\I{S}]{\V{BC}}}
+    \end{align*}
+\end{tcolorbox}
+
+\vspace{10pt}
+\noindent È semplice calcolare l'espressione della corrente di emettitore $\I{E}$, di collettore $\I{C}$ e di base $\I{B}$,
+attraverso le equazioni di Kirchoff ai tre nodi.
+Bisogna considerare che abbiamo utilizzato solo una particolare condizione di polarizzazione.
+Se studiassimo il caso opposto, ovviamente otterremmo risultati simmetrici: vedremo che con $\V{BE} < 0$ e $\V{BC} > 0$
+avremo una componente aggiuntiva di corrente ad effetto transistore, diretta in direzione opposta, rappresentabile anch'essa
+con un generatore di corrente pilotato.
+
+%17:39
+\begin{tcolorbox}[title=Equazioni caratteristiche transistore]
+    \begin{align*}
+        &\I{B} = \diodecurrent[\I{BES}]{\V{BE}} - \diodecurrent[\I{BC}]{\V{BC}}\\
+        &\I{E} = \diodecurrent[(\I{S} + \I{BE})]{\V{BE}} - \diodecurrent[\I{S}]{\V{BC}}\\
+        &\I{C} = \diodecurrent[\I{S}]{\V{BE}} - \diodecurrent[(\I{S} + \I{BCS})]{\V{BC}}\\
+    \end{align*}
+\end{tcolorbox}
+
+\vspace{20pt}
+\begin{wrapfigure}{r}{.2\textwidth}
+    \vspace{-2\baselineskip}
+    \begin{center}
+        \begin{circuitikz}
+            \draw (0, 0) node[npn](bjt){}
+            (bjt.B) node[ocirc]{} node[left]{B}
+            (bjt.E) node[ocirc]{} node[below]{E}
+            (bjt.C) node[ocirc]{} node[above]{C}
+            ;
+        \end{circuitikz}
+    \end{center}
+    \caption{transistor npn}
+    \label{component:transistor_npn}
+\end{wrapfigure}
+
+\noindent Il transistore in figura \ref{component:transistor_npn} prevede due giunzioni ed ha il nome di \textbf{transistore npn}.
+Esiste anche il suo duale, \textbf{transistore pnp} al quale faremo solo un rapido cenno più avanti ma suo
+comportamento è del tutto identico a quello che stiamo discutendo.
+
+Per la legge di Kirchoff abbiamo se conosciamo due tra le differenze di potenziale ai lati del transistore, la terza è
+univocamente determinata. Ragionamento del tutto analogo vale per le correnti.
+
+Per determinare completamente il regime di funzionamento del transistore, occorre determinare le 6 grandezze: 3 correnti e 3
+tensioni, attraverso 6 equazioni, due delle quali sono quelle di Kirchoff appena indicate.
+Per trovare le altre quattro equazioni, utilizziamo lo stesso metodo che abbiamo applicato per determinare le
+equazioni del diodo: mettiamo un morsetto a terra e, fornendo un potenziale su uno dei due morsetti rimanenti, misuriamo
+il potenziale sull'ultimo morsetto.
+
+Ovviamente è possibile connettere il transistor in 3 modi differenti: emettitore, base e collettore comune. Ma di queste
+ultime due ce ne occuperemo più avanti.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.2]
+        \draw (0, 0)
+        to[american voltage source, v=$V_i$, i=$\I{B}$] (0, 2)
+        -- (1, 2)
+        -- (1, 1) node[npn, anchor=B](tr){}
+
+        (tr.E) -- (tr.E |- 0, 0)
+        (0, 0) -- (tr.E |- 0, 0)
+        -- ++(1, 0) coordinate(x)
+
+        (tr.C) -- (tr.C |- 0, 2)
+        -- ++(1, 0)
+        to[R, v^=$V_u$, i<=$\I{C}$] (x)
+        ;
+    \end{circuitikz}
+    \caption{Connessione a Emettitore comune}
+\end{figure}
+
+%37:00
+\noindent Già osservando il circuito, possiamo notare che due incognite sono eliminate dalla equazione della tensione in ingresso
+$\V{i} = \V{BE}$, che possiamo considerare data, e dall'equazione $\V{u} = R\cdot \I{C}$.
+Ricordando che la corrente in ingresso corrisponde alla corrente di base, e che la corrente in uscita corrisponde alla
+corrente di collettore, per le ultime due equazioni residue possiamo utilizzare quelle fornite dalle caratteristiche del transistore
+elencate precedentemente.
+
+\vspace{10pt}
+\begin{tcolorbox}
+    \begin{align*}
+        &\I{B}(\V{BE}, \V{CE}) = \diodecurrent[\I{BES}]{\V{BE}} - \diodecurrent[\I{BC}]{\V{BC}}\\
+        &\I{C}(\V{BE}, \V{CE}) = \diodecurrent[\I{S}]{\V{BE}} - \diodecurrent[(\I{S} + \I{BCS})]{\V{BC}}\\
+    \end{align*}
+\end{tcolorbox}
+\vspace{10pt}
+Siccome queste relazioni di correnti sono due funzioni di due variabili ($\V{BE}$ e $\V{CE}$), è necessario
+un grafico in tre dimensioni per poterle rappresentare graficamente, e ciò non sarebbe pratico.
+
+Per questo motivo riconduciamo queste espressioni ad una rappresentazione più semplice, riconducendoci ad una famiglia di curve parametriche
+ponendo $\V{CE}$ come variabile indipendente e tracciando le funzioni al variare di $\V{CE}$ (Figura \ref{graph:transistor_bjt_3d}).
+
+\newpage
+\begin{figure}[h]
+\begin{minipage}{.47\textwidth}
+    \centering
+    \def\vt{1}
+    \def\kuno{0.001}
+    \def\kdue{20}
+    \begin{tikzpicture}[declare function={
+            ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) + \kdue *(e^((\vbe - \vce)/\vt -1));
+        }]
+
+        \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{BE}$, ylabel=$\I{B}$]
+            \foreach \i in {4, 4.250, ..., 6}{
+                \addplot {ib(x, \i)};
+            }
+
+            \draw[->, thick] (4.5, 0.5) -- (2, 2) node[above]{$\V{CE}$};
+            \draw
+                (0.8, 0.4) node[above]{OFF}
+                (4.3, 0.9) node[right] {AD}
+                (3.5, 4.5) node[left]{SAT};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$\I{B}(\V{BE})$ al variare di $\V{CE}$}
+    \label{graph:transistor_bjt_3d}
+\end{minipage}
+\begin{minipage}{.47\textwidth}
+    \centering
+    \def\vt{1}
+    \def\kuno{1.250}
+    \def\kdue{3}
+    \begin{tikzpicture}[declare function={
+            ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) - \kdue *(e^((\vbe - \vce)/\vt -1));
+        }]
+
+        \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{CE}$, ylabel=$\I{C}$]
+            \foreach \i in {0.25, 0.50, ...,1.5}
+            {
+                \addplot {ib(\i, x)};
+            }
+
+            \draw[->, thick] (3, 0.2)--(3, 4.5)
+                node[left]{$\V{BE}$};
+            \draw
+                (4.5, 4.5) node[above]{AD}
+                (4.5, 0.3) node[above]{OFF}
+                (1, 3.3) node[above]{SAT};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$\I{C}(\V{CE})$ al variare di $\V{BE}$}
+\end{minipage}
+\end{figure}
+
+\vspace{20pt}
+\noindent Il transistor è composto da 2 diodi, ognuno polarizzabile in regione diretta o regione inversa. Possiamo riconoscere quindi
+quattro regioni di funzionamento del transistore, dipendenti da $\V{BE}$ e $\V{BC}$.
+\begin{itemize}
+    \item BE on, BC off: Regione normale di funzionamento o regione di polarizzazione attiva diretta
+    \item BE off, BC on: Regione di polarizzazione attiva inversa.
+    \item BE off, BC off: Regione di interdizione, per brevità diremo che il transistore è spento
+    \item BE on, BC on: Regione di saturazione.
+\end{itemize}
 
 \end{document}

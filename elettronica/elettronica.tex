@@ -94,8 +94,8 @@
 }
 % Formula per corrente diodo
 \def\vgamma{0.78}
-\newcommand{\diodecurrent}[1][V]{%
-    \ensuremath{I_s \big(e^{#1/V_T} -1\big)}%
+\newcommand{\diodecurrent}[2][I_s]{%
+    \ensuremath{#1 \big(e^{#2/V_T} -1\big)}%
 }
 \newcommand{\diodeoffcases}[2] {
     \ensuremath{
