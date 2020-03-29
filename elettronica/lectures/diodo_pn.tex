@@ -824,9 +824,9 @@ essere a loro volta corretti alla luce di questa considerazione.
                 to [R, v^=$V_u$](2, 0)
                 -- (0, 0)
                 ;
-            \draw[blue]
+            \draw[code-keyword]
                 (-0.5, 2) -- ++(0, 1.5)
-                to[polar capacitor, color=blue, i=$I_C$] ++(2, 0)
+                to[polar capacitor, color=code-keyword, i=$I_C$] ++(2, 0)
                 -- ++(0, -1.5)
                 ;
         \end{circuitikz}
@@ -834,19 +834,24 @@ essere a loro volta corretti alla luce di questa considerazione.
     \begin{minipage}{.45\textwidth}
         \begin{tikzpicture}
             \begin{axis}[ylabel=$V$, xlabel=$t$, ymin=-4, ymax=4, xmin=-4, xmax=4]
-                \addplot [code-red] coordinates {(-5, 2) (0, 2)};
-                \addplot [code-red] coordinates {(0, -2) (5, -2)};
-                \addplot [code-keyword] coordinates {(-5, 2-\vgamma) (0, 2-\vgamma)};
-                \addplot [code-keyword] coordinates {(0, 0) (5, 0)};
+                \addplot [code-keyword] coordinates {(-5, 2) (0, 2)};
+                \addplot [code-keyword] coordinates {(0, -2) (5, -2)};
+                \addplot [code-comment] coordinates {(-5, 2-\vgamma) (0, 2-\vgamma)};
+                \addplot [code-comment] coordinates {(0, 0) (5, 0)};
 
-                \node [right, code-keyword] at (0, 2-\vgamma) {$V_u$};
-                \node [right, code-red] at (0, 2) {$V_i$};
+                \addplot [code-red] coordinates {(3, -2) (3, 2)};
+                \addplot [code-red] coordinates {(3, 2) (5, 2)};
+
+                \node [right, code-comment] at (0, 2-\vgamma) {$V_u$};
+                \node [right, code-keyword] at (0, 2) {$V_i$};
                 \node [above] at (-2, 2) {ON};
                 \node [above] at (2, 0) {OFF};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
 \end{figure}
+
+In grigio riportata la risposta statica del circuito in risposta al segnale in ingresso $V_i$.
 
 \noindent Per calcolare il ritardo dobbiamo introdurre un modello nel diodo, che, in aggiunta a quanto descritto fino ad ora,
 tenga conto anche degli effetti di reazione appena introdotti.
@@ -887,17 +892,168 @@ in cui questa approssimazione risulterà inadeguata.
 
 Ed in entrambe è valida $Q = \tau I$.
 
-\noindent Per $t < 0$, il circuito è ancora in regione statica, per questo la derivata della corrente è nulla e valgono ancora le equazioni del diodo in
-regione statica.
-Stesso ragionamento è valido per $t \to \infty$.
+\noindent Per $t < 0$, siccome arriviamo da tempo $t = -\infty$, il circuito è ancora in regione statica,
+per questo la derivata della corrente è nulla e valgono ancora le equazioni del diodo in regione statica.
 
-\begin{tcolorbox}[title={$t < 0$}]
+Stesso ragionamento è valido se attendo un tempo sufficientemente lungo, dove ogni fenomeno
+transitorio tenderà ad esaurirsi.
+
+\begin{tcolorbox}[title=Equazioni generali]
+    \begin{align*}
+        &V_i - V_d - V_u = 0\\
+        &I_d + I_c = I\\
+        &I_c = \frac{dQ_u}{dt}\\
+        &I_d = \frac{Q}{\tau}
+    \end{align*}
 \end{tcolorbox}
 
-\begin{tikzpicture}
-    \begin{axis}
-        \addplot coordinates {(-5, 3) (0, 3)};
-    \end{axis}
-\end{tikzpicture}
+\begin{minipage}{.47\textwidth}
+    \begin{tcolorbox}[title=Circuito a diodo acceso]
+        \[\begin{cases}
+            V_i = V_f > V_\gamma\\
+            V_u = V_f - V_\gamma\\
+            I = \frac{V_f - V_\gamma}{R}\\
+            Q = \frac{\tau}{R}(V_f - V_\gamma)
+        \end{cases}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.47\textwidth}
+    \begin{tcolorbox}[title={Circuito da $t > 0$ a $t \to \infty$}]
+        \[\begin{cases}
+        &V_u = 0\\
+        &I_c = 0\\
+        &I = 0\\
+        &Q = 0
+        \end{cases}
+    \]
+    \end{tcolorbox}
+\end{minipage}
+
+\begin{minipage}{.47\textwidth}
+    \begin{tcolorbox}[title={Condizioni iniziali $t = 0^+$}]
+        \begin{align*}
+            &Q(0^+) = Q(0^-) = \frac{\tau}{R}(V_f - V_\gamma)\\
+            &V_d(0^+) = V_d(0^-) = V_\gamma\\
+            &V_u(0^+) = -V_R - V_\gamma\\
+            &I(0^+) = \frac{-V_R - V_\gamma}{R}
+        \end{align*}
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.47\textwidth}
+    \begin{tcolorbox}[title={Circuito a $t > 0$}]
+        \begin{align*}
+            &\frac{dQ}{dt} + \frac{Q}{\tau} = -\frac{V_R + V_\gamma}{R}\\
+            \\
+            &\text{da cui}
+            \\
+            &Q(t) = \frac{\tau}{R}(V_f + V_R) e ^ {-\frac{t}{\tau}} - \frac{\tau}{R}(V_R + V_\gamma)
+        \end{align*}
+    \end{tcolorbox}
+\end{minipage}
+
+
+Analizzando l'equazione del transitorio di $Q(t)$ ottenuta, possiamo osservare che per $t = 0$,
+allora $Q(t) = \frac{\tau}{R}\big(V_f - V_\gamma\big)$, che corrisponde a $Q(0^+)$.
+Mentre per $t \to \infty$, otteniamo $-\frac{\tau}{R}\big(V_R + V_\gamma)$, che, essendo $V_R + V_\gamma$ positivo
+$Q(t) < 0$ per $t \to \infty$.
+
+L'equazione $V_d = V\gamma$, ipotesi utilizzata per il transitorio, è valida fino a quando il valore
+di $Q$ è positivo, maggiore o al limite 0.
+
+
+L'equazione del transitorio è valida fino a quando l'equazione del diodo una costante e pari a $V_\gamma$, $Q(t) > 0$
+Il valore finale di $Q(t)$ può essere al minimo 0,
+
+Il diodo, dovendo smaltire la carica positiva sulla giunzione, per un certo periodo di tempo tiene costante
+la tensione ai suoi capi, quindi ritarda a spegnersi. Chiamiamo questo tempo: tempo di storage.
+Per calcolare questo tempo dobbiamo trovare il punto in cui l'equazione della carica raggiunge il valore 0.
+\begin{align*}
+    \frac{\tau}{R}(V_f + V_R) e ^ {-t_s/\tau} - \frac{\tau}{R}(V_R + V_\gamma) = 0
+    \\
+    t_s = \tau \ln\Big(\frac{V_f + V_R}{V_R + V_\gamma}\Big)
+\end{align*}
+Si vede subito che il rapporto è maggiore di 1, e che il tempo di storage, non dipende dal valore della resistenza,
+ma dipende unicamente dalla escursione di tensione e dalle caratteristiche fisiche $\tau$ del diodo.
+
+\begin{center}
+    \def\tm{3}
+
+    \begin{minipage}{.32\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[width=.95\textwidth, ylabel=$V_u$, xlabel=$t$, xmin=-2, xmax=7]
+                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
+                \addplot [code-keyword] coordinates {(0, -3) (\tm, -3)};
+                \addplot [code-keyword] coordinates {(\tm, -3) (\tm, 0)};
+                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
+                \addplot [code-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
+                \addplot [code-red] coordinates {(\tm + 2, 3) (8, 3)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}{.31\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[width=.95\textwidth, ylabel=$I$, xlabel=$t$, xmin=-2, xmax=7]
+                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
+                \addplot [code-keyword] coordinates {(0, -3) (\tm, -3)};
+                \addplot [code-keyword] coordinates {(\tm, -3) (\tm, 0)};
+                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
+                \addplot [code-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
+                \addplot [code-red] coordinates {(\tm + 2, 3) (8, 3)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}{.32\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[width=.95\textwidth, ylabel=$Q$, xlabel=$t$, xmin=-2, xmax=8]
+                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
+                \addplot [code-keyword, domain=0:\tm]{(3 / (1-e^(-\tm)))*e ^(-x) - (3 / (1-e^(-\tm))) +3};
+                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
+                \addplot [code-red, domain=\tm+2:8] {-e^(-x + ln(3) + \tm+2) + 3};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{center}
+
+Nel modello approssimato che stiamo utilizzando si impiega un tempo $t_s$ per passare da $Q = Q(0^-)$, a $Q = 0$
+perché abbiamo dovuto spostare le cariche interne al diodo fino ad arrivare al valore 0.
+Dato che nel modello approssimato che stiamo utilizzando non c'è ulteriore carica da spostare,
+il tempo del transitorio è necessariamente nullo, quindi la tensione è libera di variare istantaneamente.
+
+Abbiamo già commentato che la qualità dell'approssimazione della carica è inferiore a quella della corrente, dato
+che in regione di polarizzazione inversa, una si comporta come radice e l'altra come esponenziale negativo che tende ad un
+valore di $I_s$ pressoché 0.
+
+Questo significa che l'approssimazione considera nulla la carica in polarizzazione inversa non è accuratissima, perché la
+carica essendo anche debolmente negativa, comporta un transitorio di scarica del condensatore, dove ci dobbiamo aspettare che
+il valore della resistenza $R$ influirà sul tempo di scarica.
+
+Abbiamo descritto il transitorio di spegnimento del diodo, descrivendolo in due tratti:
+il primo caratterizzato da una tensione costante $V_d = V_\gamma$ ed una carica che varia da un valore positivo
+ad un valore nullo in un tempo $t_s$, ed un secondo tratto dove la carica è costante e vale 0,
+e la tensione $V_d < V_\gamma$ che si compie in un tempo nullo.
+
+Per determinare come funziona il passaggio di accensione del diodo, dovremo percorrere questi due tratti
+all'inverso, entrambi descritti dalle stesse equazioni.
+Dato che percorrendo il secondo tratto impieghiamo un tempo nullo, visto che non comporta spostamento di carica,
+nel primo tratto avremo ai capi del diodo una tensione costante pari a $V_f - V_\gamma$.
+Ma siccome non appena il condensatore comincia a caricarsi la tensione ai capi del diodo ha assunto già il suo
+valore definitivo, il transitorio inverso ha un comportamento totalmente differente.
+Mentre per spegnere il diodo è necessario un tempo di spegnimento $t_s$, per accendere il diodo (in termini di
+tensione in uscita) il tempo di accensione non è visibile.
+
+Il transitorio del diodo è asimmetrico, è lento a spegnersi e molto rapido ad accendersi.
+
+Abbiamo stimato che il tempo di spegnimento del diodo è di circa $20ns$, e questo tempo è pressoché indipendente
+dalla resistenza.
+
+Le approssimazioni fatte sino ad ora sono del tutto accettabili quando il periodo del segnale è maggiore come
+ordine di grandezza al ritardo intrinseco del diodo. Diventa non trascurabile quando le frequenze del segnale
+sono notevolmente maggiori rispetto al ritardo. Al crescere della frequenza il capacitore tende a cortocircuitare
+il diodo.
+
+Esiste quindi un limite alla frequenza massima di commutazione che posso richiedere ad un diodo.
+Questo è uno dei motivi per cui la frequenza di clock è limitata ad un valore massimo e che il periodo associato a
+quella frequenza deve essere sufficientemente lungo per permettere ai transitori del
+circuito di completarsi.
 
 \end{document}
