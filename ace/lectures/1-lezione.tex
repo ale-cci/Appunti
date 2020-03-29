@@ -18,6 +18,20 @@ La CPU (unità di controllo) è ulteriormente divisa in 4 parti:
 \end{itemize}
 
 \subsection{Architettura di Von Neumann}
-xoxo
+\begin{center}
+    \begin{tikzpicture}
+        \node[block] (ms) {Memoria Secondaria};
+        \node[block, below of=ms, node distance=2cm] (mc) {Memoria Centrale};
+        \node[block, below of=mc, node distance=2cm] (cpu) {CPU};
+        \node[block, right of=cpu, node distance=3cm] (out) {Output};
+        \node[block, left of=cpu, node distance=3cm] (in) {Input};
 
+        \draw[block, <->, thick] (ms)--(mc);
+        \draw[block, <->, thick] (mc)--(cpu);
+        \draw[block, ->, thick] (cpu) -- (out);
+        \draw[block, ->, thick] (in) -- (cpu);
+    \end{tikzpicture}
+\end{center}
+
+La novità che porta l'architettura di Von Neumann è l'introduzione di una memoria.
 \end{document}

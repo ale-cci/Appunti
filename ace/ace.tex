@@ -9,10 +9,12 @@
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{tabu}   % tabular with colors
+\usepackage{tikz}
 
 \usepackage{fontspec}
 \setmainfont{Roboto}
 
+\usetikzlibrary{shapes,arrows}
 
 \definecolor{code-bg}{HTML}{EFF0F1}
 \definecolor{code-keyword}{HTML}{0054A3}
@@ -57,6 +59,8 @@
     keywordstyle=\color{code-keyword}\bfseries,
     showstringspaces=false
 }
+
+\tikzstyle{block} = [fill=blue!20, draw, rectangle, minimum height=3em, minimum width=6em]
 
 \makeatletter
 \def\@maketitle{
