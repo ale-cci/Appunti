@@ -10,6 +10,9 @@
 \usepackage{fancyhdr}
 \usepackage{tabu}   % tabular with colors
 \usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+
 
 \usepackage{fontspec}
 \setmainfont{Roboto}
@@ -50,6 +53,15 @@
     {}
     {0em}
     {}
+
+\tcbset{
+    boxrule=0pt,
+    arc=0mm,
+    colframe=code-bg,
+    colback=code-bg,
+    coltitle=black,
+    fonttitle=\bfseries,
+}
 
 \lstset{
     language=[x86masm]{Assembler},

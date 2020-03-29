@@ -1,21 +1,65 @@
+%Lezione 2.1
 \documentclass[../ace.tex]{subfiles}
 
 \begin{document}
-\section{Lezione 2}
-ISA: Instruction Set Architecture, lista id istruzioni disponibili al programmatore utilizzate dal processore
+\section{RISC vs CISC}
+\subsection{ISA}
+L'ISA (\textit{Instruction set Architecture}) di un processore, non è altro che la lista di istruzioni disponibili
+al programmatore, interpretabili dal processore.
+Un' istruzione dell'ISA inviata al processore, viene prima trasformata in comandi di microarchitettura
+(linguaggio macchina) e poi eseguita dall'hardware.
+Un processore viene detto compatibile a livello di ISA con un altro processore, se tutte le istruzioni di
+quest'ultimo sono interpretabili dal processore.
 
-CISC: Complex Instruction Set Computer
-\\
-Facilita la programmazione, fornendo al programmatore un vasto numero di istruzioni possibili\\
-, aumentando però la complessitá a livello di microcodice.
+La definizione di un ISA è la prima tra le diverse fasi della progettazione della CPU, ed in base
+a quanto verbosa (quanti comandi ne fanno parte), il processore si può definire di architettura CISC o RISC.
 
+\subsection{CISC}
+Un' ISA di tipo CISC (\textit{Complex Instruction Set Computer}) facilita il compito del, fornendo a disposizione
+un vasto numero di istruzioni. Di contro ha che la sua realizzazione in hardware spesso risulta non
+efficiente.
+Inoltre le istruzioni utilizzate più di frequente dai programmatori sono approssimativamente il 20\% di quelle
+disponibili.
 
-RISC: Reduced Set Computer, Ha un ISA più vicina all Hardwere, e piu lontana dal programmantore.
-\\
-Ha un set efficente e limitato di istruzioni, basato sul fatto che solo un ridotto numero di istruzioni è utilizzato.
-\\
-\textit{Confronto 'RISC' e 'CISC' a lezione 3.1 in 20:19}
+\subsection{RISC}
+All'esatto opposto ci sono le ISA di tipo RISC (\textit{Reduced Instruction Set Computer}).
+È un ISA semplice più vicina all'hardware, hanno un'implementazione più veloce e più semplice.
+Fornisce un set di istruzioni ristretto ma efficiente.
+Di contro, essendo il numero di istruzioni a disposizione ridotto, scrivere un programma solitamente risulta
+più complesso e si impiega più tempo.
+% 20:19
+\subsection{Confronto fra RISC e CISC}
+Altre differenze tra i due tipi di architettura, non ancora riportate, ma da tener presente sono:
 
+\vspace{10pt}
+\noindent\begin{minipage}{.48\textwidth}
+    \begin{tcolorbox}[title={\centering RISC}]
+        \begin{itemize}[leftmargin=*]
+            \item Istruzioni di lunghezza fissa
+            \item Decodifica più semplice
+            \item Unità di controllo cablata
+            \item pochi metodi di indirizzamento
+            \item memoria allineata
+            \item molti registri di lunghezza fissa ed ortogonali
+            \item processori load/store
+        \end{itemize}
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.51\textwidth}
+    \begin{tcolorbox}[title={\centering CISC}]
+        \begin{itemize}[leftmargin=*]
+            \item Codice operativo e istruzioni di lunghezza variabile
+            \item Decodifica complessa, a più cicli di clock
+            \item Unità di controllo microprogrammata
+            \item Molta flessibilità nei metodi di indirizzamento
+            \item memoria non allineata
+            \item pochi registri di varie lunghezze e non ortogonali
+        \end{itemize}
+    \end{tcolorbox}
+\end{minipage}
+\vspace{10pt}
+
+% --HERE
 Memoria Allineata: Accesso più veloce ai ai dati, non efficiente per 'storing' dei dati.
 \\
 Per cercare di accedere il meno possibile alla memoria vengono utilizzati \textbf{Registri}.
