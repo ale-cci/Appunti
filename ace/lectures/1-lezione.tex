@@ -18,11 +18,12 @@ La CPU (unità di controllo) è ulteriormente divisa in 4 parti:
 \end{itemize}
 
 \subsection{Architettura di Von Neumann}
-\begin{center}
+\begin{figure}[h]
+    \centering
     \begin{tikzpicture}
         \node[block] (ms) {Memoria Secondaria};
-        \node[block, below of=ms, node distance=2cm] (mc) {Memoria Centrale};
-        \node[block, below of=mc, node distance=2cm] (cpu) {CPU};
+        \node[block, below of=ms, node distance=1.5cm] (mc) {Memoria Centrale};
+        \node[block, below of=mc, node distance=1.5cm] (cpu) {CPU};
         \node[block, right of=cpu, node distance=3cm] (out) {Output};
         \node[block, left of=cpu, node distance=3cm] (in) {Input};
 
@@ -31,7 +32,62 @@ La CPU (unità di controllo) è ulteriormente divisa in 4 parti:
         \draw[block, ->, thick] (cpu) -- (out);
         \draw[block, ->, thick] (in) -- (cpu);
     \end{tikzpicture}
-\end{center}
 
-La novità che porta l'architettura di Von Neumann è l'introduzione di una memoria.
+    \caption{Computer secondo architettura di Von Neumann}
+    \label{img:von_neumann}
+\end{figure}
+
+\noindent La novità che porta l'architettura di Von Neumann è l'introduzione di una memoria.
+Prima di questa architettura, i programmi erano salvati esternamente al calcolatore in schede perforate.
+La memoria centrale (RAM) dell'architettura serviva per memorizzare temporaneamente i dati e permanentemente
+nella memoria secondaria (HD).
+
+Come si può vedere dallo schema in figura \ref{img:von_neumann}, si interfaccia solamente con la memoria
+centrale.
+
+\subsection{Architettura di Harvard}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \node[block] (alu) {ALU};
+        \node[block, below of=alu, node distance=1.5cm] (uc) {Unità di Controllo};
+        \node[block, right of=uc, node distance=3cm] (md) {Memoria Dati};
+        \node[block, below of=uc, node distance=1.5cm] (io) {I/O};
+        \node[block, left of=uc, node distance=4cm] (mp) {Memoria di Programma};
+
+        \draw[block, <->, thick] (alu)--(uc);
+        \draw[block, <->, thick] (uc)--(md);
+        \draw[block, <->, thick] (uc)--(io);
+        \draw[block, <->, thick] (uc)--(mp);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent La differenza fondamentale di questa architettura è la memoria del programma è separata dalla memoria dati, e le
+istruzioni devono obbligatoriamente passare dalla CPU.
+Questa architettura ha dato spunto a memorie separate come cache.
+L'idea di poter accedere memoria e dati velocizza le prestazioni del calcolatore.
+
+\subsection{Legge di Moore}
+\begin{enumerate}
+    \item Le prestazioni dei processori, e il numero di transistor ad esso relativo, raddoppiano ogni 18 mesi.
+    \item IL costo di una fabbrica di chip raddoppia da una generazione all'altra.
+\end{enumerate}
+
+\subsection{Legge di Amdahl}
+Nella storia dei computer, si è capito che il continuo aumento della frequenza di clock del numero di transistor del processore
+non era una cosa plausibile. Per questo si è iniziato a ragionare sul parallelismo.
+
+Nel momento in cui voglio parallelizzare un algoritmo, ho due parti fondamentali: una componente sequenziale ed una componente
+parallelizzabile.
+Chiamata $f$ la frazione di algoritmo parallelizzabile, ed ho a disposizione un numero di processori $N$, l'aumento di
+velocità di esecuzione $S$ è calcolabile attraverso la legge di Amdahl:
+\[
+    S = \frac{1}{(1 - f) + \frac{f}{N}}
+\]
+È da tenere quindi presente che se utilizzo un grande numero di core per un algoritmo non parallelizzabile, il suo tempo di
+esecuzione sarà identico se eseguito con un solo core.
+
+Il parallelismo è stato quindi stato adottato dai processori attraverso pipelining, coprocessori paralleli (processori dedicati
+a specifiche operazioni) ed architetture multicore.
+
 \end{document}
