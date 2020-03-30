@@ -60,46 +60,25 @@ Altre differenze tra i due tipi di architettura, non ancora riportate, ma da ten
 \vspace{10pt}
 
 % --HERE
-Memoria Allineata: Accesso più veloce ai ai dati, non efficiente per 'storing' dei dati.
+In una memoria allineata, i dati vengono disposti ad indirizzi multipli di $n$.
+Il vantaggio ovvio che si ha utilizzando questa struttura è un rapido accesso alla memoria.
+Ovviamente avere una memoria allineata porta con sé lo svantaggio di avere un maggiore consumo di memoria in
+caso dovessi salvare dei dati di grandezza minore di $n$.
 \\
-Per cercare di accedere il meno possibile alla memoria vengono utilizzati \textbf{Registri}.
-L'architettura RISC utilizza molti registri oriogonali (ogni registro può effettuare ogni operazione),
-mentre CISC utilizza meno registri non ortogonali, ovvero esistono registri specifici per specifiche operazioni.
-\section{Lezione 3}
-CPU: Unità di controllo a stati finiti (fetch, decode, execute)
+I registri e la memoria sono collegati, l'approccio RISC cerca di lavorare con la memoria il meno
+possibile, attraverso poche modalità di indirizzamento e processori che accedono alla memoria attraverso
+due sole istruzioni: load e store.
+Per evitare ripetuti accessi alla memoria, i dati vengono salvati temporaneamente in \textbf{registri} interni
+al processore. Questi registri possono essere ortogonali (ogni registro può effettuare ogni operazione) nel
+caso RISC o non ortogonali (esistono registri specifici per specifiche operazioni) nel caso CISC.
 
-PC: Program Counter
-
-MR: Memory register
-
-DR: Data register
-
-La memoria si interfaccia con:
-\begin{itemize}
-    \item Bus di indirizzi (solo in input)
-    \item Bus di dati, \\utilizzato sia per leggere che per scrivere i dati sulla memoria
-\end{itemize}
-
-Con $R_{2..n}$ vengono indicati i vari registri
-
-Register File: (slide 43)
-
-\subsection{CPU Monociclo}
-\textbf{Modello Harvard}: Due memorie separate.% Aggiungere descrizione
-
-Richiede due memorie separate, siccome accede due volte alla memoria nello stesso ciclo di clock.
-
-\begin{enumerate}
-    \item fetch: accede alla memoria per leggere istruzioni della CPU
-    \item decode
-    \item execute
-    \item memoria
-\end{enumerate}
-
-Writeback (WB): Il contenuto letto dalla memoria viene scritto su un registro.
-
-Siccome tutte le operazioni vengono eseguite in un unico ciclo di clock, il tempo impiegato da ciascuna istruzione diventa uguale al tempo impiegato dalla 'funzione' più lenta: $T_{mono} = 83 ns$.
-\\
-Il tempo di esecuzione del programma diventa $N \cdot 83ns$
+Tempo necessario al processore per eseguire un programma è dato dalla somma
+dei clock per instruction di ogni istruzione, moltiplicata al tempo di clock della CPU.
+Questo si traduce in:
+\[
+    T_{\mathit{CPU}} = T_{\mathit{ck}}\sum_i (\mathit{NI}_i \cdot \mathit{CPI}_i)
+\]
+L'obbiettivo RISC è quello di eseguire la maggior parte delle istruzioni in un solo ciclo di clock,
+e rendere l'implementazione più semplice in modo da ridurre la durata del tempo di clock $T_\mathit{CK}$.
 
 \end{document}

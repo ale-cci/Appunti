@@ -109,6 +109,45 @@
 
 \subfile{lectures/1-lezione}
 \subfile{lectures/2-1-lezione}
+\subfile{lectures/2-3-microarchitettura_cpu}
+
+\section{Lezione 3}
+CPU: Unità di controllo a stati finiti (fetch, decode, execute)
+
+PC: Program Counter
+
+MR: Memory register
+
+DR: Data register
+
+La memoria si interfaccia con:
+\begin{itemize}
+    \item Bus di indirizzi (solo in input)
+    \item Bus di dati, \\utilizzato sia per leggere che per scrivere i dati sulla memoria
+\end{itemize}
+
+Con $R_{2..n}$ vengono indicati i vari registri
+
+Register File: (slide 43)
+
+\subsection{CPU Monociclo}
+\textbf{Modello Harvard}: Due memorie separate.% Aggiungere descrizione
+
+Richiede due memorie separate, siccome accede due volte alla memoria nello stesso ciclo di clock.
+
+\begin{enumerate}
+    \item fetch: accede alla memoria per leggere istruzioni della CPU
+    \item decode
+    \item execute
+    \item memoria
+\end{enumerate}
+
+Writeback (WB): Il contenuto letto dalla memoria viene scritto su un registro.
+
+Siccome tutte le operazioni vengono eseguite in un unico ciclo di clock, il tempo impiegato da ciascuna istruzione diventa uguale al tempo impiegato dalla 'funzione' più lenta: $T_{mono} = 83 ns$.
+\\
+Il tempo di esecuzione del programma diventa $N \cdot 83ns$
+
 \subsection{Lezione 3.6 - Architettura Multiciclo}
 A differenza della architettura monociclo, in ogni singolo stadio opera in un ciclo di clock.
 Motivato dal fatto che non tutte le istruzioni impiegano lo stesso tempo di esecuzione.
