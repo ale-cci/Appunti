@@ -2,5 +2,80 @@
 
 \begin{document}
 \section{Microarchitettura CPU}
-TODO
+\subsection{La CPU}
+Rete logica combinatoria: rete priva di memoria, che dati ingressi da' delle uscite indipendentemente
+dal tempo.
+Rete sequenziale: rete che ha memoria, macchina a stati finiti, che dati degli ingressi fornisce
+delle uscite dipendenti dallo stato in cui si trova.
+
+Dal punto di vista funzionale possiamo vedere la CPU, come composta da due parti: il data path e
+l'unità di controllo.
+Il data path di cui componente fondamentale è l'ALU, è una rete logica che si occupa di eseguire le istruzioni, mentre
+l'unita di controllo è una macchina a stati finiti che comanda il data path su quali istruzioni eseguire.
+\\
+Possiamo schematizzare l'unità di controllo come una macchina a stati finiti a tre stati: fetch, decode ed execute.
+
+\subsection{Architettura di riferimento RISC}
+Analizziamo adesso un esempio di architettura RISC.
+
+Gli indirizzi di memoria sono riferiti ai byte. Le istruzioni occupano sempre e solo una parola a 32 bit.
+Le istruzioni ed i dati si trovano sempre in indirizzi multipli di 4, per questo motivo il program counter
+è incrementato di 4 ad ogni istruzione.
+Avremo anche 32 registri di uso generale a 32bit. L'insieme dei registri è chiamato register file.
+
+In generale l'esecuzione all'interno di un processore passa attraverso 5 fasi:
+una prima fase chiamata Instruction Fetch (IF) dove il processore carica dalla memoria l'istruzione,
+successivamente la decodifica nella fase (FT) e la esegue nella fase di execute (EX).
+Dopodiché in alcuni casi si ha un accesso alla memoria nella fase di Memory (ME), ed infine
+in alcuni casi ho una fase di write-back (WB), dove il risultato delle operazioni è riscritto
+nei registri.
+
+Tutte le istruzioni di questa ISA, come già detto hanno una lunghezza fissa di 32bit, ed appartengono a
+3 categorie:
+\begin{itemize}
+    \item Un primo aritmetico logiche,
+        Nei primi 6 bit opcode (codice operativo),
+        seguiti da 5 che indicano il primo registro sorgente,
+        altri 5 bit che indicano il secondo registro,
+        5 che indicano il registro destinazione
+        ed i rimanenti 11 fanno riferimento all'operazione specifica dell'ALU (somma, sottrazione, ...).
+        \begin{lstlisting}
+    add  r4,r2,r5
+    \end{lstlisting}
+
+    \item Un secondo formato utilizzato per accesso alla memoria e salti condizionati.
+        I primi 6 bit di codice operativo,
+        a seguire altri 5 ad indicare il primo registro
+        ed altri 5 ad indicare il secondo registro (come nel primo caso)
+        16 che indicano un offset o un dato.
+
+        \begin{lstlisting}
+    je  r2,r3,0045h
+        \end{lstlisting}
+    \item Un terzo ed ultimo caso utilizzato per i salti incondizionati.
+        I primi 6 bit indicano sempre l'opcode ed i rimanenti indicano l'indirizzo di termine del
+        salto.
+
+        \begin{lstlisting}
+    jmp 0045h
+        \end{lstlisting}
+\end{itemize}
+In questa prima architettura assumiamo che non ci sia lo stack (zona di memoria organizzata a pila LIFO),
+accessibile attraverso istruzioni apposite come \lstinline{push} e \lstinline{pop}.
+
+Oltre a salto condizionato ed incondizionato esiste un terzo tipo di salto: la chiamata a funzione.
+È un tipo di salto incondizionato particolare, dato che quando eseguito è necessario salvare il valore
+del program counter per poter proseguire l'esecuzione una volta terminata la funzione.
+
+Siccome non abbiamo uno stack, il program counter è salvato nell'indirizzo $R_{31}$
+%27: ragionamento di funzionamento dell'ALU
+
+Per selezionare le operazioni da far eseguire all'ALU è specificato un ingresso chiamato opalu, dove vengono
+specificate le operazioni. Oltre all'uscita dell'operazione vengono tornati dei valori aggiuntivi come
+il flag di zero (messo ad uno quando il risultato dell'ALU è zero), ed il flag di segno (messo ad 1 quando il
+risultato è negativo).
+
+%35
+Load e store permettono la lettura e scrittura in memoria.
+
 \end{document}
