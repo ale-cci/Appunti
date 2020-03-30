@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Modelli ed Algoritmi per il supporto alle decisioni}
+\author{ale-cci}
+
+\begin{document}
+\maketitle{}
+\section{Riunione in Generale}
+\subsection{TODO}
+\begin{itemize}
+    \item \textbf{Dati}:
+        Grandezze di un sistema reale, il cui valore é fissato a priori. (input del programma)
+    \item \textbf{Varabili Decisionali}:
+        Grandezze del sistema su cui abbiamo controllo diretto.
+        A diversi valori delle variabili decisionali corrispondono diverse realizzazioni del sistema
+    \item \textbf{Vincoli}:
+        Condizioni che imposte sui valori che possono assumere le variabili decisionali.
+        L'insieme dei vincoli forma l'\textit{insieme delle soluzioni possibili} del sistema reale,
+        detta anche \textit{Regione ammissibile del problema}
+    \item \textbf{Obbettivo}:
+        Criterio di confronto applicato alle varie soluzioni del sistema reale.
+\end{itemize}
+
+\subsection{Procedura di soluzione}
+
+\subsubsection{}
+Una volta definito un modello, si passa attraverso un'algoritmo per calcolare i miglori valori da assegnare alle variabili decisionali, in modo da ottenere la miglior realizzazione possibile del sistema.
+
+\subsubsection{Validazione del modello}
+Ri-verificare la validitá del modello. In caso modificare il modello adattandolo al sistema reale, e ri-applicare l'algoritmo.
+
+- costruire modello di un sistema reale:
+    - identificare dati, variabili decisionali, vincoli del sistema reale e definire un obbiettivo
+- processare il modello attraverso un algoritmo, in grado di determinare i valori delle variabili
+-  validazione del modello: guardare soluzione ottenuta e determinare se accettabile
+    - se non accettabile si aggiorna il modello e si torna al passo 2
+- realizzare il sistema reale
+
+\subsection{Tipi di modello}
+\begin{itemize}
+    \item Modelli a scala:
+        riprodotto su scala ridotta (es. plastico)
+    \item Modelli matematici:
+        Ciascuna componente viene tradotta in oggetti matematici
+    \item Modelli di simulazione:
+        Componenti vengono rappresentate attraverso componenti di tipo informatico
+
+        Hanno vantaggi e svantaggi circa complementari al modello matematico.
+        Hanno maggiore capacitá di rappresentazione.
+
+        computer utilizzato sia in fase di rappresentazione che in fase di risoluzione.
+\end{itemize}
+Ci concentriamo su modelli di tipo matematico, hanno il vantaggio di poter utilizzare tutti gli strumenti della matematica. Hanno lo svantaggio di avere una capacitá espressiva limitata.
+Non tutti i sistemi reali sono rappresentabili in maniera ottimale attraverso sistemi matematici, risulterebbero troppo complessi
+
+Utilizzo dei computer durante la fase di risoluzione.
+\subsection{Tipi di algoritmi}
+\begin{itemize}
+    \item Algoritmi di tipo costruttivo:
+        costruiti in modo progressivo, partono da una soluzione vuota, e progressivamente vengono aggiunti pezzi per raggiungere una soluzione completa
+        -  Senza revisione di decisioni passate:
+            Una volta aggiunti pezzi non vengono piu tolti
+        - revisioni decisioni passate:
+            pezzi aggiunti possono essere sostituiti
+
+    \item Raffinamento Locale:
+        partire da una soluzinoe possibile che rispetta tutti i vincoli, e si procede a raffinare progressivamente la soluzione.
+        Richiede di definire un concetto di \textit{Vicinanza alla soluzione}
+    \item Enumerazione:
+        enumera le possibili soluzioni possibili per andare a cercare la soluzione migliore
+        - eumerazione completa
+            Prendere individualmente ogni soluzione, e valutarla esplicitamente e prendere la migliore tra esse
+        - eumerazione implicita
+            Enumerare impl. initeri sottinsiemi attraverso restrizione di sottoproblemi
+            Valutazione di interi gruppi di soluzioni attraverso soluzioni di sottoproblemi
+\end{itemize}
+
+Analizzare problema reale, individuare le 4 componenti e Costruzione modello matematico
+
+\subsection{Es. 1}
+Effettuare investimento di quantitá $x$. Fonte di ricavo $\sqrt{x} + \frac{1}{2}x$.
+\\
+Problema: quantitá di denaro da investire per massimizzare $x$.
+
+Dati: formula di ricavo : $\sqrt{x} + \frac{1}{2}x$
+\\
+Variabili decisionali: $x$
+\\
+Vincoli: no vincoli
+\\
+Obbiettivo: massimizzare il guadagno
+
+\subsection{Es. 2 - Trasporto sacchi}
+Trasportare numero fissato di carichi, in modo da minimizzare il costo di trasporto.
+
+\begin{enumerate}
+    \item Grandezze che non sono sotto il nostro controllo:
+        \\
+        Quantitativi minimi di ogni sacco,
+        \\
+        Sacchi trasportabili da ogni automezzo e costo relativo dell'automezzo
+    \item Variabili decisionali:
+        \\
+        Numero di automezzi di ciascun tipo da utilizzare
+    \item Vincoli:
+        \\
+        Variabili decisionali non negative
+        \\
+        Quantitativo minimo di sacchi da portare
+    \item Obbiettivo:
+        \\
+        Costo complessivo del trasporto minimo
+\end{enumerate}
+\subsubsection{Trasformazione dei dati in concetto matematico}
+Dati sono gia rappresentati
+Approfondimento: Guarda slide
+
+\section{Lezione 2 - Introduzione ai grafi}
+Forma canonica
+Cammino semplice: nessun arco é percorso piu di una volta
+Cammino elementare: nessun nodo viene toccato piu di una volta
+Circuito hemiltoniano: toccano tutti i nodi del grafo
+
+Individuazione componenti connesse: BFS
+matching: sottinsieme di archi non adiacenti
+Riconoscimento grafi bipartiti 1:19:21, esempio: 1:21:49
+
+
+\end{document}
