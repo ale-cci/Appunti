@@ -14,5 +14,14 @@ def edges_list(adj_matrix):
             for y in range(x+1, len(adj_matrix))]
 
 
-def as_matrix(edges):
-    pass
+def get_set(component, u):
+    if component[u] == u:
+        return u
+
+    component[u] = get_set(component, component[u])
+    return component[u]
+
+
+def union_set(component, u, v):
+    component[get_set(component, u)] = get_set(component, v)
+
