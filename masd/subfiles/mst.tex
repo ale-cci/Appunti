@@ -2,7 +2,7 @@
 
 \begin{document}
 \section{Minimum Spanning Tree}
-
+\subsection{Algoritmo di Kruskal (Greedy)}
 \begin{center}
     \begin{tikzpicture}[rotate=90]
         \Vertices[unit=2.3]{circle}{A,B,C,D,E}
@@ -17,9 +17,8 @@
         ;
     \end{tikzpicture}
 \end{center}
-\subsection{Algoritmo di Kruskal (Greedy)}
 \lstinputlisting{algorithms/mst_kruskal.py}
-\subsection{Correttezza algoritmo di Kruskal}
+\subsubsection{Correttezza algoritmo di Kruskal}
 Supponiamo per assurdo che esista un' diverso MST $T' = (V,E_{T'})$ di peso inferiore a $T = (V, E_T)$,
 quello restituito dall'algoritmo greedy.
 
@@ -32,7 +31,7 @@ Necessariamente $w_{e_r} \le w_{e_h}$, altrimenti l'algoritmo greedy applicato a
 Sostituendo in $T'$ l'arco $e_r$ con $e_h$ ottengo un nuovo albero di peso inferiore.
 
 Questo va contro l'ipotesi $T'$ è l'albero di supporto a peso minore.
-\subsection{Analisi complessità algoritmo greedy}
+\subsubsection{Analisi complessità}
 $O(E \cdot \log (E))$, dovuta all'ordinamento degli archi in ordine di peso.
 Il controllo dell'esistenza di cicli è effettuato in $O(1)$.
 
@@ -74,6 +73,54 @@ contraddicendo l'ipotesi.
     \end{tikzpicture}
 \end{center}
 \lstinputlisting{algorithms/mst_1.py}
+% Lezione 4
+\subsubsection{Correttezza MST-1}
+Inizialmente abbiamo la foresta con $V_1 \equiv U = \{v_1\}, V_i = \{v_i\} \quad i=2\ldots n$, con tutti gli $E_i = \emptyset$.
 
-\subsection{Correttezza MST-1}
+Alla prima iterazione si inserisce l'arco $(V_i, v_{j_1})$, $j_1 \neq 1$, a peso minimo tra quelli con un solo estremo in $U \equiv V_1$
+e quindi, per il teorema visto al paragrafo della foresta di supporto, tale arco farà parte dell'albero di supporto a peso minimo
+tra tutti i possibili alberi di supporto.
+
+Con l'aggiunta di questo arco, le due componenti connesse $(V_1, E_1)$ e $(V_{j_1}, E_{j_1})$ si fondono in un'unica componente
+connessa con nodi $U = \{v_i, v_{j_1}\}$ e l'insieme di archi $E_T = \{(v_1, v_{j_1})\}$, mentre le altre componenti connesse non cambiano.
+Abbiamo cioè che le componenti connesse
+\[(U, E_T), \quad (V_i, \emptyset) i \in \{2,\ldots n\} - \{j_1\}\]
+
+Alla seconda iterazione andiamo a selezionare il nodo $v_{j_2}$ e il relativo arco $( v_{j_2}, c(v_{j_2}))$ con il peso minimo
+tra tutti quelli con un solo estremo in $U$.
+In base al teorema, l'arco $(v_{j_2}, c(v_{j_2}))$ farà parte di un albero di supporto a peso minimo tra tutti quelli che contengono
+l'unione di tutti gli archi delle componenti connesse, che si riduce ad $E_T$.
+
+Effettuiamo lo stesso ragionamento per tutti gli $n$ ottenendo l'albero di supporto a peso minimo.
+\subsubsection{Complessità dell'algoritmo}
+Il numero di operazioni richiesto è pari a $O(V^2)$ dovuta al ciclo eseguito $V$ volte ($O(V)$) e la ricerca del minimo in tempo lineare.
+
+\subsubsection{Confronto con algoritmo di Kruskal}
+Anche se risulta essere peggiore rispetto all'algoritmo di greedy Kruskal, è possibile dimostrare che, in caso di grafi densi
+ha una complessità ottima.
+Infatti per tali grafi non possiamo aspettarci di fare meglio di $O(V^2)$: la sola operazione di lettura dei pesi
+degli archi richiede $O(V^2)$.
+
+\subsection{Algoritmo MST-2}
+\lstinputlisting{algorithms/mst_2.py}
+\subsubsection{Dimostrazione correttezza}
+Lasciata per esercizio, si basa sul teorema della foresta.
+\textit{"Tutti gli archi shortest aggiunti ad una certa iterazione, sono tutti archi
+che fanno parte ad un albero di supporto ottimo, tra tutti i possibili
+alberi di supporto."}
+
+\subsubsection{Complessità algoritmo}
+$O(E \cdot \log_2 (V))$ derivato dal costo dell'iterazione su tutti gli archi
+$O(E)$, eseguita un numero massimo di $\log(|V|)$ volte.
+
+Inizialmente il numero di componenti connesse è pari al numero di nodi.
+Sicuramente ad ogni iterazione, il numero di componenti connesse viene
+almeno dimezzato. Per cui, il primo ciclo viene eseguito al più $\log(|V|)$
+volte.
+
+Per grafi densi con $|E| = O(|V|^2)$ questa complessità
+è peggiore di quella di MST-1, ma se il numero di archi scende sotto l'ordine $O(|V|^2/log(|V|))$ l'algoritmo MST-2 ha prestazioni migliori.
+
+\subsection{Note}
+Questi tre algoritmi appena visti sono tutti e tre algoritmi costruttivi, senza revisione delle decisioni passate.
 \end{document}

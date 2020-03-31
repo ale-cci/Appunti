@@ -12,8 +12,8 @@
     - [ ] Alberi, spanning tree
 - [ ] MST
     - [x] Greedy, dimostrazione, complessità
-    - [ ] Foresta di supporto
-    - [ ] MST-1 + teorema, dimostrazione
+    - [x] Foresta di supporto
+    - [x] MST-1 + teorema, dimostrazione
     - [ ] MST-2, complessità
 - [ ] Shortest Path
     - [ ] Dijkstra, dimostrazione, complessità

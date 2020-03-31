@@ -18,7 +18,7 @@ def kruskal(edges: list, N: int) -> list:
         if len(mst) == N:
             break
 
-    return list(mst)
+    return mst
 
 
 if __name__ == '__main__':

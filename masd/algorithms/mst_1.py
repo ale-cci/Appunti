@@ -1,9 +1,3 @@
-from collections import defaultdict
-
-def argmin(array: list) -> int:
-    arg = min((value, idx) for idx, value in enumerate(array))
-    return arg[1]
-
 def mst_1(w: list) -> list:
     V = set(range(len(w)))  # {0, 1, 2, 3, 4}
     c = [0] * len(V)        # [0, 0, 0, 0, 0]
