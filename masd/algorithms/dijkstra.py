@@ -29,4 +29,4 @@ if __name__ == '__main__':
          [   5, None, None,    3],
          [   8, None,    1, None]]
 
-    print(dijkstra(w, 2))
+    print(dijkstra(w, 0))
