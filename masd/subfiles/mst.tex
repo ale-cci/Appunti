@@ -17,9 +17,9 @@
         ;
     \end{tikzpicture}
 \end{center}
-\subsection{Algoritmo Greedy}
-\lstinputlisting{algorithms/mst.py}
-\subsection{Correttezza algoritmo Greedy}
+\subsection{Algoritmo di Kruskal (Greedy)}
+\lstinputlisting{algorithms/mst_kruskal.py}
+\subsection{Correttezza algoritmo di Kruskal}
 Supponiamo per assurdo che esista un' diverso MST $T' = (V,E_{T'})$ di peso inferiore a $T = (V, E_T)$,
 quello restituito dall'algoritmo greedy.
 
@@ -40,4 +40,40 @@ Il controllo dell'esistenza di cicli è effettuato in $O(1)$.
 Viene chiamata foresta di supporto di un grafo $G$ un grafo parziale $F = (V, E_F)$ privo di cicli. In particolare, un albero di
 supporto è una foresta con una sola componente connessa.
 
+\subsubsection{Teorema}
+Indichiamo con $(V_1, E_1),\ldots ,(V_k, E_k)$ le componenti connesse di una foresta di supporto
+$F = (V, E_F)$ del grafo $G$. Sia inoltre $(u, v)$ un arco a peso minimo tra quelli con un unico estremo
+in $V_1$. Allora esiste almeno un albero di supporto a peso minimo appartenente a $\bigcup^k_{i=1} E_i$,
+che contiene $(v, v)$.
+
+\subsubsection{Dimostrazione}
+Per assurdo, l'albero a peso minimo non contiene $(u, v)$. Ma aggiungendo $(u, v)$ a tale albero si forma un
+ciclo contenente un altro arco $(u', v')$  con un solo estremo in $V_1$.
+Se si toglie questo arco e si lascia $(u, v)$ si ottiene un albero di peso minore,
+contraddicendo l'ipotesi.
+
+\subsection{Algoritmo MST-1}
+\begin{center}
+    \begin{tikzpicture}[rotate=90]
+        \Vertices[unit=2.3]{circle}{0,1,2,3,4}
+        %\Edges(A,B,C,D,E)
+        \Edge[color=red, label=$3$](0)(1)
+        \Edge[label=$5$](0)(2)
+        \Edge[label=$9$](0)(3)
+        \Edge[label=$20$](0)(4)
+
+        \Edge[color=red, label=$4$](1)(2)
+        \Edge[label=$8$](1)(3)
+        \Edge[color=red, label=$10$](1)(4)
+
+        \Edge[label=$7$, color=red](2)(3)
+        \Edge[label=$11$](2)(4)
+
+        \Edge[label=$12$](3)(4)
+        ;
+    \end{tikzpicture}
+\end{center}
+\lstinputlisting{algorithms/mst_1.py}
+
+\subsection{Correttezza MST-1}
 \end{document}
