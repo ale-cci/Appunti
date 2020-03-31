@@ -94,3 +94,9 @@
     }
     \end{center}
 }
+
+% Hide section numbers in table of contents
+\makeatletter
+\let\latexl@section\l@section
+\def\l@section#1#2{\begingroup\let\numberline\@gobble\latexl@section{#1}{#2}\endgroup}
+\makeatother

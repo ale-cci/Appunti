@@ -11,7 +11,7 @@
     - [ ] Bipartiti, completi, algoritmo
     - [ ] Alberi, spanning tree
 - [ ] MST
-    - [ ] Greedy, dimostrazione, complessità
+    - [x] Greedy, dimostrazione, complessità
     - [ ] Foresta di supporto
     - [ ] MST-1 + teorema, dimostrazione
     - [ ] MST-2, complessità
