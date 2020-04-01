@@ -10,18 +10,18 @@
     - [ ] Matching
     - [ ] Bipartiti, completi, algoritmo
     - [ ] Alberi, spanning tree
-- [ ] MST
+- [x] MST
     - [x] Greedy, dimostrazione, complessità
     - [x] Foresta di supporto
     - [x] MST-1 + teorema, dimostrazione
-    - [ ] MST-2, complessità
-- [ ] Shortest Path
-    - [ ] Dijkstra, dimostrazione, complessità
-    - [ ] Floyd-warshall
-        - [ ] triangolazione
-        - [ ] condizioni validità
-        - [ ] terminazione
-        - [ ] complessità
+    - [x] MST-2, complessità
+- [x] Shortest Path
+    - [x] Dijkstra, dimostrazione, complessità
+    - [x] Floyd-warshall
+        - [x] triangolazione
+        - [x] condizioni validità
+        - [x] terminazione
+        - [x] complessità
 - [ ] Matching
     - [ ] Peso massimo, cardinalità massima
     - [ ] Matching iniziale

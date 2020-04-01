@@ -5,8 +5,8 @@ def dijkstra(adj_matrix: list, source: int):
 
     dist = [0 if i == source else adj_matrix[source][i]
             for i in range(N)]
-    parent = [None if i == source else source
-            for i in range(N)]
+    parent = [source] * N
+    parent[source] = None
 
     while W != V:
         _, x = min((dist[i], i) for i in V - W if dist[i] is not None)
