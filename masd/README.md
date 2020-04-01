@@ -28,12 +28,12 @@
     - [ ] Algoritmo risoluzione, complessità
 - [ ] Flow
     - [ ] Flusso costo minimo
-    - [ ] Base, Soluzione di base
-    - [ ] Coefficienti Costo Ridotto
-    - [ ] Condizione ottimalità
-    - [ ] Calcolo coefficienti
-    - [ ] Condizione illimitatezza
-    - [ ] Entrata, uscita archi
+    - [x] Base, Soluzione di base
+    - [x] Coefficienti Costo Ridotto
+    - [x] Condizione ottimalità
+    - [x] Calcolo coefficienti
+    - [x] Condizione illimitatezza
+    - [x] Entrata, uscita archi
     - [ ] Simplesso
     - [ ] Ricerca base ammissibile
     - [ ] Flusso massimo

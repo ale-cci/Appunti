@@ -66,8 +66,9 @@ conseguenza $\rho(x) < \rho(z)$.
 Il numero di operazioni richiesto è $O(V^2)$, dovuta ad il ciclo principale di complessità $O(|V|)$ ed il
 calcolo del minimo ed il ciclo sui nodi adiacenti, entrambi di complessità $O(|V|)$.
 
+\newpage
 \subsection{Operazione di Triangolazione}
-Data una matrice $n x n$ di distanze $R$, per un dato $j \in \{1\ldots n\}$, chiamiamo ``operazione di triangolazione'' il
+Data una matrice $n \times n$ di distanze $R$, per un dato $j \in \{1\ldots n\}$, chiamiamo ``operazione di triangolazione'' il
 seguente aggiornamento:
 \[
     R_{jk} = \min\big\{R_{ik}, R_{ij} + R_{jk}\big\} \quad \forall\,i, k \in \big\{1\ldots n\big\} - \big\{j\big\}
