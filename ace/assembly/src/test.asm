@@ -9,7 +9,9 @@
 ;                   }
 ; d - memory dump
 ; p - proceed: execute single instruction
-mov bx, 0ah
-mov ax, [bx]
-mov ax, 4c00h
-int 21h
+start:  mov bx, 0ah
+        mov ax, [bx]
+
+end:    mov ax, 4c00h
+        int 21h
+

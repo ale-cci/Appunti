@@ -1,0 +1,114 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Istruzioni di aritmetica binaria}
+\subsection{Operazioni di aritmetica binaria}
+\begin{lstlisting}
+; Operazioni ad 1 parametro
+inc var1        ; Incrementa di 1 var1
+dec var1        ; Decrementa di 1 var1
+
+mul sorg    ; Moltiplicazione sorg * al oppure sorg * ax
+div sorg    ; Divisione:      sorg / al oppure sorg / ax
+
+imul sorg   ; mul con segno
+idiv sorg   ; mul con segno
+
+neg var1    ; nega il registro var1 (negato aritmetico, non binario)
+
+
+; Operazioni a 2 parametri
+add dest, sorg  ; Salvano entrambe il risultato dell'
+sub dest, sorg  ; operazione in `dest`
+
+cmp dest, sorg  ; uguale a sub ma non salva il
+                ; risultato in dest
+
+adc dest, sorg  ; add with carry: dest = dest + sorg + carry_flag
+sbb dest, sorg  ; sub with carry: dest = dest - sorg - carry_flag
+\end{lstlisting}
+\subsubsection{NOTE}
+Nelle operazioni a due parametri, entrambi i registri devono avere
+stessa dimensione. Ad esempio \lstinline{add AX, BL} non è permesso.
+
+\vspace{10pt}
+\noindent
+Nel caso in cui \lstinline{div} sia troppo grande per essere contenuto nel
+registro destinazione, o il divisore sia 0, viene generato un \lstinline{int 0h} (Divisione per zero).
+
+\vspace{10pt}
+\noindent
+Sono supportati i formati \textbf{signed}, \textbf{unsigned}, numeri decimali \textbf{packed} \footnote{Ogni byte contiene due numeri decimali, la cifra più significativa è allocata nei 4 bit superiori. Es: 35=0011.0101} e \textbf{unpacked}
+\footnote{Ogni byte contiene un solo numero decimale BCD nei 4 bit inferiori. Es: 35=0000.0011 0000.0101}.
+\\
+Nel caso di numeri decimali unpacked, i 4 bit superiori devono essere a 0 se il numero è usato in un'operazione di moltiplicazione o divisione.
+
+\subsection{Operazioni su 32 bit}
+\newcommand\ax{\lstinline{ax}}
+\newcommand\bx{\lstinline{bx}}
+\newcommand\dx{\lstinline{dx}}
+\newcommand\al{\lstinline{al}}
+\newcommand\ah{\lstinline{al}}
+
+
+Considerando come unico numero a 32bit i registri \bx e \ax (con 16bit più significativi salvati in \ax e
+16 meno significativi salvati in \bx), ed un altro numero a 32bit salvato in analogo modo in \lstinline{dx} \lstinline{cx},
+somma e sottrazione possono essere eseguite nel seguente modo
+\begin{lstlisting}
+add ax, cx  ; Somma parti meno significative
+adc bx, ds  ; Somma parti più significative con carry
+
+sub ax, cx  ; Analogo per sottrazione
+sbb bx, ds
+\end{lstlisting}
+% 27:42
+\newpage
+\subsection{Moltiplicazione e Divisione}
+Esistono due tipi, quelle che operano con segno (\lstinline{imul} e \lstinline{idiv}), e quelle che operano in
+modo unsigned (\lstinline{mul} e \lstinline{div}).
+\\
+Prendono un solo operando, che può essere un registro generale o una variabile. Il secondo operando viene scelto dinamicamente
+in base alla dimensione del primo. Nel caso di moltiplicazione:
+
+\begin{itemize}
+    \item se è di tipo \textbf{byte}: 8bit, il secondo è \al, ed il risultato è salvato in \ax
+    \item se è di tipo \textbf{word}: 16bit, è \ax ed il risultato è messo in \dx:\ax
+        \footnote{Indico con \ax:\bx, un numero i cui bit più significativi sono salvati in \ax, ed i bit meno significativi sono salvati in \bx.}
+    \item se è di tipo \textbf{dword}: 32bit
+\end{itemize}
+Se viene preso dalla memoria è necessario specificare manualmente la dimensione attraverso le keyword elencate sopra (es: \lstinline{mul word [0100]})
+
+\vspace{10pt}
+\noindent
+In caso di divisione le operazioni di tipo byte utilizzano \ax come secondo operando, e salvano risultato e resto in \al ed \ah rispettivamente.
+Per operazioni di tipo word, \dx:\ax è il secondo operando, resto e risultato sono salvati in \dx e \ax.
+
+\vspace{10pt}
+\noindent
+Esempio di divisione a 16 bit
+\begin{lstlisting}
+    mov dx, 0234h
+    mov ax, 5678h
+    mov cx, 1000h
+    div cx
+
+    ; dx = 678
+    ; ax = 2345
+\end{lstlisting}
+Se \dx fosse maggiore di $1000h$, il risultato della divisione risulterebbe a 20byte e non sarebbe possibile salvarlo in \ax. Quindi
+genera un interrupt.
+
+\subsubsection{Operazioni su numeri decimali}
+Esistono istruzioni che lavorano con i numeri salvati in formato packed ed unpacked, ma non prendono parametri, dato che
+lavorano solamente attraverso i registri AL
+
+\begin{itemize}
+    \item AAA converte il risultato di una somma in decimale unpacked
+    \item AAS converte il risultato di una sottrazione in decimale unpacked
+    \item AAM converte il risultato di una moltiplicazione in decimale unpacked
+    \item AAD converte il dividendo di una divisione da decimale unpacked a binario
+    \item DAA converte il risultato di un addizione in decimale packed
+    \item DAS converte il risultato di una sottrazione in decimale packed.
+\end{itemize}
+
+\end{document}

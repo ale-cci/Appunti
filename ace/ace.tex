@@ -54,6 +54,11 @@
     {0em}
     {}
 
+\titleformat{\subsubsection}
+    {\bfseries}
+    {}
+    {0em}
+    {}
 \tcbset{
     boxrule=0pt,
     arc=0mm,
@@ -107,9 +112,9 @@
 \begin{document}
 \maketitle{}
 
-\subfile{lectures/1-lezione}
-\subfile{lectures/2-1-lezione}
-\subfile{lectures/2-3-microarchitettura_cpu}
+\subfile{subfiles/1-lezione}
+\subfile{subfiles/2-1-lezione}
+\subfile{subfiles/2-3-microarchitettura_cpu}
 
 \section{Lezione 3}
 CPU: Unità di controllo a stati finiti (fetch, decode, execute)
@@ -264,9 +269,11 @@ Parallelismo pipelines
 
 \textbf{ROB}: Buffer di riordinamento
 
+\subfile{subfiles/4-3_modelli-di-memoria}
+\subfile{subfiles/4-4_modalita_di_indirizzamento}
+\subfile{subfiles/4-5_introduzione_assembly}
+\subfile{subfiles/4-6_aritmetica_binaria}
 
-\subfile{lectures/4-3_modelli-di-memoria}
-\subfile{lectures/4-4_modalita_di_indirizzamento}
-\subfile{lectures/4-5_introduzione_assembly}
-
+\newpage
+\tableofcontents{}
 \end{document}
