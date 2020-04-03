@@ -4,12 +4,15 @@
 \section{Flusso a costo minimo}
 \begin{center}
     \begin{tikzpicture}[rotate=90, EdgeStyle/.style={->}]
-        \Vertices[unit = 2]{circle} {1, 2, 3, 4, 5}
+        \SetUpEdge[labelstyle={draw}]
+        \Vertices[unit = 2]{circle} {1, 2, 4, 5, 3}
         \Edge[label=$5/9$](1)(2)
-        \Edge[label=$15/4$](1)(4)
-        \Edge[label=$2/3$](1)(3)
+        \Edge[label=$15/3$](1)(4)
+        \Edge[label=$2/7$](1)(3)
         \Edge[label=$3/11$](2)(4)
-        \Edge[label=$2/4$](3)(4)
+        \Edge[label=$2/2$](3)(4)
+        \Edge[label=$3/7$](3)(5)
+        \Edge[label=$2/7$](5)(4)
         ;
     \end{tikzpicture}
 \end{center}
@@ -126,7 +129,7 @@ sarebbe stata soddisfatta la condizione di ottimalità} attraverso un approccio 
 coefficiente di costo ridotto minore, e chiamo tale coefficiente $\bar{c}$.
 Aggiungendo tale arco alla base, formando un ciclo.
 Tra tutti gli archi percorsi in verso opposto, rimuovo quello con quantità di prodotto su arco minore, e chiamo
-tale quantità $-\Delta$. Successivamente, assegno all'arco appena aggiunto una quantità di prodotto inviata
+tale quantità $\Delta$. Successivamente, assegno all'arco appena aggiunto una quantità di prodotto inviata
 pari a $\Delta$ ed aggiorno il flusso degli archi rimanenti dell'ex-ciclo.
 
 Il nuovo costo è il costo precedente,
@@ -152,4 +155,71 @@ grafo originario.
 Inoltre, in tal caso esiste un albero di supporto ottimo che contiene solo uno dei nuovi archi (incidenti su $q$).
 Eliminando tale arco si ottiene una base ammissibile per il problema originario.
 \lstinputlisting{algorithms/unlimited_symplex.py}
+
+\subsection{Algoritmo del simplesso con capacità limitate}
+\begin{lstlisting}
+def symplex(edges):
+    base_solution = find_base_solution(edges)
+
+    while not optimal_solution(base_solution):
+        base_solution = change_base(base_solution)
+
+    return base_solution
+\end{lstlisting}
+Gli archi sono suddivisi in tre tipi: gli archi in base $B$, archi fuori base a valore nullo $N_0$ ed archi fuori base saturi
+(con flusso pari al proprio limite superiore) $N_1$.
+\\
+Una soluzione di base è definita ammissibile se tutti gli archi in base hanno flusso compreso tra 0 e la propria capacità massima.
+Inoltre la soluzione non è degenere se tutti gli archi hanno flusso strettamente compreso tra 0 e la capacità dell'arco.
+\\
+Partendo da una tripla $(B, N_0, N_1)$, per trovare la soluzione di base associata seguo i passaggi:
+\begin{enumerate}
+    \item Inizializzazione
+        \begin{enumerate}
+            \item Pongo a 0 il flusso lungo tutti gli archi in $N_0$
+            \item Pongo pongo saturi tutti gli archi $\in N_1$
+        \end{enumerate}
+    \item Determinare la quantità di prodotto inviata
+        \begin{enumerate}
+            \item Partendo dai nodi foglia dell'albero di supporto, invio la massima quantità di prodotto inviabile
+            \item DFS per calcolare il prodotto inviato su ogni arco
+        \end{enumerate}
+    \item Verifico che la tripla in input sia una soluzione ammissibile
+\end{enumerate}
+
+La tripla ammissibile viene trovata attraverso il metodo a due fasi:
+\\
+Introduco un nodo aggiuntivo $q$, lo collego ad ogni sorgente e destinazione come nei casi recedenti.
+
+\subsubsection{Condizione di Ottimalità}
+Per gli archi in $N_1$ l'unica cosa possibile da fare è far decrescere la quantità di prodotto inviata, per questo voglio
+calcolare quanto varia il costo totale facendo \textbf{diminuire} la quantità di prodotto inviata sull'arco.
+
+Per gli archi in $N_0$, il coefficiente di costo ridotto è non negativo
+
+Per gli archi in $N_1$, il coefficiente di costo ridotto deve essere non positivo.
+\[
+    \bar{c}_{ij} \ge 0 \quad \forall (i, j) \in N_0  \qquad \bar{c}_{ij} \le 0 \quad \forall (i, j) \in N_1
+\]
+Se le disuguaglianze sono strette la soluzione ottima è unica.
+\subsubsection{Condizione di Illimitatezza}
+Se l'aggiunta alla base attuale di un arco in $N_0$, con coefficiente di costo ridotto negativo crea un ciclo orientato
+e \textbf{tutti} gli archi del ciclo hanno capacità pari a $+\infty$, allora il problema del flusso a costo minimo ha obbiettivo
+illimitato.
+
+\subsubsection{Cambio di base}
+Attraverso sempre un approccio greedy, l'arco entrante in base è
+\[
+    (i, j) \in \arg\max\big\{ \max_{(i, j) \in N_0} -\bar{c}_{ij}, \max_{(i, j) \in N_1} \bar{c}_{ij}\big\}
+\]
+Per trovare l'arco uscente, aumento la quantità di prodotto $\Delta$ se l'arco aggiunto era in $N_0$, altrimenti diminuiamo
+$\Delta$ inviata lungo il ciclo in caso di arco in $N_1$.
+Al crescere di $\Delta$:
+\begin{itemize}
+    \item Arco si azzera, esce dalla base ed entra in $N_0$.
+    \item Arco si satura, esce dalla base ed entra in $N_1$.
+    \item L'arco fuori base si azzera/satura, la base non cambia, ma l'arco cambia di collocazione (da $N_0$ ad $N_1$ e viceversa)
+\end{itemize}
+Una volta effettuato il cambio di base, si applica il controllo delle condizioni sulla nuova tripla ammissibile.
+Viene ripetuto questo procedimento fino a quando le condizioni sono soddisfatte.
 \end{document}

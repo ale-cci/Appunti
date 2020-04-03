@@ -1,5 +1,5 @@
-'''
-'''
+import collections
+
 
 def num_vertices(edges):
     connected = [{lhs, rhs} for weight, lhs, rhs in edges]
@@ -25,3 +25,5 @@ def get_set(component, u):
 def union_set(component, u, v):
     component[get_set(component, u)] = get_set(component, v)
 
+def find_cycle(edges):
+    pass

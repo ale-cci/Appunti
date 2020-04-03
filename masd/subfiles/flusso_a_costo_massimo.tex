@@ -1,0 +1,79 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Flusso a costo massimo}
+\begin{center}
+    \begin{tikzpicture}[rotate=180]
+        \Vertices[unit=1.5]{circle}{S, 1, 2, D, 3, 4}
+        \Edge(1)(2)
+        \Edge(S)(3)
+        \Edge(S)(4)
+        \Edge(1)(4)
+        \Edge(4)(2)
+        \Edge(1)(3)
+        \Edge(2)(D)
+        ;
+    \end{tikzpicture}
+\end{center}
+Quando in un grafo di flusso voglio calcolare la massima trasmissione possibile tra un nodo sorgente $S$ ed un nodo destinazione $D$.
+Il resto dei nodi della rete prende il nome di intermedio, ed hanno una capacità limitata $c_{ij}$ che rappresenta la quantità massima
+di flusso inviabile attraverso l'arco.
+\subsubsection{Taglio a costo minimo}
+Si consideri $U \subset V$ tale che $S \in U$ e  $D \notin U$.
+L'insieme di archi $S_U = \{(i, j) \in A : i \in U, j \notin U\}$ ovvero gli archi con il un solo estremo in $U$, è
+detto taglio della rete.
+
+\vspace{10pt}
+\noindent
+Ad un taglio è associabile anche un costo, pari alla somma delle capacità del taglio:
+\[
+    C(S_U) = \sum_{(i, j) \in S_U} c_{ij}
+\]
+NOTA: Dalla sorgente alla destinazione non è possibile inviare una quantità di prodotto superiore alla capacità di taglio.
+Quindi il taglio a costo minimo indica il bottleneck della rete, ovvero la quantità massima di prodotto da sorgente a destinazione.
+L'algoritmo di risoluzione del flusso a costo massimo è anche la soluzione al problema del taglio a costo minimo.
+
+\subsection{Procedura di soluzione}
+Partire da un flusso ammissibile, $\bar{X} = (\bar{x}_{ij})_{(i, j) \in A}$ ed un cammino orientato $S = q_0 \to q_1 \to \dots \to q_{r} \to q_{r+1} = D$,
+privo di archi saturi.
+\\
+In questo caso $\bar{X}$ non è ottimo, dato che posso ancora inviare una quantità $\Delta = \min_{i=0\dots r} [c_{q_i, q_{i+1}} - \bar{x}_{q_i, q_{i+1}]}$ di prodotto senza violare i vincoli di capacità degli archi.
+Sommando $\Delta$ otteniamo un cammino $P$ da $S$ a $D$ contenente almeno un arco saturo.
+
+Definiamo un nuovo grafo orientato $G(\bar{X}) = (V, A(\bar{X}))$, detto grafo associato al flusso $\bar{X}$.
+Il nuovo grafo ha gli stessi nodi della rete originaria ed ha il seguente insieme di archi
+$A_f$ (archi forward) archi in $P$ non saturi, $A_b$ (archi backward) sono tutti gli archi della rete con $x_{ij} > 0$ (stanno inviando prodotto),
+rivolti in orientamento opposto.
+
+Supponiamo che esista un cammino orientato $P$ da $S$ a $D$ in $G(\bar{X})$.
+Per ogni arco $(i, j)$ del cammino, calcoliamo il seguente valore:
+\[
+    \alpha_{ij} =
+    \begin{cases}
+        c_{ij} - \bar{x}_{ij} &\text{se}\quad (i, j) \in A_f (\bar{X}) \cap P\\
+        x_{ji}                &\text{se}\quad (i, j) \in A_{b}(\bar{X}) \cap P
+    \end{cases}
+\]
+Note: $\alpha_{ij}$ indica la quantità di prodotto che si può rispedire indietro lungo l'arco, i.e. di quanto è possibile ridurre il flusso lungo l'arco $(j, i)$.
+\\
+Una volta calcolati i coefficienti $\alpha_{ij}$, definisco
+\[
+    \Delta = \min_{(i, j) \in P} \alpha_{ij}
+\]
+Note: Sottraendo questa quantità $\Delta$ non è mai possibile avere valori di flusso negativi.
+\\
+Ed aggiorno i flussi $\bar{x}_{ij}$ nel modo seguente:
+\[
+    \bar{x}_{ij} =
+    \begin{cases}
+        \bar{x}_{ij} + \Delta & \text{se} \quad (i, j) \in A_f(\bar{X}) \cap P \\
+        \bar{x}_{ij} - \Delta & \text{se} \quad (j, i) \in A_b(\bar{X}) \cap P\\
+        \bar{x}_{ij} & \text{altrimenti}
+    \end{cases}
+\]
+Note: segue che attraverso tale aggiornamento, sto inviando anche una quantità $\Delta$ in più da sorgente a destinazione.
+
+Diversamente se il grafo $G(\bar{X})$ non contiene cammini orientati da $S$ a $D$, possiamo immediatamente concludere che il flusso $\bar{X}$ è soluzione
+ottima del problema di flusso massimo.
+Inoltre tutti i nodi raggiungibili dal nodo sorgente con un camino orientato formano l'insieme di nodi che andranno a formare il taglio minimo.
+\end{document}
