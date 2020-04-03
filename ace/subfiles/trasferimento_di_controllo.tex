@@ -1,0 +1,110 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Trasferimento di controllo}
+\subsection{Lista delle Istruzioni}
+\begin{lstlisting}
+call indirizzo          ; chiamata a funzione
+ret                     ; return della funzione
+
+int                     ; interrupt software (funzione di sistema)
+iret                    ; ?
+
+
+jmp                     ; salto incondizionato, cambia valore program counter
+
+loop    ind             ; derementa cx, se cx != 0 fa un jump ad ind
+                        ; esistono anche loop con condizioni particolari
+\end{lstlisting}
+\subsection{Salti condizionati}
+Tutti i salti condizionati sono preceduti da un \lstinline{cmp} \footnote{Non è obbligatorio ma consigliato per
+leggibilità}.
+
+\begin{center}
+    \begin{tabu}{|c|c|}
+        \hline
+        Instruction & Jump if\\
+        \hline
+        \hline
+        \lstinline{JE} & \zf = 1 \\
+        \lstinline{JNE} & \zf = 0\\
+        \hline
+        \hline
+        \lstinline{JA} o \lstinline{JNBE} &  \cf = 0 e \zf = 0\\
+        \lstinline{JAE} o \lstinline{JNB} & \cf = 0\\
+        \lstinline{JB} o \lstinline{JNAE} & \cf = 1\\
+        \lstinline{JBE} o \lstinline{JNA} & \cf = 1 o \zf = 1\\
+        \hline
+        \hline
+        \lstinline{JG} o \lstinline{JNLE} & \zf = 0 e \sf = \of \\
+        \lstinline{JGE} o \lstinline{JNL} & \sf = \of \\
+        \lstinline{JL} o \lstinline{JNGE} & \sf $\neq$ \of \\
+        \lstinline{JLE} o \lstinline{JNG} & \zf = 1 o \sf $\neq$ \of\\
+        \hline
+        \multicolumn{2}{c}{}\\
+        \multicolumn{2}{c}{}\\
+        \multicolumn{2}{c}{}\\
+        \multicolumn{2}{c}{}
+    \end{tabu}
+    \begin{tabu}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{Flag}\\
+        \hline
+        \lstinline{JC} - \lstinline{JNC} & Jump if Carry (Carry flag a 1)\\
+        \lstinline{JO} - \lstinline{JNO} & Jump overflow \\
+        \lstinline{JS} - \lstinline{JNS}& Jump Sign / Jump Not Sign\\
+        \lstinline{JZ} - \lstinline{JNZ}& Jump Zero (alias di \lstinline{JE} e \lstinline{JNE})\\
+        \lstinline{JP} o \lstinline{JPE} & Jump Parity (Even). (bit di parità)\\
+        \lstinline{JNP} o \lstinline{JPO} & Jump Not Parity, o Jump Parity Odd\\
+        \lstinline{JCXZ} & Jump if \cx (registro contatore) Zero. \\
+        \hline
+        \hline
+        \multicolumn{2}{|c|}{Legenda}\\
+        \hline
+        A & Above\\
+        B & Below\\
+        G & Greater\\
+        L & Less\\
+        E & Equal\\
+        N & Not\\
+        \hline
+    \end{tabu}
+\end{center}
+Esempio di utilizzo di salti condizionati
+\begin{lstlisting}
+init:   mov ax, 10
+        mov bx, 5
+
+check:  cmp ax, bx
+        ja halt         ; jump to halt only if ax > bx
+
+        inc ax
+        jmp check
+
+halt:   mov  ax, 4c00h
+        int 21h
+\end{lstlisting}
+
+\subsection{CALL e RET}
+Una procedura è una label, la cui chiamata corrisponde ad un salto incondizionato, i parametri sono passati via stack.
+La differenza da un normale salto incondizionato è che al momento di una call, è salvato l'instruction pointer nello stack.
+
+Una procedura, nel caso sia all'interno di uno stesso segmento di codice (inter-segment) è detta di tipo \textbf{NEAR}, mentre se può esser
+chiamata all'interno di un segmento di codice qualsiasi (intra-segment) è detta di tipo \textbf{FAR}.
+
+Nel momento in cui effettuo una \lstinline{call} di tipo NEAR, l'unica cosa che cambia è l'instruction pointer, dato che non cambia il segment.
+Diversamente se effettuo una \lstinline{call} FAR, siccome cambia anche il code segment, viene anch'esso pushato all'interno dello stack.
+
+\begin{lstlisting}
+start:      call function
+
+halt:       mov ax, 4c00h
+            int 21h
+
+function:   mov ax, 10h
+            ret
+\end{lstlisting}
+\warning{{\color{code-keyword}jmp} e {\color{code-keyword}call} hanno la stessa sintassi. Per questo se confuse il compilatore non dà errore.
+Se una funzione è invocata con {\color{code-keyword} jmp} l'istruzione {\color{code-keyword}ret} fa comunque il {\color{code-keyword} pop} di un valore dallo stack e cambiato l'instruction pointer.}
+
+\end{document}

@@ -44,13 +44,6 @@ Sono supportati i formati \textbf{signed}, \textbf{unsigned}, numeri decimali \t
 Nel caso di numeri decimali unpacked, i 4 bit superiori devono essere a 0 se il numero è usato in un'operazione di moltiplicazione o divisione.
 
 \subsection{Operazioni su 32 bit}
-\newcommand\ax{\lstinline{ax}}
-\newcommand\bx{\lstinline{bx}}
-\newcommand\dx{\lstinline{dx}}
-\newcommand\al{\lstinline{al}}
-\newcommand\ah{\lstinline{al}}
-
-
 Considerando come unico numero a 32bit i registri \bx e \ax (con 16bit più significativi salvati in \ax e
 16 meno significativi salvati in \bx), ed un altro numero a 32bit salvato in analogo modo in \lstinline{dx} \lstinline{cx},
 somma e sottrazione possono essere eseguite nel seguente modo
