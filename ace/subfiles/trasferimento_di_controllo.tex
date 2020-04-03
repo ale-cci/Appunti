@@ -2,23 +2,10 @@
 
 \begin{document}
 \section{Trasferimento di controllo}
-\subsection{Lista delle Istruzioni}
-\begin{lstlisting}
-call indirizzo          ; chiamata a funzione
-ret                     ; return della funzione
-
-int                     ; interrupt software (funzione di sistema)
-iret                    ; ?
-
-
-jmp                     ; salto incondizionato, cambia valore program counter
-
-loop    ind             ; derementa cx, se cx != 0 fa un jump ad ind
-                        ; esistono anche loop con condizioni particolari
-\end{lstlisting}
-\subsection{Salti condizionati}
-Tutti i salti condizionati sono preceduti da un \lstinline{cmp} \footnote{Non è obbligatorio ma consigliato per
-leggibilità}.
+\subsection{Salti}
+Tutti i salti prendono come unico argomento l'indirizzo di destinazione. L'istruzione per
+il salto incondizionato (equivalente a goto in C) è \lstinline{jmp}.
+Esistono anche i salti condizionati, i quali solitamente sono preceduti da un'istruzione \lstinline{cmp}.
 
 \begin{center}
     \begin{tabu}{|c|c|}
@@ -106,5 +93,72 @@ function:   mov ax, 10h
 \end{lstlisting}
 \warning{{\color{code-keyword}jmp} e {\color{code-keyword}call} hanno la stessa sintassi. Per questo se confuse il compilatore non dà errore.
 Se una funzione è invocata con {\color{code-keyword} jmp} l'istruzione {\color{code-keyword}ret} fa comunque il {\color{code-keyword} pop} di un valore dallo stack e cambiato l'instruction pointer.}
+
+\subsection{LOOP}
+L'istruzione \lstinline{loop etichetta} o \lstinline{loope etichetta} è equivalente ad effettuare le operazioni:
+\begin{lstlisting}
+dec  cx
+cmp  cx, 0
+je  etichetta
+\end{lstlisting}
+Esistono anche le varianti: \lstinline{loopz} e \lstinline{loopne} che controllano inoltre lo zero flag.
+\\
+Esempio di utilizzo di \lstinline{loop}:
+\begin{lstlisting}
+start:  mov ax, 0h
+        mov cx, 10h
+cycle:  add ax, 10h     ; Eseguita 10h = 16 volte
+        loop cycle
+\end{lstlisting}
+
+\subsection{INT ed IRET}
+Gli Interrupt interrompono l'esecuzione normale del programma.
+Possono essere di tipo hardware o invocati via software (es, tramite istruzione \lstinline{int})
+Il programma, una volta fermato, passa il controllo ad una procedura di tipo FAR, chiamata RRI (\textit{Inserire acronimo}).
+Al termine dell'esecuzione di questa procedura è eseguita l'istruzione \lstinline{iret}.
+
+Dato che il programma è interrotto e deve riprendere la sua normale esecuzione, al momento di un'interrupt
+vengono eseguite in ordine le operazioni di:
+\begin{itemize}
+    \item Salvare nello stack il register flag (\lstinline{pushf})
+    \item Trap Flag = 0 (disabilita esecuzione step by step per ragioni di sicurezza), e
+        IF = 0 (Interrupt Flag = 0, per evitare l'interruzione di altri interrupt mascherabili).
+    \item Salvare nello stack CS e carica CS della RRI
+    \item Salvare nello stack IP e carica IP della RRI
+\end{itemize}
+L'istruzione duale \lstinline{iret}, recupera le istruzioni di IP, CS e register flag precedentemente
+salvate nello stack.
+
+\newpage
+\noindent
+Esistono due possibili categorie di interrupt:
+\begin{itemize}
+    \item Interrupt BIOS, che dal nome agiscono direttamente a livello di BIOS.
+        Esempi sono la 10h per l'output su video e la 16h per l'input da tastiera.
+    \item Interrupt DOS, che agiscono a livello di sistema operativo.
+        Esempio è 21h, utilizzata sempre per I/O da tastiera e terminazione processo.
+\end{itemize}
+Ogni interrupt ha un elenco di funzioni, ed il registro \ah specifica quale utilizzare.
+
+\begin{center}
+\begin{tabu}{|c|c|c|l|}
+    \hline
+    Code & Function & Description & Info \\
+    \hline
+    10h & 0Eh &Write chatacter on TTY & AL = Character ASCII code\\
+        & & & BH = page number (0 current page) \\
+        & & & BL = foreground color (only gui mode)\\
+    \hline
+    16h & 00h & Keyboard Read & AL = Read ASCII code\\
+        &     &               & AH = scan code (specifies input source)\\
+    \hline
+    21h & 02h & Character Output & DL = ASCII Code\\
+    \hline
+    21h & 03h & Keyboard Read and echo & AL = Read ASCII code\\
+    \hline
+    21h & 4Ch & Terminate Process and EXIT & AL = Exit Code\\
+    \hline
+\end{tabu}
+\end{center}
 
 \end{document}
