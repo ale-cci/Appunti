@@ -20,6 +20,7 @@
 
 \definecolor{clr-primary}{HTML}{0054A3}
 \definecolor{clr-lightgray}{HTML}{A5ACB2}
+\definecolor{clr-highlight}{HTML}{F48024}
 \renewcommand{\familydefault}{\sfdefault}
 
 \colorlet{clr-code-keyword}{clr-primary}
@@ -113,3 +114,4 @@
 \let\latexl@subsection\l@subsection
 \def\l@subsection#1#2{\begingroup\let\numberline\@gobble\latexl@subsection{#1}{#2}\endgroup}
 \makeatother
+
