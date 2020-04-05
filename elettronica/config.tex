@@ -1,0 +1,51 @@
+% Custom package style
+\def\axisdefaultwidth{8cm}
+\def\axisdefaultheight{6cm}
+\pgfplotsset{
+    no markers,
+    axis lines=middle,
+    xtick={\empty},
+    ytick={\empty},
+    compat=1.11,
+    xlabel style={at={(ticklabel* cs:1)},anchor=north west},
+    ylabel style={at={(ticklabel* cs:1)},anchor=south west, rotate=-90},
+    every axis plot/.append style={ultra thick},
+    every axis/.style={scale only axis, unit vector ratio*=1 1 1, xmin=-5, xmax=5, ymin=-5, ymax=5},
+    xlabel=$V_i$,
+    ylabel=$V_u$,
+}
+\tcbset{
+    boxrule=0pt,
+    arc=0mm,
+    colframe=clr-lightgray,
+    colback=clr-lightgray,
+    coltitle=black,
+    fonttitle=\bfseries
+}
+\setcounter{tocdepth}{2} % Show only sections in table of contents
+
+
+% Custom commands and variables
+\def\vgamma{0.78}
+\newcommand{\diodecurrent}[2][I_s]{%
+    \ensuremath{#1 \big(e^{#2/V_T} -1\big)}%
+}
+\newcommand{\diodeoffcases}[2] {
+    \ensuremath{
+        \begin{cases}
+            #1 = 0
+            \\
+            #2 < V_\gamma
+        \end{cases}
+    }
+}
+
+\newcommand{\diodeoncases}[2] {
+    \ensuremath{
+        \begin{cases}
+            #2 = V_\gamma
+            \\
+            #1 > 0
+        \end{cases}
+    }
+}

@@ -55,15 +55,15 @@ ed emettitore a fronte di una corrente di base molto più piccola rispetto alle 
 
         (0, 0) node[circ]{}
         ;
-        \draw[code-red] (2, 0)
-        to[short, i=${\I{t}}$, color=code-red] (2, 1)
-        to[american controlled current source, color=code-red] (-2, 1)
+        \draw[clr-main-red] (2, 0)
+        to[short, i=${\I{t}}$, color=clr-main-red] (2, 1)
+        to[american controlled current source, color=clr-main-red] (-2, 1)
         -- (-2, 0)
         ;
 
-        \draw[code-keyword] (-2, 1)
+        \draw[clr-primary] (-2, 1)
         -- (-2, 1.8)
-        to[american controlled current source, color=code-keyword] ++(4, 0)
+        to[american controlled current source, color=clr-primary] ++(4, 0)
         -- (2, 1)
         ;
     \end{circuitikz}
@@ -78,7 +78,7 @@ che dipende a sua volta esponenzialmente da \vbe. Chiameremo questa corrente $I_
     \begin{align*}
         &\I{BE} = \diodecurrent[\I{BES}]{\V{BE}}\\
         &\I{BC} = \diodecurrent[\I{BCS}]{\V{BC}}\\
-        &\I{t} = {\color{code-red} \diodecurrent[\I{S}]{\V{BE}}} - {\color{code-keyword} \diodecurrent[\I{S}]{\V{BC}}}
+        &\I{t} = {\color{clr-main-red} \diodecurrent[\I{S}]{\V{BE}}} - {\color{clr-primary} \diodecurrent[\I{S}]{\V{BC}}}
     \end{align*}
 \end{tcolorbox}
 

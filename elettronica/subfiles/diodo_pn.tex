@@ -57,9 +57,9 @@ in cui i diodi si possono trovare, indicando anche le relative ipotesi di funzio
 \\ %%
 Il seguenti calcoli riguardano il circuito in figura \ref{circuit:singola_semionda}, utilizzando il modello di approssimazione.
 
-Partendo dall'ipotesi che il diodo sia spento, avremo che $ I = 0$, quindi {\color{code-red}$V_u = 0$}, per $V_u = R\cdot I $.
+Partendo dall'ipotesi che il diodo sia spento, avremo che $ I = 0$, quindi {\color{clr-main-red}$V_u = 0$}, per $V_u = R\cdot I $.
 Il modello inoltre richiede che $V_d < V_\gamma$, e, utilizzando la prima equazione di Kirchoff alla maglia,
-otteniamo $V_d = V_i - V_u = V_i$. Quindi il diodo è spento per {\color{code-red}$V_i < V_\gamma$}.
+otteniamo $V_d = V_i - V_u = V_i$. Quindi il diodo è spento per {\color{clr-main-red}$V_i < V_\gamma$}.
 
 Studiando ora la seconda ed ultima ipotesi per questo circuito, diodo acceso, abbiamo che:
 $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
@@ -69,7 +69,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         V_u = R \cdot I\\
         I \cdot R > 0\\
         V_u = V_i - V_d
-    \end{cases} \quad \Rightarrow \quad V_i - V_d > 0 \quad \Rightarrow {\color{code-keyword}{V_i > V_d}}
+    \end{cases} \quad \Rightarrow \quad V_i - V_d > 0 \quad \Rightarrow {\color{clr-main-blue}{V_i > V_d}}
 \]
 
 \begin{figure}[h]
@@ -77,8 +77,8 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \begin{minipage}[b]{0.48\textwidth}
         \begin{tikzpicture}
             \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, width={.9\textwidth}]
-                \addplot[code-red, domain=-50:0.78]{0};
-                \addplot[code-keyword, domain=0.78:50]{x - 0.78};
+                \addplot[clr-main-red, domain=-50:0.78]{0};
+                \addplot[clr-main-blue, domain=0.78:50]{x - 0.78};
                 \node[label={$V_\gamma$},circle,fill,inner sep=1.5pt] at (axis cs: 0.78,0) {};
             \end{axis}
         \end{tikzpicture}
@@ -89,7 +89,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
                 func(\x) = (\x < 0.78) * 0 + (\x > 0.78) * (\x - 0.78);
             }]
             \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, width={.9\textwidth}]
-                \addplot[code-keyword, samples=30]{func(3*sin(deg(x)))};
+                \addplot[clr-main-blue, samples=30]{func(3*sin(deg(x)))};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
@@ -115,20 +115,20 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \begin{align*}
         &I = 0 \qquad&\Rightarrow &V_R = 0
         \\
-        &V_i - \cancel{V_R} - V_u = 0 \qquad &\Rightarrow & {\color{code-red}V_u = V_i}
+        &V_i - \cancel{V_R} - V_u = 0 \qquad &\Rightarrow & {\color{clr-main-red}V_u = V_i}
         \\
-        &V_u < V_\gamma \qquad&\Rightarrow &{\color{code-red}V_i < V_\gamma}
+        &V_u < V_\gamma \qquad&\Rightarrow &{\color{clr-main-red}V_i < V_\gamma}
     \end{align*}
 \end{tcolorbox}
 \end{minipage}
 \begin{minipage}[b]{.45\textwidth}
 \begin{tcolorbox}[title=Diodo ON]
     \begin{align*}
-        &V_d = V_\gamma \qquad&\Rightarrow &{\color{code-keyword}V_u = V_\gamma}
+        &V_d = V_\gamma \qquad&\Rightarrow &{\color{clr-main-blue}V_u = V_\gamma}
         \\
         &I\cdot R > 0 \qquad&\Rightarrow & V_i - V_d > 0
         \\
-        &&& {\color{code-keyword} V_i > V_\gamma}
+        &&& {\color{clr-main-blue} V_i > V_\gamma}
     \end{align*}
 \end{tcolorbox}
 \end{minipage}
@@ -140,9 +140,9 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \begin{minipage}[b]{0.48\textwidth}
         \begin{tikzpicture}
             \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymax=2, ymin=-2.5, width={.9\textwidth}]
-                \addplot[code-red, domain=-5:0.78]{x};
-                \addplot[code-keyword, domain=0.78:5]{0.78};
-                \addplot[code-comment, dashed] coordinates {(0.78, -4) (0.78, 1)};
+                \addplot[clr-main-red, domain=-5:0.78]{x};
+                \addplot[clr-main-blue, domain=0.78:5]{0.78};
+                \addplot[clr-gray, dashed] coordinates {(0.78, -4) (0.78, 1)};
                 \node[label={-45:{$V_\gamma$}},circle,fill,inner sep=1.5pt] at (axis cs: 0.78,0) {};
             \end{axis}
         \end{tikzpicture}
@@ -153,8 +153,8 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
                 func(\x) = (\x < 0.78) * \x + (\x >= 0.78) * 0.78;
             }]
             \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymax=2, ymin=-2.5, width={.9\textwidth}]
-                \addplot[code-keyword, samples=30]{func(2*sin(deg(x)))};
-                \addplot [code-comment, dashed]{0.78};
+                \addplot[clr-main-blue, samples=30]{func(2*sin(deg(x)))};
+                \addplot [clr-gray, dashed]{0.78};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
@@ -190,7 +190,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         \end{cases}
         \Rightarrow
         \begin{cases}
-            {\color{code-keyword}V_i = V_u}
+            {\color{clr-main-blue}V_i = V_u}
             \\
             V_i > V_b - V_\gamma
         \end{cases}
@@ -207,7 +207,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         \end{cases}
         \Rightarrow
         \begin{cases}
-            {\color{code-red}V_u = V_b - V_\gamma}
+            {\color{clr-main-red}V_u = V_b - V_\gamma}
             \\
             V_i < V_b - V_\gamma
         \end{cases}
@@ -221,9 +221,9 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \begin{minipage}[b]{.48\textwidth}
         \begin{tikzpicture}
             \begin{axis}[ymin=-1, ymax=4, width={.9\textwidth}]
-                \addplot [code-keyword, domain=-5:\vg]{\vg};
-                \addplot [code-red, domain=\vg:5]{x};
-                \addplot [code-comment, dashed] coordinates {(\vg, -5) (\vg, 5)};
+                \addplot [clr-main-blue, domain=-5:\vg]{\vg};
+                \addplot [clr-main-red, domain=\vg:5]{x};
+                \addplot [clr-gray, dashed] coordinates {(\vg, -5) (\vg, 5)};
                 \node[label={0:{$V_\gamma+V_b$}}] at (axis cs:\vg,-0.8) {};
             \end{axis}
         \end{tikzpicture}
@@ -234,7 +234,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
                 func(\x) = (\x <= \vg) * (\vg) + (\x > \vg) *\x;
             }]
             \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, ymax=4, width={.9\textwidth}]
-                \addplot[code-keyword, samples=30]{func(4*sin(deg(x)))};
+                \addplot[clr-main-blue, samples=30]{func(4*sin(deg(x)))};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
@@ -637,8 +637,8 @@ Quindi a differenza del circuito a singola semionda, che taglia la semionda nega
                 \addplot[domain=(-2 * \vgamma):(2*\vgamma)]{0};
                 \addplot[domain=(2 * \vgamma):5]{x-2*\vgamma};
                 \addplot[domain=-5:-2*\vgamma]{-x-2*\vgamma};
-                \addplot[dashed, code-comment] coordinates {(2*\vgamma, 5) (2*\vgamma, -5)};
-                \addplot[dashed, code-comment] coordinates {(-2*\vgamma, 5) (-2*\vgamma, -5)};
+                \addplot[dashed, clr-gray] coordinates {(2*\vgamma, 5) (2*\vgamma, -5)};
+                \addplot[dashed, clr-gray] coordinates {(-2*\vgamma, 5) (-2*\vgamma, -5)};
 
                 \node[circ,label={-45:{$2V_\gamma$}}] at (axis cs:2*\vgamma,0) {};
                 \node[circ,label={180+45:{$-2V_\gamma$}}] at (axis cs:-2*\vgamma,0) {};
@@ -782,8 +782,8 @@ un esponenziale negativo.
             ) - \vgamma;
         }]
         \begin{axis}[xmin=-1, xmax=10]
-            \addplot [code-red, samples=40, domain=-1:10] {vi(deg(x))};
-            \addplot [code-keyword, samples=100, domain=-1:10] {func(mod(deg(x) + 360, 360))};
+            \addplot [clr-main-red, samples=40, domain=-1:10] {vi(deg(x))};
+            \addplot [clr-main-blue, samples=100, domain=-1:10] {func(mod(deg(x) + 360, 360))};
         \end{axis}
     \end{tikzpicture}
 \end{figure}
@@ -824,9 +824,9 @@ essere a loro volta corretti alla luce di questa considerazione.
                 to [R, v^=$V_u$](2, 0)
                 -- (0, 0)
                 ;
-            \draw[code-keyword]
+            \draw[clr-main-blue]
                 (-0.5, 2) -- ++(0, 1.5)
-                to[polar capacitor, color=code-keyword, i=$I_C$] ++(2, 0)
+                to[polar capacitor, color=clr-main-blue, i=$I_C$] ++(2, 0)
                 -- ++(0, -1.5)
                 ;
         \end{circuitikz}
@@ -834,16 +834,16 @@ essere a loro volta corretti alla luce di questa considerazione.
     \begin{minipage}{.45\textwidth}
         \begin{tikzpicture}
             \begin{axis}[ylabel=$V$, xlabel=$t$, ymin=-4, ymax=4, xmin=-4, xmax=4]
-                \addplot [code-keyword] coordinates {(-5, 2) (0, 2)};
-                \addplot [code-keyword] coordinates {(0, -2) (5, -2)};
-                \addplot [code-comment] coordinates {(-5, 2-\vgamma) (0, 2-\vgamma)};
-                \addplot [code-comment] coordinates {(0, 0) (5, 0)};
+                \addplot [clr-main-blue] coordinates {(-5, 2) (0, 2)};
+                \addplot [clr-main-blue] coordinates {(0, -2) (5, -2)};
+                \addplot [clr-gray] coordinates {(-5, 2-\vgamma) (0, 2-\vgamma)};
+                \addplot [clr-gray] coordinates {(0, 0) (5, 0)};
 
-                \addplot [code-red] coordinates {(3, -2) (3, 2)};
-                \addplot [code-red] coordinates {(3, 2) (5, 2)};
+                \addplot [clr-main-red] coordinates {(3, -2) (3, 2)};
+                \addplot [clr-main-red] coordinates {(3, 2) (5, 2)};
 
-                \node [right, code-comment] at (0, 2-\vgamma) {$V_u$};
-                \node [right, code-keyword] at (0, 2) {$V_i$};
+                \node [right, clr-gray] at (0, 2-\vgamma) {$V_u$};
+                \node [right, clr-main-blue] at (0, 2) {$V_i$};
                 \node [above] at (-2, 2) {ON};
                 \node [above] at (2, 0) {OFF};
             \end{axis}
@@ -981,34 +981,34 @@ ma dipende unicamente dalla escursione di tensione e dalle caratteristiche fisic
     \begin{minipage}{.32\textwidth}
         \begin{tikzpicture}
             \begin{axis}[width=.95\textwidth, ylabel=$V_u$, xlabel=$t$, xmin=-2, xmax=7]
-                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
-                \addplot [code-keyword] coordinates {(0, -3) (\tm, -3)};
-                \addplot [code-keyword] coordinates {(\tm, -3) (\tm, 0)};
-                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
-                \addplot [code-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
-                \addplot [code-red] coordinates {(\tm + 2, 3) (8, 3)};
+                \addplot [clr-main-blue] coordinates {(-5, 3) (0, 3)};
+                \addplot [clr-main-blue] coordinates {(0, -3) (\tm, -3)};
+                \addplot [clr-main-blue] coordinates {(\tm, -3) (\tm, 0)};
+                \addplot [clr-main-blue] coordinates {(\tm, 0) (8, 0)};
+                \addplot [clr-main-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
+                \addplot [clr-main-red] coordinates {(\tm + 2, 3) (8, 3)};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
     \begin{minipage}{.31\textwidth}
         \begin{tikzpicture}
             \begin{axis}[width=.95\textwidth, ylabel=$I$, xlabel=$t$, xmin=-2, xmax=7]
-                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
-                \addplot [code-keyword] coordinates {(0, -3) (\tm, -3)};
-                \addplot [code-keyword] coordinates {(\tm, -3) (\tm, 0)};
-                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
-                \addplot [code-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
-                \addplot [code-red] coordinates {(\tm + 2, 3) (8, 3)};
+                \addplot [clr-main-blue] coordinates {(-5, 3) (0, 3)};
+                \addplot [clr-main-blue] coordinates {(0, -3) (\tm, -3)};
+                \addplot [clr-main-blue] coordinates {(\tm, -3) (\tm, 0)};
+                \addplot [clr-main-blue] coordinates {(\tm, 0) (8, 0)};
+                \addplot [clr-main-red] coordinates {(\tm + 2, 0) (\tm + 2, 3)};
+                \addplot [clr-main-red] coordinates {(\tm + 2, 3) (8, 3)};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
     \begin{minipage}{.32\textwidth}
         \begin{tikzpicture}
             \begin{axis}[width=.95\textwidth, ylabel=$Q$, xlabel=$t$, xmin=-2, xmax=8]
-                \addplot [code-keyword] coordinates {(-5, 3) (0, 3)};
-                \addplot [code-keyword, domain=0:\tm]{(3 / (1-e^(-\tm)))*e ^(-x) - (3 / (1-e^(-\tm))) +3};
-                \addplot [code-keyword] coordinates {(\tm, 0) (8, 0)};
-                \addplot [code-red, domain=\tm+2:8] {-e^(-x + ln(3) + \tm+2) + 3};
+                \addplot [clr-main-blue] coordinates {(-5, 3) (0, 3)};
+                \addplot [clr-main-blue, domain=0:\tm]{(3 / (1-e^(-\tm)))*e ^(-x) - (3 / (1-e^(-\tm))) +3};
+                \addplot [clr-main-blue] coordinates {(\tm, 0) (8, 0)};
+                \addplot [clr-main-red, domain=\tm+2:8] {-e^(-x + ln(3) + \tm+2) + 3};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}
