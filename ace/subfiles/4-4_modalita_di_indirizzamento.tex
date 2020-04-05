@@ -69,7 +69,7 @@ decrementato.
 \end{figure}
 Le modalità di accesso possono essere combinate: \lstinline{mov AX [12 + BX + SI]}.
 
-\warning{
+\warnbox{
     Se nella modalità di indirizzamento è presente il registro \textbf{BP}, il segmento di riferimento
     sarà \textbf{SS} (l'indirizzo è relativo allo stack), altrimenti il riferimento sarà sempre \textbf{DS}
     (segmento dati).

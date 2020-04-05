@@ -91,7 +91,7 @@ halt:       mov ax, 4c00h
 function:   mov ax, 10h
             ret
 \end{lstlisting}
-\warning{{\color{code-keyword}jmp} e {\color{code-keyword}call} hanno la stessa sintassi. Per questo se confuse il compilatore non dà errore.
+\warnbox{{\color{code-keyword}jmp} e {\color{code-keyword}call} hanno la stessa sintassi. Per questo se confuse il compilatore non dà errore.
 Se una funzione è invocata con {\color{code-keyword} jmp} l'istruzione {\color{code-keyword}ret} fa comunque il {\color{code-keyword} pop} di un valore dallo stack e cambiato l'instruction pointer.}
 
 \subsection{LOOP}

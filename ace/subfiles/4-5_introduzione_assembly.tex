@@ -57,7 +57,7 @@ mov ds, ax
 \end{itemize}
 Lo stack pointer \lstinline{sp} parte con valore iniziale 0xffff, ad ogni istruzione \lstinline{push},
 \lstinline{sp} diminuisce di 2, mentre ad ogni \lstinline{pop} aumenta di 2.
-\warning{
+\warnbox{
     Quando tolgo i dati dallo stack con {\color{code-keyword}pop}, la cella di memoria non viene azzerata.
 }
 
