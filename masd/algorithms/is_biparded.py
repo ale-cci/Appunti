@@ -1,7 +1,3 @@
-'''
-Check if the current graph is biparted or not
-DFS, assigning each vertex the color that differs from the color of its parent
-'''
 import collections
 
 
@@ -26,6 +22,8 @@ def is_biparted(graph):
 
 
 if __name__ == '__main__':
-    from utils import default_graph as graph
-    print('Is biparted:', is_biparted(graph))
-
+    is_biparted({
+        'a': ['b', 'c'],
+        'b': ['a'],
+        'c': ['a']
+    })

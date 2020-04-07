@@ -1,0 +1,46 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Matching}
+\subsection{Definizione di Matching}
+Dato un grafo non orientato $G = (v, A)$, un matching è un sottoinsieme $M \subseteq A$ dell'insieme di archi $A$ tale che
+in $M$ non ci siano coppie di archi adiacenti\footnote{Con un nodo in comune}.
+\subsubsection{Problema del matching di peso massimo}
+Di tutti i matching possibili, vogliamo trovare quello il cui peso $w(M) = \sum_{e \in M} w_e$ sia massimo.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[rotate=90]
+        \SetGraphUnit{2}
+        \Vertices{circle}{6, 3, 4, 5, 1}
+        \WE(6){2}
+        \Edge[label=$2$](2)(4)
+        \Edge[label=$3$](2)(5)
+
+        \tikzset{EdgeStyle/.style={color=green}}
+        \Edge[label=$1$](2)(3)
+        \Edge[label=$5$](4)(5)
+        \Edge[label=$6$](1)(6)
+
+        \tikzset{EdgeStyle/.style={color=red}}
+        \Edge[label=$4$](3)(6)
+        \Edge[label=$5$](1)(2)
+        ;
+    \end{tikzpicture}
+\end{figure}
+
+\noindent L'insieme di archi $M_1 = \{ (1, 2) \, (3, 6)\}$ forma un matching di peso $9$, mentre $M_2 = \{(2, 3)\,(4, 5)\,(1, 6)\}$ ha un peso
+di $12$.
+Algoritmi di matching sono utilizzati per determinare accoppiamenti ottimali tra i nodi.
+\\[10pt]
+Viene detto matching di cardinalità massima, l'insieme di problemi dove il peso di ogni arco è unitario.
+In caso di grafi bipartiti, si cerca una soluzione che colleghi i due set di nodi.
+
+\begin{enumerate}
+    \item Inizializzazione: Parto da un matching $M$ di partenza, e con i vertici del
+        grafo non etichettati
+    \item Condizione di arresto: In $V_1$ non ci sono nodi etichettati e nessun arco incide in $M$
+    \item Selezione $V \in V_1$ ed assegna un etichetta $(E, -)$
+    \item Si inizializzi l'insieme $R$ di vertici analizzati con $R = \emptyset$
+\end{enumerate}
+\end{document}
