@@ -27,6 +27,7 @@
 
 % Custom commands and variables
 \def\vgamma{0.78}
+\def\vcesatval{0.2}
 \newcommand{\diodecurrent}[2][I_s]{%
     \ensuremath{#1 \big(e^{#2/V_T} -1\big)}%
 }
@@ -59,5 +60,8 @@
 \def\vbe{\V{BE}}
 \def\vce{\V{CE}}
 \def\vi{\V{i}}
+\def\vh{\V{h}}
+\def\vl{\V{l}}
+\newcommand\vcesat{\ensuremath{V_{\text{CE}_{\text{SAT}}}}}
 
 \newcommand\bjtcurrentic{\ensuremath{\diodecurrent[\I{S}]{\V{BE}} - \diodecurrent[(\I{S} + \I{BCs})]{\V{BC}}}}

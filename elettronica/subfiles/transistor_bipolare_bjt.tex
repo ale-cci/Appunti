@@ -220,6 +220,7 @@ ponendo $\V{CE}$ come variabile indipendente e tracciando le funzioni al variare
         \end{axis}
     \end{tikzpicture}
     \caption{$\I{C}(\V{CE})$ al variare di $\V{BE}$}
+    \label{graph:transistor_bjt_3d_2}
 \end{minipage}
 \end{figure}
 
@@ -284,7 +285,7 @@ $\V{BE} < 0$ e $\V{BC} < 0$ ci portano ad osservare che ciascuna delle espressio
 $\V{BE} > 0$ e $\V{BC} > 0$ indica che nessun esponenziale è trascurabile. Tutte le correnti dipendono da entrambe le tensioni di funzionamento $\V{BE}$ e $\V{BC}$.
 
 \newpage
-\subsection{Analisi del circuito transistore BJT}
+\subsection{Amplificatore invertente di tensione per piccoli segnali}
 Utilizzando le approssimazioni appena ricavate nel circuito in figura \ref{circuit:transistor_bjt_common_e}
 
 \begin{tcolorbox}[title=Regione attiva diretta, width=\textwidth]
@@ -373,57 +374,253 @@ tende asintoticamente ad un valore appena maggiore di 0.
 
 \newpage
 \begin{figure}[h]
-    \centering
-    \begin{minipage}{.48\textwidth}
-        \def\vt{1}
-        \def\kuno{1.250}
-        \def\kdue{3}
-        \begin{tikzpicture}[declare function={
-                ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) - \kdue *(e^((\vbe - \vce)/\vt -1));
-            }]
+\centering
+\begin{minipage}{.48\textwidth}
+    \def\vt{1}
+    \def\kuno{1.250}
+    \def\kdue{3}
+    \begin{tikzpicture}[declare function={
+            ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) - \kdue *(e^((\vbe - \vce)/\vt -1));
+        }]
 
-            \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{CE}$, ylabel=$\I{C}$]
-                \foreach \i in {0.25, 0.50, ...,1.5}
-                {
-                    \addplot {ib(\i, x)};
-                }
+        \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{CE}$, ylabel=$\I{C}$]
+            \foreach \i in {0.25, 0.50, ...,1.5}
+            {
+                \addplot {ib(\i, x)};
+            }
 
-                \addplot [solid] coordinates {(0, 3) (4, 0)};
-                \draw (0, 3) node[circ]{} node[left]{$\frac{\V{cc}}{R}$}
-                    (4, 0) node[circ]{} node[below]{$\V{cc}$};
-                \draw[->, thick] (3, 0.2)--(3, 4.5)
-                    node[left]{$\V{i}$};
-            \end{axis}
-        \end{tikzpicture}
-        \label{graph:ramo_di_carico}
-        \caption{Grafico con ramo di carico}
-    \end{minipage}
-    \begin{minipage}{.48\textwidth}
-        \begin{tikzpicture}[declare function={
-                fun(\x,\R) = (3 - \R*(exp(\x/2) -1)) * (\x < (3 - \R*(exp(\x/2) -1)))
-                + (\x > (3 - \R*(exp(\x/2) -1)))* (exp(-\x + 2.2));
-            }]
-            \begin{axis}[ymin=-2, xmin=-2]
-                \addplot[domain=-5:0]{3};
-                \addplot[domain=0:5]{fun(x, 1)};
-                \addplot{x};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Andamento qualitativo di \vu in funzione di \vi}
-    \end{minipage}
+            \addplot [solid] coordinates {(0, 3) (4, 0)};
+            \draw (0, 3) node[circ]{} node[left]{$\frac{\V{cc}}{R}$}
+                (4, 0) node[circ]{} node[below]{$\V{cc}$};
+            \draw[->, thick] (3, 0.2)--(3, 4.5)
+                node[left]{$\V{i}$};
+        \end{axis}
+    \end{tikzpicture}
+    \label{graph:ramo_di_carico}
+    \caption{Grafico con ramo di carico}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+    \begin{tikzpicture}[declare function={
+            fun(\x,\R) = (3 - \R*(exp(\x) -1)) * (\x < (3 - \R*(exp(\x) -1)))
+            + (\x > (3 - \R*(exp(\x) -1)))* (exp(-\x + 1));
+        }]
+        \begin{axis}[ymin=-2, xmin=-2]
+            \addplot[domain=-5:0]{3};
+            \addplot[domain=0:5]{fun(x, 1)};
+            \addplot[dashed, clr-gray]{x};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Andamento qualitativo di \vu in funzione di \vi}
+\end{minipage}
 \end{figure}
 
 \noindent
 In particolare, il valore a cui asintoticamente tende la tensione in uscita è dato da
 \[
-    \I{C} = \bjtcurrentic = 0
+\I{C} = \bjtcurrentic = 0
 \]
 Dove entrambi i termini 1 sono trascurabili, siccome entrambi gli esponenziali sono maggiori di 1.
 \[
-    \vce  = \V{T} \ln{\frac{1}{\alpha_R}}
+\vce  = \V{T} \ln{\frac{1}{\alpha_R}}
 \]
 Quindi \vce è strettamente positivo, dato che $\alpha_R$ è compreso tra 0 ed 1, quindi il suo reciproco è maggiore di 1, e
 rispettivo logaritmo è positivo.
 Inoltre dato che questa espressione non dipende da \vbe, significa che tutte le caratteristiche intersecano l'asse delle ascisse
-in corrispondenza di questo valore.
+in corrispondenza di tale valore.
+\\[10pt]
+Considerando ora un punto $(\V{i0}, \V{u0})$ appartenente al tratto di polarizzazione attiva diretta,
+la retta tangente al grafico in tale punto ha equazione $\vu - \V{u0} = m (\vi - \V{i0})$, il termine $m$, uguale alla derivata
+di \vu rispetto a \vi, calcolata in $(\V{i0})$, è chiamato "guadagno di tensione" ed è indicato dal simbolo $A_V$.
+\\[10pt]
+Dato che la corrente $\I{c}(\V{i0}) = \I{c0} = \diodecurrent{\V{i0}}$, e siamo in regione attiva diretta (quindi il termine 1
+è trascurabile rispetto all'esponenziale), possiamo dire che $\I{c0} = \I{S}e^{\V{i0}/\V{T}}$.
+Quindi se calcolando il guadagno di tensione in $\V{i0}$ otteniamo:
+\begin{align*}
+    \vu = \V{cc} - R\diodecurrent{\vi}\\
+    \frac{d\vu}{d\vi}\Bigg|_{\V{i0}} = -\frac{R \I{s}}{\V{T}}e^{\V{i0}/\V{T}}
+    = -\frac{R}{\V{T}} \I{c0}
+\end{align*}
+Per dare una stima a questo rapporto, prendiamo ad esempio un punto intermedio, in cui $\V{u0} \approx 2.5 V$. Mentre la tensione termica
+\V{T} che compare a denominatore è dell'ordine di grandezza di $25 mV$, quindi $A_V \approx -100$.
+Questo valore significa che in regione attiva diretta, le piccole variazioni di un segnale in ingresso, vengono amplificate di
+un fattore $A_V = 100$. Comportamento tipico di un amplificatore di tensione per piccoli segnali.
+% 19:35
+Ovviamente, se il segnale di ingresso raggiunge la regione di saturazione, il segnale d'uscita non sarà più sinusoidale.
+
+Facendo riferimento ad un segnale binario, il quale può assumere solamente i valori \vh molto grande e \vl prossimo a zero, allora
+il circuito si comporta come un invertitore.
+
+\newpage
+\subsection{Approssimazione Transistor BJT}
+Esattamente come abbiamo fatto nel caso del diodo, approssimiamo nello stesso modo le caratteristiche del transistor bipolare.
+Osservando i grafici in figura \ref{graph:transistor_bjt_3d} e \ref{graph:transistor_bjt_3d_2}, possiamo formulare un modello
+lineare, valido nelle tre regioni di funzionamento, trascurando la regione inversa.
+Siccome dai calcoli svolti in precedenza, sappiamo che il grafico in figura \ref{graph:transistor_bjt_3d_2} non passa per lo zero,
+chiamiamo tale punto $\vcesat = 0.2 V$.
+\\[1em]
+Inoltre, siccome in saturazione entrambi i diodi sono in polarizzazione diretta
+\[
+    \vce = {\vbe}_{on} - {\vbc}_{on} = \vcesat
+\]
+Sapendo già che in polarizzazione diretta ${\vbe}_{on} = V_\gamma$, possiamo dire che ${\vbc}_{on} = 0.55 V = V_\gamma'$, quindi le tensioni
+base-emettitore e base-collettore in polarizzazione diretta, sono diverse tra di loro.
+\\[1em]
+\begin{minipage}{.49\textwidth}
+    \begin{tcolorbox}[title=OFF, width=\textwidth]
+        \[\begin{cases*}
+            \I{B} = 0 ,\quad \vbe < V_\gamma\\
+            \I{C} = 0 ,\quad \vbc < V_\gamma'
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.50\textwidth}
+    \begin{tcolorbox}[title=AD, width=\textwidth]
+        \[\begin{cases*}
+            \I{B} > 0 ,\quad \V{BE} = V_\gamma\\
+            \I{c} = \beta_F \I{B} > 0, \quad \vce > \vcesat
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{tcolorbox}[title=SAT]
+    \[\begin{cases*}
+        \I{B}> 0, \quad \vbe = V_\gamma\\
+        \I{C} < \beta_F \I{B} , \quad \vce = \vcesat
+    \end{cases*}\]
+\end{tcolorbox}
+
+\noindent
+In questo caso, siccome abbiamo a che fare con due giunzioni, abbiamo bisogno di definire due correnti, e per ciascuna delle regioni
+abbiamo due disequazioni che descrivono la validità delle due equazioni.
+
+\subsubsection{Studio del circuito utilizzando il modello approssimato}
+\begin{minipage}{.32\textwidth}
+    \begin{tcolorbox}[title=OFF]
+        \[\begin{cases*}
+            \vu = \V{cc}\\
+            \vi < V_\gamma
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.33\textwidth}
+    \begin{tcolorbox}[title=AD]
+        \vspace{-1em}
+        \[\begin{cases*}
+            \vcesat < \vu < \V{cc}\\
+            \vi = V_\gamma
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.33\textwidth}
+    \begin{tcolorbox}[title=SAT]
+        \[\begin{cases*}
+            \vi = V_\gamma\\
+            \vu = \vcesat
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{wrapfigure}{r}{0pt}
+    \begin{tikzpicture}[scale=.8]
+        \begin{axis}[ymin=-1, xmin=-1, ymax=4]
+            \addplot[domain=-5:\vgamma]{3};
+            \addplot coordinates {(\vgamma, 3) (\vgamma, \vcesatval)};
+            \draw (\vgamma, \vcesatval) node[circ]{};
+        \end{axis}
+    \end{tikzpicture}
+\end{wrapfigure}
+
+\vspace{1em}
+\noindent
+Questo modello rappresenta il tratto a pendenza elevata, con un tratto a pendenza infinita (tratto verticale).
+Se stiamo progettando un' amplificatore analogico, il quale si basa sul determinare il guadagno del
+circuito ($A_V$), non è una buona approssimazione.
+
+Inoltre il modello rappresenta tutta la regione di saturazione con un unico punto, di coordinate $(V_\gamma, \vcesat)$
+quindi è un'approssimazione non accettabile.
+
+La spiegazione di questo fenomeno è che, siccome $\lim_{\vi \to \infty} \I{C} = \infty$ non esiste un asintoto verticale,
+mentre noi stiamo approssimando tutte le possibili relazioni corrente-tensione con un unica retta verticale.
+
+%1h:05
+Se osserviamo per quali ordini di grandezza di corrente, questo modello non rappresenta accuratamente il valore della
+tensione in uscita, sono dell'ordine dei giga ampere. Il circuito visto ora, non è realistico perché non ci sono limitazioni
+per i valori di corrente \I{B}, aggiungiamo quindi una resistenza alla base, per limitare la corrente, e rianalizziamo il
+circuito con il modello lineare.
+
+\newpage
+\subsubsection{Analisi dello stesso circuito con corrente limitata}
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.2]
+        \draw (0, 0)
+        to[american voltage source, v=$V_i$, i=$\I{B}$] (0, 3)
+        -- (1, 3)
+        to[R, label=$R_b$] (1, 1.5) node[npn, anchor=B, scale=2](tr){}
+
+        (tr.E) -- (tr.E |- 0, 0)
+        node[ground]{}
+        (0, 0) -- (tr.E |- 0, 0)
+        -- ++(1, 0) coordinate(x)
+
+        (tr.C) -- (tr.C |- 0, 3)
+        -- ++(1, 0)
+        node[circ] {} node[above] {$\vu$}
+        to[R, i<=$\I{C}$, label=$R_C$] ++(0, -2)
+
+        (x) to[american voltage source, v_=$\V{cc}$] ++(0, 1)
+
+        ;
+    \end{circuitikz}
+\end{figure}
+
+%1h:13
+\noindent
+\begin{minipage}{.5\textwidth}
+    \begin{tcolorbox}[title=OFF]
+        \vspace{1.2em}
+        \[\begin{cases*}
+            \vu = \V{cc}\\
+            \vi < V_\gamma
+        \end{cases*}\]
+    \end{tcolorbox}
+    \begin{tcolorbox}[title=AD]
+        \vspace{-1.2em}
+        \[\begin{cases*}
+            \vi > V_\gamma \\
+            \vu = \V{CC} - \frac{\beta_F R_C}{R_B} (\vi - V_\gamma)\\
+            \vu > \vcesat
+        \end{cases*}\]
+    \end{tcolorbox}
+    \begin{tcolorbox}[title=SAT]
+        \[\begin{cases*}
+            \vu = \vcesat\\
+            \vi > \frac{R_b}{R_c}(\vcesat - \V{c}) + V_\gamma
+        \end{cases*}\]
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=.8]
+            \begin{axis}[ymin=-1, xmin=-1, ymax=4]
+                \addplot[dashed, clr-gray]{\vcesatval};
+
+                \addplot[domain=-5:\vgamma]{3};
+                \addplot[domain=\vgamma:3]{(3 - \vcesatval) / (\vgamma - 3) * x +3 -(3 - \vcesatval) / (\vgamma - 3) * \vgamma };
+                \addplot[domain=3:5]{\vcesatval};
+
+                \draw
+                    (-0.5, \vcesatval) node[above]{\vcesat}
+                    (-0.5, 3) node[above] {\V{cc}};
+
+            \end{axis}
+        \end{tikzpicture}
+\end{minipage}
+
+\noindent
+Il modello a soglia descrive con un ottima approssimazione i casi in cui la corrente si mantiene limitata.
+Il guadagno in questo modello lineare è esattamente il coefficiente angolare del tratto in regione attiva diretta: $-\beta_F R_C / R_B$.
+Dato che dipende solamente dai valori delle due resistenze del circuito, è possibile aumentare o diminuire arbitrariamente il
+guadagno introducendo una resistenza variabile nel circuito.
+% 1h:36
+
 \end{document}
