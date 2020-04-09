@@ -2,9 +2,6 @@
 
 \begin{document}
 %Lezione 7
-\newcommand\I[1]{\ensuremath{I_{\text{#1}}}}
-\newcommand\V[1]{\ensuremath{V_{\text{#1}}}}
-\def\vbe{$\V{BE}$}
 
 \section{Transistore bipolare a giunzione BJT}
 \begin{figure}[h]
@@ -91,7 +88,7 @@ avremo una componente aggiuntiva di corrente ad effetto transistore, diretta in 
 con un generatore di corrente pilotato.
 
 %17:39
-\begin{tcolorbox}[title=Equazioni caratteristiche transistore]
+\begin{tcolorbox}[title=Equazioni caratteristiche transistore (linearm. dipendenti)]
     \begin{align*}
         &\I{B} = \diodecurrent[\I{BES}]{\V{BE}} - \diodecurrent[\I{BC}]{\V{BC}}\\
         &\I{E} = \diodecurrent[(\I{S} + \I{BE})]{\V{BE}} - \diodecurrent[\I{S}]{\V{BC}}\\
@@ -149,6 +146,7 @@ ultime due ce ne occuperemo più avanti.
         ;
     \end{circuitikz}
     \caption{Connessione a Emettitore comune}
+    \label{circuit:transistor_bjt_common_e}
 \end{figure}
 
 %37:00
@@ -235,4 +233,197 @@ quattro regioni di funzionamento del transistore, dipendenti da $\V{BE}$ e $\V{B
     \item BE on, BC on: Regione di saturazione.
 \end{itemize}
 
+\subsubsection{Regione Attiva Diretta}
+Prendendo in considerazione la regione di funzionamento attiva diretta, considerando che $e^{\V{BE} / \V{T}} > e^{\V{BC}/{\V{T}}}$
+siccome il primo termine è maggiore di 1 per $\V{BE} > 0$ ed il secondo minore di 1 per $\V{BC} < 0$, possiamo semplificare le relative
+equazioni caratteristiche del transistore in
+\begin{align*}
+    &\I{C} = \diodecurrent[\I{s}]{\V{BE}}\\
+    &\I{B} = \diodecurrent[\I{BEs}]{\V{BE}}\\
+    &\I{E} = \diodecurrent[(\I{s} + \I{BEs})]{\V{BE}}
+\end{align*}
+Osserviamo che in questa regione, tutte le correnti assumono la forma di esponenziale traslata in funzione della sola tensione $\V{BE}$.
+In questo caso particolare, il circuito in figura \ref{circuit:transistor_bjt_common_e}, la corrente in uscita $\I{c}$ non è una funzione della tensione
+di uscita $\V{u} = \V{CE}$, quindi si comporta come un circuito generatore di corrente costante/controllata in funzione di $\V{i}$.
+
+Inoltre, siccome tutte le correnti dipendono dallo stesso esponenziale, allora sono proporzionali tra loro
+\[
+    \frac{\I{C}}{\I{B}} = \frac{\I{s}}{\I{BEs}} = \beta_F
+\]
+Per analogo ragionamento $\I{E} = (\beta_F+1) \I{B}$, e $\I{C} = \frac{\beta_F}{\beta_F + 1}\I{E} = \alpha_F \I{E}$.
+Con $\alpha_F$ viene definita l'\textit{efficienza di emettitore}: maggiore è la costante più la corrente di collettore assomiglia alla corrente di emettitore.
+Quindi siccome $\alpha_F = \frac{\beta_F}{\beta_F + 1}$, maggiore è $\beta_F$, più $\alpha_F$ è vicina ad 1, e migliore è il transistore.
+
+\subsubsection{Regione attiva inversa}
+Per ragionamento analogo alla regione precedente, $\V{BE} < 0$ e $\V{BC} > 0$ ci porta a trascurare i termini in funzione di $\V{BE}$
+\begin{align*}
+    &\I{C} = -\diodecurrent[(\I{S} + \I{BCs})]{\V{BC}}\\
+    &\I{B} = \diodecurrent[\I{BCs}]{\V{BC}}\\
+    &\I{E} = -\diodecurrent[\I{s}]{\V{BC}}\\
+\end{align*}
+Indicando con $\beta_R = {\I{s}}/{\I{BCs}}$, abbiamo che
+\begin{align*}
+    &\I{E} = - \beta_R \I{B}\\
+    &\I{C} = -(\beta_R + 1) \I{B}\\
+    &\I{E} = \frac{\beta_R}{1 + \beta_R}\I{C} = \alpha_R \I{C}
+\end{align*}
+Il crescere di $\beta_R$ aumenta le prestazioni del transistore: $\alpha_R \approx 1$.
+\\[1em]
+Nota: \textit{F e B a pedice, indicano Forward e Reverse}
+
+\subsubsection{Regione di interdizione}
+$\V{BE} < 0$ e $\V{BC} < 0$ ci portano ad osservare che ciascuna delle espressioni esponenziali è trascurabile, quindi:
+\begin{align*}
+    &\I{C} = \I{BCs}\\
+    &\I{B} = - \I{BEs} - \I{BCs}\\
+    &\I{E} = \I{BEs}
+\end{align*}
+"Il modello non ha bisogno dell'aggiunta di un generatore controllato per essere descritto".
+
+\subsubsection{Regione di saturazione}
+$\V{BE} > 0$ e $\V{BC} > 0$ indica che nessun esponenziale è trascurabile. Tutte le correnti dipendono da entrambe le tensioni di funzionamento $\V{BE}$ e $\V{BC}$.
+
+\newpage
+\subsection{Analisi del circuito transistore BJT}
+Utilizzando le approssimazioni appena ricavate nel circuito in figura \ref{circuit:transistor_bjt_common_e}
+
+\begin{tcolorbox}[title=Regione attiva diretta, width=\textwidth]
+    \begin{align*}
+        &\vu = \vbe - \vbc > 0\\
+        &\vu = -R\I{C} = -R \diodecurrent[\I{s}]{\vbe} < 0
+    \end{align*}
+\end{tcolorbox}
+
+\noindent
+Quindi il circuito non può funzionare in regione normale.
+Modifichiamo quindi il circuito aggiungendo un generatore di tensione $\V{cc}$ tale che $\vu = \V{cc} - R\I{c} > 0$.
+Mantenendo compatibilità con la prima ipotesi.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.2]
+        \draw (0, 0)
+        to[american voltage source, v=$V_i$, i=$\I{B}$] (0, 3)
+        -- (1, 3)
+        -- (1, 1.5) node[npn, anchor=B, scale=2](tr){}
+
+        (tr.E) -- (tr.E |- 0, 0)
+        node[ground]{}
+        (0, 0) -- (tr.E |- 0, 0)
+        -- ++(1, 0) coordinate(x)
+
+        (tr.C) -- (tr.C |- 0, 3)
+        -- ++(1, 0)
+        node[circ] {} node[above] {$\vu$}
+        to[R, i<=$\I{C}$] ++(0, -2)
+
+        (x) to[american voltage source, v_=$\V{cc}$] ++(0, 1)
+
+        ;
+    \end{circuitikz}
+\end{figure}
+\noindent
+Siccome ci siamo assicurati che il circuito funzioni in regione attiva diretta, verifichiamo ora se è possibile che tale
+circuito funzioni in regione attiva inversa:
+
+\begin{tcolorbox}[title=Regione attiva inversa]
+    \begin{align*}
+        &\vu = \vbe - \vbc < 0\\
+        &\vu = \V{cc} - R\I{C} > 0
+    \end{align*}
+\end{tcolorbox}
+
+\noindent
+Abbiamo dimostrato quindi che questo circuito, corretto appositamente per farlo lavorare in regione attiva diretta,
+non può lavorare in regione attiva inversa. Per funzionare in quest'ultima regione il generatore di tensione \V{cc} dovrebbe
+avere una tensione negativa, per questo motivo per analizzare di questo circuito, consideriamo solo
+tre regioni di funzionamento.
+
+\noindent
+\begin{minipage}{.49\textwidth}
+    \begin{tcolorbox}[title=Regione di interdizione]
+        \vspace{-1.5em}
+        \begin{align*}
+        &\I{C} = \I{BEs} \approx 0\\
+        &\vu = \V{cc}\\
+        &\vbe = \vi < 0\\
+        &\vbc = \vi - \vu < 0
+        \end{align*}
+    \end{tcolorbox}
+\end{minipage}
+\begin{minipage}{.49\textwidth}
+    \begin{tcolorbox}[title=Attiva diretta]
+        \begin{align*}
+        &\vbe = \vi > 0\\
+        &\vu = \V{cc} - R \diodecurrent[\I{s}]{\vi}\\
+        \end{align*}
+    \end{tcolorbox}
+\end{minipage}
+
+\noindent
+In regione di saturazione abbiamo che
+\begin{align*}
+    \I{C} = \frac{\V{cc} - \vce}{R}
+\end{align*}
+Ricordandoci che in figura \ref{graph:ramo_di_carico} abbiamo già calcolato una relazione che lega \I{C} e \vce.
+Tracciamo l'equazione di $\I{C}$ appena trovata. Ciascuno dei punti di intersezione in tale figura, rappresenta
+quindi il luogo dei punti soluzione di questa equazione.
+Dal grafico quindi possiamo osservare che in regione di saturazione, la tensione di uscita continua a calare, ma
+tende asintoticamente ad un valore appena maggiore di 0.
+
+\newpage
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{.48\textwidth}
+        \def\vt{1}
+        \def\kuno{1.250}
+        \def\kdue{3}
+        \begin{tikzpicture}[declare function={
+                ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) - \kdue *(e^((\vbe - \vce)/\vt -1));
+            }]
+
+            \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{CE}$, ylabel=$\I{C}$]
+                \foreach \i in {0.25, 0.50, ...,1.5}
+                {
+                    \addplot {ib(\i, x)};
+                }
+
+                \addplot [solid] coordinates {(0, 3) (4, 0)};
+                \draw (0, 3) node[circ]{} node[left]{$\frac{\V{cc}}{R}$}
+                    (4, 0) node[circ]{} node[below]{$\V{cc}$};
+                \draw[->, thick] (3, 0.2)--(3, 4.5)
+                    node[left]{$\V{i}$};
+            \end{axis}
+        \end{tikzpicture}
+        \label{graph:ramo_di_carico}
+        \caption{Grafico con ramo di carico}
+    \end{minipage}
+    \begin{minipage}{.48\textwidth}
+        \begin{tikzpicture}[declare function={
+                fun(\x,\R) = (3 - \R*(exp(\x/2) -1)) * (\x < (3 - \R*(exp(\x/2) -1)))
+                + (\x > (3 - \R*(exp(\x/2) -1)))* (exp(-\x + 2.2));
+            }]
+            \begin{axis}[ymin=-2, xmin=-2]
+                \addplot[domain=-5:0]{3};
+                \addplot[domain=0:5]{fun(x, 1)};
+                \addplot{x};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Andamento qualitativo di \vu in funzione di \vi}
+    \end{minipage}
+\end{figure}
+
+\noindent
+In particolare, il valore a cui asintoticamente tende la tensione in uscita è dato da
+\[
+    \I{C} = \bjtcurrentic = 0
+\]
+Dove entrambi i termini 1 sono trascurabili, siccome entrambi gli esponenziali sono maggiori di 1.
+\[
+    \vce  = \V{T} \ln{\frac{1}{\alpha_R}}
+\]
+Quindi \vce è strettamente positivo, dato che $\alpha_R$ è compreso tra 0 ed 1, quindi il suo reciproco è maggiore di 1, e
+rispettivo logaritmo è positivo.
+Inoltre dato che questa espressione non dipende da \vbe, significa che tutte le caratteristiche intersecano l'asse delle ascisse
+in corrispondenza di questo valore.
 \end{document}
