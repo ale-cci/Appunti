@@ -621,6 +621,45 @@ Il modello a soglia descrive con un ottima approssimazione i casi in cui la corr
 Il guadagno in questo modello lineare è esattamente il coefficiente angolare del tratto in regione attiva diretta: $-\beta_F R_C / R_B$.
 Dato che dipende solamente dai valori delle due resistenze del circuito, è possibile aumentare o diminuire arbitrariamente il
 guadagno introducendo una resistenza variabile nel circuito.
-% 1h:36
+\subsubsection{Valutazione metodo di approssimazione}
+% 1h:36 - trovare un metodo per comprendere se l'approssimazione del modello a soglia è accettabile
+\begin{wrapfigure}{r}{0pt}
+    \begin{tikzpicture}
+        \begin{axis}[xmin=-3, ymin=-3, ylabel=\vi, xlabel=\I{B}, width=.3\textwidth]
+            \addplot[domain=-2:5]{x + ln(x + 1)};
+            \addplot[domain=-2:5, color=red]{ln(x+1)};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{test}
+    \label{graph:voltage_current}
+\end{wrapfigure}
+Mettendo insieme l'equazione di tensione e corrente della maglia in ingresso:
+\begin{align*}
+    &\vi - R_B \I{B} - \vbe = 0\\
+    &\I{B} = \diodecurrent[\I{BEs}]{\vbe}
+\end{align*}
+ottengo $\vi = R_B \I{B} + \V{T} \ln(\I{B} / \I{BES} + 1)$.
+\\
+Si può vedere dall'espressione come la corrente di base influenza la tensione
+in ingresso con un termine logaritmico ed uno lineare,
+seguendo l'andamento del grafico nero in figura \ref{graph:voltage_current}.
+Ad $\I{B} > 0$ la tensione in ingresso ha un andamento pressoché lineare, quindi
+una variazione lineare di tensione corrisponde ad una variazione lineare di corrente.
+Ciò significa che la corrente in ingresso è dissipata più facilmente sulla resistenza
+che sulla giunzione base-emettitore.
+Diverso è il caso precedente, rappresentato dal grafico rosso, dove per mancanza di
+resistenza a piccole variazioni della tensione in ingresso corrispondono grandi variazioni
+di corrente, e siccome manca la resistenza in ingresso, per raggiungere la stessa
+quantità di corrente è necessario raggiungere valori di tensione molto più elevati.
+
+\warnbox{
+Riassumendo: Quando la giunzione è in serie ad una resistenza qualunque variazione in ingresso si scarica prevalentemente
+sulla resistenza consentendo un'approssimazione di tensione costante.
+Nel caso in cui manchi la resistenza, non si può pensare di applicare un modello che consideri la tensione in ingresso costante
+se quest'ultima è variabile per definizione.
+}
+
+%1h:48m:50s - Esempio molle
+
 
 \end{document}
