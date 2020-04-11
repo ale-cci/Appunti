@@ -16,6 +16,58 @@ L'immunità al rumore è caratterizzato dalle due caratteristiche a guadagno 0 (
 grado di entrare nella fascia intermedia, si manifestano sul segnale in uscita.
 % 33:00
 
-\subsubsection{Soglia di rumore}
+\def\vilmax{\ensuremath{{\V{IL}}_\text{MAX}}}
+\def\vihmin{\ensuremath{{\V{IH}}_\text{MIN}}}
+\def\nm{\ensuremath{{N}_\text{M}}}
+
+\subsection{Margine di immunità al rumore}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=.8]
+        \begin{axis}[ymin=-1, xmin=-1, ymax=4]
+            \addplot[dashed, clr-gray]{\vcesatval};
+
+            \addplot[domain=-5:\vgamma]{3};
+            \addplot[domain=\vgamma:2]{(3 - \vcesatval) / (\vgamma - 2) * x +3 -(3 - \vcesatval) / (\vgamma - 2) * \vgamma };
+            \addplot[domain=2:5]{\vcesatval};
+
+            \addplot[dashed, clr-gray] coordinates {(\vgamma, 3) (\vgamma, 0)};
+            \draw
+                (-0.5, \vcesatval) node[above]{\V{L}}
+                (-0.5, 3) node[above] {\V{H}}
+                (2, 0) node[below]{\vihmin}
+                (3, 0) node[circ]{} node[below]{\V{H}}
+                (1.9, 1.9) node[right]{AD}
+                (4, \vcesatval) node[above]{SAT}
+                (0.4, 3) node[below]{OFF}
+                (\vgamma, 0) node[below]{\vilmax}
+                ;
+
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+\noindent
+Nel grafico del segnale d'uscita del circuito possiamo riconoscere il valore basso $\V{L} \equiv \vcesat$ ed allo stesso modo un valore
+alto $\V{H} \equiv \V{cc}$.
+La caratteristica da invertitore è esprimibile quindi come $\vu(\V{H}) = \V{L}$ e $\vu(\V{L}) = \V{H}$.
+Inoltre siccome questo circuito tollera il rumore, per rumore minore di $\delta_1$ abbiamo ugualmente che $\vu(\V{L} + \delta_1) = \V{L}$.
+Chiamiamo quindi $\vilmax = \V{L} + \delta_1$ il massimo valore della tensione d'ingresso che produce in uscita un $\V{H}$.
+Analogamente chiamo $\vihmin = \V{H} - \delta_2$ il massimo valore della tensione d'ingresso che produce ancora un'uscita $\V{L}$.
+Il margine di immunità al rumore \nm è il minimo tra $\delta_1$ e $\delta_2$.
+\\
+Dato che sappiamo già i valori di \V{H} e \V{L}, calcolando \vihmin come punto di intersezione tra la zona attiva diretta e di saturazione,
+otteniamo:
+\begin{align*}
+    \delta_1 = \vilmax - \V{L} = \vgamma - \vcesatval = 0.55 V\\
+    \delta_2 = \V{H} - \vihmin = 5 - 1.23 = 3.77V
+\end{align*}
+Da cui $\nm = 0.55 V$. Per avere immunità al rumore è necessario che $\delta_1 = \vilmax - \V{L}$ e $\delta_2 = \V{H} - \vihmin$ siano positivi
+sarà positiva anche la loro somma, per questo possiamo dire che
+\begin{align*}
+    \V{H} - \V{L} > \vihmin - \vilmax\\
+    \frac{\V{H} - \V{L}}{ \vihmin - \vilmax} > 1
+\end{align*}
+Facendo sempre riferimento al grafico è facile capire che rapporto tra $\V{H} - \V{L}$ e $\vihmin - \vilmax$ è $|A_V|$.
+Per cui $|A_V| > 1$. Inoltre maggiore è tale valore, maggiore sarà il margine di immunità al rumore.
 
 \end{document}
