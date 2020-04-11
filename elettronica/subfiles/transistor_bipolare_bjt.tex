@@ -610,8 +610,12 @@ circuito con il modello lineare.
 
                 \draw
                     (-0.5, \vcesatval) node[above]{\vcesat}
-                    (-0.5, 3) node[above] {\V{cc}};
-
+                    (-0.5, 3) node[above] {\V{cc}}
+                    (3, 0) node[below]{$V^*$}
+                    (1.9, 1.9) node[right]{AD}
+                    (4, \vcesatval) node[above]{SAT}
+                    (0.4, 3) node[below]{OFF}
+                    ;
             \end{axis}
         \end{tikzpicture}
 \end{minipage}
@@ -653,13 +657,11 @@ di corrente, e siccome manca la resistenza in ingresso, per raggiungere la stess
 quantità di corrente è necessario raggiungere valori di tensione molto più elevati.
 
 \warnbox{
-Riassumendo: Quando la giunzione è in serie ad una resistenza qualunque variazione in ingresso si scarica prevalentemente
-sulla resistenza consentendo un'approssimazione di tensione costante.
-Nel caso in cui manchi la resistenza, non si può pensare di applicare un modello che consideri la tensione in ingresso costante
-se quest'ultima è variabile per definizione.
+    Riassumendo: Quando la giunzione è in serie ad una resistenza qualunque variazione in ingresso si scarica prevalentemente
+    sulla resistenza consentendo un'approssimazione di tensione costante.
+    Nel caso in cui manchi la resistenza, non si può pensare di applicare un modello che consideri la tensione in ingresso costante
+    se quest'ultima è variabile per definizione.
 }
-
-%1h:48m:50s - Esempio molle
-
+%1h:48m:50s - Esempio con molle
 
 \end{document}
