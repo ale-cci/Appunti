@@ -75,7 +75,18 @@ specificate le operazioni. Oltre all'uscita dell'operazione vengono tornati dei 
 il flag di zero (messo ad uno quando il risultato dell'ALU è zero), ed il flag di segno (messo ad 1 quando il
 risultato è negativo).
 
+\subsubsection{Load e Store}
 %35
-Load e store permettono la lettura e scrittura in memoria.
+Load e store permettono rispettivamente lettura e scrittura in memoria.
+Entrambe prendono in ingresso un registro base, uno destinazione ed un offset. Per accedere al dato l'offset viene sommato
+al registro base ottenendo un nuovo indirizzo, il cui contenuto è salvato nel registro destinazione.
+I dati vengono direttamente presi dal bus attraverso buffer 3-state, lettura e scrittura possono essere disabilitate con i segnali
+$Mr$ (\textit{Memory Read}) e $Mw$ (\textit{Memory Write}),
+
+\subsubsection{Register File}
+Componente che ha come ingressi 5 bit che identificano il primo registro, 5bit per il secondo registro,
+5bit per il registro destinazione, ed i rimanenti 32 per il dato in ingresso.
+Le due porte in uscita riportano i dati letti rispettivamente dal registro sorgente 1 e 2.
+%49
 
 \end{document}
