@@ -4,9 +4,9 @@
 \begin{document}
 \section{Introduzione}
 \subsection{Calcolatore Elettronico}
-Un calcolatore elettronico è un sistema gerarchico che possiede le funzioni di elaborazione,
-memorizzazione, trasmissione e di controllo.  Queste funzioni corrispondono in prima
-approssimazione agli elementi: CPU, memoria, sistema I/O e Bus.
+Un calcolatore elettronico è un sistema gerarchico suddiviso in elaborazione,
+memorizzazione, trasmissione e di controllo.  Queste funzioni corrispondono
+gli elementi: CPU, memoria, sistema I/O e Bus.
 
 La CPU (unità di controllo) è ulteriormente divisa in 4 parti:
 \begin{itemize}
@@ -36,14 +36,11 @@ La CPU (unità di controllo) è ulteriormente divisa in 4 parti:
     \caption{Computer secondo architettura di Von Neumann}
     \label{img:von_neumann}
 \end{figure}
-
-\noindent La novità che porta l'architettura di Von Neumann è l'introduzione di una memoria.
-Prima di questa architettura, i programmi erano salvati esternamente al calcolatore in schede perforate.
-La memoria centrale (RAM) dell'architettura serviva per memorizzare temporaneamente i dati e permanentemente
-nella memoria secondaria (HD).
-
-Come si può vedere dallo schema in figura \ref{img:von_neumann}, si interfaccia solamente con la memoria
-centrale.
+\noindent
+La caratteristica principale dell'architettura è l'introduzione di una memoria interna.
+Precedentemente, i programmi erano salvati esternamente in schede perforate.
+La memoria centrale (RAM) è temporanea e fa da tramite alla memoria secondaria (HD), utilizzata per salvare
+permanentemente i dati.
 
 \subsection{Architettura di Harvard}
 \begin{figure}[h]
@@ -62,12 +59,13 @@ centrale.
     \end{tikzpicture}
 \end{figure}
 
-\noindent La differenza fondamentale di questa architettura è la memoria del programma è separata dalla memoria dati, e le
-istruzioni devono obbligatoriamente passare dalla CPU.
+\noindent
+Ideata ad Harvard, questa architettura è caratterizzata dalla separazione tra memoria del programma e memoria dati: le istruzioni
+devono passare obbligatoriamente attraverso la CPU.
 Questa architettura ha dato spunto a memorie separate come cache.
 L'idea di poter accedere memoria e dati velocizza le prestazioni del calcolatore.
 
-\subsection{Legge di Moore}
+\subsection{Leggi di Moore}
 \begin{enumerate}
     \item Le prestazioni dei processori, e il numero di transistor ad esso relativo, raddoppiano ogni 18 mesi.
     \item IL costo di una fabbrica di chip raddoppia da una generazione all'altra.
