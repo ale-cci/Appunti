@@ -36,7 +36,7 @@
 
 % listings default style for code
 \lstset{
-    language={python},
+    language=[x86masm]{Assembler},
     breaklines=true,
     backgroundcolor=\color{clr-code-bg},
     basicstyle=\small\ttfamily,
