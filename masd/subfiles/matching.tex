@@ -48,4 +48,17 @@ Collegando un nodo sorgente alla prima classe di partizione, ed un nodo destinaz
 problema di flusso massimo, risolvibile con Ford-Fulkerson.
 
 \subsection{Assegnamento}
+Dato un grafo bipartito completo $G = (V_1 \cup V_2, E)$ con $V_1 = \{a_1 \dots a_n\}$ e $V_2 = \{b_1 \dots b_n\}$ ($|V_1| = |V_2|$),
+e $\forall (i, j) \in E \quad d_{ij} \ge 0$ ed interi,
+il problema d'assegnamento è trovare il matching $M$ di cardinalità $n$ tale per cui
+$\sum_{(i, j) \in M} d_{ij}$ è minimo.
+\\[10pt]
+Il numero di soluzioni ammissibili è ovviamente $n!$, siccome ad ogni nodo nella prima
+partizione deve corrispondere un nodo nella seconda.
+\\
+Nei casi in cui $|V_1| \neq |V_2|$ vengono aggiunti elementi fittizi con collegamenti di costo 0 nell'insieme con meno elementi.
+
+\subsection{Algoritmo Ungherese}
+\lstinputlisting{algorithms/ungherese.py}
+
 \end{document}
