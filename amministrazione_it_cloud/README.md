@@ -2,7 +2,6 @@
 
 ### vars
 `$?` last status code
-``
 
 ### useradd
 `-k`

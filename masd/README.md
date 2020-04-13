@@ -1,5 +1,5 @@
-# Argomenti
-## Teoria
+# Modelli e Algoritmi per il Supporto alle Decisioni
+### Teoria
 - [ ] Grafi, alberi
     - [ ] Nodi, Archi, Orientato
     - [ ] Matrice adiacenza
@@ -22,10 +22,10 @@
         - [x] condizioni validità
         - [x] terminazione
         - [x] complessità
-- [ ] Matching
-    - [ ] Peso massimo, cardinalità massima
-    - [ ] Matching iniziale
-    - [ ] Algoritmo risoluzione, complessità
+- [x] Matching
+    - [x] Peso massimo, cardinalità massima
+    - [x] Matching iniziale
+    - [x] Algoritmo risoluzione, complessità
 - [ ] Flow
     - [ ] Flusso costo minimo
     - [x] Base, Soluzione di base
@@ -79,7 +79,7 @@
     - [ ] Alg. double spanning tree
     - [ ] Dim. grado di approssimazione DST
 
-## Esercizi
+### Esercizi
 Spanning Tree
 - [ ] Greedy
 - [ ] MST-1
