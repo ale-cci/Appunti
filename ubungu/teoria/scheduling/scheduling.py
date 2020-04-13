@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from itertools import cycle, dropwhile
-
 def first_come_first_output(processes: list):
     time, total_time = 0, 0
 
@@ -14,12 +12,12 @@ def first_come_first_output(processes: list):
 def shortest_job_first(processes: list):
     return first_come_first_output(sorted(processes))
 
+
 def priority_queue(processes: list):
     return first_come_first_output(sorted(processes, key=lambda x: x[1]))
 
-def round_robin(processes: list):
-    TIME_SLICE = 10
 
+def round_robin(processes: list, TIME_SLICE=10):
     execution_times = list(map(lambda p: p[0], processes))
     total_time      = -sum(execution_times)
     time = 0
@@ -35,6 +33,7 @@ def round_robin(processes: list):
 
     return total_time / len(processes)
 
+
 if __name__ == "__main__":
     print("[", "="*30, "> SCHEDULING SIMULATOR <", "="*30, "]\n", sep="")
     print(" Type in processes execution time and (default: 128) priority; write end top stop")
@@ -49,9 +48,8 @@ if __name__ == "__main__":
         processes.append((int(proc[0]), int(proc[1]) if len(proc) > 1 else 128))
 
     assert processes, "At least one process needed"
-    print("\n Shortest Job First:     ", shortest_job_first(processes))
+    print()
+    print(" Shortest Job First:     ", shortest_job_first(processes))
     print(" First come First Output:", first_come_first_output(processes))
     print(" Priority Queue:         ", priority_queue(processes))
     print(" Round Robin:            ", round_robin(processes))
-
-

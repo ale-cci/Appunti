@@ -1,4 +1,7 @@
-from scheduling import first_come_first_output as fcfo, priority_queue as prio, shortest_job_first, round_robin
+from scheduling import (first_come_first_output as fcfo,
+                        priority_queue as prio,
+                        shortest_job_first,
+                        round_robin)
 
 #FCFO
 assert(fcfo([(24,), (3,), (3,)]) ==  17)
@@ -16,3 +19,5 @@ assert(shortest_job_first([(10, 2), (29, 3), (3, 4), (7, 5), (12, 1) ]) == 13)
 
 assert(round_robin([(10, 2), (29, 3), (3, 4), (7, 5), (12, 1) ]) == 23)
 assert(round_robin([(12,), (6,), (4,)]) == 12)
+
+print("OK")
