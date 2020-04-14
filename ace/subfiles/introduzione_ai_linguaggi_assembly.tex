@@ -1,0 +1,46 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Introduzione ai linguaggi Assembly}
+Per evitare al programmatore di ricordarsi specifiche sequenze di zeri ed uno, ogni microprocessore ha un proprio
+linguaggio assembly, in grado di tradurre con una corrispondenza 1:1 istruzioni a basso livello o indirizzi di memoria
+in codice macchina.
+
+Con statement o pseudo-istruzione si intende una riga del programma assembly. A tale riga corrisponde una direttiva
+dell'assemblatore.  Inoltre se a tale direttiva corrisponde un'istruzione in linguaggio macchina, prende il nome di
+istruzione.
+
+Ogni istruzione è composta da un'etichetta (label) che rappresenta l'indirizzo di memoria in cui l'istruzione è
+memorizzata, un codice operativo (opcode) simbolo mnemonico per l'operazione e da nessuno, uno o più operandi.
+
+\begin{lstlisting}
+label:      mov ax, bx
+            jmp label
+\end{lstlisting}
+
+Le etichette sono sostituite automaticamente dall'assemblatore in indirizzi di memoria. Permettono di astrarre gli
+indirizzi fisici, semplificando la modifica e comprensione del programma.
+
+I codici operativi (es. \lstinline{mov}, \lstinline{add} \dots) sono gli alias dati alle istruzioni eseguibili dalla
+CPU.
+
+Gli operandi funzionano come argomenti passati ai codici operativi (nel caso di assembly 8086 sono al massimo 2).
+Durante l'esecuzione del programma, la CPU provvede a reperire il valore degli operandi, che può essere passato
+direttamente all'istruzione per valore, tramite registro, contenuto in memoria o da una porta di I/O.
+
+
+Le pseudo-istruzioni sono utilizzate durante il processo di assemblaggio: esempi sono i segmenti dati, commenti  e le
+macro.
+\subsection{Linguaggio assembly 8086}
+Specifico per il processore general purpose a 16 bit Intel 8086.
+Ha 14 registri interni a 16 bit, 7 modi di indirizzamento con capacità di 1Mb.
+
+\begin{tabular}{|c|c|c|}
+    \hline
+$n$   & parallelismo del processore & 16\\
+$n_a$ & parallelismo della memoria & 20\\
+$n_d$ & parallelismo del buffer di dati & 16\\
+\hline
+\end{tabular}
+
+\end{document}
