@@ -1,0 +1,25 @@
+\documentclass[tikz]{standalone}
+\input{./pgfconfig}
+\def\vgamma{0.75}
+
+\begin{document}
+\begin{tikzpicture}[
+    declare function={
+        func(\x) = (\x > \vgamma) * (\x - \vgamma);
+    }]
+    \begin{axis}[xlabel=t, ylabel=$V_u$,
+                ymin=-2,
+                xmin=-1,
+                xmax=7.5,
+                ymax=3]
+
+        \addplot[gray, samples=300, domain=-1:7.5]{
+            2*sin(1.5*deg(x))
+        };
+
+        \addplot[samples=300, domain=-1:7.5]{
+            func(2*sin(1.5*deg(x)))
+        };
+    \end{axis}
+\end{tikzpicture}
+\end{document}

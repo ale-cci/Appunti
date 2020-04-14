@@ -29,3 +29,5 @@ ace/assembly/*
 ace/assembly/src/*
 !ace/assembly/src/*.asm
 __pycache__
+
+img/*.pdf

@@ -1,0 +1,15 @@
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\pgfplotsset{
+    no markers,
+    axis lines=middle,
+    xtick={\empty},
+    ytick={\empty},
+    every axis/.style={
+        scale only axis,
+        unit vector ratio*=1 1 1,
+    },
+    every axis plot/.append style={ultra thick},
+    xlabel style={at={(ticklabel* cs:1)}, anchor=north west},
+    ylabel style={at={(ticklabel* cs:1)}, anchor=east},
+}

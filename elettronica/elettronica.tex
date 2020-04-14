@@ -7,6 +7,8 @@
 \usepackage{cancel}
 \usepackage{mathtools}
 \usepackage{wrapfig}
+\usepackage{graphicx}
+\graphicspath{{./img/}}
 
 \input{config.tex}
 
@@ -16,11 +18,15 @@
 
 \begin{document}
 \maketitle{}
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+
+\setcounter{page}{1}
+
 \subfile{subfiles/diodo_pn.tex}
 \subfile{subfiles/transistor_bipolare_bjt.tex}
 \subfile{subfiles/logica_rtl}
 %[nextsection]
 
-\newpage
-\tableofcontents
 \end{document}

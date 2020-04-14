@@ -3,6 +3,15 @@
 \begin{document}
 \section{Diodo a giunzione PN}
 \subsection{Diodo}
+\noindent
+La relazione corrente-tensione per il diodo è esponenziale. Per piccoli spostamenti dall'origine è bene approssimata dalla
+formula \diodecurrent{V}. Da una rapida analisi è facile osservare come per $V \to -\infty$ la corrente tende a saturare in
+un valore $-I_S$, chiamato per questo motivo \textit{corrente di saturazione}.
+Tale corrente assume un valore molto basso ($\approx 10^{-15} V$) risultando per questo motivo trascurabile rispetto al
+resto delle correnti misurabili nel circuito in polarizzazione diretta.
+Diremo per questo motivo che il diodo è spento e non fa passare corrente quando si trova in polarizzazione diretta.
+Diversamente diremo che è acceso quando si trova in polarizzazione diretta.
+
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[/tikz/circuitikz/bipoles/length=1cm, scale=1.1]
@@ -16,18 +25,11 @@
             ;
     \end{tikzpicture}
     \caption{Raddrizzatore a singola semionda}
-    \label{circuit:singola_semionda}
+    \label{fig:singola_semionda}
 \end{figure}
 
-La dipendenza Corrente-Tensione per il diodo è un circuito esponenziale.
-\\
-La formula $\diodecurrent{V}$ è valida solo per piccoli spostamenti dall'origine.
-\[
-    \lim_{V\to\infty} \diodecurrent{V} = -I_S
-\]
-La corrente di Saturazione $I_S$ assume un valore trascurabile ($\approx 10^{-15}$) rispetto al resto delle correnti misurabili in polarizzazione diretta, per questo diremo che il diodo è spento (D-OFF) in polarizzazione inversa, ed acceso (D-ON) in polarizzazione diretta.
-
-Analizzando il circuito in figura \ref{circuit:singola_semionda}, otteniamo le seguenti relazioni:
+\noindent
+Il circuito in figura \ref{fig:singola_semionda} è descritto dalle relazioni:
 \[
     \begin{cases}
         V_i = V_d + V_u
@@ -37,29 +39,26 @@ Analizzando il circuito in figura \ref{circuit:singola_semionda}, otteniamo le s
         I = I_D
     \end{cases}
 \]
-
-% TODO: Calcoli
-Con $V_T$ viene indicata la tensione termica $V_T = K \frac{T}{q}$, dove con $K$ è indicata la costante di Boltzmann, $q$ è la carica elettronica, e $T$ è la temperatura. Misurata con $T = 300K$ (Temperatura ambiente), $V_T \approx 26mV$.
+$V_T$ indica la tensione termica: $V_T = K \frac{T}{q}$, con $K$ costante di Boltzmann, $q$ la carica di un elettrone e
+$T$ la temperatura del circuito (misurata a $300K$).
+Siccome è prodotto di costanti, $V_T$ è considerabile come una costante che vale approssimativamente $26mV$.
 
 \subsection{Modello a soglia}
-Dato che lavorare con equazioni esponenziali non è così pratico, si preferisce utilizzare un modello più semplice da utilizzare, ma che rispetti sempre il comportamento del diodo.
-
-Tralasciando la regione di breakdown, trattiamo le zone di polarizzazione diretta ed inversa come due tratti lineari, validi rispettivamente per i valori di $V$: $V < V_\gamma$ e $V > V_\gamma$.
-
+Per semplificare la risoluzione del circuito, approssimiamo le zone di polarizzazione diretta ed inversa con due tratti lineari:
+Il primo descritto dalla caratteristica $I = 0$ (diodo spento) valido per $V_d < V_\gamma$, ed il secondo una semiretta
+perpendicolare alle ascisse $V = V_\gamma$ a rappresentare la corrente costante a diodo acceso.
 \warnbox{
     \begin{tabular*}{.7\textwidth}{@{\extracolsep{\fill}} cc}
         \textbf{P. INVERSA (off)} & \textbf{P. DIRETTA (on)}\\
         $\diodeoffcases{I}{V}$ & $\diodeoncases{I}{V}$\\
     \end{tabular*}
 }
-Per poter utilizzare questo modello è necessario risolvere il circuito per tutti i possibili stati
-in cui i diodi si possono trovare, indicando anche le relative ipotesi di funzionamento.
-\\ %%
-Il seguenti calcoli riguardano il circuito in figura \ref{circuit:singola_semionda}, utilizzando il modello di approssimazione.
+Questa semplificazione porta a dover risolvere il circuito due volte, una per ogni stato di funzionamento per cui
+il diodo si può trovare. Inoltre è necessario anche controllare le relative ipotesi di funzionamento.
 
-Partendo dall'ipotesi che il diodo sia spento, avremo che $ I = 0$, quindi {\color{clr-main-red}$V_u = 0$}, per $V_u = R\cdot I $.
-Il modello inoltre richiede che $V_d < V_\gamma$, e, utilizzando la prima equazione di Kirchoff alla maglia,
-otteniamo $V_d = V_i - V_u = V_i$. Quindi il diodo è spento per {\color{clr-main-red}$V_i < V_\gamma$}.
+Partendo dall'ipotesi che il diodo sia spento, $\vu = R \cdot I = 0$.
+Inoltre abbiamo che $V_d = \vi - \vu = \vi$, e per ipotesi di funzionamento $V_d < \vgg$, quindi il diodo
+è spento per $\vi < \vgg$.
 
 Studiando ora la seconda ed ultima ipotesi per questo circuito, diodo acceso, abbiamo che:
 $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
@@ -71,7 +70,6 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         V_u = V_i - V_d
     \end{cases} \quad \Rightarrow \quad V_i - V_d > 0 \quad \Rightarrow {\color{clr-main-blue}{V_i > V_d}}
 \]
-
 \begin{figure}[h]
     \centering
     \begin{minipage}[b]{0.48\textwidth}
@@ -84,14 +82,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         \end{tikzpicture}
     \end{minipage}%
     \begin{minipage}[b]{.48\textwidth}
-        \begin{tikzpicture}[
-            declare function={
-                func(\x) = (\x < 0.78) * 0 + (\x > 0.78) * (\x - 0.78);
-            }]
-            \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, ymin=-1, width={.9\textwidth}]
-                \addplot[clr-main-blue, samples=30]{func(3*sin(deg(x)))};
-            \end{axis}
-        \end{tikzpicture}
+        \includegraphics[width=\textwidth]{graph_raddrizzatore_singola_semionda}
     \end{minipage}
 \end{figure}
 
@@ -110,10 +101,10 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \end{circuitikz}
 \end{figure}
 
-\begin{minipage}[b]{.45\textwidth}
+\begin{minipage}[b]{.50\textwidth -1.11pt}
 \begin{tcolorbox}[title=Diodo OFF]
     \begin{align*}
-        &I = 0 \qquad&\Rightarrow &V_R = 0
+        &V_R = I \cdot R = 0
         \\
         &V_i - \cancel{V_R} - V_u = 0 \qquad &\Rightarrow & {\color{clr-main-red}V_u = V_i}
         \\
@@ -121,7 +112,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \end{align*}
 \end{tcolorbox}
 \end{minipage}
-\begin{minipage}[b]{.45\textwidth}
+\begin{minipage}[b]{.50\textwidth -1.11pt}
 \begin{tcolorbox}[title=Diodo ON]
     \begin{align*}
         &V_d = V_\gamma \qquad&\Rightarrow &{\color{clr-main-blue}V_u = V_\gamma}
@@ -315,16 +306,16 @@ distinte, abbiamo quattro regimi di funzionamento differenti.
     \end{tcolorbox}
 \end{minipage}
 
-\noindent Possiamo osservare che quando entrambi i diodi sono spenti, l'uscita è uguale a 0.
-Quando la tensione $V_{1}$ maggiore sia di $V_\gamma$ che di $V_{2}$, la tensione di uscita segue il
-valore di $V_{1}$ a meno di una costante, $V_\gamma$.
-In maniera del tutto analoga, quando $V_{2}$ è maggiore di $V_\gamma$ e $V_{1}$, la tensione di uscita
-segue il valore di $V_{2}$ a meno di una costante, $V_\gamma$.
-\\
-Caso  particolare, quando $V_1$ e $V_2$ sono uguali, e sono entrambi maggiori di $V_\gamma$, allora l'
-uscita segue l'uno o l'altro a meno di una costante.
+Quando entrambi i diodi sono spenti, l'uscita è 0.
 
-Possiamo sintetizzare tutto questo, dicendo che $V_u = \max{\big\{0, V_1 - V_\gamma, V_2 - V_\gamma\big\}}$.
+Quando la tensione $V_{1}$ è maggiore sia di \vgg, che di $V_{2}$, la tensione di uscita segue il
+valore di $V_{1}$ a meno di una costante, \vgg.
+In maniera del tutto analoga, quando $V_{2}$ è maggiore di $V_\gamma$ e $V_{1}$, la tensione di uscita
+segue il valore di $V_{2}$ a meno di $V_\gamma$.
+
+Quando $V_1$ e $V_2$ sono uguali, e sono entrambi maggiori di $V_\gamma$, allora l'
+uscita segue l'uno o l'altro a meno di una costante.
+In altre parole $V_u = \max{\big\{0, V_1 - V_\gamma, V_2 - V_\gamma\big\}}$.
 
 \begin{figure}[h]
     \centering

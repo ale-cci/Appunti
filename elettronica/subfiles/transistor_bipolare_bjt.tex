@@ -174,51 +174,13 @@ ponendo $\V{CE}$ come variabile indipendente e tracciando le funzioni al variare
 \begin{figure}[h]
 \begin{minipage}{.47\textwidth}
     \centering
-    \def\vt{1}
-    \def\kuno{0.001}
-    \def\kdue{20}
-    \begin{tikzpicture}[declare function={
-            ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) + \kdue *(e^((\vbe - \vce)/\vt -1));
-        }]
-
-        \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{BE}$, ylabel=$\I{B}$]
-            \foreach \i in {4, 4.250, ..., 6}{
-                \addplot {ib(x, \i)};
-            }
-
-            \draw[->, thick] (4.5, 0.5) -- (2, 2) node[above]{$\V{CE}$};
-            \draw
-                (0.8, 0.4) node[above]{OFF}
-                (4.3, 0.9) node[right] {AD}
-                (3.5, 4.5) node[left]{SAT};
-        \end{axis}
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth]{graph_bjt_ib_varying_vce}
     \caption{$\I{B}(\V{BE})$ al variare di $\V{CE}$}
     \label{graph:transistor_bjt_3d}
 \end{minipage}
 \begin{minipage}{.47\textwidth}
     \centering
-    \def\vt{1}
-    \def\kuno{1.250}
-    \def\kdue{3}
-    \begin{tikzpicture}[declare function={
-            ib(\vbe,\vce) = \kuno *(e^(\vbe/\vt)-1) - \kdue *(e^((\vbe - \vce)/\vt -1));
-        }]
-
-        \begin{axis}[restrict y to domain=-1:10, ymin=-1, xmin=-1, xlabel=$\V{CE}$, ylabel=$\I{C}$]
-            \foreach \i in {0.25, 0.50, ...,1.5}
-            {
-                \addplot {ib(\i, x)};
-            }
-
-            \draw[->, thick] (3, 0.2)--(3, 4.5)
-                node[left]{$\V{BE}$};
-            \draw
-                (4.5, 4.5) node[above]{AD}
-                (4.5, 0.3) node[above]{OFF}
-                (1, 3.3) node[above]{SAT};
-        \end{axis}
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth]{graph_bjt_ic_varying_vbc}
     \caption{$\I{C}(\V{CE})$ al variare di $\V{BE}$}
     \label{graph:transistor_bjt_3d_2}
 \end{minipage}
