@@ -142,6 +142,29 @@ Ne consegue che l'architettura multiciclo è in media più veloce dell'architett
 
 Inoltre non è più necessario duplicare componenti come ALU e memoria, dato che l'accesso ai dati e incremento PC/calcolo registri è
 eseguito in due cicli di clock differenti.
+
+% TODO: aggiungere schema generale architettura multiciclo (slide 60)
+\begin{itemize}
+    \item Fetch:
+        Viene letto in memoria ll contenuto del program counter, e nello stesso ciclo attraverso l'alu aggiorno il program counter e lo
+        salvo in pc.
+    \item Decode:
+        Analogamente alla precedente, il codice operativo di PC entra in IR, e viene decodificato.
+        Leggo il contenuto dei registri R1 ed R2.
+        Utilizzo l'alu per calcolare a prescindere il valore del registro di destinazione (destinazione del salto condizionato
+        viene calcolata prima di verificare le condizioni)
+    \item Operaaione Aritmetia:
+        Eseguo l'istruzione utilizzando i dati calcolati nelle fasi precedenti.
+    \item Load e Store:
+        Sempre attraverso buffer 3-state salvano o leggono dati dalla memoria all'indirizzo destinazione calcolato nelle fasi
+        precedenti.
+    \item Writeback:
+        In caso di operazione aritmetica prendo il valore in uscita dell'ALU e lo riporto nel register file nella porta dati.
+        In caso di load, il valore di uscita della memoria viene riportato nella porta dati del register file.
+        In caso di JAL PC1 (valore precedente di PC) entra nel register file.
+\end{itemize}
+Interfacce con l'esterno: bus di dati attraverso buffer 3-state, in uscita al bus degli indirizzi arriva o alu-out o pc.
+
 \subsubsection{Accessi alla memoria architettura multiciclo}
 \subsubsection{Salti architettura multiciclo}
 

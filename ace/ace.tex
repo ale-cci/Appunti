@@ -2,6 +2,9 @@
 \documentclass{custom}
 \usetikzlibrary{positioning,shapes,arrows,backgrounds,external,fit}
 
+\usepackage{graphicx}
+\graphicspath{{./img/}}
+
 \usepackage{tabu}
 \taburulecolor{code-comment}
 \tabulinesep = 2mm
@@ -27,9 +30,6 @@
 \renewcommand\sf{\lstinline{sf}}
 \newcommand\of{\lstinline{of}}
 
-% Paragraph styling
-\setlength\parindent{0em}
-\setlength\parskip{1em}
 
 \setcounter{tocdepth}{2} % Show only sections in table of contents
 
@@ -38,6 +38,19 @@
 
 \begin{document}
 \maketitle{}
+\setlength\parskip{0pt}
+\pagestyle{empty}
+\thispagestyle{empty}
+\tableofcontents
+\cleardoublepage
+
+% Paragraph styling
+\setlength\parindent{0em}
+\setlength\parskip{1em}
+\newpage
+
+\pagestyle{plain}
+\setcounter{page}{1}
 
 \subfile{subfiles/1-lezione}
 \subfile{subfiles/2-1-lezione}
@@ -51,6 +64,4 @@
 \subfile{subfiles/4-6_aritmetica_binaria}
 \subfile{subfiles/trasferimento_di_controllo}
 
-\newpage
-\tableofcontents
 \end{document}
