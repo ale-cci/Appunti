@@ -89,4 +89,60 @@ Componente che ha come ingressi 5 bit che identificano il primo registro, 5bit p
 Le due porte in uscita riportano i dati letti rispettivamente dal registro sorgente 1 e 2.
 %49
 
+\subsection{CPU monociclo}
+% TODO: aggiungere disegno CPU monociclo
+In una CPU monociclo, tutte le istruzioni impiegano un solo ciclo di clock. È una struttura molto semplice, ma potenzialmente anche molto
+lenta, dato che il tempo di esecuzione di ogni istruzione deve essere pari al tempo di esecuzione dell'istruzione più lenta.
+
+Prendendo come esempio l'istruzione \lstinline{st R6,R1, 20},
+\begin{itemize}
+    \item in fase di fetch: recupero istruzione dalla memoria.
+    \item fase di decode
+    \item fase di execute: salva dato in memoria.
+\end{itemize}
+
+\def\tmono{T_\text{mono}}
+\def\tmulti{T_\text{multi}}
+
+Dato che in un unico ciclo di clock devo eseguire sia fetch che store, devo necessariamente avere due memorie separate.
+È inevitabile l'uso di un'architettura di Harvard (pagina \pageref{sec:architettura_harvard}).
+Oltre alla doppia memoria portata dall'architettura è necessario duplicare altre risorse, come ad esempio l'ALU, richiesta
+per incrementare sia valore del program counter che per calcolare l'indirizzo di destinazione del dato.
+
+Tra le varie operazioni richieste dall'ISA, il tempo di esecuzione maggiore è dovuto sicuramente alla \lstinline{load} (vedi
+tabella \ref{tab:tempi_esecuzione_monociclo}),
+che oltre alle fasi di fetch e decode richiede: calcoli dall'ALU, writeback ed accesso alla memoria.
+Chiamato il suo tempo di esecuzione $\tmono$ ed $N$ il numero di istruzioni, il tempo di esecuzione del programma è $\tmono \cdot N$.
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+    & Fetch  & Decode & ALU & Memory & Writeback & Totale \\
+    \hline
+        Aritm.   & 30 & 5 &  12 &        &         5 &      52\\
+        Load     & 30 & 5 &  12 &     30 &         5 &      82\\
+        Store    & 30 & 5 &  12 &     30 &           &      77\\
+        jmp cond.& 30 & 5 &  12 &        &           &      47\\
+        jmp      & 30 & 5 &     &        &           &      35\\
+        jal/call & 30 & 5 &     &        &         5 &      40\\
+        \hline
+    \end{tabular}
+    \caption{Esempio tempi di esecuzione in architettura monociclo}
+    \label{tab:tempi_esecuzione_monociclo}
+\end{table}
+
+% Lezione 2.6
+\subsection{CPU multiciclo}
+Suddivide ogni stadio di esecuzione dell'istruzione in un ciclo di clock.
+Il ragionamento alla base di questa architettura è che molte istruzioni hanno un tempo di istruzione notevolmente inferiore ad altre.
+In altre parole, chiamata $\sum\tmulti$ il tempo di esecuzione di una singola istruzione il numero di istruzioni per cui
+$\sum\tmulti > \tmono$ sarà inferiore al numero di istruzioni per cui $\sum\tmulti < \tmono$.
+Ne consegue che l'architettura multiciclo è in media più veloce dell'architettura monociclo.
+
+Inoltre non è più necessario duplicare componenti come ALU e memoria, dato che l'accesso ai dati e incremento PC/calcolo registri è
+eseguito in due cicli di clock differenti.
+\subsubsection{Accessi alla memoria architettura multiciclo}
+\subsubsection{Salti architettura multiciclo}
+
 \end{document}
