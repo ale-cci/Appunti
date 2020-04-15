@@ -7,7 +7,8 @@ Tutti i salti prendono come unico argomento l'indirizzo di destinazione. L'istru
 il salto incondizionato (equivalente a goto in C) è \lstinline{jmp}.
 Esistono anche i salti condizionati, i quali solitamente sono preceduti da un'istruzione \lstinline{cmp}.
 
-\begin{center}
+\begin{table}[h]
+    \label{asm_jump_table}
     \begin{tabu}{|c|c|}
         \hline
         Instruction & Jump if\\
@@ -56,7 +57,9 @@ Esistono anche i salti condizionati, i quali solitamente sono preceduti da un'is
         N & Not\\
         \hline
     \end{tabu}
-\end{center}
+\end{table}
+
+
 Esempio di utilizzo di salti condizionati
 \begin{lstlisting}
 init:   mov ax, 10

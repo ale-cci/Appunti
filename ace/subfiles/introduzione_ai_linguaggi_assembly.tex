@@ -35,12 +35,106 @@ macro.
 Specifico per il processore general purpose a 16 bit Intel 8086.
 Ha 14 registri interni a 16 bit, 7 modi di indirizzamento con capacità di 1Mb.
 
-\begin{tabular}{|c|c|c|}
-    \hline
-$n$   & parallelismo del processore & 16\\
-$n_a$ & parallelismo della memoria & 20\\
-$n_d$ & parallelismo del buffer di dati & 16\\
-\hline
-\end{tabular}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|c|l|c|}
+        \hline
+        $n$   & parallelismo del processore & 16\\
+        \hline
+        $n_a$ & parallelismo della memoria & 20\\
+        \hline
+        $n_d$ & parallelismo del buffer di dati & 16\\
+        \hline
+    \end{tabu}
+    \caption{Parallelismi del processore Intel 8086}
+\end{table}
+
+Tutti i processori Intel sono backward-compatible, per questo i concetti di base per questo processore sono gli stessi
+utilizzati da un processore moderno.
+
+%TODO: Processore specifico 8086
+Il processore 8086 è diviso in due unità funzionali concettualmente separate: la BIU (\textit{Bus Interface Unit}) ed EU
+(\textit{Execution Unit}).
+Come dice il nome, la BIU si interfaccia con il bus dei dati attraverso un unico bus in ingresso controllato dal
+\textit{Bus Control}. L'EU non ha un collegamento diretto con la memoria ed è dedicata ai calcoli.
+
+Siccome il fetch di è in media media più veloce dell'esecuzione, le istruzioni, una volta prelevate dal bus,
+vengono salvate temporaneamente in una coda (\textit{coda di prefetch}) in attesa di essere processate dalla EU.
+
+Inoltre questa architettura la BIU ha un sommatore dedicato utilizzato per calcolare il valore dell'IP o l'indirizzo di
+accesso per i dati in memoria.
+
+EU Control si occupa di decodificare le istruzioni e genera i segnali necessari al resto dei componenti nella EU:
+op-alu, abilitazioni dei registri (temporanei, generali e di flag).
+Flag register descrive lo stato dell'ultima operazione effettuata dall'ALU (vedi flag a pag.  \pageref{8086_flags})
+\subsection{Scelte progettuali di un ISA}
+\begin{itemize}
+    \item dove sono memorizzati gli operandi nella CPU
+    \item con che istruzioni si accede agli operandi
+    \item modello di memoria
+    \item formato delle istruzioni
+    \item modello di indirizzamento (come indicare gli indirizzi di memoria)
+    \item tipo e struttura degli operandi
+    \item tipo di istruzioni previste
+\end{itemize}
+
+\subsubsection{Dove sono memorizzati gli operandi nella CPU}
+Un metodo per memorizzare gli operandi è attraverso lo stack, in questo modo viene garantita un'indipendenza dal
+register set, ma con lo svantaggio di avere difficoltà di accesso agli operandi. Inoltre dato che il tempo di accesso allo
+stack è elevato rispetto al tempo di esecuzione si forma un bottleneck.
+
+Un altro metodo è l'utilizzo di un unico registro accumulatore, da cui passano tutte le operazioni. La gestione diventa
+molto semplice ma è ovvia la formazione di bottleneck.
+
+Il metodo più utilizzato è a set di registri, ovvero gli operandi vengono salvati direttamente nei registri del
+processore.
+In particolare, nella  CPU 8086, i registri possono essere di tre categorie: general purpose (generici non ortogonali), segment o miscellaneous.
+I registri sono \ax, \bx, \cx, \dx, \lstinline{si}, \lstinline{di}, \lstinline{bp}, \lstinline{sp}, tutti a 16 bit. Per
+i primi 4 è possibile accedere agli 8 bit più e meno significativi, sostituendo alla \lstinline{x} una \lstinline{h} o
+una \lstinline{l} rispettivamente (es. \ah per accedere ai primi 8 del registro \ax).
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|c|l|}
+        \hline
+        \multicolumn{2}{|c|}{\bfseries Registri generici}\\
+        \hline
+        \ax & Accumulatore: registro di base per le operazioni\\
+        \bx & Base: unico utilizzato per indirizzamenti di memoria\\
+        \cx & Conteggio: utilizzato per cicli\\
+        \dx & Dati: utilizzato per indirizzi di istruzioni i/o o overflow\\
+        \lstinline{si} \lstinline{di}& source  e destination per operazioni con stringhe di byte\\
+        \lstinline{bp}& Base Pointer accesso a parametri e variabili di funzioni.\\
+        \lstinline{sp}& Stack Pointer: puntatore a top dello stack\\
+        \hline
+    \end{tabu}
+    \begin{tabu}{|c|l|}
+        \hline
+        \multicolumn{2}{|c|}{\bfseries Registri speciali}\\
+        \hline
+        IP & Instruction Pointer\\
+        FLAG & Register flag\\
+        \hline
+    \end{tabu}
+\end{table}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabu}{|c|l|}
+        \hline
+        Overflow flag& Operazione ha un risultato troppo grande\\
+        Direction& Indica se incrementare / decrementare per le istruzioni con stringhe\\
+        Interrupt Enable& Abilita/Disabilita mascheramento degli interrupt\\
+        Trap& Utilizzato dai debugger, genera un int 3 dopo ogni istruzione\\
+        Sign& 1 quando il risultato è negativo\\
+        Zero& il risultato dell'operazione è 0\\
+        Auxiliary Carry& 1 quando è presente un riporto tra la parte alta e la parte bassa del registro.\\
+        Parity Flag& 1 quando il numero di bit è pari, 0 quando è dispari\\
+        Carry Flag& Riporto o prestito nella parte alta dell'ultimo risultato.\\
+        \hline
+    \end{tabu}
+    \caption{Flag architettura}
+    \label{8086_flags}
+\end{table}
+
 
 \end{document}
