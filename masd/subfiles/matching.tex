@@ -59,6 +59,16 @@ partizione deve corrispondere un nodo nella seconda.
 Nei casi in cui $|V_1| \neq |V_2|$ vengono aggiunti elementi fittizi con collegamenti di costo 0 nell'insieme con meno elementi.
 
 \subsection{Algoritmo Ungherese}
+% TODO: Descrizione algoritmo
+
 \lstinputlisting{algorithms/ungherese.py}
+\subsubsection{Finitezza}
+L'algoritmo è sicuramente finito
+\subsubsection{Complessità}
+$O(n^3)$
+Rientra nella categoria di algoritmi costruttivi, con la possibilità di rivedere decisioni passate: ad ogni iterazione
+si ha un insieme $\Delta$ definisce un assegnamento incompleto, che può essere alterato durante ogni iterazione.
+%53:33
+
 
 \end{document}

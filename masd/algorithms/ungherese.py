@@ -35,6 +35,10 @@ trovare sottinsieme di 0 in d2 di cardinalità max (1 solo x riga e conna)
 
 se insieme ammette soluzione di cardinalità
 
+--- per trovare delta:
+dati due insiemi di vertici A e B traccio un arco sse d2_ij = 0, il problema diventa quindi di trovare
+un matching di cardinalità massima (delta)
+
 se delta = n
 1h02 dimostraz: siccome gli elementi devono essere indipendenti per
 il principio della piccionaia e delta ha cardinalità n, sum_i(x_ij) == 1e sum_j(x_ij) == 1
@@ -42,6 +46,21 @@ il principio della piccionaia e delta ha cardinalità n, sum_i(x_ij) == 1e sum_j
 se delta < n
 in caso non si riesca a trovare
 va risolto un sottoproblema
+
+---
+determinare il valore minimo lambda tra gli elementi T2 non coperti da nessuna linea.
+(gli elementi non ricoperti sono tutti strettamente positivi siccome tutti gli zeri sono coperti)
+* incremento tutti gli elementi ricoperti da due linee di lambda.
+* decremento tutti gli elementi non ricoperti di lambda.
+indicato con h1 il numero di riche nel ricoprimento e con h2 il numero di colonne nel ricoprimento,
+: h1 + h2 = delta
+
+si ha
+sum_i(d3_i) = - lambda * (#righe notin ricoprimento) = - lambda (n - h1)
+sum_j(d3_j) = lambda * (#colonne ricoprimento) = lambda (h2)
+
+
+---
 '''
 def ungherese(d):
     pass
