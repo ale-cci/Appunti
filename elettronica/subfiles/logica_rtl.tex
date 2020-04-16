@@ -16,9 +16,6 @@ L'immunità al rumore è caratterizzato dalle due caratteristiche a guadagno 0 (
 grado di entrare nella fascia intermedia, si manifestano sul segnale in uscita.
 % 33:00
 
-\def\vilmax{\ensuremath{{\V{IL}}_\text{MAX}}}
-\def\vihmin{\ensuremath{{\V{IH}}_\text{MIN}}}
-\def\nm{\ensuremath{{N}_\text{M}}}
 
 \subsection{Margine di immunità al rumore}
 \begin{figure}[h]
@@ -47,8 +44,7 @@ grado di entrare nella fascia intermedia, si manifestano sul segnale in uscita.
     \end{tikzpicture}
 \end{figure}
 \noindent
-Nel grafico del segnale d'uscita del circuito possiamo riconoscere il valore basso $\V{L} \equiv \vcesat$ ed allo stesso modo un valore
-alto $\V{H} \equiv \V{cc}$.
+Dal grafico è distinguibile un valore basso $\V{L} \equiv \vcesat$, ed un valore alto $\V{H} \equiv \V{cc}$.
 La caratteristica da invertitore è esprimibile quindi come $\vu(\V{H}) = \V{L}$ e $\vu(\V{L}) = \V{H}$.
 Inoltre siccome questo circuito tollera il rumore, per rumore minore di $\delta_1$ abbiamo ugualmente che $\vu(\V{L} + \delta_1) = \V{L}$.
 Chiamiamo quindi $\vilmax = \V{L} + \delta_1$ il massimo valore della tensione d'ingresso che produce in uscita un $\V{H}$.
@@ -68,6 +64,87 @@ sarà positiva anche la loro somma, per questo possiamo dire che
     \frac{\V{H} - \V{L}}{ \vihmin - \vilmax} > 1
 \end{align*}
 Facendo sempre riferimento al grafico è facile capire che rapporto tra $\V{H} - \V{L}$ e $\vihmin - \vilmax$ è $|A_V|$.
-Per cui $|A_V| > 1$. Inoltre maggiore è tale valore, maggiore sarà il margine di immunità al rumore.
+Per cui $|A_V| > 1$. Maggiore sarà il valore di $|A_V|$, migliore è la proprietà di filtro per il rumore di questo
+circuito.
 
+Il risultato ottenuto dipende fortemente dall'approssimazione lineare utilizzata, dato il valore alto \V{H} ed il valore
+basso \V{L} sono stati definiti graficamente, in corrispondenza di \V{cc} e \vcesat.
+Generalizziamo quindi questa definizione facendo riferimento ad altri circuiti.
+
+Preso un andamento di circuito generico (es. figura \ref{fig:bjt_graph}) rimane ancora vero che esistono due regioni con
+guadagno basso ed una con guadagno maggiore di 1, ma la distinzione di \V{H} e \V{L} non è ovvia come nel caso
+precedente.
+
+
+Per identificare il valore di \vl e \vh, facciamo il seguente ragionamento:
+considerando una serie di $n$ invertitori, l'andamento del valore di uscita sarà identico per tutti gli invertitori di
+posto pari, mentre sarà invertito per tutti gli invertitori di posto dispari.
+Dato che gli invertitori di posto dispari dovranno corrispondere alla funzione inversa degli invertitori di posto pari,
+il loro grafico è uguale al grafico degli invertitori di posto pari ma specchiato rispetto alla bisettrice.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=2in]{graph_double_not}
+    \caption{Grafico}
+    \label{fig:graph_double_not}
+\end{figure}
+
+Siccome è ovvio che quando tutti gli invertitori sono connessi in cascata, le loro condizioni devono essere soddisfatte,
+esistono solo 3 punti in queste caratteristiche che soddisfano le equazioni (vedi figura \ref{fig:graph_double_not}).
+Le coppie di punti $(\vl, \vh)$ e $(\vh, \vl)$ sono simmetrici per costruzione, per questo sono i valori \vh e \vl che
+stavamo cercando.
+
+Definiamo questo punto l'escursione logica \ls (\textit{Logic Swing}) come $\vh - \vl$.
+
+Il punto $(\vtl, \vtl)$ è tale per cui se posto in ingresso al primo invertitore, si propaga invariato fino al termine
+della catena. In realtà questa condizione è quasi impossibile, siccome ci troviamo in una zona con $|A_V| > 1$
+ed al primo segnale di rumore veniamo spostati verso \vh o \vl, allontanandoci dal punto di precario equilibrio, detto
+anche metastabile.
+
+Possiamo osservare che la qualità (intesa come distanza da \vh o \vl), aumenta, lungo la catena di invertitori. Questa
+proprietà prende il nome di \textbf{proprietà rigenerativa del segnale}.
+
+Per questo motivo, osservando anche in ingresso un valore compreso in un intorno di \vl, per la proprietà appena citata,
+esso viene trattato ugualmente come valore nominale basso. Il valore \vtl si comporta quindi come soglia logica,
+discriminando i valori alti dai valori bassi.
+% Esempio palline 30:50 lez 11
+
+Questa proprietà è strettamente legata alla disuguaglianza $|A_V| > 1$. Nel caso quest'ultima non fosse verificata,
+osserviamo che il punto di intersezione delle due caratteristiche è uno solo (vedi figura da fare)
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=2in]{graph_not_a_low}
+    \caption{grafico per $|A_V| < 1$}
+\end{figure}
+
+Quindi in caso $|A_V| < 1$ ogni punto in ingresso alla catena di invertitori, convergerebbe in $(\vtl, \vtl)$.
+\newpage
+\subsubsection{Margine di immunità ai disturbi}
+Rimane comunque vero che se il guadagno è minore di 1, il rumore in uscita è minore del rumore in ingresso, mentre se il
+guadagno è maggiore di 1, il rumore in ingresso è amplificato.  Possiamo quindi identificare due punti, con guadagno
+$|A_V| = 1$, per suddividere i tratti di caratteristica, identificati da $|A_V| < 1$ e $|A_V| > 1$.
+
+Utilizzando la stessa nomenclatura della logica RTL, chiamiamo \vilmax, il punto per cui il tratto $0 < x < \vilmax$ ha
+$|A_V| < 1$, e \vihmin il tratto in cui $\vihmin < x$ per cui $|A_V| < 1$. Di conseguenza $\vilmax < x < \vihmin$ è
+caratterizzato da $|A_V| > 1$.
+
+
+Indichiamo inoltre con $\vohmin = \vu(\vilmax)$ il più piccolo valore dell'uscita associato all'attenuazione
+del rumore. Analogamente $\volmax=\vu(\vilmax)$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{graph_margine_soglia}
+\end{figure}
+
+La massima quantità di rumore accettabile per non uscire dalla regione di attenuazione sono $N_H = \vohmin - \vihmin$ e
+$N_L = \vilmax - \volmax$. Quindi $N_M = \min(\vohmin - \vihmin, \vilmax - \volmax)$.
+% Grafico 57
+Da questa costruzione risulta evidente che $\ls > N_H + N_L$, quindi nel caso in cui una delle due soglie sia
+controllata (ad esempio da una resistenza variabile) e dovesse aumentare di valore, l'altra sarebbe costretta a
+diminuire, per evitare che la somma superi \ls.
+
+La condizione ottimale per avere massimo margine ai disturbi è quindi in caso in cui $N_L$ e $N_H$ siano simmetrici.
+(nel caso di approssimazione i punti coincidono con vh e vl, dato che per approssimazione non ci sono punti con derivata
+= -1, passa dal valore in modulo < 1 a modulo > 1)
 \end{document}

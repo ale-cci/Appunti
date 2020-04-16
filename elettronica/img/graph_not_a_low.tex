@@ -1,0 +1,29 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{amsmath}
+\input{./pgfconfig}
+\input{../constants}
+
+\def\k{2}
+\def\a{-1}
+\def\n{0.05}
+\def\A{3.2}
+\def\int{1.8}
+
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}[xlabel=\vi, ylabel=\vu, ymin=-1, ymax=5, xmin=-1, xmax=5]
+        \addplot[samples=200, color=blue]{
+                \A * ((e^(\a*x + \k))/( 1 + e^(\a * x + \k))) + \n
+            };
+        \addplot[samples=200, color=red](
+            \A * ((e^(\a*x + \k))/( 1 + e^(\a * x + \k))) + \n
+            , x);
+        \addplot[dashed, lightgray]{x};
+
+        \filldraw[black]
+            (\int, \int) circle(2pt) node[anchor=south west]{(\vtl, \vtl)}
+            ;
+    \end{axis}
+\end{tikzpicture}
+\end{document}
