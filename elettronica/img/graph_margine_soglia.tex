@@ -18,9 +18,6 @@
         \addplot[thin, samples=200, color=blue]{
                 \A * ((e^(\a*x + \k))/( 1 + e^(\a * x + \k))) + \n
             };
-        \addplot[thin, samples=200, color=red](
-            \A * ((e^(\a*x + \k))/( 1 + e^(\a * x + \k))) + \n
-            , x);
 
         \addplot[dashed, gray, thin] coordinates {(1.3, 0) (1.3, 2.9)};
         \addplot[dashed, gray, thin] coordinates {(2.7, 0) (2.7, .43)};
