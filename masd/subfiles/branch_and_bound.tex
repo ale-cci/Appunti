@@ -7,35 +7,36 @@ Il generico problema associato a questo algoritmo è determinare il massimo valo
 Considerato un insieme $T \subseteq S$, un' upper bound per un insieme $T$ è un valore $U(T)$ tale che $U(T) \ge f(x) \forall x \in
 T$.
 
-È richiesto calcolare tale valore nel più breve tempo possibile e più accuratamente possibile.
+Il valore di $U(T)$ è calcolato tramite una procedura che deve avere tempo di esecuzione minore possibile, e precisione
+più elevata possibile.
 
-Indichiamo con $\alpha(f, T) = \max_{x\in T} f(x)$ il valore ottimo della funzione $f$ su $T$.
-È definito rilassamento del problema:
+Indicato con $\alpha(f, T) = \max_{x\in T} f(x)$ il valore ottimo della funzione $f$ su $T$,
+è definito rilassamento:
 \[
     \alpha(f', T') = \max_{x \in T'} f'(x)
 \]
-Dove $T \subseteq T'$ e $f'(x) \ge f(x) \quad \forall x \in T$. Il rilassamento è un upper bound del sottoinsieme $T$,
-dato che $\alpha(f', T') \ge \alpha(f, T)$.
+Dove $T \subseteq T'$ e $f'(x) \ge f(x) \quad \forall x \in T$.
 
-Chiamata $\bar{x}\in T$ una soluzione ottima del problema su $T$ , e $x' \in T'$ una soluzione ottima del rilassamento;
+Il rilassamento è un upper bound del sottoinsieme $T$, dato che $\alpha(f', T') \ge \alpha(f, T)$:
+chiamata $\bar{x}\in T$ una soluzione ottima del problema su $T$ , e $x' \in T'$ una soluzione ottima del rilassamento;
 Siccome $T \subseteq T'$, allora $\bar{x} \in T'$ e $f'(\bar{x}) \ge f(\bar{x})$, da cui $\alpha(f', T') \ge \alpha(f,
 T)$.
 
 Per trovare un' upper bound di un insieme, basta risolvere quindi il problema di rilassamento.
 \subsubsection{Lower Bound}
-Con lower bound si intende una limitazione inferiore della funzione sull'intero dominio.
+Indicato con $L_B$, rappresenta la limitazione inferiore della funzione $f$ sull'intero insieme $S$:
 \[
     L_B \le f(x) \quad \forall x \in S
 \]
-Per ottenere una precisione più elevata possibile, dati i punti $y_1\dots y_h \in S$
+Per ottenere una precisione più elevata possibile, dato un insieme di punti $y_1\dots y_h \in S$
 \[
     L_B = \max \big\{f(y_i) : i=1\dots h\big\} \le f(x)
 \]
-I punti $y_1\dots y_h$ sono spesso individuati attraverso un euristica \footnote{Rapido algoritmo che restituisce delel
-buone soluzioni ammissibili ma non necessariamente ottimi}.
+I punti $y_1\dots y_h$ sono spesso individuati attraverso un euristica
+\footnote{Rapido algoritmo che restituisce delle buone soluzioni ammissibili ma non necessariamente ottime}.
 %TODO: missing second point before min.29
 \subsection{Branching}
-Questa operazione consiste nel sostituire l'insieme $T \subseteq S$ con una sua partizione $T_1 \dots T_m$:
+L'operazione consiste nel sostituire l'insieme $T \subseteq S$ con una sua partizione $T_1 \dots T_m$.
 $T_1\dots T_m$ formano una partizione se e solo se:
 \[
     T = \bigcup^m_{i=1}T_i \qquad \bigwedge \qquad T_i \cap T_j = \emptyset \quad \forall i \neq j

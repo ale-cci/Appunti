@@ -12,6 +12,15 @@
 
 \begin{document}
 \maketitle{}
+
+\pagestyle{thisempty}
+\pagestyle{empty}
+\tableofcontents
+\setlength\parskip{1em}
+\cleardoublepage
+\setcounter{page}{1}
+\pagestyle{plain}
+
 \subfile{subfiles/introduction}
 \subfile{subfiles/mst}
 \subfile{subfiles/shortest_path}
@@ -20,7 +29,4 @@
 \subfile{subfiles/matching}
 \subfile{subfiles/branch_and_bound}
 %[nextsection]
-
-\newpage
-\tableofcontents
 \end{document}
