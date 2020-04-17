@@ -1,0 +1,79 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Branch and bound}
+Il generico problema associato a questo algoritmo è determinare il massimo valore che può assumere una funzione $f(x)$.
+\subsubsection{Upper Bound}
+Considerato un insieme $T \subseteq S$, un' upper bound per un insieme $T$ è un valore $U(T)$ tale che $U(T) \ge f(x) \forall x \in
+T$.
+
+È richiesto calcolare tale valore nel più breve tempo possibile e più accuratamente possibile.
+
+Indichiamo con $\alpha(f, T) = \max_{x\in T} f(x)$ il valore ottimo della funzione $f$ su $T$.
+È definito rilassamento del problema:
+\[
+    \alpha(f', T') = \max_{x \in T'} f'(x)
+\]
+Dove $T \subseteq T'$ e $f'(x) \ge f(x) \quad \forall x \in T$. Il rilassamento è un upper bound del sottoinsieme $T$,
+dato che $\alpha(f', T') \ge \alpha(f, T)$.
+
+Chiamata $\bar{x}\in T$ una soluzione ottima del problema su $T$ , e $x' \in T'$ una soluzione ottima del rilassamento;
+Siccome $T \subseteq T'$, allora $\bar{x} \in T'$ e $f'(\bar{x}) \ge f(\bar{x})$, da cui $\alpha(f', T') \ge \alpha(f,
+T)$.
+
+Per trovare un' upper bound di un insieme, basta risolvere quindi il problema di rilassamento.
+\subsubsection{Lower Bound}
+Con lower bound si intende una limitazione inferiore della funzione sull'intero dominio.
+\[
+    L_B \le f(x) \quad \forall x \in S
+\]
+Per ottenere una precisione più elevata possibile, dati i punti $y_1\dots y_h \in S$
+\[
+    L_B = \max \big\{f(y_i) : i=1\dots h\big\} \le f(x)
+\]
+I punti $y_1\dots y_h$ sono spesso individuati attraverso un euristica \footnote{Rapido algoritmo che restituisce delel
+buone soluzioni ammissibili ma non necessariamente ottimi}.
+%TODO: missing second point before min.29
+\subsection{Branching}
+Questa operazione consiste nel sostituire l'insieme $T \subseteq S$ con una sua partizione $T_1 \dots T_m$:
+$T_1\dots T_m$ formano una partizione se e solo se:
+\[
+    T = \bigcup^m_{i=1}T_i \qquad \bigwedge \qquad T_i \cap T_j = \emptyset \quad \forall i \neq j
+\]
+La partizione è rappresentata con un albero.
+\subsubsection{Eliminazione di sottoinsiemi}
+Un insieme $T_i$ viene eliminato se $U(T_i) \le L_B$. In tale insieme non può essere contenuto il massimo di $f$.
+\subsection{Algoritmo branch and bound}
+\begin{enumerate}
+    \item
+        Posto $C = \{S\}$ il set di sottoinsiemi analizzabili, e $Q = \emptyset$ il set di insiemi eliminati,
+        si calcoli $U(S)$ e $L_B$ in caso si disponga di un euristica, altrimenti $L_B=-\infty$.
+
+    \item\label{branch_loop}
+        Selezionato $T \in C$, ad esempio il sottoinsieme con upper bound maggiore: $U(T) = \max_{Q \in C} U(C)$
+    \item
+        Si sostituisca $T$ in $C$ con la sua partizione in $k$ sottoinsiemi:
+        $C = C \cup \{T_1 \dots T_k\} - \{T\}$
+    \item
+        Calcolare per ciascuno dei sottoinsiemi il valore $U(T_i) \quad \forall i \in 1\dots k$
+    \item
+        Aggiornare il valore $L_B$ con il massimo valore di $f$ osservato durante l'esecuzione dell'algoritmo.
+    \item
+        Spostare da $C$ a $Q$ tutti i sottoinsiemi per cui $U(T') \le L_B$:
+        $C = C - \{T': U(T') \le L_B\}$ , $Q = Q \cup \{T': U(T') \le L_B\}$
+    \item Se $C = \emptyset$, allora $L_B$ coincide con il valore ottimo. Altrimenti ripartire dal passo
+        \ref{branch_loop}
+\end{enumerate}
+Esistono problemi la cui regione ammissibile è vuota, per questo il loro lower bound risulta $-\infty$.
+\subsubsection{Dimostrazione che $L_B$ è soluzione ottima}
+Durante tutto l'algoritmo $C + Q$ forma una partizione di $S$, quindi al termine dell'algoritmo esiste sicuramente $T
+\in Q$ tale che $\bar{x} \in T$, ma dato che $T$ è stato cancellato, allora
+\[
+    f(\bar{x}) \le U(T) \le L_B \le f(\bar{x})
+\]
+da cui $L_B = f(\bar{x})$.
+
+Per trovare il minimo di una funzione, o consideriamo $-f(x)$, o invertiamo il ruolo di $L_B$ ed $U_B$
+
+%euristiche 26
+\end{document}
