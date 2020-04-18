@@ -252,5 +252,49 @@ Prendendo come riferimento la tabella dei tempi di esecuzione dell'architettura 
 Confrontando quindi le varie fasi ottengo chiaramente che i tempi di esecuzione delle singole istruzioni, ed il tempo di
 esecuzione medio è peggiore. Questo è dovuto ai $30ns$ della fase di fetch, che occupano più di 1/3 del tempo di
 esecuzione di una singola istruzione.
+\clearpage
+
+\subsection{Miglioramenti architettura multiciclo}
+L'architettura multiciclo per come vista sino ad ora è inefficiente, per migliorarla ci possono essere diversi modi:
+\begin{itemize}
+    \item Ridurre il periodo di clock, introducendo salti di attesa per le fasi più lunghe
+    \item Sfruttare le componenti inutilizzate, calcolando in anticipo operazioni richieste in fasi successive
+    \item Unire fasi distinte e modificare opportunamente il segnale di clock
+\end{itemize}
+\subsubsection{Aumento granularità del clock}
+Avendo preso $\tmulti$ uguale al tempo d'accesso alla memoria, nelle fasi in cui essa è inutilizzata, c'è spreco di
+tempo. L'ideale per questa architettura sarebbe che tutti gli stadi richiedano approssimativamente lo stesso tempo di
+esecuzione.
+Prendendo ad esempio $\tmulti=12$ (tempo dell'ALU), gli stadi di accesso alla memoria richiederanno 3 cicli di clock
+($12\cdot 3 > 30$).
+
+Svolgendo i calcoli otteniamo un tempo medio di $86.88ns$, migliore rispetto al precedente, ma ancora più lento rispetto
+agli $82ns$ dell'architettura monociclo.
+
+Osservando che con $\tmulti=12$ nelle fasi di memoria rimane uno spreco di $36-3\cdot 12=6ns$ riduciamo ancora la
+granularità di clock a $\tmulti=5ns$ (fase più veloce: decodifica del writeback)
+saranno richiesti quindi 6 cicli di clock per le fasi che fanno accesso alla memoria, e 3 per le fasi di ALU.
+Il tempo medio per istruzione si riduce a $75.65ns$, migliore rispetto al caso precedente e dell'architettura monociclo.
+\subsubsection{Anticipazione delle operazioni}
+Partiamo dall'osservazione che in T2 si esegue un passo che serve solo a JE/JS. Possiamo quindi differenziare la fase T2
+a seconda dell'istruzione. Inoltre, dato che il periodo è sufficientemente lungo, possiamo unire più istruzioni in un
+unico ciclo di clock:
+
+\begin{itemize}
+    \item Per operazioni aritmetiche, dopo il fetch, richiedono una decodifica ed un operazione dell'ALU, con un totale
+        di $5 + 12 + 5=22ns$ sufficiente da eseguirle nell'unica fase T2
+    \item Per load il calcolo dell'indirizzo può essere fatto in T2, la lettura della memoria in T3 e scrittura nel
+        registro destinazione in T4, tagliando un ciclo di clock.
+    \item L'operazione di store, esattamente come per la load, anticipiamo il calcolo dell'indirizzo sorgente in T2,
+        quindi la scrittura in memoria è effettuabile immediatamente all'istante T3.
+    \item In JMP/JS è possibile aggiornare PC direttamente in T2
+    \item In JAL è possibile aggiornare PC e la scrittura in R31. PC1 non è più necessario.
+\end{itemize}
+
+Il tempo di esecuzione medio è $81.60ns$, migliore della versione multiciclo originale e circa la stessa velocità
+dell'architettura monociclo.
+
+Aumentando la granularità di clock in quest'architettura, ipotizzando un $\tmulti=6 ns$ (dato che IF e ME richiedono
+$6ns$), otteniamo un tempo medio di $64.76ns$ migliore del $21\%$ rispetto alla monociclo.
 
 \end{document}
