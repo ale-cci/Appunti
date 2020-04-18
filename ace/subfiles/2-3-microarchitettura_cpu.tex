@@ -153,7 +153,7 @@ eseguito in due cicli di clock differenti.
         Leggo il contenuto dei registri R1 ed R2.
         Utilizzo l'alu per calcolare a prescindere il valore del registro di destinazione (destinazione del salto condizionato
         viene calcolata prima di verificare le condizioni)
-    \item Operaaione Aritmetia:
+    \item Operazione Aritmetica:
         Eseguo l'istruzione utilizzando i dati calcolati nelle fasi precedenti.
     \item Load e Store:
         Sempre attraverso buffer 3-state salvano o leggono dati dalla memoria all'indirizzo destinazione calcolato nelle fasi
@@ -165,6 +165,92 @@ eseguito in due cicli di clock differenti.
 \end{itemize}
 Interfacce con l'esterno: bus di dati attraverso buffer 3-state, in uscita al bus degli indirizzi arriva o alu-out o pc.
 
+
+%2.7
+\newcommand{\code}[1]{\oldlstinline[keywordstyle=\ttfamily]{#1}}
+
 \subsubsection{Segnali di controllo architettura multiciclo}
+La fase di instruction fetch, comune a tutte le istruzioni, richiede di leggere l'istruzione corrente dalla memoria ed
+incrementare il program counter di 4. Per queste operazioni, sono necessari i segnali:
+\begin{tabular}{ll}
+    \code{M_r}& Memory Read\\
+    \code{In} &abilitazione buffer 3state\\
+    \code{PC_w}& program counter write\\
+    \code{PC1_w}& program counter 1 write\\
+    \code{IR_w} &instruction register write
+\end{tabular}
+
+Ed i seguenti segnali di selezione:
+
+\begin{tabular}{ll}
+    \code{INDsorg =1}& per scegliere di inviare alla memoria il valore del program counter\\
+    \code{PCsorg=0} &per selezionare come ingresso di PC, PC+4\\
+    \code{ALUsorgA = 0} &seleziona PC come ingresso A della ALU\\
+    \code{ALUsorgB = 0} &seleziona 4 come ingresso B della ALU\\
+    \code{OPALU =  ADD} &per eseguire una somma con la ALU
+\end{tabular}
+
+Nella fase di decode è richiesto di decodificare il codice operativo, inviare i due registri sorgente al register file
+e sfrutto l'ALU non utilizzata per calcolare in anticipo l'indirizzo di destinazione gli eventuali salti condizionati.
+
+Quindi è necessario il segnale \code{DESTw} per abilitare scrittura nel registro di destinazione, e i selettori
+per l'ALU: \code{ALUsorgA=0}, \code{ALUsorgB=2} per indicare rispettivamente PC e l'offset come ingressi, e
+\code{OPALU=ADD} per sommarli.
+
+Passate queste due fasi, comuni a tutte le operazioni, vi è una differenziazione a seconda del tipo di istruzione
+contenuta in \code{IR}.
+In caso di istruzioni aritmetiche, composte da execute (T3) e writeback (T5), in prima fase, sono richiesti i segnali
+per specificare le operazioni dell'alu (A = 1, B = 2, OP=ADD).
+In T5 è richiesto \code{Rw} per scrivere nel registro destinazione contenuto in \code{RF}, e \code{Rsorg = 0}
+\code{Rdest=0} per scrivere nel registro destinazione il alu-out.
+L'istruzione passa anche attraverso una fase di memory (T4) ma vengono solamente mantenuti i valori in T3, tenere
+costante il valore di alu-out.
+
+Nella fase di execute di una load, viene calcolato l'indirizzo del dato in memoria \code{Rb + offset} (A=1, B=2, OP=ADD)
+e salvato in \code{Rdest} .
+In fase T4 \code{INDsorg = 0} e \code{Mr =1} per indicare di leggere il valore del dato all'indirizzo
+di memoria calcolato dall'ALU.
+In T5 viene salvato in \code{Rd} il dato letto dalla memoria \code{In=2} per mettere il bus dei dati in ingresso e
+portare il segnale dalla memoria al processore, viene abilitato \code{Rwrite} per abilitare la scrittura al register file.
+\code{Rsorg=1} e \code{Dsorg=1} per scrivere il registro \code{Rd} il dato proveniente dalla memoria.
+
+In caso di store, i segnali nella fase di execute sono identici a quelli della load, ma eseguo \code{INDsorg=0} uno step
+prima per avere il segnale stabile alla fase successiva e \code{Out=1}.
+In T4 \code{Mw=1} per scrivere in memoria. Non ha una fase di writeback.
+
+I salti condizionati richiedono solo un ciclo di completamento, in quanto l'indirizzo di destinazione è già stato
+calcolato nella fase precedente, per resta solo da abilitare \code{PCw} in caso la condizione di salto sia verificata.
+(A = 1, B=1, OP=SUB) \code{PCsorg=1} per selezionare \code{DEST} come ingresso a PC.
+
+In caso di salti incondizionati esiste la sola fase T3 con \code{PCw=1} e \code{PCsorg=2}.
+
+L'ultimo caso \lstinline{jal}, è del tutto identico ad un salto condizionato, solo che viene seguito da una fase di
+writeback, in cui salvare \code{PC1} in \code{R31}.
+\subsection{Prestazioni dell'architettura multiciclo}
+\begin{wrapfigure}{R}{0pt}
+    \centering
+    \begin{tabu}{|l|lc|c|}
+        \hline
+        Aritm  & 5& 150ns &40\%\\
+        \hline
+        Load & 5& 150ns   &25\%\\
+        \hline
+        Store & 4& 120ns  &10\%\\
+        \hline
+        JE/JS& 3& 90ns    &12\%\\
+        \hline
+        JMP/JR& 3& 90ns   &6\%\\
+        \hline
+        JAL& 5& 150ns     &2\%\\
+        \hline
+    \end{tabu}
+\end{wrapfigure}
+Diversamente dall'architettura monociclo in cui $\tmono$ dipende dall'istruzione più lenta, il tempo $\tmulti$ dipende dallo
+stadio più lento.
+Prendendo come riferimento la tabella dei tempi di esecuzione dell'architettura monociclo (vedi pagina
+\pageref{tab:tempi_esecuzione_monociclo}), ne consegue $\tmulti =30$
+Confrontando quindi le varie fasi ottengo chiaramente che i tempi di esecuzione delle singole istruzioni, ed il tempo di
+esecuzione medio è peggiore. Questo è dovuto ai $30ns$ della fase di fetch, che occupano più di 1/3 del tempo di
+esecuzione di una singola istruzione.
 
 \end{document}
