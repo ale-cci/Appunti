@@ -138,7 +138,7 @@ Nell'architettura che utilizzeremo come riferimento, solo la fase di execute è 
             \item LSU \textit{Load Store Unit}
         \end{itemize}
     \end{minipage}
-    \caption{Architettura di riferimento}
+    \caption{Architettura parallelismo di riferimento}
 \end{figure}
 
 Ipotizziamo che allo stadio di execute venga emessa solo una istruzione alla volta (ID), una volta messe in esecuzione,
@@ -147,10 +147,66 @@ Ipotizziamo che allo stadio di execute venga emessa solo una istruzione alla vol
 \subsubsection{Problemi dell'architettura}
 \begin{enumerate}
     \item Date due istruzioni $i$ e $j$, se con $i$ che precede $j$, se $i$ impiega più cicli di clock di $j$ ad essere eseguita,
-        l'ordine di completamento può essere invertito.
+        l'ordine di completamento può essere invertito. Questo pone un problema di coerenza della macchina.
     \item Può accadere che due istruzioni nello stesso istante richiedano di passare alla fase di writeback, generando
         un conflitto di risorse.
 \end{enumerate}
 
+Per risolvere il primo dei due problemi esistono tre metodi: il completamento in ordine, dove le istruzioni sono
+completate secondo l'ordine prestabilito; il buffer di riordinamento,dove le istruzioni una volta completate scrivono il
+loro output in un buffer in cui vengono successivamente riordinate; e attraverso un history buffer, dove lo stato
+coerente può essere ripristinato in presenza di conflitti.
+
+\subsubsection{Reservation Shift register}
+Il primo metodo, meno efficiente, è realizzabile attraverso un RSR (\textit{Reservation Shift Register}). Per la
+scrittura in tale registro è utilizzato un metodo di prenotazione.
+L'RSR è una tabella di colonne:
+\begin{itemize}
+    \item $V$ un bit di validità che dice se la posizione corrente contiene informazioni,
+    \item $PC$ il program counter dell'istruzione, necessario per il ripristino dello stato coerente in caso di
+        predizione di salto errata
+    \item $UF$ L'unità funzionale che sta eseguendo l'istruzione
+    \item $R_d$ Registro destinazione del risultato
+\end{itemize}
+% Tabella esecuzione
+Il completamento in ordine questo risulta molto dispendioso per quanto riguarda i cicli di clock. Rimane comunque
+vulnerabile nel caso di riferimenti alla memoria, in quanto posso avere una scrittura seguita da una lettura e
+riscontrare lo stesso problema che ho avuto con il register file.
+
+Per risolvere questo problema o non si emettono comandi di memorizzazione prima che le istruzioni emesse precedentemente
+siano completate, o si considera la memoria come un'unità funzionale quindi store occupa una posizione in RSR in modo
+che questa raggiunga la cima quando tutte le istruzioni precedenti sono completate.
+
+\subsubsection{Reordering Buffer}
+Il ROB non è in grado di risolvere i problemi d'accesso al buffer, per questo viene utilizzato un RSR in versione
+semplificata.
+
+Nella tabella RSR, vengono tenute solo le colonne $V$ ed $UF$ ed aggiunto $pROB$, un puntatore alla riga
+della tabella ROB in cui è inserita l'unità funzionale.
+
+Nella tabella ROB, vengono spostati $PC$ e $R_d$ rimossi dal RSR, in aggiunta ad un bit di completamento $C$
+(1=istruzione completata) e $RIS$ risultato temporaneo della istruzione.
+
+È gestito come un buffer circolare. Il writeback viene eseguito quando l'elemento puntato dalla testa del buffer
+circolare è segnato come completato.
+
+\subsubsection{History Buffer}
+Soluzione delle tre più flessibile, e permette il completamento in ordine anche del register file.
+Rappresenta una history di tutte le scritture nel register file, in modo da poter effettuare un rollback in caso di
+incoerenza, come previsioni di salto errate o interrupt.
+
+HB è gestito come il rob: un buffer circolare di cui ogni riga è costituita dai componenti $C$, $PC$, $R_d$ e $OLD$ che
+contiene il valore del registro di destinazione al momento dell'operazione.
+
+Se alle componenti di HA si aggiunge un ulteriore campo EPR (\textit{Errata Previsione}). Quando un'istruzione di salto
+arriva in testa ad HB, se EPR=1: Blocco l'emissione di nuovi valori, attendo operazioni ancora attive che vengano
+completate (svuotamento pipeline), eseguo il rollback fino ad arrivare alla prima istruzione sul percorso sbagliato.
+L'esecuzione riprende prelevando l'istruzione proveniente dal percorso corretto.
+
+
+\subsubsection{Considerazioni}
+Abbiamo assunto l'emissione ed il ritiro di un'unica istruzione alla volta. Se viene emessa una sola istruzione alla
+volta non accadrà mai che vengano eseguite più di un istruzione per clock. Occorre quindi ritirare, decodificare ed emettere più
+istruzioni in parallelo.
 
 \end{document}
