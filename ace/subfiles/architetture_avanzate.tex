@@ -114,5 +114,43 @@ sul comportamento precedente del salto (vedi esempio in figura \ref{fig:dynamic_
 Queste predizioni sono salvate in una tabella di predizione associativa, dove ad ogni indirizzo di program counter del
 salto è associato il valore di relativa predizione.
 
-% \subsection{Architetture superscalari}
+\subsection{Architetture superscalari}
+Quello visto sino ad ora prende il nome di pipeline lineare, non viene più utilizzato perché come visto, lo speedup
+teorico è ben diverso dallo speedup reale.
+Un altro problema di questa architettura è che tutte le istruzioni attraversano tutti gli stadi, il periodo di clock è
+quindi determinato dallo stadio più lento (come nella multiciclo).
+
+La soluzione è quindi introdurre non un parziale parallelismo, come nel caso della pipeline, ma un parallelismo totale,
+sovrapponendo specifiche fasi delle istruzioni.
+Nell'architettura che utilizzeremo come riferimento, solo la fase di execute è in parallelo:
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\textwidth]{cpu_parallelism}
+    \end{minipage}
+    \begin{minipage}{.45\textwidth}
+        \begin{itemize}
+            \item IU1= ALU, per aritmetica intera (1 cck)
+            \item IU2=ALU, per aritmetica intera, ma operazioni più complesse come moltiplicazione e divisione (2cck)
+            \item FPU=ALU, per virgola mobile (4cck)
+            \item BPU \textit{Branch Prediction Unit}
+            \item LSU \textit{Load Store Unit}
+        \end{itemize}
+    \end{minipage}
+    \caption{Architettura di riferimento}
+\end{figure}
+
+Ipotizziamo che allo stadio di execute venga emessa solo una istruzione alla volta (ID), una volta messe in esecuzione,
+è sono eseguite in parallelo.
+
+\subsubsection{Problemi dell'architettura}
+\begin{enumerate}
+    \item Date due istruzioni $i$ e $j$, se con $i$ che precede $j$, se $i$ impiega più cicli di clock di $j$ ad essere eseguita,
+        l'ordine di completamento può essere invertito.
+    \item Può accadere che due istruzioni nello stesso istante richiedano di passare alla fase di writeback, generando
+        un conflitto di risorse.
+\end{enumerate}
+
+
 \end{document}
