@@ -60,10 +60,10 @@ permanentemente i dati.
 \end{figure}
 
 \noindent
-Ideata ad Harvard, questa architettura è caratterizzata dalla separazione tra memoria del programma e memoria dati: le istruzioni
-devono passare obbligatoriamente attraverso la CPU.
-Questa architettura ha dato spunto a memorie separate come cache.
-L'idea di poter accedere memoria e dati velocizza le prestazioni del calcolatore.
+Ideata ad Harvard, questa architettura è caratterizzata da una separazione tra la memoria del programma e la memoria dati.
+A causa di questa separazione, le istruzioni sono obbligate a passare attraverso la CPU.
+Questa architettura ha dato spunto a memorie separate a rapido accesso come la cache.
+L'idea di poter accedere separatamente a memoria del programma e memoria dati velocizza le prestazioni del calcolatore.
 
 \subsection{Leggi di Moore}
 \begin{enumerate}
@@ -72,20 +72,19 @@ L'idea di poter accedere memoria e dati velocizza le prestazioni del calcolatore
 \end{enumerate}
 
 \subsection{Legge di Amdahl}
-Nella storia dei computer, si è capito che il continuo aumento della frequenza di clock del numero di transistor del processore
-non era una cosa plausibile. Per questo si è iniziato a ragionare sul parallelismo.
+L'aumento progressivo della frequenza di clock e di transistor interni al processore non è sostenibile.
+Per questo si è iniziato a ragionare sul parallelismo.
 
-Nel momento in cui voglio parallelizzare un algoritmo, ho due parti fondamentali: una componente sequenziale ed una componente
-parallelizzabile.
-Chiamata $f$ la frazione di algoritmo parallelizzabile, ed ho a disposizione un numero di processori $N$, l'aumento di
-velocità di esecuzione $S$ è calcolabile attraverso la legge di Amdahl:
+Nel momento in cui si vuole parallelizzare un algoritmo, è possibile suddividere le istruzioni del programma in due gruppi: una componente sequenziale ed una parallelizzabile.
+Chiamata $f$ la frazione di algoritmo parallelizzabile, ed $N$ il numero di processori a disposizione, l'aumento di
+velocità di esecuzione $S$ (\textit{Speedup}) è calcolabile con la legge di Amdahl:
 \[
     S = \frac{1}{(1 - f) + \frac{f}{N}}
 \]
-È da tenere quindi presente che se utilizzo un grande numero di core per un algoritmo non parallelizzabile, il suo tempo di
-esecuzione sarà identico se eseguito con un solo core.
-
-Il parallelismo è stato quindi stato adottato dai processori attraverso pipelining, coprocessori paralleli (processori dedicati
-a specifiche operazioni) ed architetture multicore.
+Da come si può evincere dalla formula, avere a disposizione un elevato numero di core per un algoritmo non parallelizzabile ($f = 0$), non porta alcun miglioramento:
+\[
+    \lim_{N \to +\infty} \frac{1}{1 + \frac{1}{N}} = 1
+\]
+Il parallelismo è  utilizzato in architetture pipeline, coprocessori paralleli (processori dedicati a specifiche operazioni) ed architetture multicore.
 
 \end{document}

@@ -8,60 +8,58 @@ L'ISA (\textit{Instruction set Architecture}) di un processore, non è altro che
 al programmatore, interpretabili dal processore.
 Un' istruzione dell'ISA inviata al processore, viene prima trasformata in comandi di microarchitettura
 (linguaggio macchina) e poi eseguita dall'hardware.
-Un processore viene detto compatibile a livello di ISA con un altro processore, se tutte le istruzioni di
-quest'ultimo sono interpretabili dal processore.
 
-La definizione di un ISA è la prima tra le diverse fasi della progettazione della CPU, ed in base
-a quanto verbosa (quanti comandi ne fanno parte), il processore si può definire di architettura CISC o RISC.
+Un processore viene detto compatibile a livello di ISA con un altro processore, se tutte le sue istruzioni sono interpretabili da quest'ultimo.
 
-\subsection{CISC}
-Un' ISA di tipo CISC (\textit{Complex Instruction Set Computer}) facilita il compito del, fornendo a disposizione
-un vasto numero di istruzioni. Di contro ha che la sua realizzazione in hardware spesso risulta non
-efficiente.
-Inoltre le istruzioni utilizzate più di frequente dai programmatori sono approssimativamente il 20\% di quelle
-disponibili.
+La definizione di un ISA è la prima tra le diverse fasi della progettazione della CPU, ed in base a quanti comandi ne fanno parte, il processore si può definire di architettura CISC o RISC.
+
+\subsection{Architettura CISC}
+Un'ISA di tipo CISC (\textit{Complex Instruction Set Computer}) è caratterizzata da un vasto numero di istruzioni a disposizione del programmatore, facilitandogli in questo modo la stesura del codice.
+
+Il punto negativo di questa architettura è che la sua realizzazione, essendo ricca di features, risulta poco efficiente e dispendiosa dal punto di vista hardware.
+Inoltre le istruzioni utilizzate più di frequente dai programmatori sono un set ridotto (circa il 20\%) di tutte le quelle a disposizione.
 
 \subsection{RISC}
 All'esatto opposto ci sono le ISA di tipo RISC (\textit{Reduced Instruction Set Computer}).
-È un ISA semplice più vicina all'hardware, hanno un'implementazione più veloce e più semplice.
-Fornisce un set di istruzioni ristretto ma efficiente.
-Di contro, essendo il numero di istruzioni a disposizione ridotto, scrivere un programma solitamente risulta
-più complesso e si impiega più tempo.
-% 20:19
+
+Sono ISA che mettono a disposizione un numero ridotto e selezionato di istruzioni, portando il vantaggio di una realizzazione a livello di hardware più semplice e veloce.
+Come diretta conseguenza della semplificazione a livello di hardware si hanno tempi di esecuzione più rapidi rispetto alle architetture CISC.
+
+Di contro, essendo il numero di istruzioni a disposizione ridotto, scrivere un programma solitamente risulta più tempo-dispendioso e complesso.
+
+\newpage
 \subsection{Confronto fra RISC e CISC}
-Altre differenze tra i due tipi di architettura, non ancora riportate, ma da tener presente sono:
+Altre differenze non ancora discusse su questi due tipi di architettura sono i seguenti:
 
-\vspace{10pt}
-\noindent\begin{minipage}{.48\textwidth}
-    \begin{tcolorbox}[title={\centering RISC}]
-        \begin{itemize}[leftmargin=*]
-            \item Istruzioni di lunghezza fissa
-            \item Decodifica più semplice
-            \item Unità di controllo cablata
-            \item pochi metodi di indirizzamento
-            \item memoria allineata
-            \item molti registri di lunghezza fissa ed ortogonali
-            \item processori load/store
-        \end{itemize}
-    \end{tcolorbox}
-\end{minipage}
-\begin{minipage}{.51\textwidth}
-    \begin{tcolorbox}[title={\centering CISC}]
-        \begin{itemize}[leftmargin=*]
-            \item Codice operativo e istruzioni di lunghezza variabile
-            \item Decodifica complessa, a più cicli di clock
-            \item Unità di controllo microprogrammata
-            \item Molta flessibilità nei metodi di indirizzamento
-            \item memoria non allineata
-            \item pochi registri di varie lunghezze e non ortogonali
-        \end{itemize}
-    \end{tcolorbox}
-\end{minipage}
-\vspace{10pt}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|m{.4\textwidth}|m{.4\textwidth}|}
+        \rowfont{\centering\bfseries\color{clr-primary}}
+        \hline
+        RISC & CISC \\
+        \hline
+        Istruzioni di lunghezza fissa & Istruzioni di lunghezza variabile\\
+        \hline
+        Decodifica semplice & Decodifica complessa, a più cicli di clock\\
+        \hline
+        Unità di controllo cablata & Unità di controllo microprogrammata\\
+        \hline
+        Pochi metodi di indirizzamento & Svariati metodi di indirizzamento\\
+        \hline
+        Memoria allineata & Memoria non allineata\\
+        \hline
+        Molti registri di lunghezza fissa ed ortogonali & Pochi registri di varie lunghezze e non ortogonali\\
+        \hline
+        Processori load/store&\\
+        \hline
+    \end{tabu}
+\end{table}
 
-% --HERE
-In una memoria allineata, i dati vengono disposti ad indirizzi multipli di $n$.
-Il vantaggio ovvio che si ha utilizzando questa struttura è un rapido accesso alla memoria.
+\subsubsection{Memoria allineata}
+In una memoria allineata, i dati vengono disposti ad indirizzi multipli di $n$, portando il vantaggio di avere un rapido accesso alla memoria, dato che gli indirizzi sono semplici da calcolare.
+
+Il difetto, come facilmente intuibile, si verifica nel caso di scrittura di dati di grandezza minore di $n$,
+
 Ovviamente avere una memoria allineata porta con sé lo svantaggio di avere un maggiore consumo di memoria in
 caso dovessi salvare dei dati di grandezza minore di $n$.
 \\
