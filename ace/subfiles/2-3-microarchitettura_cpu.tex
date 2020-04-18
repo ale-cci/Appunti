@@ -140,7 +140,11 @@ In altre parole, chiamata $\sum\tmulti$ il tempo di esecuzione di una singola is
 $\sum\tmulti > \tmono$ sarà inferiore al numero di istruzioni per cui $\sum\tmulti < \tmono$.
 Ne consegue che l'architettura multiciclo è in media più veloce dell'architettura monociclo.
 
-Inoltre non è più necessario duplicare componenti come ALU e memoria, dato che l'accesso ai dati e incremento PC/calcolo registri è
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{architettura_cpu}
+\end{figure}
+Non è più necessario duplicare componenti come ALU e memoria, dato che l'accesso ai dati e incremento PC/calcolo registri è
 eseguito in due cicli di clock differenti.
 
 % TODO: aggiungere schema generale architettura multiciclo (slide 60)
@@ -163,6 +167,7 @@ eseguito in due cicli di clock differenti.
         In caso di load, il valore di uscita della memoria viene riportato nella porta dati del register file.
         In caso di JAL PC1 (valore precedente di PC) entra nel register file.
 \end{itemize}
+
 Interfacce con l'esterno: bus di dati attraverso buffer 3-state, in uscita al bus degli indirizzi arriva o alu-out o pc.
 
 
