@@ -31,47 +31,64 @@ Una volta eseguita, in alcuni casi vengono scritti o letti dei dati dalla memori
 Ogni istruzione di questa ISA di riferimento può appartenere ad una delle tre seguenti categorie:
 \begin{itemize}
     \item Istruzione aritmetico/logica \lstinline{add dest, reg1, reg2}
-    \item Un primo aritmetico logiche,
-        Nei primi 6 bit opcode (codice operativo),
-        seguiti da 5 che indicano il primo registro sorgente,
-        altri 5 bit che indicano il secondo registro,
-        5 che indicano il registro destinazione
-        ed i rimanenti 11 fanno riferimento all'operazione specifica dell'ALU (somma, sottrazione, ...).
-        \begin{lstlisting}
-    add  r4,r2,r5
-    \end{lstlisting}
+        \begin{figure}[h]
+            \centering
+            \begin{tikzpicture}[every node/.style={draw, minimum height=.6cm}]
+                \node[minimum width=1.8cm](n1) at (0, 0) {opcode};
+                \node[right=0pt of n1, minimum width=1.5cm](reg1) {R1};
+                \node[right=0pt of reg1, minimum width=1.5cm](reg2) {R2};
+                \node[right=0pt of reg2, minimum width=1.5cm](regd) {RD};
+                \node[right=0pt of regd, minimum width=3.3cm](opalu){opalu};
 
-    \item Un secondo formato utilizzato per accesso alla memoria e salti condizionati.
-        I primi 6 bit di codice operativo,
-        a seguire altri 5 ad indicare il primo registro
-        ed altri 5 ad indicare il secondo registro (come nel primo caso)
-        16 che indicano un offset o un dato.
+                \draw
+                    (n1.north) node[anchor=south, draw=none] {\scriptsize 6bit}
+                    (reg1.north) node[anchor=south, draw=none] {\scriptsize 5bit}
+                    (reg2.north) node[anchor=south, draw=none] {\scriptsize 5bit}
+                    (regd.north) node[anchor=south, draw=none] {\scriptsize 5bit}
+                    (opalu.north) node[anchor=south, draw=none] {\scriptsize 11bit}
+                    ;
+            \end{tikzpicture}
+        \end{figure}
 
-        \begin{lstlisting}
-    je  r2,r3,0045h
-        \end{lstlisting}
-    \item Un terzo ed ultimo caso utilizzato per i salti incondizionati.
-        I primi 6 bit indicano sempre l'opcode ed i rimanenti indicano l'indirizzo di termine del
-        salto.
-
-        \begin{lstlisting}
-    jmp 0045h
-        \end{lstlisting}
+    \item accesso alla memoria/salto condizionato \lstinline{je  r2,r3,0045h}
+        \begin{figure}[h]
+            \centering
+            \begin{tikzpicture}[every node/.style={draw, minimum height=.6cm}]
+                \node[minimum width=1.8cm](n1) at (0, 0) {opcode};
+                \node[right=0pt of n1, minimum width=1.5cm](reg1) {R1};
+                \node[right=0pt of reg1, minimum width=1.5cm](reg2) {R2};
+                \node[right=0pt of reg2, minimum width=4.8cm](offset){offset};
+                \draw
+                    (n1.north)    node[anchor=south, draw=none]{\scriptsize 6bit}
+                    (reg1.north)  node[anchor=south, draw=none]{\scriptsize 5bit}
+                    (reg2.north)  node[anchor=south, draw=none]{\scriptsize 5bit}
+                    (offset.north)node[anchor=south, draw=none]{\scriptsize 16bit}
+                    ;
+            \end{tikzpicture}
+        \end{figure}
+    \item Salti incondizionati \lstinline{jmp 0045h}
+        \begin{figure}[h]
+            \centering
+            \begin{tikzpicture}[every node/.style={draw, minimum height=.6cm}]
+                \node[minimum width=1.8cm](n1) at (0, 0) {opcode};
+                \node[right=0pt of n1, minimum width=7.8cm](addr) {address};
+                \draw
+                    (n1.north) node[anchor=south, draw=none]{\scriptsize 6bit}
+                    (addr.north) node[anchor=south, draw=none]{\scriptsize 11bit}
+                    ;
+            \end{tikzpicture}
+        \end{figure}
 \end{itemize}
-In questa prima architettura assumiamo che non ci sia lo stack (zona di memoria organizzata a pila LIFO),
-accessibile attraverso istruzioni apposite come \lstinline{push} e \lstinline{pop}.
 
 Oltre a salto condizionato ed incondizionato esiste un terzo tipo di salto: la chiamata a funzione.
 È un tipo di salto incondizionato particolare, dato che quando eseguito è necessario salvare il valore
 del program counter per poter proseguire l'esecuzione una volta terminata la funzione.
 
-Siccome non abbiamo uno stack, il program counter è salvato nell'indirizzo $R_{31}$
+In questa prima architettura assumiamo che non ci sia lo stack \footnote{Zona di memoria organizzata a pila LIFO, accessibile attraverso le istruzioni \lstinline{push} e \lstinline{pop}}, quindi salviamo il program counter nell'indirizzo $R_{31}$.
 %27: ragionamento di funzionamento dell'ALU
 
-Per selezionare le operazioni da far eseguire all'ALU è specificato un ingresso chiamato opalu, dove vengono
-specificate le operazioni. Oltre all'uscita dell'operazione vengono tornati dei valori aggiuntivi come
-il flag di zero (messo ad uno quando il risultato dell'ALU è zero), ed il flag di segno (messo ad 1 quando il
-risultato è negativo).
+Per selezionare le operazioni da far eseguire all'ALU è specificato un ingresso chiamato opalu.
+Oltre al risultato  dell'operazione vengono tornati valori di flag aggiuntivi come zero flag (messo ad uno quando il risultato dell'ALU è zero) e sign flag(messo ad 1 quando il risultato è negativo).
 
 \subsubsection{Load e Store}
 %35
@@ -90,7 +107,7 @@ Le due porte in uscita riportano i dati letti rispettivamente dal registro sorge
 \subsection{CPU monociclo}
 % TODO: aggiungere disegno CPU monociclo
 In una CPU monociclo, tutte le istruzioni impiegano un solo ciclo di clock. È una struttura molto semplice, ma potenzialmente anche molto
-lenta, dato che il tempo di esecuzione di ogni istruzione deve essere pari al tempo di esecuzione dell'istruzione più lenta.
+lenta, dato che il tempo di esecuzione di ogni istruzione necessita di essere pari al tempo di esecuzione dell'istruzione più lenta.
 
 Prendendo come esempio l'istruzione \lstinline{st R6,R1, 20},
 \begin{itemize}
@@ -112,7 +129,7 @@ tabella \ref{tab:tempi_esecuzione_monociclo}),
 che oltre alle fasi di fetch e decode richiede: calcoli dall'ALU, writeback ed accesso alla memoria.
 Chiamato il suo tempo di esecuzione $\tmono$ ed $N$ il numero di istruzioni, il tempo di esecuzione del programma è $\tmono \cdot N$.
 
-\begin{table}[t]
+\begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|c|}
         \hline
