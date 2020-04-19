@@ -3,36 +3,34 @@
 \begin{document}
 \section{Microarchitettura CPU}
 \subsection{La CPU}
-Rete logica combinatoria: rete priva di memoria, che dati ingressi da' delle uscite indipendentemente
-dal tempo.
-Rete sequenziale: rete che ha memoria, macchina a stati finiti, che dati degli ingressi fornisce
-delle uscite dipendenti dallo stato in cui si trova.
-
-Dal punto di vista funzionale possiamo vedere la CPU, come composta da due parti: il data path e
-l'unità di controllo.
-Il data path di cui componente fondamentale è l'ALU, è una rete logica che si occupa di eseguire le istruzioni, mentre
-l'unita di controllo è una macchina a stati finiti che comanda il data path su quali istruzioni eseguire.
+Una rete logica è definita \textbf{combinatoria} se dati degli ingressi, fornisce sempre gli stessi valori d'uscita, indipendenti dal tempo.
 \\
-Possiamo schematizzare l'unità di controllo come una macchina a stati finiti a tre stati: fetch, decode ed execute.
+Diversamente una rete \textbf{sequenziale} è una macchina a stati finiti, dotata di memoria, quindi a valori in ingresso corrispondono uscite che dipendenti dallo stato attuale.
+
+Dal punto di vista funzionale è possibile suddividere la CPU in due parti: data path e unità di controllo.
+Il data path, di cui componente fondamentale è l'ALU, è una rete logica che si limita ad eseguire istruzioni indicategli dall'unità di controllo, una rete sequenziale di stati: fetch, decode ed execute.
 
 \subsection{Architettura di riferimento RISC}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.9\textwidth]{suddivisione_cpu}
+\end{figure}
 Analizziamo adesso un esempio di architettura RISC.
 
-Gli indirizzi di memoria sono riferiti ai byte. Le istruzioni occupano sempre e solo una parola a 32 bit.
-Le istruzioni ed i dati si trovano sempre in indirizzi multipli di 4, per questo motivo il program counter
-è incrementato di 4 ad ogni istruzione.
-Avremo anche 32 registri di uso generale a 32bit. L'insieme dei registri è chiamato register file.
+Un indirizzo indica la posizione di un byte in memoria, ad esempio l'indirizzo 2 indica il secondo byte, posizionato all'ottavo bit.
+\\
+Le istruzioni sono di lunghezza fissa a 32 bit.
+Dato che istruzioni e dati sono salvati sempre ad indirizzi multipli di 4, il program counter è incrementato di 4 ad ogni istruzione.
+I registri, a 32bit, sono 32 e di uso generale. L'insieme dei registri prende il nome di register file.
 
-In generale l'esecuzione all'interno di un processore passa attraverso 5 fasi:
-una prima fase chiamata Instruction Fetch (IF) dove il processore carica dalla memoria l'istruzione,
-successivamente la decodifica nella fase (FT) e la esegue nella fase di execute (EX).
-Dopodiché in alcuni casi si ha un accesso alla memoria nella fase di Memory (ME), ed infine
-in alcuni casi ho una fase di write-back (WB), dove il risultato delle operazioni è riscritto
-nei registri.
+In generale l'esecuzione all'interno di un processore passa attraverso 5 fasi: fetch, decode, execute, memory e writeback.
+\\
+Nella prima fase (IF) il processore si occupa di leggere dalla memoria l'istruzione indicata dal program counter. Successivamente nella fase di decode (ID) viene decodificata e passata alla fase di execute (EX).
+Una volta eseguita, in alcuni casi vengono scritti o letti dei dati dalla memoria (ME), ed infine dove necessario vi è la fase di writeback (WB) dove il risultato dell'operazione è scritta in un registro.
 
-Tutte le istruzioni di questa ISA, come già detto hanno una lunghezza fissa di 32bit, ed appartengono a
-3 categorie:
+Ogni istruzione di questa ISA di riferimento può appartenere ad una delle tre seguenti categorie:
 \begin{itemize}
+    \item Istruzione aritmetico/logica \lstinline{add dest, reg1, reg2}
     \item Un primo aritmetico logiche,
         Nei primi 6 bit opcode (codice operativo),
         seguiti da 5 che indicano il primo registro sorgente,

@@ -50,7 +50,7 @@ Altre differenze non ancora discusse su questi due tipi di architettura sono i s
         \hline
         Molti registri di lunghezza fissa ed ortogonali & Pochi registri di varie lunghezze e non ortogonali\\
         \hline
-        Processori load/store&\\
+        Processori load-store&\\
         \hline
     \end{tabu}
 \end{table}
@@ -60,23 +60,21 @@ In una memoria allineata, i dati vengono disposti ad indirizzi multipli di $n$, 
 
 Il difetto, come facilmente intuibile, si verifica nel caso di scrittura di dati di grandezza minore di $n$,
 
-Ovviamente avere una memoria allineata porta con sé lo svantaggio di avere un maggiore consumo di memoria in
-caso dovessi salvare dei dati di grandezza minore di $n$.
-\\
-I registri e la memoria sono collegati, l'approccio RISC cerca di lavorare con la memoria il meno
-possibile, attraverso poche modalità di indirizzamento e processori che accedono alla memoria attraverso
-due sole istruzioni: load e store.
-Per evitare ripetuti accessi alla memoria, i dati vengono salvati temporaneamente in \textbf{registri} interni
-al processore. Questi registri possono essere ortogonali (ogni registro può effettuare ogni operazione) nel
-caso RISC o non ortogonali (esistono registri specifici per specifiche operazioni) nel caso CISC.
+\subsubsection{Ortogonalità registri}
+Registri e memoria sono collegati.
+Un'architettura RISC cerca di ridurre il più possibile gli accessi alla memoria, attraverso un numero ridotto di modalità di indirizzamento
+Un'architettura RISC ha poche modalità di indirizzamento e cerca di ridurre il più possibile gli accessi alla memoria. Per questo lavora con processori che comunicano con essa con le due sole operazioni \lstinline{load} e \lstinline{store}.
 
-Tempo necessario al processore per eseguire un programma è dato dalla somma
-dei clock per instruction di ogni istruzione, moltiplicata al tempo di clock della CPU.
-Questo si traduce in:
+Per evitare ripetuti accessi, i dati vengono salvati temporaneamente su registri interni al processore stesso. Si definiscono ortogonali (caso RISC) se ogni registro può effettuare ogni operazione o non ortogonali nel caso in cui esistano registri specifici per specifiche operazioni (CISC).
+
+\subsubsection{Istruzioni}
+Il tempo impiegato al processore per eseguire un determinato programma è dipendente dal numero di cicli di clock che il processore impiega ad eseguire ogni istruzione. In altre parole, chiamato il tempo di clock $T_\mathit{ck}$ e $\mathit{CPI}_i$ il \textit{clock per instruction} impiegato dall'istruzione $N_i$, il tempo di esecuzione è calcolabile come:
 \[
-    T_{\mathit{CPU}} = T_{\mathit{ck}}\sum_i (\mathit{NI}_i \cdot \mathit{CPI}_i)
+    T_{\mathit{CPU}} = T_{\mathit{ck}}\sum_i (N_i \cdot \mathit{CPI}_i)
 \]
-L'obbiettivo RISC è quello di eseguire la maggior parte delle istruzioni in un solo ciclo di clock,
-e rendere l'implementazione più semplice in modo da ridurre la durata del tempo di clock $T_\mathit{CK}$.
+Le istruzioni a lunghezza fissa dell'architettura RISC, permettono di essere decodificate in un unico ciclo di clock.
+Inoltre, grazie alla logica hardware semplificata, tali architetture permettono di durata del tempo di clock $T_\mathit{ck}$ minore.
+
+Da come si può vedere in formula, entrambe queste caratteristiche portano una riduzione nel tempo di esecuzione complessivo di un programma.
 
 \end{document}
