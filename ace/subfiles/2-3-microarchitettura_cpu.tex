@@ -30,7 +30,7 @@ Una volta eseguita, in alcuni casi vengono scritti o letti dei dati dalla memori
 
 Ogni istruzione di questa ISA di riferimento può appartenere ad una delle tre seguenti categorie:
 \begin{itemize}
-    \item Istruzione aritmetico/logica \lstinline{add dest, reg1, reg2}
+    \item Istruzione aritmetico/logica \lstinline{add reg1, reg2, dest}
         \begin{figure}[h]
             \centering
             \begin{tikzpicture}[every node/.style={draw, minimum height=.6cm}]
@@ -93,41 +93,35 @@ Oltre al risultato  dell'operazione vengono tornati valori di flag aggiuntivi co
 \subsubsection{Load e Store}
 %35
 Load e store permettono rispettivamente lettura e scrittura in memoria.
-Entrambe prendono in ingresso un registro base, uno destinazione ed un offset. Per accedere al dato l'offset viene sommato
-al registro base ottenendo un nuovo indirizzo, il cui contenuto è salvato nel registro destinazione.
-I dati vengono direttamente presi dal bus attraverso buffer 3-state, lettura e scrittura possono essere disabilitate con i segnali
-$Mr$ (\textit{Memory Read}) e $Mw$ (\textit{Memory Write}),
+Entrambe prendono in ingresso un registro base, uno destinazione ed un offset.
+L'indirizzo su cui leggere/scrivere il dato contenuto nel registro destinazione viene ottenuto sommando l'offset al registro base.
+Per comunicare con la memoria si passa attraverso un unico bus, controllato da buffer 3state. Per leggere o scrivere è necessario abilitare i segnali
+\code{Mread} e \code{Mwrite}.
 
 \subsubsection{Register File}
 Componente che ha come ingressi 5 bit che identificano il primo registro, 5bit per il secondo registro,
-5bit per il registro destinazione, ed i rimanenti 32 per il dato in ingresso.
+5bit per il registro destinazione, ed i rimanenti 32 identificano il dato in ingresso.
 Le due porte in uscita riportano i dati letti rispettivamente dal registro sorgente 1 e 2.
 %49
 
-\subsection{CPU monociclo}
-% TODO: aggiungere disegno CPU monociclo
-In una CPU monociclo, tutte le istruzioni impiegano un solo ciclo di clock. È una struttura molto semplice, ma potenzialmente anche molto
-lenta, dato che il tempo di esecuzione di ogni istruzione necessita di essere pari al tempo di esecuzione dell'istruzione più lenta.
-
-Prendendo come esempio l'istruzione \lstinline{st R6,R1, 20},
-\begin{itemize}
-    \item in fase di fetch: recupero istruzione dalla memoria.
-    \item fase di decode
-    \item fase di execute: salva dato in memoria.
-\end{itemize}
-
 \def\tmono{T_\text{mono}}
 \def\tmulti{T_\text{multi}}
+\subsection{CPU monociclo}
+% TODO: aggiungere disegno CPU monociclo
+In una CPU monociclo, tutte le istruzioni impiegano un unico ciclo di clock. È una struttura molto semplice, ma potenzialmente anche molto
+lenta, dato che il tempo di esecuzione di ogni istruzione necessita di essere pari al tempo di esecuzione di quella più lenta.
 
-Dato che in un unico ciclo di clock devo eseguire sia fetch che store, devo necessariamente avere due memorie separate.
-È inevitabile l'uso di un'architettura di Harvard (pagina \pageref{sec:architettura_harvard}).
+Prendendo come esempio l'istruzione \lstinline{st R6,R1, 20},
+
+Dato che in un unico ciclo di clock devo eseguire sia fetch dell'istruzione che store, sono necessarie due memorie separate.
+È inevitabile l'uso di un'architettura di Harvard (vedi pagina \pageref{sec:architettura_harvard}).
 Oltre alla doppia memoria portata dall'architettura è necessario duplicare altre risorse, come ad esempio l'ALU, richiesta
 per incrementare sia valore del program counter che per calcolare l'indirizzo di destinazione del dato.
 
 Tra le varie operazioni richieste dall'ISA, il tempo di esecuzione maggiore è dovuto sicuramente alla \lstinline{load} (vedi
 tabella \ref{tab:tempi_esecuzione_monociclo}),
 che oltre alle fasi di fetch e decode richiede: calcoli dall'ALU, writeback ed accesso alla memoria.
-Chiamato il suo tempo di esecuzione $\tmono$ ed $N$ il numero di istruzioni, il tempo di esecuzione del programma è $\tmono \cdot N$.
+Chiamato il suo tempo di esecuzione $\tmono=82ns$ ed $N$ il numero di istruzioni, il tempo di esecuzione del programma è $\tmono \cdot N$.
 
 \begin{table}[h]
     \centering
@@ -159,26 +153,21 @@ Ne consegue che l'architettura multiciclo è in media più veloce dell'architett
     \centering
     \includegraphics[width=\textwidth]{architettura_cpu}
 \end{figure}
-Non è più necessario duplicare componenti come ALU e memoria, dato che l'accesso ai dati e incremento PC/calcolo registri è
-eseguito in due cicli di clock differenti.
+Un vantaggio che porta quest'architettura è che non necessita più di duplicare componenti come ALU e memoria, dato che le diverse fasi dell'istruzione sono divise in diversi cicli di clock evitando conflitti di risorse.
 
-% TODO: aggiungere schema generale architettura multiciclo (slide 60)
 \begin{itemize}
     \item Fetch:
-        Viene letto in memoria ll contenuto del program counter, e nello stesso ciclo attraverso l'alu aggiorno il program counter e lo
-        salvo in pc.
+        Dalla memoria viene letta l'istruzione indicata dal program counter. L'ALU incrementa il valore di quest'ultima per leggere la prossima istruzione al ciclo successivo.
     \item Decode:
-        Analogamente alla precedente, il codice operativo di PC entra in IR, e viene decodificato.
-        Leggo il contenuto dei registri R1 ed R2.
-        Utilizzo l'alu per calcolare a prescindere il valore del registro di destinazione (destinazione del salto condizionato
-        viene calcolata prima di verificare le condizioni)
+        Il codice operativo indicato dell'istruzione entra in \code{IR}, e viene assegnato il valore ai registri \code{R1} ed \code{R2}
+        L'ALU viene impiegata per calcolare il registro destinazione. In caso di salto condizionato, calcolo ugualmente il valore dell'indirizzo di destinazione, senza verificare le condizioni del salto.
     \item Operazione Aritmetica:
         Eseguo l'istruzione utilizzando i dati calcolati nelle fasi precedenti.
     \item Load e Store:
         Sempre attraverso buffer 3-state salvano o leggono dati dalla memoria all'indirizzo destinazione calcolato nelle fasi
         precedenti.
     \item Writeback:
-        In caso di operazione aritmetica prendo il valore in uscita dell'ALU e lo riporto nel register file nella porta dati.
+        In caso di operazione aritmetica prendo il valore in uscita dell'ALU e lo riporto nella porta dati del register file.
         In caso di load, il valore di uscita della memoria viene riportato nella porta dati del register file.
         In caso di JAL PC1 (valore precedente di PC) entra nel register file.
 \end{itemize}
@@ -187,7 +176,6 @@ Interfacce con l'esterno: bus di dati attraverso buffer 3-state, in uscita al bu
 
 
 %2.7
-\newcommand{\code}[1]{\oldlstinline[keywordstyle=\ttfamily]{#1}}
 
 \subsubsection{Segnali di controllo architettura multiciclo}
 La fase di instruction fetch, comune a tutte le istruzioni, richiede di leggere l'istruzione corrente dalla memoria ed
