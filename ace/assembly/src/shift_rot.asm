@@ -25,17 +25,17 @@ End:    mov ax, 4c00h
 
 ; Print binary value of dl
 DlRepr: mov cx, 8
-        rol dl, 1
+        rol dl, 1    ; Start printing from MSB, equivalent of ror dl, 7
 
         mov ah, 0eh
         xor bx, bx
 
 r_loop: mov al, dl
-        and al, 1
-        add al, '0'
+        and al, 1    ; Get LSB
+        add al, '0'  ; LSB to Ascii
 
         int 10h
-        rol dl, 1
+        rol dl, 1    ; Rotate number to next digit
 
         loop r_loop
 
