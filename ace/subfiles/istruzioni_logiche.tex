@@ -1,0 +1,38 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\newpage
+\section{Istruzioni di logica binaria}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|l|}
+        \hline
+        \lstinline{and   dest,sorg}  \\
+        \lstinline{not   dest}   \\
+        \lstinline{or    dest,sorg}   \\
+        \lstinline{test  dest,sorg}   \\
+        \lstinline{xor   dest,sorg}   \\
+        \hline
+    \end{tabu}
+\end{table}
+\lstinline{and}, \lstinline{not}, \lstinline{or}, \lstinline{xor} eseguono l'operazione logica sui bit dei registri forniti come parametro.
+\lstinline{test} funziona come \lstinline{and} modifica i flag ma non salva il risultato. È spesso utilizzato per controllare se determinati bit siano ad 1 es: \lstinline{test al, 0010000b}.
+
+\subsection{Shift e rotate}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|l|l|}
+        \hline
+        \lstinline{shl dest, count} & \lstinline{sal dest, count}\\
+        \lstinline{shr dest, count} & \lstinline{sar dest, count}\\
+        \lstinline{rol dest, count} & \lstinline{rcl dest, count}\\
+        \lstinline{ror dest, count} & \lstinline{rcr dest, count}\\
+        \hline
+    \end{tabu}
+\end{table}
+Gli shift aritmetici \lstinline{sar} e \lstinline{sal} si differenziano dagli shift logici \lstinline{shl} e \lstinline{shr} perché il bit di segno non viene shiftato, rimanendo fisso di posizione.
+\\
+Nelle istruzioni \lstinline{rcl} ed \lstinline{rcr} il bit shiftato viene prima inserito nel flag di carry ed alla rotazione successiva inserito nell'estremo opposto del byte.
+Le istruzioni \lstinline{rol} e \lstinline{ror} il bit shiftato viene inserito immediatamente nell'estremo opposto, inoltre viene salvato anche nel carry flag.
+
+\end{document}

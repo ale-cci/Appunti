@@ -27,32 +27,4 @@ FarPtr:     DD String           ; Contiene offset ed indirizzo del segmento
 \subsubsection{Esempio utilizzo Variabili}
 \lstinputlisting{ascii_repr.asm}
 All'inizio del programma è richiesto che \ds punti alla sezione dei dati per accedere alle variabili dichiarate
-\subsection{Istruzioni di logica binaria}
-\begin{table}[h]
-    \centering
-    \begin{tabu}{|l|}
-        \hline
-        \lstinline{and   dest,sorg}  \\
-        \lstinline{not   dest}   \\
-        \lstinline{or    dest,sorg}   \\
-        \lstinline{test  dest,sorg}   \\
-        \lstinline{xor   dest,sorg}   \\
-        \hline
-    \end{tabu}
-\end{table}
-\lstinline{and}, \lstinline{not}, \lstinline{or}, \lstinline{xor} eseguono l'operazione logica sui bit dei registri forniti come parametro.
-\lstinline{test} funziona come \lstinline{and} modifica i flag ma non salva il risultato. È spesso utilizzato per controllare se determinati bit siano ad 1 es: \lstinline{test al, 0010000b}.
-
-\subsection{Shift e rotate}
-\begin{table}[h]
-    \centering
-    \begin{tabu}{|l|l|}
-        \hline
-        \lstinline{shl dest, count} & Shift a sinistra di \code{count} positioni\\
-        \lstinline{shr dest, count} & Shift a destra di \code{count} positioni\\
-        \lstinline{sal dest, count} & Spostamento aritmetico a destra\
-        \hline
-    \end{tabu}
-\end{table}
-
 \end{document}
