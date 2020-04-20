@@ -132,8 +132,6 @@ vengono eseguite in ordine le operazioni di:
 L'istruzione duale \lstinline{iret}, recupera le istruzioni di IP, CS e register flag precedentemente
 salvate nello stack.
 
-\newpage
-\noindent
 Esistono due possibili categorie di interrupt:
 \begin{itemize}
     \item Interrupt BIOS, che dal nome agiscono direttamente a livello di BIOS.
@@ -163,5 +161,9 @@ Ogni interrupt ha un elenco di funzioni, ed il registro \ah specifica quale util
     \hline
 \end{tabu}
 \end{center}
+
+\subsubsection{Esempio di utilizzo interrupt}
+\lstinputlisting{interrupt_example.asm}
+
 
 \end{document}

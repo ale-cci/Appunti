@@ -2,6 +2,7 @@
 \documentclass{custom}
 \usetikzlibrary{calc,positioning,shapes,arrows,backgrounds,external,fit}
 
+\lstset{inputpath=assembly/src}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \graphicspath{{./img/}}
@@ -30,6 +31,7 @@
 \newcommand\zf{\lstinline{zf}}
 \renewcommand\sf{\lstinline{sf}}
 \newcommand\of{\lstinline{of}}
+\newcommand\ds{\lstinline{DS}}
 
 
 \newcommand{\code}[1]{\oldlstinline[keywordstyle=\ttfamily]{#1}}
@@ -65,5 +67,6 @@
 \subfile{subfiles/4-6_aritmetica_binaria}
 \subfile{subfiles/trasferimento_di_controllo}
 
+\subfile{subfiles/definizione_dati}
 %[nextsection]
 \end{document}

@@ -1,0 +1,58 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Definizione Dati}
+La sintassi utilizzata per definire un dato in assembly è
+necessaria una label, non richiesta ma utile per avere un riferimento per accedere al dato (facoltativo) ;
+il tipo del dato, ed i valori per l'inizializzazione, che possono essere uno o più separati da virgola.
+
+I tipi di dato a disposizione sono \lstinline{DB} (\textit{Define Byte} 8bit), \lstinline{DW} (\textit{Define Word} 16bit) e \lstinline{DD} (\textit{Define doubleword} 32bbit).
+\\
+Per dichiarare dei dati evitando l'inizializzazione è possibile utilizzare rispettivamente \lstinline{RESB}, \lstinline{RESW} e \lstinline{RESW}.
+
+\begin{lstlisting}
+ByteVar:    DB 0                ; Byte inizializzato a 0
+ByteArray:  DB 1,2,3,4          ; Array di 4 byte
+String:     DB '8086',0dh,0ah   ; Array di 6 caratteri (4 + CR/LF)
+FiveTh:     DW 100*50           ; Assegnamento risultato operazione
+Zeros:      times 256 DB 0      ; Array di 256 0
+
+Table:      RESB 50             ; Array di 50 byte non inizializzati
+
+NearPtr:    DW String           ; Contiene l'offset di String (NEAR)
+FarPtr:     DD String           ; Contiene offset ed indirizzo del segmento
+                                ; di String (FAR)
+\end{lstlisting}
+
+\subsubsection{Esempio utilizzo Variabili}
+\lstinputlisting{ascii_repr.asm}
+All'inizio del programma è richiesto che \ds punti alla sezione dei dati per accedere alle variabili dichiarate
+\subsection{Istruzioni di logica binaria}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|l|}
+        \hline
+        \lstinline{and   dest,sorg}  \\
+        \lstinline{not   dest}   \\
+        \lstinline{or    dest,sorg}   \\
+        \lstinline{test  dest,sorg}   \\
+        \lstinline{xor   dest,sorg}   \\
+        \hline
+    \end{tabu}
+\end{table}
+\lstinline{and}, \lstinline{not}, \lstinline{or}, \lstinline{xor} eseguono l'operazione logica sui bit dei registri forniti come parametro.
+\lstinline{test} funziona come \lstinline{and} modifica i flag ma non salva il risultato. È spesso utilizzato per controllare se determinati bit siano ad 1 es: \lstinline{test al, 0010000b}.
+
+\subsection{Shift e rotate}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|l|l|}
+        \hline
+        \lstinline{shl dest, count} & Shift a sinistra di \code{count} positioni\\
+        \lstinline{shr dest, count} & Shift a destra di \code{count} positioni\\
+        \lstinline{sal dest, count} & Spostamento aritmetico a destra\
+        \hline
+    \end{tabu}
+\end{table}
+
+\end{document}
