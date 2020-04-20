@@ -1,4 +1,4 @@
-;CPU 8086
+CPU 8086
 
 SECTION data
 number: DB 10010111b
@@ -25,7 +25,7 @@ End:    mov ax, 4c00h
 
 ; Print binary value of dl
 DlRepr: mov cx, 8
-        ror dl, 7
+        rol dl, 1
 
         mov ah, 0eh
         xor bx, bx
