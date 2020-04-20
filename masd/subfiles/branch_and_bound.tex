@@ -77,4 +77,58 @@ da cui $L_B = f(\bar{x})$.
 Per trovare il minimo di una funzione, o consideriamo $-f(x)$, o invertiamo il ruolo di $L_B$ ed $U_B$
 
 %euristiche 26
+\subsection{Knapsack Problem}
+È dato uno zaino con capacità $b$ (intero positivo) ed un numero di oggetti $n$.
+A ciascun oggetto $i$ è associato un peso $p_i$ ed un valore $v_i$.
+\\
+Il problema consiste trovare un gruppo di oggetti il cui peso sia inferiore alla capacità $b$, e valore cumulativo sia massimo.
+
+Applichiamo un modello matematico per studiare questo modello.
+Indichiamo con $x_i = 1$ gli oggetti che sono presi nello zaino, e con $x_i = 0$ gli oggetti non presi.
+In tal caso $\sum^n_i p_i x_i \le b$ e $\sum_i^n v_i x_i$ è massima.
+\subsubsection{Calcolo dell'upper bound}
+Aggiungendo l'ipotesi che gli oggetti possano essere inseriti parzialmente: $x \in [0,1]$
+\begin{enumerate}
+    \item Riordiniamo gli oggetti in ordine non crescente rispetto ai rapporti peso/valore.
+    \item Calcoliamo i valori $b - p_1$, $b - p_1 - p_2$, \ldots
+        Calcoliamo il massimo valore di $r$ per cui $b - \sum^{r+1}_{i=1} p_i > 0$ risulta vera.
+        \\
+        Nel caso in cui non si arriva ad un valore negativo, allora la soluzione ottima è mettere tutti gli oggetti nello zaino.
+    \item \label{enum:calc_ub} La soluzione ottima del rilassamento lineare è
+        \begin{align*}
+            &x_1\dots x_r = 1 \quad , \quad x_{r+2} \dots x_n = 0 \\
+            &x_{r+1} = \frac{b - \sum^r_{j=1} p_j}{p_r +1}
+        \end{align*}
+        con valore ottimo $\sum^r v_j + v_{r+1}\frac{b - \sum^r p_j}{p_{r+1}}$.
+    \item $x_1 \dots x_r$ è una soluzione ammissibile al problema originario, quindi utilizziamo quella per calcolare il lower bound.
+        Per upper bound, prendiamo il valore ottimo calcolato al punto \ref{enum:calc_ub} arrotondato per difetto.
+\end{enumerate}
+
+\subsubsection{Operazione di branching}
+Indichiamo con $S(I_0, I_1)$ tutti i sottoinsiemi che non contengono elementi in $I_0$ ma contengono tutti gli elementi appartenenti ad $I_1$.
+Supponendo di non essere nel caso banale in cui non tutto gli oggetti sono contenuti nello zaino,
+utilizziamo la regola di branching $S(\{r + 1\}, \emptyset)$ tutti i sottoinsiemi in cui non è presente l'oggetto $r +1$ e $S(\emptyset, \{r + 1\})$ tutti i sottoinsiemi in cui è presente $r + 1$.
+
+Per calcolare l'upper bound di questi insiemi al punto \ref{enum:calc_ub} basta forzare nella formula tutti gli elementi in $I_1$ e non prendere in considerazione gli elementi in $I_0$.
+
+\subsubsection{Procedura di calcolo}
+\begin{enumerate}
+    \item Caso base: se $b - \sum_{i \in I_1} p_i < 0$ allora il nodo non ha soluzioni ammissibili. In tal caso poniamo $U(S(I_0, I_1)) = -\infty$.
+    \item Altrimenti trovo il massimo valore di $r$ per cui $b - \sum_{i \in I_1} p_i -\sum^{r}_{i \notin I_1} p_i \ge 0$.
+    \item Se esiste tale valore di $r$ allora l'upper bound di tale insieme è
+        \[
+            \sum_{i \in I_1} v_i + \sum_{h=1}^r v_{i_h} + \Big\lfloor v_{i_{r+1}} \frac{b - \sum_{i\in I_1} p_i - \sum^r_{h=1} p_{i_h}}{p_{i_{r+1}}} \Big\rfloor
+        \]
+        Con soluzione ammissibile $N = I_1 \cup \{i_1\dots i_r\}$
+    \item Se si sottraggono i pesi di tutti gli oggetti senza mai arrivare ad un valore negativo,
+        l'upper bound sarà semplicemente:
+        \[
+            \sum_{i \in I_1} v_i + \sum_{h=1}^k v_{i_h}
+        \]
+        Con soluzione ammissibile $N = I_1 \cup I_f \in S$
+\end{enumerate}
+\subsubsection{Complessità}
+Il caso peggiore si ha quando non si riesce a cancellare alcun nodo. In tal caso il numero di  nodi generati è dell'ordine $2^n$.
+Quindi non è migliore rispetto ad un algoritmo di enumerazione, ma mediamente il tempo di esecuzione è minore.
+Questo è valido per tutti gli algoritmi di branch and bound.
 \end{document}
