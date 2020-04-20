@@ -34,6 +34,7 @@ Gli shift aritmetici \lstinline{sar} e \lstinline{sal} si differenziano dagli sh
 \\
 Nelle istruzioni \lstinline{rcl} ed \lstinline{rcr} il bit shiftato viene prima inserito nel flag di carry ed alla rotazione successiva inserito nell'estremo opposto del byte.
 Le istruzioni \lstinline{rol} e \lstinline{ror} il bit shiftato viene inserito immediatamente nell'estremo opposto, inoltre viene salvato anche nel carry flag.
+\warnbox{Se viene specificato \code{CPU 8086}, nel caso in cui \code{dest} sia diverso da 1, è richiesto passarne il valore attraverso il registro {\color{clr-primary}cx}.}
 \subsubsection{Esempio}
 \lstinputlisting[firstline=3]{shift_rot.asm}
 
