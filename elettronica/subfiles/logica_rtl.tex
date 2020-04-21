@@ -147,4 +147,193 @@ diminuire, per evitare che la somma superi \ls.
 La condizione ottimale per avere massimo margine ai disturbi è quindi in caso in cui $N_L$ e $N_H$ siano simmetrici.
 (nel caso di approssimazione i punti coincidono con vh e vl, dato che per approssimazione non ci sono punti con derivata
 = -1, passa dal valore in modulo < 1 a modulo > 1)
+
+\newpage
+\subsection{Porta logica NOR}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above] {$V_{i1}$}
+        to[R, l=$R_B$, i=$I_B$, *-] (2,0)
+        node[npn, anchor=B](tl){}
+
+
+        (tl.C) to[short,] ++(2,0)
+        node[npn, anchor=C, xscale=-1](tr){}
+
+        (tl.C) ++(1, 0) node[circ]{}
+        node[below]{$V_u$}
+        to[R, l=$R_C$, i<=$I_{RC}$, -*] ++(0, 2)
+        node[right]{$V_{cc}$}
+
+        (tr.B) to[R, l=$R_B$, i<=$I_B$, -*] ++(2, 0)
+        node[above]{$V_{i2}$}
+        (tl.E) node[ground]{}
+        (tr.E) node[ground]{}
+
+        (tl) node[right]{$T_1$}
+        (tr) node[left]{$T_2$}
+        ;
+    \end{circuitikz}
+\end{figure}
+
+Supponendo i valori delle resistenze $R_C = 1k\Omega$ e $R_B = 10k\Omega$, e $\beta_F = 100$
+vogliamo valutare il comportamento di questa rete al variare dei due ingressi $V_{i1}$ e $V_{i2}$, prendendo il caso di segnali in ingresso digitali:
+$\vi = \{\vh, \vl\}$.
+Le combinazioni possibili in ingresso sono quindi enumerabili e studiabili individualmente.
+\begin{tcolorbox}[title=Equazioni Generali]
+    \begin{align*}
+        &\I{RC} = \I{C1} + \I{C2}\\
+        &\vi - R_B \I{B} - \vbe = 0
+    \end{align*}
+\end{tcolorbox}
+Nel caso di un qualsiasi transistore spento, considerando che $\vbe < V_\gamma$ per ipotesi, otteniamo $\vi < V_\gamma$.
+\begin{tcolorbox}[title={Per ${\vi}_1 = {\vi}_2 = \vl$}]
+    \begin{align*}
+        \vi < V_\gamma\\
+        \vu = \V{cc}
+    \end{align*}
+\end{tcolorbox}
+\begin{tcolorbox}[title={Per ${\vi}_1 \vl, {\vi}_2 = \vh$}]
+    Osservando l'alta tensione ricevuta all'ingresso, è ragionevole ipotizzare che $T_2$ si trovi in regime di funzionamento saturo.
+    Verificando quindi le ipotesi:
+    \begin{align*}
+        &\I{B} = \frac{\V{cc} - V_\gamma}{R_B} = 0.425mA > 0\\
+        &\I{C} = \frac{\V{cc} - \vcesat}{R_C} = 4.8 mA < \beta_F \I{B} = 42.5mA\\
+    \end{align*}
+    Per cui in questo caso $\vu = \vcesat = \vl$
+\end{tcolorbox}
+\begin{tcolorbox}[title={Per ${\vi}_1 = {\vi}_2 = \vh$}]
+    Per ragionamento analogo al caso precedente, ci aspettiamo che entrambi i transistori siano saturi. Quindi $\vu = \vcesat = \vl$
+    \begin{align*}
+        &\I{B} = \frac{\V{cc} - V_\gamma}{R_B} = 0.425mA > 0\\
+        &\I{RC} = \frac{\V{cc} - \vcesat}{R_C} = 4.8 mA < \beta_F \I{B} = 42.5mA\\
+    \end{align*}
+    Essendo il circuito perfettamente simmetrico non c'è motivo di ipotizzare che $\I{C1} \neq \I{C2}$. Per cui $\I{C1} = \I{C2} = 4.8mA$,
+    quindi sono verificate entrambe le condizioni $\I{C} < \beta_F \I{B}$.
+\end{tcolorbox}
+Questa rete si comporta come una porta logica NOR.
+La rete composta dai transistori $T_1$ e $T_2$ è definita come \textbf{rete di pulldown}, ovvero quando è accesa, trascina il valore di uscita verso il valore basso.
+Analogamente è possibile interpretare la rete composta dalla resistenza $R_c$ come una \textbf{rete di pullup}: quando non è contrastata da reti di pulldown attive, l'uscita viene portata a \vh da $R_c$ dove non circola corrente.
+
+Osserviamo che questo circuito si comporta allo stesso modo se alla rete di pulldown è composta da più di due transistori, dato che la corrente $\I{RC}$ sarebbe suddivisa equamente tra tutti i transistori accesi, mantenendo vera l'ipotesi $\I{C} < \beta_F \I{B}$. Quindi questo circuito è generalizzabile ad una porta NOR a numero arbitrario di ingressi.
+
+L'insieme degli ingressi prende il nome di FAN-IN. Analogamente il numero delle uscite prende il nome di FAN-OUT.
+
+L'operatore NOR rappresenta di per sé una famiglia funzionalmente completa. Per questo con logica RTL è possibile realizzare qualsiasi funzione combinatoria.
+
+Manca da analizzare se la connessione in serie delle seguenti porte NOR, mantenga il valore del segnale.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above] {$V_{i1}$}
+        to[R, l=$R_B$, i=$I_B$, *-] (2,0)
+        node[npn, anchor=B](tl){}
+
+        (tl.E) node[ground]{}
+        (tl.C) --++(1, 0)
+        node[circ]{} node[anchor=north]{\vu}
+        to[R] ++(0, 2)
+        node[vcc]{} node[anchor=north east]{$\V{cc}$}
+        ;
+
+        \draw (tl.C) -- ++(2, 0) coordinate(x)
+        -- (x |- tl.B)
+        node[circ]{} node[anchor=north east]{$\vi'$}
+        to[R] ++(2, 0)
+        node[npn, anchor=B](tr){}
+
+        (tr.E) node[ground]{}
+        (tr.C) to[R] ++(0, 2)
+        node[vcc]{} node[anchor=north east]{$\V{cc}$}
+
+        (tl) node[right]{$T$}
+        (tr) node[right]{$T'$}
+        ;
+    \end{circuitikz}
+\end{figure}
+\begin{tcolorbox}[title={$T$ OFF }]
+Partendo ad analizzare la condizione per cui $T$ OFF otteniamo che $\vu = \V{cc} - R_C \I{B}$
+Nel caso in cui anche $T'$ sia OFF, allora $\I{B}'$ è 0 e di conseguenza:
+\begin{align*}
+    &\vu = \V{cc}\\
+    &\vu = \vi' -\cancel{R\I{B}'} = \vbe'
+\end{align*}
+Ma ciò non è possibile dato che se $T'$ è OFF, allora $\vbe' < V_\gamma$. Quindi $T'$ non può essere OFF se $T$ è OFF.
+Quindi $T'$ è necessariamente acceso, con $\vbe'=V_\gamma$. Dall'equazione di kirkoff al nodo \vu:
+\[
+    \frac{\V{cc} - \vu}{R_C} = \frac{\vu - V_\gamma}{R_B}
+\]
+Ottenendo $\vu = \frac{R_B \V{CC} + R_C V_\gamma}{R_B + R_C} = < V_\gamma$ svolgendo la disequazione si ottiene: $V_\gamma < \V{cc}$.
+Sostituendo inoltre i dati utilizzati nel circuito precedente, otteniamo $\vu = 4.61V$
+\end{tcolorbox}
+
+\begin{tcolorbox}[title={$T$ in AD}]
+    \[
+        \vu = \V{cc} - R_C \Big\{\beta_f \frac{\vi - V_\gamma}{R_B} + \frac{\vu - V_\gamma}{R_B}\Big\}
+    \]
+    Da cui
+    \[
+        \vu = {\color{clr-primary} \frac{R_B \V{cc} + R_C V_\gamma}{R_B + R_C}} - {\color{red}\frac{\beta_F R_C}{R_B + R_C}}(\vi - V_\gamma)
+    \]
+    Osserviamo come il termine blu è identico a quello calcolato in precedenza, nel tratto di regione attiva diretta, mentre il tratto rosso è un guadagno di modulo minore rispetto a quello di prima ($\frac{\beta_F R_C}{R_B}$).
+
+    Questa condizione è valida fino a quando o $T$ passa alla regione di saturazione ($\vu=\vcesat$) o $T'$ passa in regione attiva diretta ($\vu = V_\gamma$).
+    Dato che $\vu < V_\gamma$ avverrà prima, sostituendo tale valore nell'equazione di \vu segue $\vi = 1.175V$
+\end{tcolorbox}
+\begin{tcolorbox}[title={$T$ in AD e $T'$ OFF}]
+    Questo tratto di caratteristica corrisponde esattamente al precedente.
+\end{tcolorbox}
+
+\begin{tikzpicture}
+    \def\rc{80}
+    \def\rb{400}
+    \def\betaf{30}
+
+    \begin{axis}[ymax=6, ymin=-1, xmin=-1]
+        \addplot[thin, red, domain=-5:\vgamma]{5};
+        \addplot[thin, red, domain=\vgamma:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
+        \addplot[thin, red, domain={(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}:5]{\vcesatval};
+
+        \addplot[thin, black, domain=-5:\vgamma]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc)};
+        \addplot[thin, black, domain=\vgamma:{-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc) - (\betaf*\rc)/(\rb + \rc) * (x - \vgamma)};
+        \addplot[thin, black, domain={-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
+
+        \addplot[thin, lightgray, dashed] coordinates {(\vgamma, 0) (\vgamma, 5)};
+        \addplot[thin, lightgray, dashed, domain=0:{-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}] {\vgamma};
+        \draw (\vgamma, 0) node[below] {$V_\gamma$}
+              (0, \vgamma) node[left]{$V_\gamma$};
+
+        \draw (\vgamma, 5) node[circ]{}
+            node[anchor=south west]{\scriptsize $(\vilmax, \vohmin)$}
+            ({(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}, \vcesatval) node[circ]{}
+            node[anchor=south west]{\scriptsize $(\vihmin, \volmax)$}
+            ;
+    \end{axis}
+\end{tikzpicture}
+
+Delle quattro coordinate utilizzate per calcolare il margine di rumore, solo una è modificata dal fatto che il FAN-OUT è modificato da 0 a 1.
+Il margine $\nml$ definito quindi per il livello basso rimane invariato: $\nml = \vilmax - \volmax = V_\gamma - \vcesat = 0.55 V$.
+Diversamente il margine $\nmh$ varia: $\nmh = \vohmin - \vihmin = 4.61 - 1.23 = 3.37V$.
+
+Il margine complessivo, rimanendo definito come il minimo tra $\nml$ e $\nmh$ rimane invariato a $0.55V$.
+
+Nel caso di un FAN-OUT generico ad $n$ porte il valore $\nmh$ tenderà a calare, dato che, la corrente del transitorio di pullup è richiamata dagli altri componenti connessi.
+
+Generalizzando con $n$ componenti connessi che condividono \vu come tensione in ingresso, dato che tutti hanno la stessa \vi, tutti i transistori si troveranno nella stessa regione di funzionamento. Quindi le correnti in ingresso $\I{B}$ necessariamente coincidono quindi $\I{RC} = \I{C} + n \I{B}'$.
+
+Nell'ipotesi che il transistore $T$ sia spento:
+\begin{align*}
+    &\I{RC} = \frac{\V{cc} - \vu}{R_C} \\
+    &\I{B}' = \frac{\vu - V_\gamma}{R_B}
+\end{align*}
+Ottenendo la generica relazione:
+\[
+    \vu(n) = \vohmin(n) = \frac{R_B \V{cc} + n R_C V_\gamma}{R_B + n R_C}
+\]
+Da cui $\nmh = \vohmin(n) - 1.23$. Definiamo con FAN-OUTmax il massimo punto in per cui il valore di $\nmh$ rimane superiore a $\nml$.
+Risolvendo l'equazione $0.55 = \vohmin(n) - 1.23$ otteniamo $n = 31.26$, per questo FAN-OUTmax è 31.
 \end{document}
