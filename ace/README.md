@@ -8,7 +8,7 @@ Nel file [dosbox.conf](./assembly/dosbox.conf) è presente la mia configurazione
 Richiede la presenza di [NG](https://elly.dia.unipr.it/2019/pluginfile.php/22353/mod_page/content/5/Ng.zip) e [TASM](https://elly.dia.unipr.it/2019/pluginfile.php/22353/mod_page/content/5/tasm.zip) nella stessa cartella del file.
 
 ### Note DOSBOX
-Prendendo come esempio il programma assembly [assembly/src/hwrld.asm]();
+Prendendo come esempio il programma assembly [assembly/src/hworld.asm](assembly/src/hworld.asm);
 
 
 Per compilarlo

@@ -1,0 +1,76 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\newpage
+\section{Operazioni su stringhe di dati} Ogni tipo di dati, composto da più di un valore è trattato come una stringa di dati.
+Considerando quindi due stringhe \code{str1} e \code{str2} ho a disposizione le operazioni:
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|c|l|}
+        \hline
+        \lstinline{cmps} & Compare String \\
+        \hline
+        \lstinline{movs} & Move string \\
+        \hline
+        \lstinline{lods} & Load string, carica primo elemento della stringa in \al/\ax \\
+        \hline
+        \lstinline{stos} & Store \al/\ax nell'indice indicato dalla stringa\\
+        \hline
+        \lstinline{scas} & Scan string, confronta \al/\ax con una stringa\\
+        \hline
+    \end{tabu}
+\end{table}
+
+Per tutte queste operazioni, l'indirizzo della stringa sorgente è sempre \lstinline{[ds:si]}, mentre quella destinazione \lstinline{[es:di]}. Gli indirizzamenti \lstinline{ds} e \lstinline{es} sono indicati da due registri differenti per permettere spostamento di dati tra due segmenti di memoria differenti.
+
+Inoltre ogni operazione ha una sua forma con \code{b} o \code{w} indicati al termine, per esplicitare operazioni su byte o word.
+
+Le operazioni operano su singoli elementi della stringa, ad esempio se eseguita \lstinline{movsb} solo un byte è spostato da sorgente a destinazione, ed il registro \cx è incrementato/decrementato di 1. Per questo motivo esistono le funzioni di utilità che prendono come unico operando le istruzioni precedenti:
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{|c|l|}
+        \hline
+        \lstinline{rep},\lstinline{repe},\lstinline{repz} & Ripetono l'operazione fino a quando \lstinline{cx != 0} e \lstinline{zf=1} decrementando \cx\\
+        \hline
+        \lstinline{repne},\lstinline{repnz} & Ripetono l'operazione fino a quando \lstinline{cx != 0} e \lstinline{zf=0} decrementando \cx\\
+        \hline
+    \end{tabu}
+\end{table}
+
+Le doppie condizioni d'uscita servono per uscire dalla ripetizione quando termino l'operazione o quando trovo un confronto positivo nel caso di \lstinline{cmps}/\lstinline{scas}.
+In altre parole nel caso di \lstinline{cmps} tra due stringhe utilizzo \lstinline{repe} quando voglio trovare il primo elemento diverso, e \lstinline{repne} quando voglio trovare il primo elemento uguale.
+
+Di default tutte queste operazioni incrementano l'indirizzo \cx, scorrendo le stringhe da sinistra a destra. Per invertire il senso di scorrimento è necessario mettere ad 1 \code{DF} (\textit{Direction Flag}).
+
+\subsubsection{Istruzioni per il controllo dei flag}
+\begin{center}
+    \begin{tabu}{|l|l|}
+        \hline
+        \lstinline{clc}/\lstinline{stc} & Clear/Set Carry Flag \\
+        \hline
+        \lstinline{cld}/\lstinline{std} & Clear/Set Direction Flag\\
+        \hline
+        \lstinline{cli}/\lstinline{sti} & Clear/Set Interrupt Flag\\
+        \hline
+        \lstinline{cmc} & Complement Carry Flag: (Toggle \code{cf})\\
+        \hline
+    \end{tabu}
+    \begin{tabu}{|l|l|}
+        \hline
+        \lstinline{lahf} & Load flag in \ah \\
+        \hline
+        \lstinline{sahf} & Store \ah into flag\\
+        \hline
+        \lstinline{popf} & Pop flag from stack\\
+        \hline
+        \lstinline{pushf} & Push flag into stack\\
+        \hline
+    \end{tabu}
+\end{center}
+
+Le istruzioni \lstinline{lahf} e \lstinline{sahf} funzionano operano solo sui flag di stato: \code{SF}, \code{ZF}, \code{AF}, \code{CF} e \code{PF}. Istruzioni come \lstinline{clc}, \lstinline{stc} e \lstinline{cmc} sono usate per operazioni aritmetiche a più byte.
+
+
+\end{document}

@@ -174,36 +174,39 @@ Interfacce con l'esterno: bus di dati attraverso buffer 3-state, in uscita al bu
 
 \subsubsection{Segnali di controllo architettura multiciclo}
 La fase di instruction fetch, comune a tutte le istruzioni, richiede di leggere l'istruzione corrente dalla memoria ed
-incrementare il program counter di 4. Per queste operazioni, sono necessari i segnali:
-\begin{tabular}{ll}
-    \code{M_r}& Memory Read\\
-    \code{In} &abilitazione buffer 3state\\
-    \code{PC_w}& program counter write\\
-    \code{PC1_w}& program counter 1 write\\
-    \code{IR_w} &instruction register write
-\end{tabular}
+incrementare il program counter di 4. Per queste operazioni necessita dei segnali:
 
-Ed i seguenti segnali di selezione:
-
-\begin{tabular}{ll}
-    \code{INDsorg =1}& per scegliere di inviare alla memoria il valore del program counter\\
-    \code{PCsorg=0} &per selezionare come ingresso di PC, PC+4\\
-    \code{ALUsorgA = 0} &seleziona PC come ingresso A della ALU\\
-    \code{ALUsorgB = 0} &seleziona 4 come ingresso B della ALU\\
-    \code{OPALU =  ADD} &per eseguire una somma con la ALU
-\end{tabular}
+    \begin{tabular}{ll}
+        \code{Mread}  & Memory Read\\
+        \code{In}   & abilitazione buffer 3state\\
+        \code{PCwrite} & program counter write\\
+        \code{PC1write}& program counter 1 write\\
+        \code{IRwrite} & instruction register write
+    \end{tabular}
+    \hspace{3em}
+    \begin{tabular}{ll}
+        \code{INDsorg  = 1}   &invia al buffer in uscita \code{PC}\\
+        \code{ALUsorgA = 0}   &\code{PC} come ingresso \code{A} dell'ALU\\
+        \code{ALUsorgB = 0}   &\code{4} come ingresso \code{B} dell'ALU\\
+        \code{OPALU    = ADD} &operazione somma\\
+        \code{PCsorg   = 0}   &aggiorna \code{PC} in  \code{PC + 4}
+    \end{tabular}
 
 Nella fase di decode è richiesto di decodificare il codice operativo, inviare i due registri sorgente al register file
-e sfrutto l'ALU non utilizzata per calcolare in anticipo l'indirizzo di destinazione gli eventuali salti condizionati.
+e sfrutto l'ALU non utilizzata per calcolare in anticipo l'indirizzo di destinazione gli eventuali salti condizionati:
 
-Quindi è necessario il segnale \code{DESTw} per abilitare scrittura nel registro di destinazione, e i selettori
-per l'ALU: \code{ALUsorgA=0}, \code{ALUsorgB=2} per indicare rispettivamente PC e l'offset come ingressi, e
-\code{OPALU=ADD} per sommarli.
+\begin{tabular}{ll}
+    \code{DESTwrite} & abilitazione scrittura nel registro destinazione\\
+    \code{ALUsorgA=0}& \code{PC} in ingresso \\
+    \code{ALUsorbB=2}& \code{offset} dell'istruzione in ingresso \\
+    \code{OPALU = ADD} & operazione somma
+\end{tabular}
 
 Passate queste due fasi, comuni a tutte le operazioni, vi è una differenziazione a seconda del tipo di istruzione
 contenuta in \code{IR}.
 In caso di istruzioni aritmetiche, composte da execute (T3) e writeback (T5), in prima fase, sono richiesti i segnali
-per specificare le operazioni dell'alu (A = 1, B = 2, OP=ADD).
+per specificare le operazioni dell'alu: \code{ALUsorgA=1}, \code{ALUsorgB=2} mentre \code{OPALU} assume il valore dell'istruzione da eseguire.
+
 In T5 è richiesto \code{Rw} per scrivere nel registro destinazione contenuto in \code{RF}, e \code{Rsorg = 0}
 \code{Rdest=0} per scrivere nel registro destinazione il alu-out.
 L'istruzione passa anche attraverso una fase di memory (T4) ma vengono solamente mantenuti i valori in T3, tenere
@@ -230,32 +233,42 @@ In caso di salti incondizionati esiste la sola fase T3 con \code{PCw=1} e \code{
 L'ultimo caso \lstinline{jal}, è del tutto identico ad un salto condizionato, solo che viene seguito da una fase di
 writeback, in cui salvare \code{PC1} in \code{R31}.
 \subsection{Prestazioni dell'architettura multiciclo}
-\begin{wrapfigure}{R}{0pt}
-    \centering
-    \begin{tabu}{|l|lc|c|}
-        \hline
-        Aritm  & 5& 150ns &40\%\\
-        \hline
-        Load & 5& 150ns   &25\%\\
-        \hline
-        Store & 4& 120ns  &10\%\\
-        \hline
-        JE/JS& 3& 90ns    &12\%\\
-        \hline
-        JMP/JR& 3& 90ns   &6\%\\
-        \hline
-        JAL& 5& 150ns     &2\%\\
-        \hline
-    \end{tabu}
-\end{wrapfigure}
-Diversamente dall'architettura monociclo in cui $\tmono$ dipende dall'istruzione più lenta, il tempo $\tmulti$ dipende dallo
-stadio più lento.
-Prendendo come riferimento la tabella dei tempi di esecuzione dell'architettura monociclo (vedi pagina
-\pageref{tab:tempi_esecuzione_monociclo}), ne consegue $\tmulti =30$
-Confrontando quindi le varie fasi ottengo chiaramente che i tempi di esecuzione delle singole istruzioni, ed il tempo di
-esecuzione medio è peggiore. Questo è dovuto ai $30ns$ della fase di fetch, che occupano più di 1/3 del tempo di
-esecuzione di una singola istruzione.
-\clearpage
+\begin{minipage}[t]{.66\textwidth}
+    \vspace{0pt}
+    Diversamente dall'architettura monociclo in cui $\tmono$ dipende dall'istruzione più lenta, il tempo $\tmulti$ dipende dallo
+    stadio più lento.
+    Prendendo come riferimento la tabella dei tempi di esecuzione dell'architettura monociclo (vedi pagina
+    \pageref{tab:tempi_esecuzione_monociclo}), ne consegue $\tmulti =30$
+    Confrontando quindi le varie fasi ottengo chiaramente che i tempi di esecuzione delle singole istruzioni, ed il tempo di
+    esecuzione medio è peggiore. Questo è dovuto ai $30ns$ della fase di fetch, che occupano più di 1/3 del tempo di
+    esecuzione di una singola istruzione.
+\end{minipage}
+\begin{minipage}[t]{.33\textwidth}
+    \footnotesize
+    \let\fs\tiny
+    \vspace{-2em}
+    \begin{center}
+        \begin{tabu}{|c|c|r|r|}
+            \hline
+            \rowfont{\bfseries\centering}
+            Name & cck & Time & Usage \\
+            \hline
+            \hline
+            Aritm  & 5& 150ns &40\fs\%\\
+            \hline
+            Load & 5& 150ns   &25\fs\%\\
+            \hline
+            Store & 4& 120ns  &10\fs\%\\
+            \hline
+            JE/JS& 3& 90ns    &12\fs\%\\
+            \hline
+            JMP/JR& 3& 90ns   &6\fs\%\\
+            \hline
+            JAL& 5& 150ns     &2\fs\%\\
+            \hline
+        \end{tabu}
+    \end{center}
+\end{minipage}
 
 \subsection{Miglioramenti architettura multiciclo}
 L'architettura multiciclo per come vista sino ad ora è inefficiente, per migliorarla ci possono essere diversi modi:
@@ -299,5 +312,6 @@ dell'architettura monociclo.
 
 Aumentando la granularità di clock in quest'architettura, ipotizzando un $\tmulti=6 ns$ (dato che IF e ME richiedono
 $6ns$), otteniamo un tempo medio di $64.76ns$ migliore del $21\%$ rispetto alla monociclo.
+
 
 \end{document}
