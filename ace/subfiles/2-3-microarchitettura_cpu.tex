@@ -99,9 +99,8 @@ Per comunicare con la memoria si passa attraverso un unico bus, controllato da b
 \code{Mread} e \code{Mwrite}.
 
 \subsubsection{Register File}
-Componente che ha come ingressi 5 bit che identificano il primo registro, 5bit per il secondo registro,
-5bit per il registro destinazione, ed i rimanenti 32 identificano il dato in ingresso.
-Le due porte in uscita riportano i dati letti rispettivamente dal registro sorgente 1 e 2.
+Prende come ingressi il primo registro (5bit), il secondo registro (5bit), il registro destinazione (5bit) e 32bit che identificano il dato in ingresso.
+In uscita ha due porte a 5bit che riportano i dati letti dal registro sorgente 1 e 2.
 %49
 
 \def\tmono{T_\text{mono}}
@@ -111,15 +110,12 @@ Le due porte in uscita riportano i dati letti rispettivamente dal registro sorge
 In una CPU monociclo, tutte le istruzioni impiegano un unico ciclo di clock. È una struttura molto semplice, ma potenzialmente anche molto
 lenta, dato che il tempo di esecuzione di ogni istruzione necessita di essere pari al tempo di esecuzione di quella più lenta.
 
-Prendendo come esempio l'istruzione \lstinline{st R6,R1, 20},
-
-Dato che in un unico ciclo di clock devo eseguire sia fetch dell'istruzione che store, sono necessarie due memorie separate.
+Facendo riferimento all'istruzione \lstinline{st R6,R1, 20},
+dato che in un unico ciclo di clock devo eseguire sia fetch dell'istruzione che store, sono necessarie due memorie separate.
 È inevitabile l'uso di un'architettura di Harvard (vedi pagina \pageref{sec:architettura_harvard}).
-Oltre alla doppia memoria portata dall'architettura è necessario duplicare altre risorse, come ad esempio l'ALU, richiesta
-per incrementare sia valore del program counter che per calcolare l'indirizzo di destinazione del dato.
+Oltre alla doppia memoria introdotta dall'architettura è necessario duplicare anche altre risorse, come ad esempio un sommatore , richiesto per incrementare sia valore del program counter siccome l'ALU è già utilizzata in fase di execute.
 
-Tra le varie operazioni richieste dall'ISA, il tempo di esecuzione maggiore è dovuto sicuramente alla \lstinline{load} (vedi
-tabella \ref{tab:tempi_esecuzione_monociclo}),
+Tra le varie operazioni dell'ISA, il tempo di esecuzione maggiore è dovuto sicuramente alla \lstinline{load} (vedi tabella \ref{tab:tempi_esecuzione_monociclo}),
 che oltre alle fasi di fetch e decode richiede: calcoli dall'ALU, writeback ed accesso alla memoria.
 Chiamato il suo tempo di esecuzione $\tmono=82ns$ ed $N$ il numero di istruzioni, il tempo di esecuzione del programma è $\tmono \cdot N$.
 
@@ -143,29 +139,28 @@ Chiamato il suo tempo di esecuzione $\tmono=82ns$ ed $N$ il numero di istruzioni
 
 % Lezione 2.6
 \subsection{CPU multiciclo}
-Suddivide ogni stadio di esecuzione dell'istruzione in un ciclo di clock.
-Il ragionamento alla base di questa architettura è che molte istruzioni hanno un tempo di istruzione notevolmente inferiore ad altre.
-In altre parole, chiamata $\sum\tmulti$ il tempo di esecuzione di una singola istruzione il numero di istruzioni per cui
+Ogni fase dell'istruzione è eseguita in un ciclo di clock differente.
+Alla base di questa architettura c'è il ragionamento che molte delle istruzioni dell'ISA richiedono un tempo di esecuzione notevolmente inferiore rispetto al resto delle istruzioni.
+In altre parole, chiamato $\sum\tmulti$ il tempo di esecuzione di una singola istruzione il numero di istruzioni per cui
 $\sum\tmulti > \tmono$ sarà inferiore al numero di istruzioni per cui $\sum\tmulti < \tmono$.
-Ne consegue che l'architettura multiciclo è in media più veloce dell'architettura monociclo.
+Ne consegue che l'architettura multiciclo è mediamente più veloce di un architettura monociclo.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{architettura_cpu}
 \end{figure}
-Un vantaggio che porta quest'architettura è che non necessita più di duplicare componenti come ALU e memoria, dato che le diverse fasi dell'istruzione sono divise in diversi cicli di clock evitando conflitti di risorse.
+Un vantaggio che porta quest'architettura è che non necessita più di componenti come sommatore e memoria secondaria, dato che le diverse fasi dell'istruzione sono divise in diversi cicli di clock evitando conflitti di risorse.
 
 \begin{itemize}
     \item Fetch:
         Dalla memoria viene letta l'istruzione indicata dal program counter. L'ALU incrementa il valore di quest'ultima per leggere la prossima istruzione al ciclo successivo.
     \item Decode:
-        Il codice operativo indicato dell'istruzione entra in \code{IR}, e viene assegnato il valore ai registri \code{R1} ed \code{R2}
-        L'ALU viene impiegata per calcolare il registro destinazione. In caso di salto condizionato, calcolo ugualmente il valore dell'indirizzo di destinazione, senza verificare le condizioni del salto.
+        Il codice operativo indicato dell'istruzione entra in \code{IR}, viene assegnato il valore ai registri \code{R1} ed \code{R2}. L'ALU viene impiegata per calcolare il registro destinazione.
+        \\
+        In caso di salto condizionato, si calcola ugualmente il valore dell'indirizzo di destinazione, senza verificare le condizioni del salto.
     \item Operazione Aritmetica:
-        Eseguo l'istruzione utilizzando i dati calcolati nelle fasi precedenti.
-    \item Load e Store:
-        Sempre attraverso buffer 3-state salvano o leggono dati dalla memoria all'indirizzo destinazione calcolato nelle fasi
-        precedenti.
+        Esegue l'istruzione utilizzando i dati calcolati nelle fasi precedenti.
+    \item Memory attraverso le istruzioni \lstinline{load} e \lstinline{store}: vengono abilitati i segnali dei buffer 3state per lettura o scrittura dalla memoria all'indirizzo \code{Rd} calcolato nelle fasi precedenti.
     \item Writeback:
         In caso di operazione aritmetica prendo il valore in uscita dell'ALU e lo riporto nella porta dati del register file.
         In caso di load, il valore di uscita della memoria viene riportato nella porta dati del register file.
