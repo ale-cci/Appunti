@@ -25,9 +25,18 @@ o anche
 C:\SRC> HWORLD.EXE
 ```
 
-Per terminare forzatamente l'esecuzione di dosbox `Ctrl+F9`
+##### Shortcut dosbox
+| shortcut | description|
+|---|---|
+| `Ctrl + F9` | kill processo |
+| `Ctrl + F10` | toggle mouse capture |
+| `Alt + Enter` | toggle fullscreen |
+
+Per togliere focus del mouse `Ctrl
 
 [Comandi shell](https://www.dosbox.com/wiki/Commands)
+
+Norton guide: dopo aver eseguito `ng`, `Shift+F1` apre la guida.
 
 ### Debugger
 Richiede il file [DEBUG.exe](https://elly.dia.unipr.it/2019/pluginfile.php/22353/mod_page/content/5/DEBUG.EXE) nella stessa cartella
