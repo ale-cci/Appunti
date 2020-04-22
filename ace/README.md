@@ -25,6 +25,10 @@ o anche
 C:\SRC> HWORLD.EXE
 ```
 
+Per terminare forzatamente l'esecuzione di dosbox `Ctrl+F9`
+
+[Comandi shell](https://www.dosbox.com/wiki/Commands)
+
 ### Debugger
 Richiede il file [DEBUG.exe](https://elly.dia.unipr.it/2019/pluginfile.php/22353/mod_page/content/5/DEBUG.EXE) nella stessa cartella
 ```
@@ -41,3 +45,15 @@ C:\SRC> debug HWORLD
 | d | dump memoria |
 | q | quit |
 
+### Note TurboDebugger
+```
+C:\SRC> td HWORLD.EXE
+```
+| Shortcut | Description |
+|---|---|
+| `Alt+x` | quit |
+| `F8`    | single step |
+| `Ctrl+w` | add variable to watchlist |
+| `F2` | add breakpoint |
+| `F9` | run |
+| `Alt+F5` | show screen printed characters|

@@ -204,31 +204,24 @@ e sfrutto l'ALU non utilizzata per calcolare in anticipo l'indirizzo di destinaz
 
 Passate queste due fasi, comuni a tutte le operazioni, vi è una differenziazione a seconda del tipo di istruzione
 contenuta in \code{IR}.
-In caso di istruzioni aritmetiche, composte da execute (T3) e writeback (T5), in prima fase, sono richiesti i segnali
-per specificare le operazioni dell'alu: \code{ALUsorgA=1}, \code{ALUsorgB=2} mentre \code{OPALU} assume il valore dell'istruzione da eseguire.
 
-In T5 è richiesto \code{Rw} per scrivere nel registro destinazione contenuto in \code{RF}, e \code{Rsorg = 0}
-\code{Rdest=0} per scrivere nel registro destinazione il alu-out.
-L'istruzione passa anche attraverso una fase di memory (T4) ma vengono solamente mantenuti i valori in T3, tenere
-costante il valore di alu-out.
+In caso di istruzioni aritmetiche, composte da execute (T3) e writeback (T5), in prima fase, sono richiesti i segnali \code{ALUsorgA=1}, \code{ALUsorgB=2} ed \code{OPALU} per specificare le operazioni dell'ALU; in fase di writeback:
+\code{Rwrite} e \code{Rsorg = 0} per scrivere il contenuto del registro destinazione in \code{RF},
+\code{DESTwrite = 0} per abilitare scrittura di \code{ALUout} in \code{dest}.
+L'istruzione passa anche attraverso una fase di memory (T4) ma vengono solamente mantenuti i valori dei segnali in T3, mantenendo così \code{ALUout} costante.
 
-Nella fase di execute di una load, viene calcolato l'indirizzo del dato in memoria \code{Rb + offset} (A=1, B=2, OP=ADD)
-e salvato in \code{Rdest} .
-In fase T4 \code{INDsorg = 0} e \code{Mr =1} per indicare di leggere il valore del dato all'indirizzo
-di memoria calcolato dall'ALU.
-In T5 viene salvato in \code{Rd} il dato letto dalla memoria \code{In=2} per mettere il bus dei dati in ingresso e
-portare il segnale dalla memoria al processore, viene abilitato \code{Rwrite} per abilitare la scrittura al register file.
+In caso di load, nella fase di execute, viene calcolato l'indirizzo del dato in memoria \code{Rb + offset} (\code{ALUsorgA=1}, \code{ALUsorgB=2}, \code{OPALU=ADD}) e salvato in \code{Rdest}.
+In fase T4, sono tenuti costanti i segnali in T3, inoltre \code{INDsorg = 0} e \code{Mr =1} per leggere il valore del dato all'indirizzo di memoria calcolato precedentemente.
+A T5 viene salvato in \code{Rd} il dato letto dalla memoria \code{In=1} per mettere il bus dei dati in ingresso, viene abilitato \code{Rwrite} per abilitare la scrittura al register file.
 \code{Rsorg=1} e \code{Dsorg=1} per scrivere il registro \code{Rd} il dato proveniente dalla memoria.
 
-In caso di store, i segnali nella fase di execute sono identici a quelli della load, ma eseguo \code{INDsorg=0} uno step
-prima per avere il segnale stabile alla fase successiva e \code{Out=1}.
+In caso di store, i segnali nella fase di execute sono identici a quelli della load, ma eseguo \code{INDsorg=0} uno step in anticipo, per avere il segnale stabile alla fase successiva e \code{Out=1}.
 In T4 \code{Mw=1} per scrivere in memoria. Non ha una fase di writeback.
 
-I salti condizionati richiedono solo un ciclo di completamento, in quanto l'indirizzo di destinazione è già stato
-calcolato nella fase precedente, per resta solo da abilitare \code{PCw} in caso la condizione di salto sia verificata.
-(A = 1, B=1, OP=SUB) \code{PCsorg=1} per selezionare \code{DEST} come ingresso a PC.
+I salti condizionati richiedono solo un ciclo di completamento, in quanto l'indirizzo di destinazione è già calcolato nella fase precedente, è necessario solo da abilitare \code{PCwrite} in caso la condizione di salto sia verificata.
+(\code{ALUsorgA = 1}, \code{ALUsorgB=1}, \code{OPALU=SUB}) \code{PCsorg=1} è richiesto per selezionare \code{DEST} come ingresso a PC.
 
-In caso di salti incondizionati esiste la sola fase T3 con \code{PCw=1} e \code{PCsorg=2}.
+In caso di salti incondizionati è presente la sola fase T3 con \code{PCwrite=1} e \code{PCsorg=2}.
 
 L'ultimo caso \lstinline{jal}, è del tutto identico ad un salto condizionato, solo che viene seguito da una fase di
 writeback, in cui salvare \code{PC1} in \code{R31}.

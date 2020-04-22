@@ -43,8 +43,10 @@ Le doppie condizioni d'uscita servono per uscire dalla ripetizione quando termin
 In altre parole nel caso di \lstinline{cmps} tra due stringhe utilizzo \lstinline{repe} quando voglio trovare il primo elemento diverso, e \lstinline{repne} quando voglio trovare il primo elemento uguale.
 
 Di default tutte queste operazioni incrementano l'indirizzo \cx, scorrendo le stringhe da sinistra a destra. Per invertire il senso di scorrimento è necessario mettere ad 1 \code{DF} (\textit{Direction Flag}).
+\subsubsection{Esempio con lodsb}
+\lstinputlisting{hello_world.asm}
 
-\subsubsection{Istruzioni per il controllo dei flag}
+\subsection{Istruzioni per il controllo dei flag}
 \begin{center}
     \begin{tabu}{|l|l|}
         \hline
