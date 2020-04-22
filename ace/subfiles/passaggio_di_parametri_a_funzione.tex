@@ -1,0 +1,32 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Passaggio di parametri a funzione}
+Per effettuare passaggio di parametri ad una funzione, oltre ad utilizzare registri o variabili in memoria, è possibili utilizzare lo stack.
+\begin{lstlisting}
+    push ax
+    push bx
+    call funct
+    add sp, 4
+\end{lstlisting}
+Una volta caricato un parametro nello stack con \lstinline{push} è necessario, una volta invocata la funzione, ritornare il valore dello stack pointer al valore originario, presente prima di \lstinline{push}.
+Per effettuare l'operazione viene solitamente utilizzata un \lstinline{add} e non \lstinline{pop} per evitare di "sprecare registri".
+
+Si che viene \textbf{sommato} e non sottratto 2 per ogni numero di parametri passati alla funzione, perché il valore dello stack pointer parte inizialmente dal valore \code{0xFFFF}, crescendo verso \code{0x0000}.
+
+Per recuperare i parametri dallo stack, viene utilizzato il base pointer \lstinline{bp}, dato che \lstinline{sp} può essere soggetto a variazioni all'interno della funzione.
+Inoltre, l' operazioni come \lstinline{[bp]} fanno riferimento direttamente allo stack segment, diversamente da quelle come \lstinline{[bx]} che fanno riferimento al data segment.
+
+\subsubsection{Recupero di valori dallo stack}
+\begin{lstlisting}
+funct:  push bp         ; per tenere salvato il valore di bp
+        mov bp, sp
+
+        mov ax, [bp + 8]  ; primo valore pushato
+        mov bx, [bp + 4]  ; secondo valore pushato
+
+        pop bp
+        ret
+\end{lstlisting}
+
+\end{document}
