@@ -87,13 +87,17 @@ Assumendo che in questa prima architettura non sia presente uno stack
 %27: ragionamento di funzionamento dell'ALU
 
 Nel componente ALU, l'ingresso \code{OPALU} definisce l'operazione aritmetica da eseguire sui due segnali \code{ALUsorgA} e \code{ALUsorgB}.
-Oltre al risultato dell'operazione, in uscita sono presenti anche dei flag che ne descrivono le caratteristiche, come \code{zf} (\textit{Zero Flag}) e \code{sf} (\textit{Sign Flag})  (vedi lista dei flag a pagina \pageref{8086_flags}).
+Oltre al risultato dell'operazione, in uscita sono presenti anche dei flag che ne descrivono le caratteristiche, come \code{ZF} (\textit{Zero Flag}) e \code{SF} (\textit{Sign Flag})  (vedi lista dei flag a pagina \pageref{8086_flags}).
 
 \subsubsection{Load e Store}
 %35
 Load e store permettono rispettivamente lettura e scrittura in memoria.
-Entrambe prendono in ingresso un registro base, uno destinazione ed un offset.
-L'indirizzo su cui leggere/scrivere il dato contenuto nel registro destinazione viene ottenuto sommando l'offset al registro base.
+Entrambe prendono in ingresso un registro base, un registro destinazione ed un offset.
+\\
+L'indirizzo di memoria in cui leggere o scrivere è calcolato sommando il contenuto del registro base con l'offset.
+Successivamente in caso di load il dato letto è scritto nel registro destinazione, ed in caso di store il dato è letto dal registro destinazione e scritto nell'indirizzo di memoria.
+
+
 Per comunicare con la memoria si passa attraverso un unico bus, controllato da buffer 3state. Per leggere o scrivere è necessario abilitare i segnali
 \code{Mread} e \code{Mwrite}.
 
