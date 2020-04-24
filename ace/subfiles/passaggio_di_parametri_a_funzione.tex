@@ -22,7 +22,7 @@ Inoltre, l' operazioni come \lstinline{[bp]} fanno riferimento direttamente allo
 funct:  push bp         ; per tenere salvato il valore di bp
         mov bp, sp
 
-        mov ax, [bp + 8]  ; primo valore pushato
+        mov ax, [bp + 6]  ; primo valore pushato 2 + 2*2
         mov bx, [bp + 4]  ; secondo valore pushato
 
         pop bp

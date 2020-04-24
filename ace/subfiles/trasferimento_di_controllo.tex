@@ -153,9 +153,9 @@ Ogni interrupt ha un elenco di funzioni, ed il registro \ah specifica quale util
     16h & 00h & Keyboard Read & AL = Read ASCII code\\
         &     &               & AH = scan code (specifies input source)\\
     \hline
-    21h & 02h & Character Output & DL = ASCII Code\\
+    21h & 01h & Keyboard Read and echo & AL = Read ASCII code\\
     \hline
-    21h & 03h & Keyboard Read and echo & AL = Read ASCII code\\
+    21h & 02h & Character Output & DL = ASCII Code\\
     \hline
     21h & 4Ch & Terminate Process and EXIT & AL = Exit Code\\
     \hline

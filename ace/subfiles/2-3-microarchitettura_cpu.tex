@@ -80,15 +80,14 @@ Ogni istruzione di questa ISA di riferimento può appartenere ad una delle tre s
         \end{figure}
 \end{itemize}
 
-Oltre a salto condizionato ed incondizionato esiste un terzo tipo di salto: la chiamata a funzione.
-È un tipo di salto incondizionato particolare, dato che quando eseguito è necessario salvare il valore
-del program counter per poter proseguire l'esecuzione una volta terminata la funzione.
-
-In questa prima architettura assumiamo che non ci sia lo stack \footnote{Zona di memoria organizzata a pila LIFO, accessibile attraverso le istruzioni \lstinline{push} e \lstinline{pop}}, quindi salviamo il program counter nell'indirizzo $R_{31}$.
+Oltre ai salti condizionati ed incondizionati esiste un terzo tipo di salto, la chiamata a funzione: un salto incondizionato che all'invocazione memorizza il valore corrente di \code{PC}, necessario per riprendere l'esecuzione una volta terminate le istruzioni della funzione.
+\\
+Assumendo che in questa prima architettura non sia presente uno stack
+\footnote{Zona di memoria organizzata a pila LIFO, accessibile attraverso le istruzioni \lstinline{push} e \lstinline{pop}}, chiamate a funzione salveranno il valore di \code{PC} nel registro \code{R31}.
 %27: ragionamento di funzionamento dell'ALU
 
-Per selezionare le operazioni da far eseguire all'ALU è specificato un ingresso chiamato opalu.
-Oltre al risultato  dell'operazione vengono tornati valori di flag aggiuntivi come zero flag (messo ad uno quando il risultato dell'ALU è zero) e sign flag(messo ad 1 quando il risultato è negativo).
+Nel componente ALU, l'ingresso \code{OPALU} definisce l'operazione aritmetica da eseguire sui due segnali \code{ALUsorgA} e \code{ALUsorgB}.
+Oltre al risultato dell'operazione, in uscita sono presenti anche dei flag che ne descrivono le caratteristiche, come \code{zf} (\textit{Zero Flag}) e \code{sf} (\textit{Sign Flag})  (vedi lista dei flag a pagina \pageref{8086_flags}).
 
 \subsubsection{Load e Store}
 %35
