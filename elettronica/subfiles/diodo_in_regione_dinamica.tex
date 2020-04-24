@@ -1,0 +1,81 @@
+\documentclass[../template]{subfiles}
+
+\def\xbe{\ensuremath{X_\text{BE}}}
+\def\xbc{\ensuremath{X_\text{BC}}}
+
+\begin{document}
+\section{Diodo in regione dinamica}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}[scale=1.2]
+        \draw
+        (0, 0)
+        to[short, i=$\I{BC}$] (0.7, 0)
+        to[diode] (2, 0)
+        to[short, i<=$\I{C}$] ++(0.5, 0) node[below]{$C$}
+        (0, 0)
+        to[short, i=$\I{BE}$] (-0.7, 0)
+        to[diode] (-2, 0)
+        to[short, i=$\I{E}$] ++(-0.5, 0) node[above]{$E$}
+        (0, 0) -- (0, -1) to[short, i<=$\I{B}$] (0, -2) node[right]{$B$}
+
+        (0, -1) to[polar capacitor, l_=$Q_R$]
+        ++(2, 0) -- ++(0, 1)
+        (0, -1) to[polar capacitor, label=$Q_C$] ++(-2, 0) -- ++(0, 1)
+        (0, 0) node[circ]{}
+        ;
+        \draw (2, 0)
+        to[short, i=${\I{t}}$, color=clr-main-red] (2, 1)
+        to[american controlled current source, color=clr-main-red] (-2, 1)
+        -- (-2, 0)
+        ;
+    \end{circuitikz}
+\end{figure}
+A pagina \pageref{sec:regime_dinamico} è stato analizzato il diodo in regime dinamico.
+\\
+Effettuiamo quindi un'analisi analoga al transistore bipolare, utilizzando come formule, quelle del modello di Ebers e Moll.
+
+Dato che i termini esponenziali compaiono spesso, introduciamo per semplicità le seguenti notazioni:
+\begin{align*}
+    \xbe = \big(e^{\vbe/ \V{T}} -1 \big) = \frac{\I{F}}{\I{S}}\\
+    \xbc = \big(e^{\vbc/ \V{T}} -1 \big) = \frac{\I{R}}{\I{S}}
+\end{align*}
+Inoltre indichiamo con $\I{F} = \I{S} \xbe$ e $\I{R} = \I{S} \xbc$ le correnti forward e backward che si manifestano.
+Ricordandoci che $\alpha_R = \frac{\I{S}} {\I{S} + \I{BCS}}$ e $\alpha_R = \frac{\I{S}}{\I{S} + \I{BES}}$, le formule del modello sono esprimibili come:
+\begin{align*}
+    &\I{C} = \I{F} - \frac{\I{R}}{\alpha_R}\\
+    &\I{E} = \frac{\I{F}}{\alpha_F} - \I{R}\\
+    &\I{B} = \frac{\I{F}}{\beta_F} + \frac{\I{R}}{\beta_R}
+\end{align*}
+Queste equazioni descrivono le tre correnti statiche del transistore, alle quali vogliamo aggiungere le correnti dinamiche, come nel caso del diodo.
+\\
+Aggiungiamo quindi due capacità parassita alla giunzione, chiamate rispettivamente $Q_F$ e $Q_R$.
+
+Introduciamo quindi relazioni analoghe a descrivere le due cariche:
+\begin{align*}
+    &Q_F = Q_{Fs} \xbe = Q_{Fs} \frac{\I{F}}{\I{S}}\\
+    &Q_R = Q_{Rs} \xbc= Q_{Rs} \frac{\I{R}}{\I{S}}
+\end{align*}
+Da cui seguono le relazioni:
+\begin{align*}
+    \frac{Q_{F}}{\I{F}} = \frac{Q_{Fs}}{\I{S}} = \tau_F\\
+    \frac{Q_{R}}{\I{R}} = \frac{Q_{Rs}}{\I{S}} = \tau_R
+\end{align*}
+Sostituendo queste relazioni alle formule in regime statico otteniamo il modello:
+\begin{align*}
+    &\I{C} = \frac{Q_F}{\tau_F} - \frac{Q_R}{\alpha_R \tau_R}\\
+    &\I{E} = \frac{Q_F}{\alpha_F \tau_F} - \frac{Q_R}{\tau_R}\\
+    &\I{B} = \frac{Q_F}{\beta_F \tau_F} - \frac{Q_R}{\beta_R \tau_R}
+\end{align*}
+In altre parole, siccome tutte le correnti e cariche dipendono linearmente dagli stessi esponenziali, è possibile ricavare una relazione che lega le correnti alle cariche.
+
+Queste equazioni descrivono ancora il modello statico del transistore, ma lega però il valore statico della carica immagazzinata alle due giunzioni. Se ci muoviamo in regime dinamico, non è più vero che la corrente sui condensatori è nulla, ma è esprimibile come $\frac{dQ_F}{dt}$ e $\frac{dQ_R}{dt}$, ottenendo le nuove relazioni:
+
+\begin{align*}
+    &\I{C} = \frac{Q_F}{\tau_F} - \frac{Q_R}{\alpha_R \tau_R} {\color{red} - \frac{dQ_R}{dt}}\\
+    &\I{E} = \frac{Q_F}{\alpha_F \tau_F} - \frac{Q_R}{\tau_R} {\color{red} + \frac{dQ_F}{dt}}\\
+    &\I{B} = \frac{Q_F}{\beta_F \tau_F} - \frac{Q_R}{\beta_R \tau_R} {\color{red} + \frac{dQ_F}{dt} + \frac{dQ_R}{dt} }
+\end{align*}
+
+Chiameremo questo modello: \textbf{modello a controllo di carica}, nel senso che le espressioni sono dipendenti dalla carica e non più dalla tensione.
+\end{document}
