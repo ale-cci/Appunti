@@ -269,30 +269,25 @@ writeback, in cui salvare \code{PC1} in \code{R31}.
 \end{minipage}
 
 \subsection{Miglioramenti architettura multiciclo}
-L'architettura multiciclo per come vista sino ad ora è inefficiente, per migliorarla ci possono essere diversi modi:
+Il tempo di esecuzione medio dell'architettura multiciclo appena vista, $180ns$, è superiore agli $82ns$ dell'architettura monociclo.
+Per migliorarlo sono applicabili 3 metodi:
 \begin{itemize}
     \item Ridurre il periodo di clock, introducendo salti di attesa per le fasi più lunghe
     \item Sfruttare le componenti inutilizzate, calcolando in anticipo operazioni richieste in fasi successive
     \item Unire fasi distinte e modificare opportunamente il segnale di clock
 \end{itemize}
+
 \subsubsection{Aumento granularità del clock}
-Avendo preso $\tmulti$ uguale al tempo d'accesso alla memoria, nelle fasi in cui essa è inutilizzata, c'è spreco di
-tempo. L'ideale per questa architettura sarebbe che tutti gli stadi richiedano approssimativamente lo stesso tempo di
-esecuzione.
-Prendendo ad esempio $\tmulti=12$ (tempo dell'ALU), gli stadi di accesso alla memoria richiederanno 3 cicli di clock
-($12\cdot 3 > 30$).
+$\tmulti$ uguale al tempo d'accesso alla memoria risulta eccessivo per le fasi in cui essa è inutilizzata.
+Per questa architettura, il caso ideale sarebbe che tutti gli stadi richiedessero approssimativamente lo stesso tempo di esecuzione.
 
-Svolgendo i calcoli otteniamo un tempo medio di $86.88ns$, migliore rispetto al precedente, ma ancora più lento rispetto
-agli $82ns$ dell'architettura monociclo.
+Prendendo $\tmulti = 5ns$ (tempo di decodifica della fase di writeback) le fasi di accesso alla memoria saranno eseguite in 6 cicli di clock ($6 \times 5 \ge 30$).
+$\tmulti = 5ns$ migliora le prestazioni dell'architettura, riducendo il tempo medio di esecuzione a $75.65ns$.
 
-Osservando che con $\tmulti=12$ nelle fasi di memoria rimane uno spreco di $36-3\cdot 12=6ns$ riduciamo ancora la
-granularità di clock a $\tmulti=5ns$ (fase più veloce: decodifica del writeback)
-saranno richiesti quindi 6 cicli di clock per le fasi che fanno accesso alla memoria, e 3 per le fasi di ALU.
-Il tempo medio per istruzione si riduce a $75.65ns$, migliore rispetto al caso precedente e dell'architettura monociclo.
 \subsubsection{Anticipazione delle operazioni}
-Partiamo dall'osservazione che in T2 si esegue un passo che serve solo a JE/JS. Possiamo quindi differenziare la fase T2
-a seconda dell'istruzione. Inoltre, dato che il periodo è sufficientemente lungo, possiamo unire più istruzioni in un
-unico ciclo di clock:
+Si può notare come l'indirizzo destinazione, calcolato in fase di decode, è utilizzato solo in caso di salti condizionati (istruzioni JE o JS).
+Possiamo quindi differenziare la fase T2 a seconda dell'istruzione da eseguire.
+Inoltre, dato che il periodo è sufficientemente lungo, possiamo eseguire brevi fasi vicine in un unico ciclo di clock:
 
 \begin{itemize}
     \item Per operazioni aritmetiche, dopo il fetch, richiedono una decodifica ed un operazione dell'ALU, con un totale
