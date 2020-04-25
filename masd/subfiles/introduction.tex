@@ -2,7 +2,22 @@
 
 \begin{document}
 \section{Introduction}
+Gli algoritmi trattati rientrano in tre categorie: costruttivi, di raffinamento locale, e di enumerazione.
+
+Con $G=(V, E)$ indichiamo un grafo generico, di nodi $V$ (\textit{Vertices}) e di archi $E$ (\textit{Edges}).
+
+Due strutture dati frequentemente utilizzate per lavorare con i grafi sono la matrice di incidenza e la lista di adiacenza.
+
+Si definisce circuito Hamiltoniano un ciclo elementare che tocca tutti i nodi del grafo.
+
+Un grafo è detto completo se per ogni coppia di nodi $(i, j)$ esiste un arco che li collega.
 \subsection{Grafi bipartiti}
+Un grafo si dice bipartito se l'insieme di nodi $V$ può essere partizionato in due sottoinsiemi $V_1$ e $V_2$ tali che $V_1 \cap V_2 = \emptyset$.
+
+Per determinare se un grafo è bipartito si utilizza una BFS, marcando inizialmente il nodo sorgente si marcano in alternanza i nodi che appartengono ai gruppi $V_2$ e $V_1$.
+\\
+Nel caso in cui risulti un nodo appartenente a più di gruppo, il grafo non è bipartito.
+
 \lstinputlisting{algorithms/is_biparded.py}
 
 \end{document}

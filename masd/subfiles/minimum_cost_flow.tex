@@ -19,9 +19,8 @@ con $b_{n+1} = -\sum_i^n b_i$, collegato a tutti i nodi sorgente, attraverso arc
 Il problema di flusso a costo minimo consiste nel far giungere il prodotto dai nodi sorgente ai nodi destinazione
 minimizzando il costo di trasporto.
 
-Viene chiamato base un insieme di $|V| - 1$ archi, che formano un albero di supporto.
-A tale base corrisponde una soluzione di base, ottenuta ponendo a 0 il flusso \footnote{quantità di prodotto inviata}
-di ogni arco non contenuto nella base.
+Una base di un grafo di flusso è un suo albero di supporto.
+Ad ogni base è associata una soluzione di base, ottenuta ponendo a 0 il flusso \footnote{quantità di prodotto inviata} di ogni arco non contenuto in essa.
 
 \begin{figure}[h]
     \centering
@@ -144,7 +143,7 @@ grafo originario.
 
 Inoltre, in tal caso esiste un albero di supporto ottimo che contiene solo uno dei nuovi archi (incidenti su $q$).
 Eliminando tale arco si ottiene una base ammissibile per il problema originario.
-\lstinputlisting{algorithms/unlimited_symplex.py}
+% \lstinputlisting{algorithms/unlimited_symplex.py}
 
 \subsection{Algoritmo del simplesso con capacità limitate}
 \begin{lstlisting}
