@@ -4,16 +4,13 @@
 \begin{document}
 \section{Architetture Avanzate}
 \subsection{Prestazione dei calcolatori}
-Con benchmark si intende un set di programmi differenti tra loro, che rappresentano
-a grandi linee task frequenti eseguiti dal calcolatore.
-Per comparare le prestazioni di diversi calcolatori, vengono paragonati
-i tempi di esecuzione del benchmark.
+Con benchmark si definisce un set di programmi differenti che rappresentano a grandi linee task frequenti eseguiti dal calcolatore.
+Per confrontare le prestazioni di diversi calcolatori, viene eseguito lo stesso benchmark e si paragonano i diversi tempi di esecuzione.
 
 \def\tcpu{T_\text{cpu}}
 
 \subsection{Prestazione della CPU}
-Considerato l'intero tempo di esecuzione di um programma, viene definito tempo di CPU, il tempo in cui effettivamente
-quest'ultima è impiegata nel task: $\tcpu = N_{cc} T_{ck}$, dove $N_{cc}$ è il numero di cicli di clock.
+Considerato l'intero tempo di esecuzione di un programma, viene definito tempo di CPU, il tempo in cui effettivamente la CPU è occupata nell'esecuzione del task: $\tcpu = N_{cc} T_{ck}$, dove $N_{cc}$ è il numero di cicli di clock.
 \\
 Il modello più semplice per calcolarlo è il CPI (\textit{Clock Per Instruction}): quanti cicli di clock servono in media
 per un'istruzione: $\mathit{CPI} = N_{cc}/N$ dove $N$ è il numero di istruzioni in un programma.

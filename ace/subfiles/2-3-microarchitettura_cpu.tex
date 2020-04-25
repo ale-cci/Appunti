@@ -290,21 +290,17 @@ Possiamo quindi differenziare la fase T2 a seconda dell'istruzione da eseguire.
 Inoltre, dato che il periodo è sufficientemente lungo, possiamo eseguire brevi fasi vicine in un unico ciclo di clock:
 
 \begin{itemize}
-    \item Per operazioni aritmetiche, dopo il fetch, richiedono una decodifica ed un operazione dell'ALU, con un totale
-        di $5 + 12 + 5=22ns$ sufficiente da eseguirle nell'unica fase T2
-    \item Per load il calcolo dell'indirizzo può essere fatto in T2, la lettura della memoria in T3 e scrittura nel
-        registro destinazione in T4, tagliando un ciclo di clock.
-    \item L'operazione di store, esattamente come per la load, anticipiamo il calcolo dell'indirizzo sorgente in T2,
-        quindi la scrittura in memoria è effettuabile immediatamente all'istante T3.
-    \item In JMP/JS è possibile aggiornare PC direttamente in T2
-    \item In JAL è possibile aggiornare PC e la scrittura in R31. PC1 non è più necessario.
+    \item
+        Le operazioni aritmetiche, dopo la fase di fetch, richiedono la decodifica ($5ns$), un'operazione di ALU ($12ns$) e il writeback ($5ns$), con un totale di $22ns$, sufficiente ad eseguirle in un unico ciclo di clock di $30ns$.
+    \item Per l'istruzione load, il calcolo dell'indirizzo destinazione può essere effettuato in T2, la lettura dalla memoria in T3 ed il writeback sul registro in T4, rimuovendo la necessità di T5.
+    \item L'operazione di store, esattamente come per load, è possibile anticipare il calcolo dell'indirizzo sorgente in T2, di conseguenza la scrittura in memoria è effettuabile immediatamente all'istante T3.
+    \item Per i salti (\code{JMP} e \code{JS}) è possibile aggiornare il valore di \code{PC} direttamente in T2
+    \item Mentre per la chiamata a funzione (\code{JAL}) è possibile aggiornare \code{PC} e la scrittura su \code{R31} nello stesso ciclo di clock, rendendo \code{PC1} non più necessario.
 \end{itemize}
 
-Il tempo di esecuzione medio è $81.60ns$, migliore della versione multiciclo originale e circa la stessa velocità
-dell'architettura monociclo.
+Il tempo di esecuzione medio di questa nuova architettura è $81.60ns$, nettamente migliore rispetto alla versione multiciclo originale.
 
-Aumentando la granularità di clock in quest'architettura, ipotizzando un $\tmulti=6 ns$ (dato che IF e ME richiedono
-$6ns$), otteniamo un tempo medio di $64.76ns$ migliore del $21\%$ rispetto alla monociclo.
+Aumentando la granularità di clock a $\tmulti=6 ns$ (tempo impiegato dalle nuove fasi di instruction fetch e memory), si ottiene un tempo medio di $64.76ns$: il $21\%$ più veloce dell'architettura monociclo.
 
 
 \end{document}

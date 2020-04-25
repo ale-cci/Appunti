@@ -12,6 +12,7 @@ SECTION code
             mov ah, 0eh
 
             mov si, Msg
+
 l_print:    lodsb
             int 10h
 

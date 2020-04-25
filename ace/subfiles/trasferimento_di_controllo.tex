@@ -157,6 +157,8 @@ Ogni interrupt ha un elenco di funzioni, ed il registro \ah specifica quale util
     \hline
     21h & 02h & Character Output & DL = ASCII Code\\
     \hline
+    21h & 09h & Print string (\$ = end) & DX = String Addr\\
+    \hline
     21h & 4Ch & Terminate Process and EXIT & AL = Exit Code\\
     \hline
 \end{tabu}
