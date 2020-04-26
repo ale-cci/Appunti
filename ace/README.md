@@ -32,13 +32,39 @@ C:\SRC> HWORLD.EXE
 | `Ctrl + F10` | toggle mouse capture |
 | `Alt + Enter` | toggle fullscreen |
 
-Per togliere focus del mouse `Ctrl
-
 [Comandi shell](https://www.dosbox.com/wiki/Commands)
 
-Norton guide: dopo aver eseguito `ng`, `Shift+F1` apre la guida.
+Norton guide: dopo aver eseguito `ng`, `Shift+F1` apre la guida. `s` search instruction, `F9` fullscreen norton guide.
+`Esc` = indietro.
 
-### Debugger
+Dalla guida sono disponibili:
+
+* `DOS > Functions` lista di funzioni per `int 21h`
+* `Assembly > Instruction Set` lista istruzioni assembly
+* `Assembly > Flag Register` descrizione del register flag con posizioni flag
+
+
+### Note TurboDebugger
+```
+C:\SRC> td HWORLD.EXE
+```
+| Shortcut | Description |
+|---|---|
+| `Alt+x` | quit |
+| `Alt+F5` | show screen printed characters|
+| `Alt+number` | Go to pane identified by number |
+| `F2` | toggle breakpoint |
+| `F4` | center visualization to current line |
+| `F7` | step into |
+| `F8` | single step |
+| `F9` | run |
+| `Ctrl+F2` | restart program |
+| `Ctrl+w` | add variable to watchlist |
+| `Ctrl+s` | search string in program |
+| `Ctrl+i` | Inspect value of memory or register |
+| `Ctrl+l` | Got to line |
+
+### Debugger prof
 Richiede il file [DEBUG.exe](https://elly.dia.unipr.it/2019/pluginfile.php/22353/mod_page/content/5/DEBUG.EXE) nella stessa cartella
 ```
 C:\SRC> debug HWORLD
@@ -53,16 +79,3 @@ C:\SRC> debug HWORLD
 | r | print register content |
 | d | dump memoria |
 | q | quit |
-
-### Note TurboDebugger
-```
-C:\SRC> td HWORLD.EXE
-```
-| Shortcut | Description |
-|---|---|
-| `Alt+x` | quit |
-| `F8`    | single step |
-| `Ctrl+w` | add variable to watchlist |
-| `F2` | add breakpoint |
-| `F9` | run |
-| `Alt+F5` | show screen printed characters|

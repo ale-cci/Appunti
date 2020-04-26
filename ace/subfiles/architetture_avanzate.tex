@@ -10,74 +10,71 @@ Per confrontare le prestazioni di diversi calcolatori, viene eseguito lo stesso 
 \def\tcpu{T_\text{cpu}}
 
 \subsection{Prestazione della CPU}
-Considerato l'intero tempo di esecuzione di un programma, viene definito tempo di CPU, il tempo in cui effettivamente la CPU è occupata nell'esecuzione del task: $\tcpu = N_{cc} T_{ck}$, dove $N_{cc}$ è il numero di cicli di clock.
+Sull'intero tempo di esecuzione di un programma, $\tcpu$ (\textit{Tempo di CPU}) è definito come l'effettivo tempo in cui la CPU è impiegata nell'esecuzione del task: $\tcpu = N_{cc} T_{ck}$, dove $N_{cc}$ è il numero di cicli di clock.
 \\
-Il modello più semplice per calcolarlo è il CPI (\textit{Clock Per Instruction}): quanti cicli di clock servono in media
-per un'istruzione: $\mathit{CPI} = N_{cc}/N$ dove $N$ è il numero di istruzioni in un programma.
+Il metodo più semplice per calcolarlo è attraverso il CPI (\textit{Clock Per Instruction}) , ovvero il numero di cicli di clock mediamente richiesti da un istruzione: $\mathit{CPI} = N_{cc}/N$ dove $N$ è il numero di istruzioni in un programma.
 
 Per calcolare il CPI medio, occorre conoscere il CPI di ogni istruzione, e la frequenza con la quale l'istruzione
 $i$-esima viene eseguita $F_i$.
 \[
-    \mathit{CPI} = \sum_i F_i \mathit{CPI}_i = \sum_i \frac{N_i}{N} \mathit{CPI}_i
+    \mathit{CPI} = \sum_i F_i \times \mathit{CPI}_i = \sum_i \frac{N_i}{N} \mathit{CPI}_i
 \]
 Da cui:
 \[
-    \tcpu = N \cdot \mathit{CPI} \cdot T_{ck}
+    \tcpu = N \times \mathit{CPI} \times T_{ck}
 \]
-Il paradigma RISC è di ridurre il più possibile il $\mathit{CPI}$, portando il problema di aumentare il numero di
-istruzioni richiesto per formare un'operazione. CISC diversamente, riduce il numero di istruzioni richieste per
-programma, ma aumentando il $\mathit{CPI}$.
+Le architetture RISC, si concentrano nel ridurre il più possibile $\mathit{CPI}_i$, riducendo il numero di cicli di clock richiesti da ogni istruzione.
+Il numero ridotto di istruzioni dell'architettura, si risente nella scrittura dei programmi, dove, per svolgere lo stesso compito, più istruzioni sono richieste, aumentando il CPI.
 
-Il MIPS (\textit{Mega Instruction Per Second}) e MFLOPS (\textit{Mega FLoating Point Operation Per Second}) definite come
-$\mathit{MIPS} = N / (\mathit{CPU}_\mathit{time} * 10^6) = f_\mathit{ck} / \mathit{CPI}$ sono usate per misurare le prestazioni.
+MIPS (\textit{Mega Instruction Per Second}) e MFLOPS (\textit{Mega FLoating Point Operation Per Second}) definite come
+$\mathit{MIPS} = N / (\mathit{CPU}_\mathit{time} * 10^6) = f_\mathit{ck} / \mathit{CPI}$ sono utilizzate come unità per misurare le prestazioni.
 Dipendono entrambe dal $\mathit{CPI}$ medio e quindi dal benchmark.
 
-Il numero di MIPS non dipende da $N$, pertanto a parità di benchmark e MIPS otteniamo valori diversi di
-$\mathit{CPU}_\mathit{time}$ se $N$ cambia. Quindi si possono confrontare tra loro due CPU rispetto ad un deterinato
-benchmark, solamente se hanno lo stesso set di istruzioni.
+Il numero di MIPS non dipende da $N$, pertanto a parità MIPS e benchmark otteniamo valori diversi di
+$\mathit{CPU}_\mathit{time}$ se $N$ cambia.
+Ne consegue che due CPU sono paragonabili con lo stesso benchmark solamente se hanno lo stesso set di istruzioni.
 
 \subsection{Architetture Pipeline}
-Questa architettura è la più significativa soluzione per aumentare la velocità di una CPU.
-Aumenta il numero di istruzioni eseguite nell'unità di tempo (throughput).
-Rispetto all'architettura multiciclo ha una necessità di disaccoppiare le varie fasi per renderle parallelizzabili.
-I segnali sono passati alle fasi successive attraverso registri di latch.
+Questa architettura è la soluzione più efficace per aumentare la velocità di una CPU, aumentando il numero di istruzioni eseguite nell'unità di tempo (throughput).
+Diversamente dall'architettura multiciclo, tiene le istruzioni separate in più cicli di clock, rendendone possibile la loro esecuzione in parallelo.
+\\
+I segnali sono trasmessi di fase in fase attraverso registri di latch.
 
-In generale, chiamato $\tau$ il tempo di clock, supponendo $k$ stadi, $n$ istruzioni vengono elaborate in $T_k = (k +
-(n-1)) \cdot \tau$.
-L'aumento di velocità è quindi calcolabile come
+In generale, chiamato $\tau$ il tempo di clock, supponendo la divisione in $k$ stadi, $n$ istruzioni vengono elaborate in $T_k = (k + (n-1)) \cdot \tau$.
+\\
+L'aumento di velocità (\textit{Speedup}) è esprimibile come:
 \[
     S_p = \frac{T_1}{T_k}  = \frac{nk\tau}{(k + (n-1)) \tau} = \frac{nk}{k + n -1}
 \]
-È facile anche calcolare come al crescere del numero di stadi $k$, $S_p$ tende ad $n$, ma accade solo nel caso ideale
+È facilmente osservabile come come al crescere del numero di stadi $k$, $S_p$ tende ad $n$: tutte le istruzioni sarebbero eseguite allo stesso istante.  Purtroppo questo è possibile solo nel caso ideale.
 
 \subsubsection{Pipeline non ideale}
 Esistono tre limiti all'aumento del numero di stadi nella pipeline:
 \begin{itemize}
-    \item Alee strutturali, quando due fasi richiedono la stessa risorsa, ad esempio se fetch ed execute sono in
-        esecuzione allo stesso tempo, si crea un conflitto di risorse per l'ALU.
-    \item Alee di dato, quando ad un'istruzione serve un risultato non ancora prodotto
-    \item Alee di controllo, si verificano nel caso di jump, quando non è ancora stato determinato l'indirizzo
+    \item Alee strutturali: due fasi richiedono la stessa risorsa, ad esempio se fetch ed execute sono in esecuzione allo stesso tempo, la richiesta contemporanea dell'ALU crea un conflitto di risorse.
+    \item Alee di dato: l'output di un'istruzione dipende da un risultato non ancora prodotto
+    \item Alee di controllo: si verificano nel caso di jump, quando non è ancora stato determinato l'indirizzo
         di destinazione
 \end{itemize}
 
-Una possibile soluzione per risolvere le alle strutturali sono la duplicazione delle risorse richieste (es. due ALU), e nel
-caso in cui siano necessari accessi multipli alla memoria, utilizzare un'architettura di Harvard.
-Diversamente per risolvere il problema è ritardare l'esecuzione delle fasi che richiedono una risorsa già in uso.
-Ovviamente sconsigliata perché riduce il throughput.
+\subsubsection{Alee strutturali}
+Un'immediata soluzione per questo tipo di alee è la duplicazione di risorse richieste (es. due ALU) e l'utilizzo di un architettura di Harvard per supportare multipli accessi alla memoria.
 
-Nel caso di alee di dato esistono, a loro volta, tre tipi di dipendenza tra istruzioni.
-Chiamate A e B, due istruzioni, dove A precede B:
+Un'altra soluzione è ritardare l'esecuzione delle fasi che richiedono una risorsa già in uso, da evitare perché porta una riduzione del throughput.
+
+\subsubsection{Alee di dato}
+Chiamate A e B, due istruzioni, dove A precede B, esistono tre tipi di dipendenza:
 \begin{itemize}
     \item RAW (\textit{read-after-write}) B legge un dato prima che sia scritto da A
     \item WAR (\textit{write-after-read}) B scrive un dato prima che sia letto da A
     \item WAW (\textit{write-after-write}) B tenta di scrivere un dato prima che A lo abbia scritto
 \end{itemize}
-Nel primo caso, prendendo come esempio le istruzioni in successione \lstinline{add r1,r2,r3} e \lstinline{sub r4,r1,r2}, è ovvio che
-nella prima istruzione, il valore r1 è salvato nella fase di writeback, mentre durante nella seconda istruzione il
-valore di r1 è richiesto nella fase di execute.
-Prima di risolvere il problema è necessario che venga riconosciuto, ad esempio marcando quali registri richiede una
-particolare istruzione.
-Per risolverlo è possibile:
+Nel primo caso, prendendo come esempio le istruzioni in successione \lstinline{add r1,r2,r3} e \lstinline{sub r4,r1,r2},
+il valore di r1 è richiesto dalla seconda istruzione nella fase di execute, ma è salvato dalla prima istruzione solo in fase di writeback.
+
+Un metodo possibile per individuare questo tipo di alea è tenere marcato i registri in utilizzo ed controllare di volta in volta i registri richiesti dall'istruzione corrente.
+\\
+Le possibili soluzioni sono le seguenti:
 \begin{itemize}
     \item Stallo: attendere che una delle due istruzioni termini
     \item Anticipazione: rendere immediatamente disponibile il dato, senza attendere la fase di WB. Ma risulta un metodo
@@ -89,14 +86,15 @@ Per risolverlo è possibile:
         istruzioni e non alterano l'output del programma}, eseguendo cosi la seconda istruzione solo dopo che la prima abbia effettuato il WB
 \end{itemize}
 
-In caso di alee di controllo il program counter viene verificato nella fase di execute.
-È risolvibile sia eseguendo il salto con un delay di 1 ciclo di clock, o riordinando l'esecuzione delle istruzioni come
-nel caso precedente, calcolando prima l'indirizzo di destinazione.
+\subsubsection{Alee di controllo}
+In caso di jump, il valore del program counter è noto solo in fase di decode, non sapendo a priori da dove continuare l'esecuzione si ha un alea di controllo.
+È risolvibile introducendo un delay di 1 ciclo di clock, dando il tempo alla CPU di calcolare il valore del program counter, o riordinando le istruzioni, anticipando la decodifica dell'indirizzo di un'istruzione.
 
-Il problema principale delle alee di controllo è introdotto dai salti condizionati, dato che la condizione è nota
-solamente dopo la fase di execute. In questa situazione il semplice riordinamento delle istruzioni non è possibile,
-Infatti, per minimizzare i cicli "idle" sono utilizzate tecniche di predizione, in grado di  stimare in anticipo se il salto viene preso o non viene preso.
-Se queste tecniche funzionano più del 50\% delle volte, si misura un aumento di prestazione.
+Il problema maggiore delle alee di controllo è introdotto dai salti condizionali, nei quali è necessario controllare anche la condizione di salto.
+In questo caso, il semplice riordinamento delle istruzioni non è possibile.
+\\
+Per minimizzare il numero di cicli "idle" sono utilizzate tecniche di predizione, per stimare in anticipo se la condizione di salto si verifica.
+Se queste euristiche funzionano più del 50\% delle volte, si misura un aumento di prestazione.
 
 Le tecniche possono essere statiche (i salti si verifichino sempre o che non si verifichino mai), o dinamiche: basate
 sul comportamento precedente del salto (vedi esempio in figura \ref{fig:dynamic_prediction}).
@@ -108,17 +106,15 @@ sul comportamento precedente del salto (vedi esempio in figura \ref{fig:dynamic_
     \label{fig:dynamic_prediction}
 \end{figure}
 
-Queste predizioni sono salvate in una tabella di predizione associativa, dove ad ogni indirizzo di program counter del
+Queste predizioni sono salvate in una tabella associativa, dove ad ogni indirizzo di program counter del
 salto è associato il valore di relativa predizione.
 
 \subsection{Architetture superscalari}
-Quello visto sino ad ora prende il nome di pipeline lineare, non viene più utilizzato perché come visto, lo speedup
-teorico è ben diverso dallo speedup reale.
-Un altro problema di questa architettura è che tutte le istruzioni attraversano tutti gli stadi, il periodo di clock è
-quindi determinato dallo stadio più lento (come nella multiciclo).
+L'architettura appena vista prende il nome di pipeline lineare, non è più utilizzata perché, come visto, lo speedup teorico è ben diverso dal reale.
+Un altro problema dell'architettura è che ogni istruzione attraversa tutti gli stadi, imponendo un periodo di clock coincidente con il tempo dello stadio più lento (uguale alla multiciclo originale).
 
-La soluzione è quindi introdurre non un parziale parallelismo, come nel caso della pipeline, ma un parallelismo totale,
-sovrapponendo specifiche fasi delle istruzioni.
+La soluzione è quindi introdurre non un parziale parallelismo ma un parallelismo totale, sovrapponendo specifiche fasi delle istruzioni.
+\\
 Nell'architettura che utilizzeremo come riferimento, solo la fase di execute è in parallelo:
 
 \begin{figure}[h]
@@ -138,20 +134,18 @@ Nell'architettura che utilizzeremo come riferimento, solo la fase di execute è 
     \caption{Architettura parallelismo di riferimento}
 \end{figure}
 
-Ipotizziamo che allo stadio di execute venga emessa solo una istruzione alla volta (ID), una volta messe in esecuzione,
-è sono eseguite in parallelo.
+Ipotizzando che allo stadio ID (\textit{Instruction Decode}) sia emessa una sola istruzione alla volta, appena messa in esecuzione è eseguita in parallelo con le altre fasi di execute già in esecuzione.
 
 \subsubsection{Problemi dell'architettura}
 \begin{enumerate}
-    \item Date due istruzioni $i$ e $j$, se con $i$ che precede $j$, se $i$ impiega più cicli di clock di $j$ ad essere eseguita,
-        l'ordine di completamento può essere invertito. Questo pone un problema di coerenza della macchina.
-    \item Può accadere che due istruzioni nello stesso istante richiedano di passare alla fase di writeback, generando
-        un conflitto di risorse.
+    \item \label{prob_1} Date due istruzioni $i$ e $j$, se con $i$ che precede $j$, se $i$ impiega più cicli di clock di $j$ ad essere eseguita,
+        l'ordine di completamento può risultare invertito.
+    \item \label{prob_2} Può accadere che due istruzioni richiedano nello stesso istante di passare alla fase di writeback, generando un conflitto di risorse.
 \end{enumerate}
 
-Per risolvere il primo dei due problemi esistono tre metodi: il completamento in ordine, dove le istruzioni sono
-completate secondo l'ordine prestabilito; il buffer di riordinamento,dove le istruzioni una volta completate scrivono il
-loro output in un buffer in cui vengono successivamente riordinate; e attraverso un history buffer, dove lo stato
+Per risolvere il problema \ref{prob_1} esistono tre metodi: il completamento in ordine, dove le istruzioni sono
+completate secondo l'ordine prestabilito; il buffer di riordinamento, dove le istruzioni una volta completate scrivono il
+loro output su un buffer in cui vengono successivamente riordinate; ed attraverso l'history buffer, dove lo stato
 coerente può essere ripristinato in presenza di conflitti.
 
 \subsubsection{Reservation Shift register}
@@ -159,23 +153,22 @@ Il primo metodo, meno efficiente, è realizzabile attraverso un RSR (\textit{Res
 scrittura in tale registro è utilizzato un metodo di prenotazione.
 L'RSR è una tabella di colonne:
 \begin{itemize}
-    \item $V$ un bit di validità che dice se la posizione corrente contiene informazioni,
-    \item $PC$ il program counter dell'istruzione, necessario per il ripristino dello stato coerente in caso di
+    \item $V$, bit di validità che indica se la posizione corrente contiene informazioni,
+    \item $PC$ il program counter dell'istruzione, necessario per il ripristinare uno stato coerente in caso di
         predizione di salto errata
-    \item $UF$ L'unità funzionale che sta eseguendo l'istruzione
+    \item $UF$ (\textit{Unità Funzionale}) componente che sta eseguendo l'istruzione
     \item $R_d$ Registro destinazione del risultato
 \end{itemize}
 % Tabella esecuzione
-Il completamento in ordine questo risulta molto dispendioso per quanto riguarda i cicli di clock. Rimane comunque
-vulnerabile nel caso di riferimenti alla memoria, in quanto posso avere una scrittura seguita da una lettura e
-riscontrare lo stesso problema che ho avuto con il register file.
+Il riordinamento richiede diversi cicli di clock, e non risolve il problema \ref{prob_2} nel caso di multiple richieste d'accesso alla memoria,
+in quanto posso avere una scrittura seguita da una lettura e riscontrare un alea di dato.
 
 Per risolvere questo problema o non si emettono comandi di memorizzazione prima che le istruzioni emesse precedentemente
 siano completate, o si considera la memoria come un'unità funzionale quindi store occupa una posizione in RSR in modo
 che questa raggiunga la cima quando tutte le istruzioni precedenti sono completate.
 
 \subsubsection{Reordering Buffer}
-Il ROB non è in grado di risolvere i problemi d'accesso al buffer, per questo viene utilizzato un RSR in versione
+Il ROB (\textit{ReOrdering Buffer}) non è in grado di risolvere i problemi d'accesso al buffer, per questo viene utilizzato un RSR in versione
 semplificata.
 
 Nella tabella RSR, vengono tenute solo le colonne $V$ ed $UF$ ed aggiunto $pROB$, un puntatore alla riga
@@ -188,9 +181,8 @@ Nella tabella ROB, vengono spostati $PC$ e $R_d$ rimossi dal RSR, in aggiunta ad
 circolare è segnato come completato.
 
 \subsubsection{History Buffer}
-Soluzione delle tre più flessibile, e permette il completamento in ordine anche del register file.
-Rappresenta una history di tutte le scritture nel register file, in modo da poter effettuare un rollback in caso di
-incoerenza, come previsioni di salto errate o interrupt.
+È la soluzione più flessibile delle tre, permettendo il completamento delle operazioni fuori ordine.
+L' History Buffer tiene traccia di tutte le scritture sul register file, fornendo un modo di effettuare un rollback in caso di stato di incoerenza.
 
 HB è gestito come il rob: un buffer circolare di cui ogni riga è costituita dai componenti $C$, $PC$, $R_d$ e $OLD$ che
 contiene il valore del registro di destinazione al momento dell'operazione.
