@@ -2,5 +2,26 @@
 
 \begin{document}
 \section{Classificazione di complessità}
+\subsection{Problemi di ottimizzazione}
+Un problema di ottimizzazione è formato da un'insieme di istanze, ognuna rappresentata dalla coppia $(f, S)$: funzione obbiettivo e regione ammissibile.
+La regione ammissibile $S$ contiene tutti i possibili elementi che, presi singolarmente, costituiscono una soluzione.
 
+Nel caso in cui il problema di ottimizzazione sia di massimo, allora la coppia $(f, S)$ è rappresentata come
+\[
+    \max_{x\in S} f(x)
+\]
+Risolvere vuol dire trovare $x' \in S$ tale che $f(x') \ge f(x) \quad \forall x \in S$.
+$x'$ viene quindi detta soluzione ottima dell'istanza, mentre $f(x')$ viene detto valore ottimo dell'istanza.
+
+Data un'istanza $S$ con un numero arbitrario di punti, il problema di ottimizzazione viene detto ottimizzazione combinatoria se i punti sono numerabili, ed ottimizzazione continua se i punti non sono numerabili.
+
+Clique (ricerca di sottografi con almeno un arco)
+TSP (\textit{Traveling Salesman Problem}): dato un grafo completo $G=(V, A)$ con distanze degli archi $d_{ij}$ interi non negativi. Individuare nel grafo il circuito hemiltoniano di cammino minimo.
+
+Risolvere il problema di ottimizzazione, attraverso un algoritmo $\mathcal{A}$ in grado di fornire una soluzione ottima ed il valore ottimo.
+
+Se ci limitiamo a problemi di ottimizzazione combinatoria, è semplice identificare un algoritmo di risoluzione, infatti se la regione ammissibile $S$ contiene un numero di finiti di elementi, basta un'enumerazione completa per elencare tutte possibili soluzioni.
+
+Molto spesso i problemi di risoluzione completa richiedono tempi di esecuzione esagerati, per questo è utile sapere se è sempre possibile trovare soluzioni eseguibili in tempi ragionevoli.
+% slide 15 - 44
 \end{document}

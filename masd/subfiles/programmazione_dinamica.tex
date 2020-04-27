@@ -72,29 +72,19 @@ Il blocco 1 ha un unico stato $s_1$, quindi il valore di $f'_1(s_1)$ coincide co
 \subsubsection{Note}
 La programmazione dinamica rientra tra gli algoritmi di enumerazione implicita.
 \subsubsection{Complessità}
-$O(nb)$, una complessità esponenziale perché il valore $b$
-%\subsection{Problema di schedulazione}
-%Supposti $n$ processi $J_1 \dots J_n$ da eseguire su una macchina, ciascuno con tempo di esecuzione $p_i$, minimizzare la misura di prestazione $\sum_i^n \gamma(C_i)$, dove $C_i$ è l'istante in cui termina il job $J_i$ e $\gamma$ è una funzione non decrescente.
-%
-%In certi casi $\gamma(C_i)$ è una funzione molto semplice, come ad esempio $\gamma_i(C_i) = C_i / n$, e permette la soluzione attraverso algoritmi greedy. In altri casi la permutazione ottima è molto più complicata da trovare, es:
-%\[
-%    \gamma_i(C_i) = \frac{1}{n}\max\big\{0, C_i - d_i\big\} = \frac{1}{n} T_i
-%\]
-%Dove $T_i$ misura il ritardo dell'istante di completamento di $J_i$ dal una data prevista $d_i$.
-%\subsubsection{Osservazione - principio di ottimalità}
-%Se $J_1 \dots J_n$ è una schedulazione ottima, allora per ogni $k \in 1 \dots n$, $J_1 \dots J_k$ è una schedulazione ottima per il problema in cui si considerano solo i job $J_1 \dots J_k$.
-%
-%\subsubsection{Dimostrazione - principio di ottimalità}
-%Scrivendo la misura di prestazione come:
-%\[
-%    \sum_{i=1}^k \gamma(C_i) + \sum_{i=k+1}^n \gamma(C_i)
-%\]
-%Per assurdo, supponiamo che esista una schedulazione $J'_1 \dots J'_k$ migliore di $J_1 \dots J_k$, allora avremmo
-%\[
-%    \sum_{i=1}^k \gamma(C'_i) + \sum_{i=k+1}^n \gamma(C_i)
-%    <
-%    \sum_{i=1}^k \gamma(C_i) + \sum_{i=k+1}^n \gamma(C_i)
-%\]
-%Ovvero $J'_1 \dots J'_k$,$J_{k+1} \dots J_n$ sarebbe migliore di $J_1 \dots J_n$, contraddicendo l'ipotesi di $J_1 \dots J_n$ schedulazione ottima.
+Dato che per ogni stato è necessario calcolare $u(d_k, s_k)$, $t(d_k, s_k)$ e $u(d_k, s_k) + f'_{k+1}(t(d_k, s_k))$ ed il minimo dei vari $d_k$, il numero di operazioni richieste per ogni stato è $\sum_{s_k \in S_k} 4 |D_k(s_k)|$,.
+L'algoritmo, siccome eseguito su $n$ blocchi, richiede un numero di operazioni pari a:
+\[
+    \sum^n_{k=1} \sum_{s_k \in S_k} 4 |D_k(s_k)|
+\]
+Nel caso particolare del problema dello zaino, $|D_k(s_k)| = 2$ e $|S_k| = b + 1$, in definitiva
+$O(nb)$.
+
+Confrontando questa complessità con l'algoritmo branch and bound $2^n$, se $b$ è molto inferiore di $2^n$, allora questo algoritmo è migliore.
+
+La complessità di questo problema però non è lineare come appare, ma esponenziale, infatti, come vedremo più avanti, la complessità del problema è esponenziale e legata al numero di bit richiesti per rappresentare il problema.
+
+??? $b$ cresce esponenzialmente in base al numero di bit richiesti per immagazzinare $b$ stesso
+
 
 \end{document}
