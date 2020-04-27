@@ -1,0 +1,31 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Memorie}
+\subsection{Distinzione delle memorie}
+Una memoria è un'unità logica, dedicata alla memorizzazione dei dati nel calcolatore.
+Diversi tipi di memoria, sono distinti in base a:
+\begin{itemize}
+    \item Capacità: numero delle parole memorizzabili
+    \item Caratteristiche fisiche:
+    \item Organizzazione:
+    \item Modalità d'accesso: in quale modi si accede ai dati in memoria
+    \item Prestazioni
+\end{itemize}
+Le modalità d'accesso sono
+\begin{itemize}
+    \item Sequenziale: per accedere ad un dato in una posizione fissa è necessario leggere tutti i dati precedenti (cassette mangianastri)
+    \item Diretto: è possibile accedere direttamente alla posizione in memoria, in molti casi però il tempo d'accesso è dipendente dalla posizione del dato rispetto alla posizione appena letta o scritta (cd)
+    \item Casuale: un accesso diretto con tempo d'accesso costante (RAM, ROM)
+    \item Associativo: si accedono agli indirizzi di memoria attraverso delle chiavi (hash), per controllare se un dato è presente vengono controllate tutte le locazioni esistenti.
+\end{itemize}
+
+Per misurare le prestazioni di una memoria, esistono diversi parametri, uno di questi, come citato al punto precedente è il tempo d'accesso,  ovvero il tempo impiegato dalla memoria per raggiungere l'indirizzo da quando è fornito.
+
+Il tempo di ciclo $T_\text{rc}$ è definito come il tempo di accesso più il tempo necessario per terminare l'operazione prima di poter compiere un altro accesso.
+
+Mentre la velocità di trasferimento (bit rate) è l'inverso del tempo d'accesso, misurando il numero di bit trasferiti.
+
+Solitamente sono tutti dati imposti dalla CPU, a cui la memoria si adegua o introduce ritardi.
+\subsection{Organizzazione delle memorie}
+\end{document}
