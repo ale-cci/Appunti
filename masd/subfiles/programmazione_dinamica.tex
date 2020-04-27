@@ -1,0 +1,100 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Programmazione Dinamica}
+Questa metodologia è applicabile solamente per problemi suddivisibili in $n$ blocchi. In ogni blocco $k$ ($k =1 \dots n$) ci si trova in uno degli stati $s_k$ appartenenti all'insieme di stati $S_k$.
+
+In uno stato $s_k$ si deve prendere una decisione $d_k$ appartenente all'insieme di possibili decisioni $D_k(s_k)$.
+
+Si definisce la funzione di transizione di stato $t(d_k, s_k)$ , come lo spostamento da uno stato $s_k$ ad $s_{k+1}$ attraverso la decisione $d_k$.
+
+Se in un blocco $k$ ci si trova in uno stato $s_k$ e si prende la decisione
+Il risultato della funzione obbiettivo $f$ è dato dalla somma (in rari casi prodotto) di tutti i contributi $u(d_k, s_k)$ dipendenti dalle decisioni prese in ogni stato.
+\subsection{Principio di ottimalità}
+Allo stato $s_k$ la sequenza di decisioni ottime da prendere nei blocchi $k+1 \dots n$ è indipendente dalle decisioni prese per arrivare allo stato $s_k$.
+
+\subsection{Problema dello zaino}
+Chiamando $b$ il numero di oggetti a disposizione, ogni stato $s_k \in S_{0\dots b}$ rappresenta lo spazio disponibile nello zaino.
+\\
+Chiamata $p_k$ il peso dell'oggetto $k$, indicando con $d_k=0$ o $d_k=1$ se l'oggetto $k$ è preso nello zaino, la funzione $D_k$ è esprimibile come:
+\[
+    D_k(s_k) =
+    \begin{cases}
+        \{0, 1\}  &\text{se} \quad s_k \ge p_k\\
+        \{0\}     &\text{se} \quad s_k < p_k
+    \end{cases}
+\]
+Il contributo è quindi $u(d_k, s_k) = d_k \cdot v_k$, e la funzione di transizione: $t(d_k, s_k) = s_k - p_k\cdot d_k$.
+
+Il principio di ottimalità è rispettato: ad ogni blocco $k$, le decisioni ottime da $k$ ad $n$, si ottengono risolvendo il problema dello zaino con capacità $s_k$ ed oggetti $k\dots n$, indipendentemente dalle decisioni prese per arrivare al blocco $k$.
+
+\[
+    f'_n(s_n) = \max_{d_n \in D_n(s_n)} u(d_n, s_n) = d'_n u(d'_n, s_n)
+\]
+In altre parole, in ogni stato finale l'ultimo oggetto nello zaino è inserito solo se c'è posto.
+
+Chiamiamo $f'_k(s_k)$ la funzione che calcola il valore ottimo delle somme dei contributi dei blocchi $k \dots n$ partendo dallo stato $s_k$.
+
+Se mi trovo in uno stato $s_k$ e prendo la decisione $d_k$ il contributo ottimo complessivo dei blocchi $k \dots n$ sarà dato, per il principio di ottimalità da $u(d_k, s_k) + f'_{k+1} (t(d_k, s_k))$.
+\\
+Da cui prendendo la decisione $d'_k$ che ne massimizza il valore, avremo:
+\[
+    f'_k(s_k) = \max_{d_k \in D_k(s_k)} \big\{u(d_k, s_k) + f'_{k+1}(t(d_k, s_k))\big\}
+\]
+Il blocco 1 ha un unico stato $s_1$, quindi il valore di $f'_1(s_1)$ coincide con il valore ottimo del problema, caratterizzato dalle decisioni ottime $d'_k$.
+\subsubsection{Algoritmo - valore ottimo}
+\begin{enumerate}
+    \item
+        Per ogni $s_n \in S_n$ si calcoli $f'_n(s_n)$ e la corrispondente decisione ottima $d'_n(s_n)$.
+        \\
+        Si ponga $k = n-1$
+    \item
+        Per ogni $s_k \in S_k$ si calcoli
+        \[
+            f'_k(s_k) = \max_{d_k \in D_k(s_k)} \big\{ u(d_k, s_k) + f'_{k+1}(t(d_k, s_k))\big\}
+        \]
+
+    \item
+        Se $k=1$ si ha che $f'_1(s_1)$ è il valore ottimo del problema, altrimenti ripetere il passo 2 con $k=k-1$
+\end{enumerate}
+\subsubsection{Algoritmo - soluzione ottima}
+\begin{enumerate}
+    \item Si ponga $s'_1 = s_1$ e $k=1$
+    \item Per il blocco $k$, la decisione ottima è $d'_k(s'_k)$, si ponga
+        \[
+            s'_{k+1} = t(d'_k(s'_k), s'_k)
+        \]
+    \item Se $k=n$ l'algoritmo termina, e la soluzione ottima è rappresentata dalle decisioni
+        $d'_1(s'_1) \dots d'_n(s'_n)$.
+        \\
+        Altrimenti  si ripete il passo 2 con $k = k +1$
+\end{enumerate}
+\subsubsection{Note}
+La programmazione dinamica rientra tra gli algoritmi di enumerazione implicita.
+\subsubsection{Complessità}
+$O(nb)$, una complessità esponenziale perché il valore $b$
+%\subsection{Problema di schedulazione}
+%Supposti $n$ processi $J_1 \dots J_n$ da eseguire su una macchina, ciascuno con tempo di esecuzione $p_i$, minimizzare la misura di prestazione $\sum_i^n \gamma(C_i)$, dove $C_i$ è l'istante in cui termina il job $J_i$ e $\gamma$ è una funzione non decrescente.
+%
+%In certi casi $\gamma(C_i)$ è una funzione molto semplice, come ad esempio $\gamma_i(C_i) = C_i / n$, e permette la soluzione attraverso algoritmi greedy. In altri casi la permutazione ottima è molto più complicata da trovare, es:
+%\[
+%    \gamma_i(C_i) = \frac{1}{n}\max\big\{0, C_i - d_i\big\} = \frac{1}{n} T_i
+%\]
+%Dove $T_i$ misura il ritardo dell'istante di completamento di $J_i$ dal una data prevista $d_i$.
+%\subsubsection{Osservazione - principio di ottimalità}
+%Se $J_1 \dots J_n$ è una schedulazione ottima, allora per ogni $k \in 1 \dots n$, $J_1 \dots J_k$ è una schedulazione ottima per il problema in cui si considerano solo i job $J_1 \dots J_k$.
+%
+%\subsubsection{Dimostrazione - principio di ottimalità}
+%Scrivendo la misura di prestazione come:
+%\[
+%    \sum_{i=1}^k \gamma(C_i) + \sum_{i=k+1}^n \gamma(C_i)
+%\]
+%Per assurdo, supponiamo che esista una schedulazione $J'_1 \dots J'_k$ migliore di $J_1 \dots J_k$, allora avremmo
+%\[
+%    \sum_{i=1}^k \gamma(C'_i) + \sum_{i=k+1}^n \gamma(C_i)
+%    <
+%    \sum_{i=1}^k \gamma(C_i) + \sum_{i=k+1}^n \gamma(C_i)
+%\]
+%Ovvero $J'_1 \dots J'_k$,$J_{k+1} \dots J_n$ sarebbe migliore di $J_1 \dots J_n$, contraddicendo l'ipotesi di $J_1 \dots J_n$ schedulazione ottima.
+
+\end{document}
