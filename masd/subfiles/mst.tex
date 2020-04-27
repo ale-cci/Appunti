@@ -52,7 +52,7 @@ Se si toglie questo arco e si lascia $(u, v)$ si ottiene un albero di peso minor
 contraddicendo l'ipotesi.
 
 \newpage
-\subsection{Algoritmo MST-1}
+\subsection{Algoritmo di Prim (MST-1)}
 \begin{center}
     \begin{tikzpicture}[rotate=90]
         \Vertices[unit=2.3]{circle}{0,1,2,3,4}
@@ -102,7 +102,7 @@ ha una complessità ottima.
 Infatti per tali grafi non possiamo aspettarci di fare meglio di $O(V^2)$: la sola operazione di lettura dei pesi
 degli archi richiede $O(V^2)$.
 
-\subsection{Algoritmo MST-2}
+\subsection{Algoritmo Borůkova (MST-2)}
 \lstinputlisting{algorithms/mst_2.py}
 \subsubsection{Dimostrazione correttezza}
 Lasciata per esercizio, si basa sul teorema della foresta.
