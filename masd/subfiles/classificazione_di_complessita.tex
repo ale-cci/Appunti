@@ -23,5 +23,68 @@ Risolvere il problema di ottimizzazione, attraverso un algoritmo $\mathcal{A}$ i
 Se ci limitiamo a problemi di ottimizzazione combinatoria, è semplice identificare un algoritmo di risoluzione, infatti se la regione ammissibile $S$ contiene un numero di finiti di elementi, basta un'enumerazione completa per elencare tutte possibili soluzioni.
 
 Molto spesso i problemi di risoluzione completa richiedono tempi di esecuzione esagerati, per questo è utile sapere se è sempre possibile trovare soluzioni eseguibili in tempi ragionevoli.
-% slide 15 - 44
+
+\subsection{Complessità}
+Viene chiamata \textbf{dimensione istanza} $dim(I)$ la quantità di memoria necessaria per memorizzare in codifica binaria l'istanza $I$.
+
+Mentre $numop_\mathcal{A}(I)$ il numero di operazioni elementari eseguite in $\mathcal{A}$ per risolvere $I$.
+
+L'analisi worst case definisce il tempo $t_\mathcal{A}(k)$ necessario all'algoritmo $\mathcal{A}$ per risolvere istanze di dimensione $k$ come il massimo tra tutti i tempi di esecuzione:
+\[
+    t_\mathcal{A}(k) = \max_{I: dim(I) = k} numop_\mathcal{A}(I)
+\]
+Tipicamente non si calcola l'espressione esatta di $t_\mathcal{A}(k)$, ma ci si limita ad uno studio dell'ordine di grandezza. Viene detto che dell'ordine di grandezza della funzione $g(k)$, $O(g(k))$ se esiste una costante $u$ positiva, tale che $t_\mathcal{A} \le u\cdot g(k)$
+
+Algoritmi con tempi dell'ordine di grandezza di $2^k$ o $k!$ vengono detti di complessità esponenziale. Diversamente, algoritmi con tempi nell'ordine di grandezza $k^p$, con $p$ costante, vengono detti di complessità polinomiale.
+Maggiore è il fattore $p$ del polinomio, maggiore è il tempo di esecuzione, rimane comunque vero che la complessità polinomiale è preferibile rispetto a quella esponenziale.
+
+Dato un problema di ottimizzazione $R$, diciamo che questo appartiene alla classe $P$ se e solo se esiste un algoritmo $\mathcal{A}$ di complessità polinomiale che lo risolve.
+A questa classe appartengono, per esempio i problemi di shortest path ed mst.
+
+Un problema è viene detto di classe $NP$ se la soluzione ottima non può essere calcolata in tempo polinomiale.
+La classe di problemi $NP$ contiene tutti i problemi di ottimizzazione, i quali, nota la soluzione, il valore ottimo può essere verificato in tempo polinomiale.
+Esempi ne sono la CLIQUE, il cui valore ottimo si ottiene calcolandone la sua cardinalità, e TSP, dato il circuito il valore ottimo si calcola come somma delle distanze.
+
+Va notato che tutti i problemi appartenenti alla classe $\mathcal{P}$ appartengono anche ad $\mathcal{NP}$, infatti non è pure necessario che sia fornita la soluzione ottima per calcolarne il valore in tempo polinomiale.
+
+\subsubsection{Trasformazione in tempo polinomiale}
+Dati due problemi di ottimizzazione $R_1$ ed $R_2$, diciamo che $R_1$ è trasformabile in tempo polinomiale in $R_2$ se e solo se ogni istanza di $R_1$ di dimensione $k$ può essere risolta risolvendo l'istanza $R_2$ di dimensione al più $p(k)$ per qualche polinomio $p$. Se $R_1$ è trasformabile in tempo polinomiale in $R_2$, allora $R_2$ essendo risolvibile in tempo polinomiale, implica che anche $R_1$ è risolvibile in tempo polinomiale.
+\subsubsection{Dimostrazione}
+Sia $k$ la dimensione di un'istanza di problema $R_1$ e $p(k)$ la dimensione dell'istanza equivalente $R_2$.
+\\
+Ogni istanza di $R_2$ di dimensione $h$ viene risolta in un tempo polinomiale $q(h)$.
+\\
+Segue che per risolvere l'istanza $R_2$ sarà necessario un tempo $q(p(k))$, polinomiale rispetto a $k$.
+
+\subsubsection{Problemi NP-completi}
+Diciamo che un problema $R$ è NP-completo se $R \in \mathcal{NP}$ e per ogni problema $Q \in \mathcal{NP}$ esiste una riduzione polinomiale $Q$ in $R$.
+
+Se esistesse un problema NP-completo risolvibile in tempo polinomiale, allora si avrebbe che $\mathcal{P} = \mathcal{NP}$
+
+Avendo visto che $\mathcal{P} \subseteq \mathcal{NP}$, possiamo chiederci se esistono problemi in $\mathcal{NP}$ non risolvibili in tempo polinomiale: $\mathcal{P} \neq \mathcal{NP}$.
+
+Sino ad ora questa domanda non ha ancora una risposta, tuttavia si presuppone che probabilmente $\mathcal{P} \neq \mathcal{NP}$.
+
+\subsection{Problemi di approssimazione}
+Dato un problema di ottimizzazione di istanze $(f, S)$ tali che $\forall x \in S, \quad f(x) \ge 0$, chiamata $x'$ la soluzione ottima dell'istanza, e $v = f(x')$ il valore ottimo dell'istanza:
+
+Per i problemi di massimo, il problema di $\varepsilon$-approssimazione (epsilon-approssimazione), $\varepsilon \ge 0$, consiste nel determinare un punto $\bar{x} \in S$ tale che
+\[
+    \frac{v}{f(\bar{x})} \le 1 + \varepsilon
+\]
+Il punto $\bar{x}$ prende il nome di soluzione $\varepsilon$-approssimata  dell'istanza.
+
+Per valori di $\varepsilon =0$, il problema coincide con quello di ottimizzazione, ma per $\varepsilon > 0$ si richiede una soluzione che si discosti al massimo di una percentuale $\varepsilon$ del valore $f(\bar{x})$. Quindi tanto maggiore il valore di $\varepsilon$ quanto minore sarà la precisione garantita da una soluzione.
+
+\subsubsection{Algoritmi di approssimazione}
+Un algoritmo $\mathcal{A}_\varepsilon$ si definisce algoritmo di $\varepsilon$-approssimazione per un problema di ottimizzazione, se risolve il problema di $\varepsilon$-approssimazione associato ad ogni istanza del problema di ottimizzazione.
+
+
+Dato un problema $\mathcal{NP}$-completo, la complessità del corrispondente problema di $\varepsilon$-approssimazione dipende dalla categoria del problema di approssimazione:
+\begin{enumerate}
+    \item Per ogni valore di $\varepsilon > 0$ il problema è risolvibile in tempo polinomiale sia per dimensione delle istanze, sia rispetto all'inverso della precisione richiesta.
+    \item Per ogni valore di $\varepsilon > 0$ il problema richiede tempo polinomiale rispetto alla dimensione delle istanze, ma esponenziale rispetto a $\frac{1}{\varepsilon}$
+    \item Il problema è risolvibile in tempo polinomiale solo per valori alti di $\varepsilon$
+    \item Per ogni valore di $\varepsilon$ il problema è $\mathcal{NP}$-completo.
+\end{enumerate}
 \end{document}

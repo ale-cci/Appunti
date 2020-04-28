@@ -1,0 +1,46 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Approssimazione TSP Metrico}
+Introduciamo un caso particolare di TSP in cui esistono restrizioni sui valori che possono assumere le distanze lungo gli archi del grafo:
+\begin{itemize}
+    \item $d_{ij} = d_{ji}$ il grafo è bidirezionato
+    \item $d_{ij} \ge 0$ tutte le distanze sono non negative
+    \item le distanze soddisfano tutte la disuguaglianza triangolare: $d_{ij} + d_{jk} \ge d_{ik}$
+\end{itemize}
+
+\subsection{Algoritmo Double Spanning Tree}
+\begin{enumerate}
+    \item Dato il grafo $G = (V, A)$ si determini un albero di supporto a costo minimo $T = (V, A_T)$ di tale grafo.
+    \item Si duplichi ogni arco $A_T$ assegnando ad ogni arco la stessa distanza dell'arco originale.
+        Sul grafo risultante si determini un ciclo euleriano (vedi pg..)
+    \item Dalla sequenza dei nodi del ciclo, si rimuovono tutte le ripetizioni di nodi a parte quella dell'ultimo nodo. Ottenendo un circuito hemiltoniano.
+\end{enumerate}
+\subsubsection{Note}
+L'algoritmo DST richiede un tempo di esecuzione polinomiale rispetto alla dimensione dell'istanza.
+
+Un grafo ammette un ciclo euleriano se e solo se tutti i suoi nodi hanno grado pari, o due nodi dispari con stesso grado.
+Nel nostro caso, avendo raddoppiato tutti gli archi dell'albero di supporto ottimo, la condizione è sicuramente soddisfatta.
+
+\subsection{Calcolo di un ciclo euleriano}
+\begin{enumerate}
+    \item Dato un albero $T = (V, A_T)$ fissato un nodo radice $v'$, si ponga:
+        $S = \emptyset$,
+        $i_1 = v'$,
+        $k = 2$,
+        $w = v'$
+    \item Se $w$ ha nodi figli in $V - S$ allora si selezioni il suo nodo figlio $z \in V - S$, ponendo $w = z$, $i_k = z$, $k = k+1$
+        e si ripeta il passo 2.
+        \\
+        Se $w$ non ha figli in $V - S$ e $w \neq v'$ si risalga al nodo padre $y$ di $w$ e si ponga
+            $S = S \cup {w}$, $w = y$, $i_k = y$, $k=k+1$ e si ripeta il passo 2
+        \\
+        Altrimenti si termina l'esecuzione
+\end{enumerate}
+\subsubsection{Osservazione}
+Per il TSP  metrico, 'algoritmo DST è un algoritmo di 1-approssimazione.
+\subsubsection{Dimostrazione}
+...
+
+
+\end{document}
