@@ -4,28 +4,57 @@
 \section{Memorie}
 \subsection{Distinzione delle memorie}
 Una memoria è un'unità logica, dedicata alla memorizzazione dei dati nel calcolatore.
-Diversi tipi di memoria, sono distinti in base a:
+Diversi tipi di memoria, sono classificate in base a 5 parametri:
 \begin{itemize}
     \item Capacità: numero delle parole memorizzabili
+        Chiamato $L$ il numero di linee, ed $N$ il numero di parole $L =\log_2 N$.
+        Ogni parola è un dato ad $M$ bit.
+        \\
+        Dato che di solito $M = 8$, l'unità di misura la capacità di memoria si misura in byte.
     \item Caratteristiche fisiche:
+        Di cui tipo (semiconduttore come RAM, a superficie magnetica HD, ottica DVD), il consumo,
+        l'affidabilità misurata come MTBF (\textit{Mean Time Between Failure}), alterabilità (solo lettura o lettura/scrittura) e durevolezza (volatile o non-volatile)
     \item Organizzazione:
-    \item Modalità d'accesso: in quale modi si accede ai dati in memoria
-    \item Prestazioni
+        memorie interne al calcolatore sono organizzate in una gerarchia,
+        parallelismo ed interlacciamento (come si interfacciano con memorie di livello superiore)
+    \item Modalità d'accesso: in quale modi si accede ai dati in memoria,
+        \begin{itemize}
+            \item Sequenziale: per accedere ad un dato in una posizione fissa è necessario leggere tutti i dati precedenti (cassette mangianastri)
+            \item Diretto: è possibile accedere direttamente alla posizione in memoria, in molti casi però il tempo d'accesso è dipendente dalla posizione del dato rispetto alla posizione appena letta o scritta (cd)
+            \item Casuale: un accesso diretto con tempo d'accesso costante (RAM, ROM)
+            \item Associativo: si accedono agli indirizzi di memoria attraverso delle chiavi hash (tag), per controllare se un dato è presente vengono controllate tutte le locazioni esistenti.
+        \end{itemize}
+
+    \item Prestazioni:
+        Per misurare le prestazioni di una memoria, esistono diversi parametri, uno di questi, come citato al punto precedente è il tempo d'accesso,  ovvero il tempo impiegato dalla memoria per raggiungere l'indirizzo da quando è fornito.
+
+        Il tempo di ciclo $T_\text{rc}$ è definito come il tempo di accesso più il tempo necessario per terminare l'operazione prima di poter compiere un altro accesso.
+
+        Mentre la velocità di trasferimento (bit rate) è l'inverso del tempo d'accesso, misurando il numero di bit trasferiti.
+
+        Solitamente sono tutti dati imposti dalla CPU, a cui la memoria si adegua o introduce ritardi.
+
 \end{itemize}
+
+Il numero di pin in ingresso del componente della memoria non coincide necessariamente con $n_a$ ed $n_d$ del bus dei dati.
+In un processore moderno, normalmente $n_a = 36$ quindi può indirizzare al massimo $64G$ di memoria RAM. Le dimensioni dell'unità di memoria può essere inferiore a $64G$, magari si hanno 4 memorie da $16G$, con $L=34$. $n_a$ rappresenta la massima memoria indirizzabile del processore, $L$ rappresenta la memoria effettiva di un cip specifico di memoria.
+
 Le modalità d'accesso sono
-\begin{itemize}
-    \item Sequenziale: per accedere ad un dato in una posizione fissa è necessario leggere tutti i dati precedenti (cassette mangianastri)
-    \item Diretto: è possibile accedere direttamente alla posizione in memoria, in molti casi però il tempo d'accesso è dipendente dalla posizione del dato rispetto alla posizione appena letta o scritta (cd)
-    \item Casuale: un accesso diretto con tempo d'accesso costante (RAM, ROM)
-    \item Associativo: si accedono agli indirizzi di memoria attraverso delle chiavi (hash), per controllare se un dato è presente vengono controllate tutte le locazioni esistenti.
-\end{itemize}
 
-Per misurare le prestazioni di una memoria, esistono diversi parametri, uno di questi, come citato al punto precedente è il tempo d'accesso,  ovvero il tempo impiegato dalla memoria per raggiungere l'indirizzo da quando è fornito.
 
-Il tempo di ciclo $T_\text{rc}$ è definito come il tempo di accesso più il tempo necessario per terminare l'operazione prima di poter compiere un altro accesso.
+\subsection{Gerarchie di memoria}
+La memoria ideale sarebbe di capacità infinita, con tempo d'accesso, costo e consumo nullo.
 
-Mentre la velocità di trasferimento (bit rate) è l'inverso del tempo d'accesso, misurando il numero di bit trasferiti.
+L'insieme delle memorie presenti in un calcolatore mira a combinare le caratteristiche migliori di ogni tipo di memoria per raggiungere l'obbiettivo di memoria ideale.
 
-Solitamente sono tutti dati imposti dalla CPU, a cui la memoria si adegua o introduce ritardi.
-\subsection{Organizzazione delle memorie}
+Salendo la gerarchia diminuisce il tempo d'accesso e la capacità delle memorie e cresce il costo per bit.
+
+Al livello più alto della gerarchia sono presenti i registri interni alla CPU, segue la cache, poi la memoria centrale o principale, ed in fondo alla gerarchia le memorie secondarie, con alte capacità ma bassi costi e permanenti.
+\subsubsection{Principio di località}
+
+Un programma in un certo istante $t$ necessita di determinati dati
+Se un programma ad un istante $t$ accede ad un certo dato,
+c'è alta probabilità che siano richiesti anche i dati adiacenti (proprietà di località spaziale), e che all'istante successivo si acceda nuovamente alla memoria (proprietà di località temporale).
+
+Gli algoritmi della MMU (\textit{Memory Management Unit}) si concentrano a minimizzare il numero di accessi in memoria a livelli più bassi.
 \end{document}
