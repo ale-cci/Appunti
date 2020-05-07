@@ -57,4 +57,59 @@ Se un programma ad un istante $t$ accede ad un certo dato,
 c'è alta probabilità che siano richiesti anche i dati adiacenti (proprietà di località spaziale), e che all'istante successivo si acceda nuovamente alla memoria (proprietà di località temporale).
 
 Gli algoritmi della MMU (\textit{Memory Management Unit}) si concentrano a minimizzare il numero di accessi in memoria a livelli più bassi.
+
+
+\subsubsection{Blocco di memoria}
+Con blocco si fa riferimento all'unità di informazione minima scambiata fra i livelli di memoria.
+Quando un particolare dato viene richiesto ad una memoria, l'evento che il dato non sia presente prende il nome di "miss" mentre se il dato è già presente si chiama "hit".
+\\
+Lo scopo di una buona gerarchia di memoria è massimizzare il rapporto tra hit e miss.
+La frequenza di accessi trovati direttamente al livello superiore prende il nome di hit-rate ($h$).
+La miss rate è quindi complementare a quest'ultimo.
+\\
+Il tempo per recuperare il dato al livello successivo in caso di miss prende il nome di "Miss Penalty", mentre se il dato è già disponibile, il tempo per recuperarlo è pari al tempo di hit.
+
+Il miss penalty $T_{mp}$ può essere visto come la somma tra hit time ed il tempo richiesto per il trasferimento dei dati dai blocchi inferiori ($T_{miss}$).
+\\
+Ottenendo la relazione:
+\[
+    T_{acc} = h \cdot T_h + (1-h) T_{mp} = T_h + (1 -h) T_{miss}
+\]
+Dalla formula, minimizzando la miss rate, si tende alla memoria ideale, portando il tempo d'accesso uguale al tempo di hit.
+
+
+\subsection{Gerarchie di memoria}
+Una gerarchia di memoria è definita dai suoi livelli di memoria: il loro numero, dimensione, velocità e componenti.
+\\
+Il piazzamento del blocco, chiamato anche funzione di traduzione o di mapping, sceglie dove allocare il blocco nel livello di memoria corrente.  Nel caso della cache ad esempio è necessario calcolare un hash per determinarne la locazione.
+
+L'identificazione come del blocco indica come risalire alla posizione del blocco di memoria.
+
+Il rimpiazzamento si occupa di inserire i dati provenienti dai livelli inferiori della gerarchia, scegliendo in quale posizione del livello corrente inserirlo.
+
+I dati, una volta modificati, vengono scritti sui livelli inferiori utilizzando strategie di scrittura.
+
+
+Ad esempio, nel caso dei registri, l'identificazione è nominale, ed il nome viene indicato nel codice sorgente, mentre identificazione e rimpiazzamento sono definiti dal compilatore.
+
+In memoria centrale, il piazzamento del blocco dipende dall'istruzizone (specificato dall'indirizzo di memoria), i dati sono identificati dall'indirizzo e le scritture sono scielte a livello di codice.
+
+Le memorie centrali nei calcolatori sono le RAM, volatili e di lettura e scrittura). Di memorie RAM ci sono due categorie:
+SRAM (\textit{Static RAM}) utilizzate per memorie cache e DRAM (\textit{Dynamic RAM}) utilizzate come memoria centrale.
+
+Le memorie SRAM sono molto veloci e realizzate attraverso flip flop D, che permettono di memorizzare il dato senza la perdita.
+La tecnologia richiesta per realizzare uno di questi flip flop è molto costosa, per questo al giorno d'oggi non è possibile utilizzare queste memorie per immagazzinare grandi quantità di dati.
+
+Oltre ai flip flop in queste memorie sono presenti logiche di indrizzo e la selezione di lettura scrittura.
+
+Le memoria DRAM ogni bit è rappresentato da un condensatore / transistor (nel caso di tecnologia mos). Il loro costo è molto inferiore quindi rispetto alle precedenti.
+\\
+Siccome i condensatori col tempo si scaricano, necessitano di circuiti automatici di refresh per ricaricare il condensatore.
+
+Oltre a memorie RAM sono presenti le memorie ROM, a sola lettura. Esse sono divise in:
+le ROM originali erano scrivibili un'unica volta e non sono volatili.
+PROM (\textit{Programmable ROM}), scrivibili un'unica volta,
+EPROM (\textit{Erasable PROM}), cancellabili attraverso la luce ultravioletta,
+EEPROM (\textit{Electrically Erasable PROM}), cancellabili con segnali elettrici.
+FLASH leggibili e scrivibili con dati non volatili (come SSD ).
 \end{document}
