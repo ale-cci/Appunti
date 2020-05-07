@@ -1,12 +1,13 @@
 \documentclass[../template]{subfiles}
 
+\newcommand{\idiff}{\ensuremath{I = \frac{dQ}{dt}}}
+
 \begin{document}
 \section{Dispositivi e Circuiti Elettronici}
-I dispositivi elettronici, devono le loro proprietà dai materiali semiconduttori:
-La corrente elettrica $I = \frac{dQ}{dt}$ è generata da movimenti di carica, uno dei modi per mettere in moto la carica è attraverso un campo elettrico.
-In particolare la densità di corrente elettrica $J$ può essere legata ad il campo elettrico $E$ attraverso la relazione $\bar{J} = \sigma \bar{E}$, con $\sigma$ conducibilità elettrica.
+La corrente elettrica $\idiff$ è generata da movimenti di carica. Uno tra i diversi in moto per spostare delle cariche è attraverso un campo elettrico.
 
-I materiali sono classificabili per il valore di $\sigma$, un basso valore di conducibilità indica una bassa corrente, caratteristica dei materiali isolanti.
+La densità di corrente elettrica $J$ è legata al campo elettrico $E$ dalla conducibilità elettrica $\sigma$ attraverso la legge di ohm $\bar{J} = \sigma \bar{E}$.
+I materiali sono classificabili dal loro valore di $\sigma$, i materiali isolanti sono caratterizzati da bassi valori di $\sigma$, corrispondenti a bassi valori di corrente.
 Valori di $\sigma$ alti comportano un'alta corrente, caratteristica dei materiali conduttori.
 
 I semiconduttori sono materiali con conducibilità elettrica $\sigma$ variabile (ad esempio in funzione della temperatura).
@@ -17,14 +18,21 @@ Guardando il caso del componente resistenza, la corrente ai capi di essa dipende
     \includegraphics[width=.30\textwidth]{img/resistence-current}
     \includegraphics[width=.30\textwidth]{img/diode-current-graph}
 \end{figure}
+In figura sono riportate le relazioni corrente-tensione di una resistenza ed un diodo. È possibile osservare come il comportamento della corrente del diodo è completamente differente.
 
-Possiamo osservare che il comportamento della corrente del diodo è completamente differente, e la legge di ohm ($\bar{J} = \sigma \bar{E}$) è valida in forma locale.
+\subsubsection{Modello fisico}
+Gli elettroni di ciascun materiale orbitano attorno ai rispettivi nuclei, in stato di equilibrio.
+In stato equilibrio, gli elettroni di un materiale orbitano attorno al nucleo, la complessiva somma delle cariche risulta nulla.
 
-Analizziamo quindi più nel dettaglio la struttura dei materiali semiconduttori.
+Gli elettroni attratti dalla forza coulombiana, orbitano attorno al nucleo. Ad ogni orbita corrisponde una velocità di percorrenza,
+quindi un'energia cinetica. L'ampiezza di ogni orbita dipende inversamente dal quadrato della distanza dal nucleo (formula forza di coulomb).
+\\
+In definitiva, possiamo
 
-Gli elettroni dei materiali orbitano attorno ai rispettivi nuclei, perché si trovano in uno stato di equilibrio, dovuto alle forze coulombiane, tale per cui la somma complessiva delle cariche di un atomo è nulla.
+% TODO
 
-Maggiore è l'orbita degli elettroni attorno al nucleo, maggiore è la velocità degli elettroni. Inoltre siccome la forza attrattiva dipende dal quadrato della distanza, più esterna è l'orbita, minore è la forza attrattiva che si manifesta.
+Maggiore è la grandezza dell'orbita degli elettroni, maggiore è la veloci
+Inoltre maggiore è la grandezza dell'orbita degli elettroni, maggiore è la velocità degli elettroni, quindi la loro energia cinetica.
 
 All'ampiezza dell'orbita è quindi associato inversamente la forza attrattiva del nucleo, ed un'energia cinetica legata alla velocità di percorrenza.
 \\
@@ -94,4 +102,60 @@ La conducibilità elettrica aumenta quindi con la temperatura del circuito.
 
 Riassumendo quindi, un semiconduttore il livello di fermi interseca una banda proibita, la cui ampiezza è sufficientemente piccola da essere probabile l'effetto di scavalcamento con la sola energia termica.
 Il semiconduttore ha quindi "due" bande di conduzione.
+
+
+% seconda lezione
+\subsubsection{Seconda lezione}
+la distanza dal nucleo cresce col crescere dell'energia, andando a vedere gli elettroni sullo strato di valenza, sono quelli più distanti dal nucleo.
+La forma del reticolo di atomi è determinata dal numero di elettroni disponibili a collegarsi agli atomi vicini.
+Tutti i materiali semiconduttori sono materiali della quarta colonna della tavola periodica, i quali possiedono quattro elementi nell'orbita di legame, tra essi prevale il silicio.
+
+In alternativa agli elementi della tavola periodica è possibile formare delle leghe tra elementi della terza e quarta colonna o quarta e quinta, come arseniuro di gallio.
+
+Schematizzando il reticolo del silicio su una mappa in due dimensioni (figura ?)
+La promozione da banda di valenza a banda di conduzione, significa che esso è meno legato al nucleo originario. È talmente poco legato al nucleo che attraverso una forza di un campo magnetico può spostarsi internamente al reticolo.
+Tali elettroni vengono definiti come elettroni liberi.
+
+Il materiale in condizione di quiete è neutro, ovvero ha tanta carica positiva quanta negativa. Al momento in cui un'elettrone libero esce da una regione, quella regione non ha più carica nulla ma leggermente positiva. Possiamo quindi immaginare il moto dell'elettrone come uno spostamento di carica nello spazio, quindi una corrente.
+\\
+Lo spazio lasciato vuoto dall'elettrone, è successivamente occupato da altri elettroni liberi. Creando uno spostamento a catena degli elettroni.
+
+Alla banda di conduzione è associato il movimento di una carica negativa, alla banda di valenza è associato il movimento della lacuna, carica positiva generata dallo spostamento dell'elettrone.
+
+In un conduttore esiste solo un tipo di portatore di carica (elettroni), mentre nei semiconduttori esistono portatori di carica positiva e portatori di carica negativa.
+
+È possibile modellare il movimento della lacuna come il movimento di una fittizia particella fisica, dotata di una massa (maggiore di quella dell'elettrone perché si muove più lentamente)
+
+Per misurare la corrente è necessario conoscere la quantità di elettroni e lacune in un determinato volume.
+Indicheremo quindi con $n$ il numero di elettroni per unità di volume \footnote{Misurata per numero di elettroni per centimetro cubo}.
+Analogamente definiamo la concentrazione di lacune con $p$ come il numero di lacune per unità di volume.
+
+Per densità di carica degli elettroni si calcola con $-qn$, mentre per lacune $qn$.
+Ad ogni elettrone libero in banda di valenza, corrisponde una lacuna in banda di conduzione, quindi necessariamente all'equilibrio $p = n$.
+
+Possiamo quindi definire come evento di generazione il momento in cui un'elettrone abbandona la banda di valenza generando una lacuna, mentre il fenomeno duale, il passaggio da banda di conduzione a bassa di valenza viene chiamato evento di ricombinazione.
+
+Indichiamo quindi con $G$ il numero di coppie elettrone-lacune generate nell'unità di volume e nell'unità di tempo. Il tasso di ricombinazione è indicato con $R$.
+
+Alla equilibrio quindi $n = p = n_i(T)$ e $R = G\ge 0$ il numero di elettroni e lacune costante prende il nome di $n_i$ (concentrazione intrinseca del materiale).
+
+Sostituendo ad alcuni atomi di silicio, con atomi della 5a colonna, as es fosforo. In questo modo avendo un'elettrone di legame in più (ed un protone in più), siccome i legami sono tutti occupati con gli atomi di silicio adiacenti, otteniamo un'elettrone che non contribuisce ad alcun legame nel reticolo.
+\\
+La sostituzione di alcuni atomi di silicio con atomi della 3a o 5a colonna prende il nome di drogaggio.
+
+La rara sostituzione di atomi di silicio, non varia il reticolo cristallino originario.
+
+L'elettrone nella fascia più esterna non essendo legato agli altri se riceve energia sufficiente può liberarsi e comportarsi come una carica negativa mobile. È ancora vero che lascia alle sue spalle una carenza di carica negativa, ma la carica positiva è associata alla presenza del protone nel nucleo e non è in grado di spostarsi.
+In questo caso si genera un'elettrone mobile, senza generare lacune mobili. In questo caso $p \neq n$. Gli atomi della quinta colonna prendono quindi il nome di atomi droganti di tipo donatore.
+
+Tutto questo è rappresentabile nel diagramma delle energie inserendo un livello "donatore" interno alla banda proibita permettendo che l'evento di liberazione dell'elettrone richieda meno energia, rendendolo ancora più probabile a temperatura ambiente.
+\\
+Chiameremo $N_D$ la concentrazione di atomi donatori, e per mantenere la struttura del cristallino $N_D \ll 10^{22}$.
+
+Analogamente prendendo un' elemento della terza colonna (es. boro) nel reticolo viene rimosso un legame, fornendo energia al reticolo e spostando elettroni, essi andranno ad occupare del legame mancante, generando lo spostamento di una carica positiva.
+La carica negativa è fissa perché legata alla struttura del boro.
+
+Chiameremo il boro atomo accettore, perché capace di ionizzare il reticolo negativamente. Con $N_A$ indicheremo la concentrazione degli atomi accettori per unità di volume. Interpretando l'evento sul diagramma energetico, sarebbe come un livello energetico che ricade nella banda proibita molto vicino alla banda di valenza. Generando una lacuna mobile in tale banda.
+
+In questo caso $n < p$.
 \end{document}

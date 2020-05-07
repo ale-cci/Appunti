@@ -3,52 +3,63 @@
 \begin{document}
 \section{Classificazione di complessità}
 \subsection{Problemi di ottimizzazione}
-Un problema di ottimizzazione è formato da un'insieme di istanze, ognuna rappresentata dalla coppia $(f, S)$: funzione obbiettivo e regione ammissibile.
-La regione ammissibile $S$ contiene tutti i possibili elementi che, presi singolarmente, costituiscono una soluzione.
-
-Nel caso in cui il problema di ottimizzazione sia di massimo, allora la coppia $(f, S)$ è rappresentata come
+Un problema di ottimizzazione è definito su un insieme di istanze $(f, S)$: funzione obbiettivo e regione ammissibile del problema.
+\\
+La forma normale di un problema di ottimizzazione di massimo è espressa come:
 \[
-    \max_{x\in S} f(x)
+    \max_{x \in S} f(x)
 \]
-Risolvere vuol dire trovare $x' \in S$ tale che $f(x') \ge f(x) \quad \forall x \in S$.
-$x'$ viene quindi detta soluzione ottima dell'istanza, mentre $f(x')$ viene detto valore ottimo dell'istanza.
+Risolvere l'istanza $(f, S)$, vuol dire trovare $x' \in S$ tale per cui $f(x') \ge fx) \, \forall x \in S$. Il valore $x'$ viene detto soluzione ottima dell'istanza, mentre $f(x')$ prende il nome di valore ottimo.
 
-Data un'istanza $S$ con un numero arbitrario di punti, il problema di ottimizzazione viene detto ottimizzazione combinatoria se i punti sono numerabili, ed ottimizzazione continua se i punti non sono numerabili.
+Per risolvere il problema di ottimizzazione si richiede di trovare un algoritmo $\mathcal{A}$, in grado di determinare il valore ottimo su regione ammissibile $S$. Il numero di operazioni eseguite prende viene indicato com $numop_\mathcal{A}(I)$.
+\\
+Oltre al numero di operazioni, è calcolata anche la quantità di memoria necessaria all'algoritmo per processare l'istanza. Questa prende il nome di dimensione dell' istanza ed è indicata con $dim(I)$.
 
-Clique (ricerca di sottografi con almeno un arco)
-TSP (\textit{Traveling Salesman Problem}): dato un grafo completo $G=(V, A)$ con distanze degli archi $d_{ij}$ interi non negativi. Individuare nel grafo il circuito hemiltoniano di cammino minimo.
-
-Risolvere il problema di ottimizzazione, attraverso un algoritmo $\mathcal{A}$ in grado di fornire una soluzione ottima ed il valore ottimo.
-
-Se ci limitiamo a problemi di ottimizzazione combinatoria, è semplice identificare un algoritmo di risoluzione, infatti se la regione ammissibile $S$ contiene un numero di finiti di elementi, basta un'enumerazione completa per elencare tutte possibili soluzioni.
-
-Molto spesso i problemi di risoluzione completa richiedono tempi di esecuzione esagerati, per questo è utile sapere se è sempre possibile trovare soluzioni eseguibili in tempi ragionevoli.
-
-\subsection{Complessità}
-Viene chiamata \textbf{dimensione istanza} $dim(I)$ la quantità di memoria necessaria per memorizzare in codifica binaria l'istanza $I$.
-
-Mentre $numop_\mathcal{A}(I)$ il numero di operazioni elementari eseguite in $\mathcal{A}$ per risolvere $I$.
-
-L'analisi worst case definisce il tempo $t_\mathcal{A}(k)$ necessario all'algoritmo $\mathcal{A}$ per risolvere istanze di dimensione $k$ come il massimo tra tutti i tempi di esecuzione:
+L'analisi worst case definisce il tempo $t_\mathcal{A}(k)$ necessario all'algoritmo $\mathcal{A}$ per risolvere istanze di dimensione $k$, come il massimo tra tutti i tempi di esecuzione:
 \[
     t_\mathcal{A}(k) = \max_{I: dim(I) = k} numop_\mathcal{A}(I)
 \]
-Tipicamente non si calcola l'espressione esatta di $t_\mathcal{A}(k)$, ma ci si limita ad uno studio dell'ordine di grandezza. Viene detto che dell'ordine di grandezza della funzione $g(k)$, $O(g(k))$ se esiste una costante $u$ positiva, tale che $t_\mathcal{A} \le u\cdot g(k)$
+Solitamente viene calcolata l'espressione esatta di $t_\mathcal{A}(k)$, ma ci si limita ad uno studio dell'ordine di grandezza.
+Il valore $t_\mathcal{A}(k)$ è detto dell'ordine di grandezza di $g(k)$, se esiste $u$ costante positiva tale per cui $t_\mathcal{A}(k) \le u \cdot g(k)$.
 
-Algoritmi con tempi dell'ordine di grandezza di $2^k$ o $k!$ vengono detti di complessità esponenziale. Diversamente, algoritmi con tempi nell'ordine di grandezza $k^p$, con $p$ costante, vengono detti di complessità polinomiale.
-Maggiore è il fattore $p$ del polinomio, maggiore è il tempo di esecuzione, rimane comunque vero che la complessità polinomiale è preferibile rispetto a quella esponenziale.
+Un problema di ottimizzazione può essere classificato in diverse categorie in base alle caratteristiche dell'insieme $S$:
+se $S$ è continuo, allora il problema è detto di ottimizzazione continua; Diversamente se $S$ è discreto, ovvero i suoi elementi sono enumerabili, si parla di problema ad ottimizzazione combinatoria.
 
-Dato un problema di ottimizzazione $R$, diciamo che questo appartiene alla classe $P$ se e solo se esiste un algoritmo $\mathcal{A}$ di complessità polinomiale che lo risolve.
-A questa classe appartengono, per esempio i problemi di shortest path ed mst.
 
-Un problema è viene detto di classe $NP$ se la soluzione ottima non può essere calcolata in tempo polinomiale.
-La classe di problemi $NP$ contiene tutti i problemi di ottimizzazione, i quali, nota la soluzione, il valore ottimo può essere verificato in tempo polinomiale.
-Esempi ne sono la CLIQUE, il cui valore ottimo si ottiene calcolandone la sua cardinalità, e TSP, dato il circuito il valore ottimo si calcola come somma delle distanze.
+% Clique (ricerca di sottografi con almeno un arco)
+% TSP (\textit{Traveling Salesman Problem}): dato un grafo completo $G=(V, A)$ con distanze degli archi $d_{ij}$ interi non negativi.
+% Individuare nel grafo il circuito hemiltoniano di cammino minimo.
 
-Va notato che tutti i problemi appartenenti alla classe $\mathcal{P}$ appartengono anche ad $\mathcal{NP}$, infatti non è pure necessario che sia fornita la soluzione ottima per calcolarne il valore in tempo polinomiale.
+Per i problemi di ottimizzazione combinatoria, è semplice identificare un algoritmo risolutivo, infatti basta effettuare un'enumerazione completa per elencare tutte le possibili soluzioni.
+
+Enumerare tutte le soluzioni di un problema può richiedere tempi molto elevati, per questo è utile sapere in anticipo se è possible trovare soluzioni allo stesso problema eseguibili in tempo ragionevole.
+
+\subsection{Complessità}
+
+Algoritmi con tempi di esecuzione dell'ordine di grandezza $2^k$ o $k!$ sono di complessità esponenziale. In essi il tempo di esecuzione cresce molto rapidamente con l'aumento delle istruzioni dell'algoritmo.
+Diversamente, algoritmi con tempi dell'ordine di grandezza di $k^p$, con $p$ costante, vengono detti di complessità polinomiale.
+\\
+Maggiore è l fattore $p$ del polinomio, maggiore è il tempo di esecuzione. Rimane comunque vero che la complessità polinomiale è preferibile rispetto a quella esponenziale.
+
+
+\def\np{\ensuremath{\mathcal{NP}\,}}
+\def\p{\ensuremath{\mathcal{P}\,}}
+
+Dato un problema di ottimizzazione $R$, diciamo che esso appartiene alla classe \p se e solo se esiste un algoritmo $\mathcal{A}$ di complessità polinomiale in grado di risolverlo.
+\\
+A questa classe appartengono problemi come shortest path ed MST.
+
+Un problema è detto di classe \np se la soluzione ottima non è calcolabile in tempo polinomiale.
+La classe di problemi \np contiene tutti i problemi di ottimizzazione, è possibile verificare la soluzione in tempo polinomiale.
+\\
+Dentro a questa categoria è presente la Clique, il cui valore ottimo si ottiene calcolandone la cardinalità, ed il TSP, il cui valore ottimo è calcolabile come somma delle distanze.
+
+Va notato che tutti i problemi appartenenti alla classe \p, appartengono anche alla classe \np, infatti non è neanche necessario fornire la soluzione ottima per calcolarne il valore in tempo polinomiale.
 
 \subsubsection{Trasformazione in tempo polinomiale}
-Dati due problemi di ottimizzazione $R_1$ ed $R_2$, diciamo che $R_1$ è trasformabile in tempo polinomiale in $R_2$ se e solo se ogni istanza di $R_1$ di dimensione $k$ può essere risolta risolvendo l'istanza $R_2$ di dimensione al più $p(k)$ per qualche polinomio $p$. Se $R_1$ è trasformabile in tempo polinomiale in $R_2$, allora $R_2$ essendo risolvibile in tempo polinomiale, implica che anche $R_1$ è risolvibile in tempo polinomiale.
+Dati due problemi di ottimizzazione $R_1$ ed $R_2$, diciamo che $R_1$ è trasformabile in tempo polinomiale in $R_2$ se e solo se ogni istanza di $R_1$ di dimensione $k$ può essere risolta risolvendo l'istanza $R_2$ di dimensione al più $p(k)$ per qualche polinomio $p$.
+Se $R_1$ è trasformabile in tempo polinomiale in $R_2$, allora anche $R_1$ è risolvibile in tempo polinomiale.
+
 \subsubsection{Dimostrazione}
 Sia $k$ la dimensione di un'istanza di problema $R_1$ e $p(k)$ la dimensione dell'istanza equivalente $R_2$.
 \\
