@@ -112,4 +112,100 @@ PROM (\textit{Programmable ROM}), scrivibili un'unica volta,
 EPROM (\textit{Erasable PROM}), cancellabili attraverso la luce ultravioletta,
 EEPROM (\textit{Electrically Erasable PROM}), cancellabili con segnali elettrici.
 FLASH leggibili e scrivibili con dati non volatili (come SSD ).
+
+
+% Lez 2
+\subsubsection{Memorie SRAM}
+Le SRAM, memorie ram statiche, sono RAM accedute come se fossero una matrice di dati.
+Normalmente il singolo dato è rappresentato da flip flop D.
+
+Per studiare un ciclo di lettura di una memoria statica, prendiamo come esempio una ram con $N=1024$ e $M = 4bit$.
+Il numero di bit necessari ad indirizzare i valori è quindi $L = \log_2 N = 10$.
+La RAM ha quindi ingressi e 2 segnali di controllo CS (\textit{Chip Select}) per abilitare il dispositivo e WE (\textit{Write enable}).
+
+Una volta caricato l'indirizzo nel bus degli indirizzi, si abilita CS e dopo un tempo $T_{acc}$ il dato viene reso disponibile dalla memoria sul bus dei dati.
+
+Per scrittura viene abilitato il write enable e caricato il dato da scrivere nel bus dei dati, ed al momento dell'abilitazione di CS, dopo un certo tempo il dato viene scritto in memoria.
+
+Al termine di ogni operazione CS torna a 0, disabilitando il chip.
+\subsubsection{Memorie DRAM}
+Nel caso di ram dinamiche, tipicamente con capacità maggiore es $8Gb$ il numero di bit necessari per indirizzare i dati dovrebbe essere $L=33$, portando un numero di ingressi esagerato per un chip di memoria.
+\\
+La soluzione per accedere a questo tipi di memoria è dividere la capacità come una matrice bidimensionale, es una matrice di $2K$ righe e $4M$ colonne, ottenendo numero di bit di indirizzamento pari alla dimensione maggiore.
+\\
+Quindi le DRAM sono più lente rispetto alle SRAM, anche per la necessità di avere un secondo indirizzo per identificare il dato n memoria.
+
+I due segnali per identificare gli indirizzi di una DRAM prendono il nome di RAS (\textit{Row Address Strobe}) e CAS (\textit{Column Address Strobe}).
+
+RAS viene utilizzato per l'ingresso di un decoder,
+RAS viene dato in ingresso ad un decoder, identificando con 1 la riga da leggere/scrivere. In un secondo momento il segnale CAS viene utilizzato come ingresso di un demultiplexer, selezionando la colonna in ingresso del relativo indirizzo.
+
+Nel caso di lettura il segnale passa attraverso un buffer DOUT, inviando i dati al processore, nel caso di scrittura i dati vengono letti dal processore scrivendo il dato nella riga e colonna selezionati.
+
+Qua sotto se mi ricordo di aggiungerla sarà presente lo schema funzionale di una memoria DRAM.
+
+Contatore di refresh e circuito di refresh si sostituiscono agli indirizzi di riga per leggere gli indirizzi di memoria e ricaricare i condensatori.
+OE è equivalente a CS.
+
+\subsubsection{Lettura e scrittura DRAM}
+La differenza fondamentale è la necessità di inserire un secondo indirizzo per identificare i dati.
+Prima si inserisce il valore di RAS nel bus dei dati, abilitandone la lettura con RAS. Successivamente si inserisce CAS abilitandone la lettura con CAS. Al momento dell'abilitazione di CAS, RAS non viene disabilitato, (spiegazione successiva).
+\\
+Successivamente dopo un tempo di accesso, nel caso di lettura viene fornito sul bus dei dati il valore contenuto in memoria.
+
+Quando entrambi i valori RAS e CAS sono disabilitati l'output è in 3-state, quindi non più modificabile.
+
+Per effettuare le write è necessario che il segnale WE sia abilitato prima di abilitare il CAS, altrimenti il valore contenuto in memoria verrebbe copiato nel bus.
+
+\subsubsection{SDRAM}
+Sono sempre delle DRAM, realizzate con condensatori, con la differenza che sono sincrone.
+Infatti se si guarda lo schema logico di una DRAM, non è presente un segnale di clock, effettuando ogni operazione sul fronte di salita/discesa del CAS.
+
+Il vantaggio principale di questo tipo di memoria è la certezza di avere il dato in memoria dopo un numero preciso di cicli di clock. Cosa non sempre vera nel caso di memoria asincrona, dove il tempo richiesto è variabile.
+
+Lo svantaggio che portano è visibile nel caso in cui i dati siano disponibili prima che il ciclo di clock sia completato.
+Questo è compensato dal \textbf{trasferimento a burst}.
+
+La CPU è infatti in grado di scegliere il numero di dati da fare ritornare alla memoria. Nel caso di trasferimento singolo, quando la memoria è interrogata torna un solo indirizzo. In caso di trasferimento a burst la memoria restituisce ad ogni ciclo di clock, il dato all'indirizzo di memoria successivo a quello specificato.
+
+Ad esempio nel caso di accesso ad un file, il primo valore viene letto dopo 4 cicli di clock, mentre i successivi direttamente al ciclo di clock seguente.
+Questa lettura a bus è fondamentale per riempire la cache interna.
+% Schema funzionale SDRAM
+
+\subsubsection{DDR}
+Le DDR (\textit{Double Data Rate}) nascono come un ulteriore miglioramento delle SDRAM. Come dice il nome, leggono due dati in un unico ciclo di clock, campionando sia sul fronte di salita che sul fronte di discesa.
+
+Il principio di funzionamento è identico.
+\subsubsection{FPM-DRAM}
+\textit{Fast Page Mode DRAM} permettono di tenere il segnale di RAS\# attivo, variando solo il segnale CAS\# in modo da velocizzare tutti gli accessi successivi al valore in memoria, ottenendo trasferimenti di tipo 6-3-3-3 O 5-3-3-3.
+
+\subsubsection{EDO-DRAM}
+\textit{Extended Data Out DRAM}, permettono di risparmiare cicli di clock per trasferimenti successivi, perché l'uscita non richiedevano di disabilitare l'uscita (WE) ad ogni lettura.
+
+\subsubsection{RDRAM}
+\textit{Rambus DRAM} (Rambus è il nome di un consorzio), sviluppate da Intel.
+Permettevano di avere chip con fino a 320 pin con velocità di trasferimento di $1.6Gb/s$, trasferimento a blocchi stile Fast.
+Chip con pin su un unico lato per ridurre il consumo di energia.
+Utilizzate in schede video ad alte prestazioni.
+
+\subsection{Memorie Permanenti}
+Sono memorie a semiconduttore, non volatili.
+Le memorie FLASH (realizzate in tecnologia NAND o NOR) sono utilizzate per chiavette USB e SSD.
+NVSRAM (\textit{Non Voltaile SRAM}) non sono molto diffuse per via dell'elevato costo di produzione.
+\subsubsection{FeRAM}
+Le \textit{Ferroelectirc RAM}, chiamate anche FRAM o F-RAM, rientrano nelle tecnologie di memorie non volatili emergenti, ed attraverso uno strato di materiale ferroelettrico, permettendo la permanenza ai dati anche in caso di mancanza di corrente.
+
+Rispetto alle memorie flash consumano meno energia, hanno una maggiore velocità di scrittura ed un numero di scrittura/cancellazione maggiore.
+\subsubsection{PCM}
+Le \textit{Phase Change memory} sono composte da materiale in grado di cambiare fase (cristallina o amorfa). In particolare una regione amorfa presenta bassa riflettività e una regione cristallina presenta alta riflettività, permettendo attraverso punte o laser di leggerne il contenuto (funzionamento simile a CD/DVD).
+
+\subsubsection{MRAM}
+Le \textit{Magnetoresisteive RAM}, sfruttano l'effetto magnetoresistivo, non memorizzando le informazioni come quantità di carica elettrica (Come le RAM), ma come un campo magnetico.
+\\
+La lettura dell'informazione è ottenuta attraverso la misura della resistenza elettrica della cella.
+
+\subsubsection{RRAM/CBRAM}
+La \textit{Conductive Bridging RAM} è basata sulle proprietà di un elettrolita solido (tipicamente solfuro di germanio drogato con rame) che posto tra un elettrodo relativamente inerte (esempio tungsteno, materiale delle lampadine a filo) ed uno elettrochimicamente attivo  come argento o rame, fa si che quando si applica un campo elettrico viene provocato uno spostamento di ioni metallici nell'elettrolita, formando dei "nano-fili" conduttivi.
+
+I principali vantaggi di questa tecnologia sono il basso consumo, l'elevata velocità di scrittura e la lunga durata.
 \end{document}
