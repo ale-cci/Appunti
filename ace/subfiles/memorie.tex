@@ -208,4 +208,128 @@ La lettura dell'informazione è ottenuta attraverso la misura della resistenza e
 La \textit{Conductive Bridging RAM} è basata sulle proprietà di un elettrolita solido (tipicamente solfuro di germanio drogato con rame) che posto tra un elettrodo relativamente inerte (esempio tungsteno, materiale delle lampadine a filo) ed uno elettrochimicamente attivo  come argento o rame, fa si che quando si applica un campo elettrico viene provocato uno spostamento di ioni metallici nell'elettrolita, formando dei "nano-fili" conduttivi.
 
 I principali vantaggi di questa tecnologia sono il basso consumo, l'elevata velocità di scrittura e la lunga durata.
+
+\subsection{Interfaccia tra CPU e Memoria}
+Tramite il bus degli indirizzi di dimensione $na$, unidirezionale verso la memoria, e tramite il bus dei dati di dimensione $nd$ bidirezionale il processore scambia informazioni con la memoria.
+
+Oltre a bus degli indirizzi e bus dei dati sono presenti bus di controllo, con segnali di read, write, ads (\textit{Address Strobe}) indica che il bus degli indirizzi è campionabile e presenta un'indirizzo valido (unidirezionale verso la memoria).
+Nel caso di memorie sincrone, è presente anche Rdy (\textit{Ready}) unidirezionale verso il processore, ed indica se il dato della memoria è pronto.
+
+È presente anche un segnale M/IO  (\textit{Memory I/O}) che indica se si vuole accedere a memoria o input/output.
+Infatti esistono due politiche per accedere alla memoria: le memory mapped IO, dove gli indirizzi di memoria sono considerati dal processore insieme agli indirizzi di input/output, accedere ad IO in questo caso vuole dire accedere alla memoria; nelle macchine intel come l'8086 gli indirizzi di memoria ed indirizzi per direttive ad input/output sono separati, quindi è necessario specificare se il dato nel bus degli indirizzi è destinato per la memoria o ad un dispositivo esterno.
+
+\subsubsection{Architettura specifica 8086}
+Sono presenti due ingressi di terra in modo da distribuire il carico
+Il ciclo di lettura è diviso in quattro fasi, ed a fasi diverse, i 20 piedini per gli indirizzi possono essere considerati come ingressi per il bus degli indirizzi o ingressi per il bus dei dati. Questo comportamento viene indicato dicendo che il bus dei dati ed indirizzi è multiplexato.
+
+NMI, INT e INTA servono per la gestione delle interruzioni. Il segnale d'ingresso INT indica la richiesta di interrupt al processore, il segnale INTA è il segnale in uscita del processore ed indica che il processore è in risposta all'interrupt.
+Infatti il processore è in grado di ignorare gli interrupt nel caso stia effettuando calcoli importanti.
+\\
+Questo non è possibile se il segnale di interrupt che riceve in ingresso è NMI (\textit{Non Maskerable Interrupt}), dove il processore entro tempo prestabilito è obbligato a rispondere.
+
+In uscita ha il segnale M/IO che indica se si sta lavorando con memoria o segnale IO.
+Ha in ingresso il segnale di READY, proveniente dalla memoria.
+Il segnale ALE (\textit{Address latch Enable}), equivalente all'AdS di prima. Segnale di Read e Write sono separati.
+
+Segnale di test non utilizzato nel funzionamento normale, e i segnali di minmax specificavano la modalità di funzionamento dell'8086 (min modalità ridotta che consuma di meno).
+Segnali di HOLD e HOLDA, sono utilizzati per permettere ad altri componenti di fornire i dati e controllare l'esecuzione, permettendo al processore di effettuare altri calcoli.
+
+DTR \textit{Data transition / Receive}, dove quando è a 1 si ha un trasferimento dati da processore a memoria, e quando è a 0 il trasferimento è tra memoria e processore.
+
+DEN \textit{Data Enable} indica che quello che sta leggendo in questo momento il processore sono dei dati. DEN e DTR funzionano sui transceiver bidirezionali, mentre l'ALE funziona sui latch.
+
+BHE \textit{Bus High Enable} serve per l'interfacciamento con i chip fisici, perché il bus dei dati essendo a 16 bit e le memorie, avendo un parallelismo a 8 bit, per leggere due byte alla volta BHE permette di mettere due memorie in parallelo, leggendo nella parte alta dei 16 bit il valore dalla seconda memoria.
+
+\subsubsection{Multiplexing nel dettaglio}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0,0)
+        -- (1, 0)
+        -- ++(0, 1)
+        -- ++(.5, 0)
+        node[buffer, anchor=in, scale=0.5] (b) {}
+        (b.out) -- ++(.5, 0)
+        -- ++(0, -1) coordinate(x)
+        -- ++(1, 0) coordinate(cout)
+        (x) -- ++(0, -1)
+        -- ++(-.5, 0)
+        node[buffer, anchor=in, scale=.5, xscale=-1] (b2) {}
+        (b2.out) -| (1, 0);
+
+        \draw (cout) node[circ]{} node[above]{Out}
+        (0, 0) node[circ]{} node[above]{In}
+        (b2.out |- 0, 2) node[circ]{}
+        node[right] {DT/R*}
+        -- (b2.out |- 0, -.8)
+
+        (b2.out |- 0, 1.8) -| (b.north)
+        (b2.out |- 0, -.8) to[short, -o] (b2.north)
+        ;
+    \end{circuitikz}
+    \caption{Transceiver}
+\end{figure}
+
+Nel transceiver Quando viene abilitato il segnale DTR, il segnale da input viene messo in output, diversamente il segnale passa da output ad input.
+
+Nel caso di dati infatti, deve essere specificato in quale direzione i dati devono passare.
+Nel transceiver Quando viene abilitato il segnale DTR, il segnale da input viene messo in output, diversamente il segnale passa da output ad input.
+
+CS disabilita completamente il transceiver, non facendo passare il segnale
+
+Dato che lo stesso numero di uscite della CPU deve guidare il bus dei dati ed il bus degli indirizzi, attraverso dei latch e dei transceiver bidirezionali, viene deciso dove instradare i segnali.
+
+Nell istante T1, avremo quindi \code{DEN*=1} disattivando la scrittura del bus dei dati e \code{ALE = 1} campionando i bit nel bus degli indirizzi.
+\\
+In t3 \code{DEN*=0} abilitando i 3state, \code{ALE=0} indicando ai latch di non campionare (tenendo come valore presente nel bus degli indirizzi il valore precedente), \code{DTR = 0} abilitando scrittura nel 3state.
+
+In T1, quindi si passa l'indirizzo di memoria, in T2 è una fase di bufferizzazione, dando il tempo alla memoria di campionare il buffer degli indirizzi, in T3 abilita il buffer dei dati ed in T4 è il ciclo di completamento.
+
+\subsubsection{Lettura e Scrittura}
+In fase di lettura, l'indirizzo di memoria è contenuto inizialmente in tutti e 20 i bit. Il segnale di \code{ALE} viene abilitato, permettendo al flip flop D di campionare i risultati, il data enable non è attivo.
+\\
+Il \code{DTR} rimane tutto il tempo a 0, siccome si tratta di una fase di lettura.
+
+In fase T2 si porta il valore di \code{DEN} a 0, indicando la fine della fase in cui il bus multiplexato ha la funzione di indirizzo, abilito anche \code{RD*=0}
+
+In fase T3 vengono caricati i valori dei 16 bit del dato di memoria nel bus degli indirizzi, essendo abilitato il valore di \code{RD} alla fase precedente e \code{DEN}.
+
+Nella parte finale il \code{DTR} viene portato ad 1, abilitando la scrittura da processore a memoria.
+\newpage
+\subsection{Bus sincroni ed asincroni}
+Le fasi T1, T2, T3 e T4 sono scandite dai diversi cicli di clock.
+Il vantaggio di un'architettura sincrona è la certezza di sapere lo stato in cui mi trovo al momento, e la certezza dei tempi di esecuzione. L'alternativa è una struttura asincrona, gestita tramite un'protocollo che indica quando inizia e termina ogni fase.
+
+Il metodo più comune per gestire approcci asincroni, è attraverso segnali di handshake:
+ARDY (\textit{Address Ready}),equivalente ad ADS e ALE, e DRDY sono i segnali utilizzati dal protocollo di handshake.
+Il segnale ARDY indica di iniziare la fase di indirizzo.
+Sono presenti anche i segnali di acknowledge, i quali dal nome riconoscono di aver ricevuto il segnale.
+
+Prendendo come esempio il caso di un ciclo di lettura, il processore manda gli indirizzi alla memoria con ARDY. La memoria dopo un certo tempo la memoria risponde con un segnale di acknowledge \code{ack}.
+Il processore ricevendo il segnale \code{ack} capisce che la memoria ha effettuato l'elaborazione dell'indirizzo e disabilita il segnale ADRY, comunicando alla memoria che ha ricevuto l'acknowledgement.
+Quando la memoria ha copiato tutti i dati, porta anch'essa il segnale \code{ack=0}.
+
+Si esegue un'analogo procedimento per il trasferimento dei dati: il processore attende il segnale \code{drdy} dalla memoria, il quale indica quando i dati letti sono presenti sul bus. Appena riceve il segnale risponde con \code{ack} indicando alla memoria che ha ricevuto i dati.
+\\
+Una volta ricevuti questi dati, la memoria toglie il segnale \code{drdy}.
+\subsubsection{Interfaccia I/o}
+Per i dispositivi di input/output è utilizzata comunque la logica sincrona. Dove il campionamento è effettuato sempre attraverso flip-flop.
+% Una logica analoga vale per la comunicazione con i dispositivi di input/output
+
+\subsection{Indirizzamento e accesso in moduli}
+Quello visto fino ad ora è l'interfacciamento tra processore e memoria logica, un'unica entità con un bus degli indirizzi ed un bus di dati con dimensioni pari a quelle del sistema.
+
+Nel caso le memorie a disposizione abbiano una dimensione inferiore a quella del bus di dati ($L < n_a$), si può escludere gli ultimi $k$ bit dell'indirizzo meno significativi, (con $k = n_a - L$), quindi per leggere un'elemento di 32 bit all'indirizzo 100, con a disposizione quattro memorie in parallelo, ottengo il dato leggendolo da un'unica riga, indicata dai bit più significativi rimanenti: ovvero 1000 1001 1010 1011 se $k = 2$ la riga è 10.
+\\
+Il problema nasce quando è necessario leggere una parola di 32 bit all'indirizzo 1001, dove la cella degli ultimi 8 bit sarebbe 1100, indicando una riga differente. È necessario effettuare la lettura con accessi in memoria differenza.
+
+Ricordiamo che al capitolo sulle architetture risc e cisc (pg. ???) è stato detto che le architetture RISC preferiscono indirizzi di memoria allineati, garantendo letture più veloci pur consumando spazio in memoria.
+
+Nel caso di letture da righe differenti, per realizzare tale modello di memoria, sono necessari CS separati, in modo da abilitare e disabilitare la scrittura sul bus delle celle con righe differenti. I segnali di CS vengono chiamati di byte enable.
+
+In caso di parole allineate, l'accesso è possibile in un unico ciclo, abilitando il valore dei byte enable a tutte le memorie.
+
+Nel caso dell'8086, è presente un solo piedino di byte enable, utilizzando \code{a0} come abilitazione delle memorie inferiori e \code{BHE} come abilitatore delle memorie superiori.
+
+% Esercizi
 \end{document}
