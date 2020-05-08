@@ -158,4 +158,45 @@ La carica negativa è fissa perché legata alla struttura del boro.
 Chiameremo il boro atomo accettore, perché capace di ionizzare il reticolo negativamente. Con $N_A$ indicheremo la concentrazione degli atomi accettori per unità di volume. Interpretando l'evento sul diagramma energetico, sarebbe come un livello energetico che ricade nella banda proibita molto vicino alla banda di valenza. Generando una lacuna mobile in tale banda.
 
 In questo caso $n < p$.
+
+\subsubsection{Terza Lezione}
+Abbiamo interpretato il diverso comportamento delle due bande, elettroni liberi che si muovono tra livelli energetici nella banda di conduzione, e lacune alle quali è associato un significato di carica positiva mobile.
+\\
+In un materiale intrinseco, elettroni e lacune sono creati sempre in coppia, quindi necessariamente la concentrazione di elettroni e lacune sono uguali alla concentrazione intrinseca, dipendente dalla temperatura.
+
+Inoltre in condizioni di equilibrio il tasso di generazione $G$ e di ricombinazione $R$ devono essere uguali.
+
+L'equivalenza tra elettroni e lacune interna al materiale può essere modificata attraverso drogaggi con atomi donatori ($N_D$) o accettori ($N_A$). La concentrazione elettroni-lacune in materiali drogati è chiamata concentrazione estrinseca.
+
+Supponendo di conoscere la concentrazione tra atomi donatori ed accettori, calcoliamo ora i nuovi valori di $p$ ed $n$ interni al materiale.
+
+Osservando il caso della concentrazione intrinseca, osserviamo che necessariamente il prodotto $pn = n_i^2$. Questa relazione è valida non solo per materiali intrinseci, ma anche per materiali estrinseci.
+
+Possiamo pensare che il tasso di generazione $G$ sia dipendente unicamente dalla temperatura: $g(T)$. Mentre il tasso di ricombinazione $R$, l'occupazione di una lacuna da parte di un'elettrone, è logico pensare che dipenda dal numero di elettroni presenti nel materiale e dalla temperatura: $R = pnr(T)$.
+\\
+Il tasso di generazione non dipende dalla concentrazione effettiva di $p$ ed $n$, perché per evitare che si effettui una generazione, tutti gli elettroni in banda di valenza dovrebbero essersi spostati in banda di conduzione. Ipotesi irragionevole a temperatura ambiente.
+
+Ricordandoci che in condizioni di equilibrio $G = R$, otteniamo che $g(T) = pnr(T)$. Quindi $pn = g(T)/r(T) = f(T)$ è dipendente unicamente dalla temperatura. Quindi a temperatura costante il valore $pn$ è costante e vale $n_i^2$.
+
+Inoltre se è vero che a livello globale la quantità di carica positiva equivale alla carica negativa, allora la densità di carica $\rho$ in tutto il volume è costante e pari a $0$.
+
+\[
+    \rho = -q n + qp  + qN_D -q N_A = q (p -n + N_D - N_A) = 0
+\]
+La densità di carica dipende dal numero di elettroni $n$ e lacune $p$ con rispettiva carica, ed il numero di atomi accettori e donatori interni ad un materiale, ad ognuno dei quali è associata rispettivamente una carica fissa in modulo $q$.
+\\
+Unendo la relazione con $pn = n_i$, ricaviamo:
+\[
+    n = \frac{(N_D - N_A) \pm \sqrt{(N_D - N_A)^2 + 4 n_i^2}}{2}
+\]
+Siccome è evidente che non può valere il segno meno in quanto condurrebbe ad un valore di $n$ negativo, ottengo un'espressione del valore di $n$ dipendente solo da valori noti.
+\\
+Con questo ragionamento otteniamo anche il valore di $p$:
+\[
+    p = \frac{(N_A - N_D) + \sqrt{(N_A - N_D)^2 + 4 n_i^2}}{2}
+\]
+
+Dalle espressioni si può osservare come compare sempre la differenza dei valori $N_D$ ed $N_A$, il fenomeno prende il nome di principio di compensazione, il quale dice che non è importante il singolo valore di $N_D$ ed $N_A$, quello che conta è sempre la loro differenza.
+
+
 \end{document}
