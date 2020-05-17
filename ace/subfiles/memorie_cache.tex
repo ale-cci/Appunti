@@ -1,0 +1,101 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Memorie Cache}
+Le memorie cache non sono visibili dal programmatore, il processore, attraverso l'MMU cerca di accedere prima agli indirizzi attraverso la cache, e, se non sono presenti, attraverso il system bus li preleva dalla memoria.
+
+Essa è una memoria associativa, divisa in due parti: la cache directory, che contiene un tag, un indice richiesto per risalire al dato presente nella memoria, e la cache memory, dove sono presenti i dati, organizzata in blocchi di $k$ parole.
+
+Ciascuna riga (blocco) della cache, quindi è composta da multiple parole. La copia da ram a cache avviene a blocchi, favorendo i principi di località spaziale e temporale.
+
+\subsubsection{Classificazione delle miss}
+Le miss si classificano principalmente in tre categorie: le inevitabili per qualsiasi tipo di architettura (es. primo accesso).
+Di capacità, si richiede di accedere ad un dato che è appena stato sostituito per via dell'insufficienza di memoria, e le miss di conflitto: che dipendono dalle politiche di piazzamento.
+
+
+\subsection{Associatività}
+Tutte le architetture di cache, funzionano dividendo l'indirizzo del processore in index, offset e tag.
+Preso d'esempio l'indirizzo \code{3f70H}, l'index identifica il numero di riga dove controllare il dato richiesto dal processore, e per identificare un dato contenuto in una riga si utilizza il tag, composto da $t$ bit.
+
+Nel caso in cui il tag corrisponda, si ha una hit. Come l'index è l'indice di riga, l'offset, definito dagli $o$ bit meno significativi,  è l'indice di colonna.
+
+
+In poche parole, l'index ed offset identificano riga e colonna, mentre il tag, se corrisponde, indica se il dato cercato è presente nella cache.
+
+Il rimpiazzamento, avviene quando tag non corrisponde, in caso carica il dato richiesto dalla ram.
+Questo tipo di cache, viene chiamato direct mapping, ovvero, ad un indirizzo, associa una ed una sola cella nella memoria.
+Il caso opposto sono le cache fully associative, dove un dato può andare in una riga qualsiasi della cache.
+
+Questo tipo di cache, viene suddivisa solamente in tag ed offset. Per controllare se un'oggetto è in memoria, non avendo più un index è necessario controllare tutti i tag per vedere se uno corrisponde. In caso di miss, se c'è ancora spazio nella cache, si introduce il dato in righe vuote, altrimenti si procede con una politica di rimpiazzamento.
+
+Vengono anche chiamate CAM (\textit{Content Addressable Memory}), per via che il tag è utilizzato come indice per controllare se un dato è contenuto nella cache.
+
+\subsubsection{Pro e contro delle due architetture}
+La fully associative, è più costosa, in quanto richiede un numero di comparatori almeno pari a $2^t$. Ma ha un numero notevolmente inferiore di miss di conflitto.
+
+La direct map invece è più economica, ma molto rigida, generando molte miss di conflitto.
+
+Una via di mezzo è la cache set-associative, dove le linee sono organizzate set, ovvero un'insieme di linee dove un dato può essere salvato in qualsiasi riga.
+Nel caso della fully associative, tutte le righe sono raggruppate in un unico set, nel caso della direct mapping, ad ogni riga corrisponde un set.
+
+Il numero di set è quindi $N_S = N_L / n$, con $N_L$ numero di righe e $n$ la grandezza del set. La selezione del set è direct mapped, mentre la selezione della linea su cui salvare i dati è effettuato come la fully associative.
+
+Al cambiare dell'associatività, cambia anche la dimensione del tag di index, $i = \log_2 N_s = \log_2 N_L / n$, infatti con $n$, crescendo sempre per potenze di 2, ha valore massimo di $N_L$, corrispondendo al caso di fully associative.
+
+\subsubsection{Cache Suddivise}
+Ormai tutti i processori utilizzano due cache divise per i dati e le istruzioni, mentre la ram è unica.
+
+\subsection{Politiche di rimpiazzamento}
+Queste politiche hanno senso solamente in caso di fully associative o n-way associative.
+Esistono due principali strategie, una random, dove il rimpiazzamento è casuale o pseudo-casuale, ed una LRU (\textit{least Recently Used}) la quale si basa sul principio di località temporale.
+
+\subsection{Politiche di scrittura}
+Diversamente dalla lettura, dove i dati vengono sempre allocati in cache quando vengono letti da un livello inferiore, nel caso di scrittura, è possibile modificare il dato solamente nella cache e successivamente modificare il dato (writeback),  oppure applicare la stessa modifica nei blocchi di memoria inferiori (writethrough).
+
+Una politica writethrough offre una coerenza dei dati, garantendo che i cambiamenti siano sempre applicati, ma risulta molto lenta, in quanto somma al tempo di scrittura della cache, il tempo d'accesso e di scrittura del livello inferiore.
+
+Diversamente, per la politica writeback, il dato viene scritto solamente quando deve essere rimpiazzato.
+
+Nel caso di miss, in caso sia stata adottata una politica di writeback è frequente allocare i dati in cache e poi modificarli (write-allocate). La miss in caso di writethrough normalmente è gestita scrivendo il dato direttamente ai blocchi inferiori, senza caricarli in cache.
+
+\subsubsection{Protocollo MESI}
+Per ogni linea di cache, sono associati due bit, necessari per identificare uno dei quattro stati: Motified, Exclusive, Shared, Invalid
+Utilizzato soprattutto per i sistemi multiprocessore.
+\begin{itemize}
+    \item M - modified:
+        La linea è disponibile in una sola cache, senza essere stata scritta in memoria.
+    \item E - exclusive
+        La linea è disponibile in una sola cache ma non è stata modificata.
+    \item S - shared:
+        La linea è potenzialmente presente in più caches. Una scrittura sulla cache locale porta un write-through, invalidando le altre caches.
+    \item I - invalid:
+        La linea non è disponibile nella cache e l'accesso in lettura ne causa l'allocazione
+\end{itemize}
+
+Questi stati sono utilizzati solo per la gestione dei dati, nel caso di codice non sono utilizzati, in quanto è condiviso tra tutti i processori.
+
+
+\subsection{Memoria Virtuale}
+Nel caso in cui si abbia un processore con un bus di indirizzamento a 36bit (64Gb), se si ha a disposizione un' unico banco di ram da 8Gb è comunque simulare il comportamento di 64Gb di memoria attraverso la memoria virtuale: quando si eccedono gli 8G di memoria disponibili, i restanti vengono salvati in uno spazio riservato del disco, chiamato swap file.
+
+Si occupa il sistema operativo a gestire i Gb di dati disponibili attraverso i principi di vicinanza spaziale e temporale.
+
+Tecnica di paginazione:
+Lo spazio di indirizzamento della memoria centrale viene diviso in blocchi (pagine) di dimensione fissa e continugi. Un inidirizzo è identificabile quindi attraverso un'indice di pagina ed un offset rispetto alla pagina.
+
+Nel caso di un acceso ad indirizzo, il sistema operativo, attraverso l' address mapper, l'indirizzo virtuale viene trasformato in indirizzo fisico.
+
+Supponendo un rimpiazzamento associativo, è presente una tabella delle pagine, dove inserito l'indirizzo, viene ritornato il valore di pagina corrispondente. Internamente alla tabella delle pagine sono presenti anche dei bit di stato, i quali indicano se la riga è presente in memoria fisica o virtuale, se la pagina è modificabile, un dirty bit ad indicare se la pagina è stata modificata ed altri.
+
+Spesso la tabella delle pagine, essendo molto grande, è associata ad una cache, chiamata TLB (\textit{Translation Lookaside Buffer}) che tiene traccia delle corrispondenze pagina virtuale e pagina fisica recenti.
+Per il rimpiazzamento è quasi sempre utilizzata la politica di Least Recently Used. Per la scrittura invece è utilizzata una strategia di write-back, registrando la presenza di cambiamenti attraverso il dirty bit.
+
+Al momento della traduzione da indirizzo virtuale ad indirizzo fisico, se quest'ultimo non è presente si ha un "page fault" da parte del sistema operativo, ed al momento di rimpiazzamento, scrive i dati della pagina da sovrascrivere in memoria.
+
+Nel caso in cui la dimensione delle pagine sia troppo grande, per evitare sprechi di memoria, si può ricorrere ad una tabella di indirizzamento che punta alle tabelle delle pagine, ma in questo caso sarebbero richiesti tre accessi in memoria, ed i tempi sarebbero troppo lenti.
+\\
+Per questo è utile la TLB, che salvando gli ultimi indirizzamenti richiesti in memoria velocizza gli accessi ripetuti alle stesse pagine.
+
+Normalmente un indirizzo, oltre ad avere un offset ed un numero di pagina, ha anche un numero di segmento, che nella tabella dei segmenti è utilizzato come 'tag'.
+
+\end{document}
