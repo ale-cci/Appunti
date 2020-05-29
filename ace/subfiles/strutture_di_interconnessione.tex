@@ -1,0 +1,79 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Strutture di interconnessione}
+
+I bus nascono dalla necessità di comunicazione tra uno o più moduli (es. Modello di Von Neumann)
+Internamente al bus, quando un dispositivo trasmette, tutti gli altri collegati riescono a leggere i dati. Non è possibile però che due dispositivi trasmettano in contemporanea.
+
+Utilizzare il bus come unico metodo di comunicazione, è che si comporta come collo di bottiglia.
+
+Le linee di comunicazione sono a singolo bit, e possono essere seriali o parallele.
+
+Caratteristiche del bus di dati sono il tipo: dedicato o generico, l'ampiezza del bus ($n_a$), il metodo di arbitraggio, centralizzato (master-slave) o distribuito (dispositivi rispettano un protocollo di scrittura), temporizzazione (sincrona o asincrona) ed i tipi di trasferimento dati.
+
+Ogni scelta è un compromesso tra prestazione e costo di produzione.
+
+\subsection{Tipi di bus}
+Nei bus dedicati sono assegnati tipicamente ad un insieme fisico di componenti, rendendo possibile la separazione trasmissione dati-indirizzi, utilizzabile tipicamente attraverso una linea di controllo aggiuntiva.
+
+I bus multiplexati, necessitano di un controllo per distinguere le informazioni trasmesse (DEN, indirizzo, dati, \ldots).
+Vincola ad avere un tempo limitato per la lettura dell'indirizzo, dato che richiede di trasmettere successivamente i dati.
+
+Un bus multiplexato ha costi inferiori, in quanto richiede meno collegamenti ma più logica fisica, riducendo quindi le prestazioni.
+
+\subsubsection{Metodo di arbitraggio}
+Può essere centralizzato, dove il processore o un'altro dispositivo dedicato gestisce il controllo del bus, o distribuito, dove attraverso un'algoritmo i dispositivi cooperano per l'accesso.
+
+L'algoritmo utilizzato per la gestione distribuita del bus deve evitare le collisioni.
+
+\subsubsection{Temporizzazione}
+Gli eventi possono essere coordinati nel bus in modo sincrono o asincrono. Quando il bus è sincrono, è presente un clock che scandisce tutte le operazioni, campionando i dati sui fronti di salita o discesa.
+Sono necessari anche segnali di stabilizzazione, per ridurre i disturbi generati da segnali paralleli.
+
+I pro sono la semplicità di progetto e controllo, il contro è lo spreco di tempo, dovuto alla richiesta di dividere ogni operazione in un numero intero di cicli di clock.
+
+In caso di bus asincrono, ogni operazione è innescata dalla precedente, garantendo una maggior efficenza nell'uso di cicli, ma una maggiore complessità di progetto e controllo.
+
+\subsubsection{Ampiezza del bus}
+Aumentare l'ampiezza del bus vuole dire aumentare il numero di bit trasferiti, quindi il bit rate.
+Aumentare il bus degli indirizzi implica un aumento nello spazio di indirizzamento: il massimo intervallo di locazioni indirizzabili.
+
+Inoltre aumentare il parallelismo porta una maggiore velocità, tutti i bus moderni sono seriali. Un suo svantaggio è l'aumento della complessità di realizzazione.
+I bus seriali permettono di fare linee più lunghe, diminuendo l'interferenza tra le diverse linee.
+
+\subsubsection{Tipi di trasferimento}
+Tutti i bus permettono lettura e scrittura, ma esistono anche particolari tipi di funzionamento:
+\begin{itemize}
+    \item Read modify write: lettura seguita da una scrittura allo stesso indirizzo, in un solo ciclo d'accesso il dato viene letto, modificato e riscritto.
+    \item Read after write, operazioni di controllo, indivisibili. Utilizzate nei bus per comunicare con i dispositivi IO, garantendo la corretta scrittura del dato.
+    \item Trasferimento a blocchi, leggendo un indirizzo, prosegue la lettura fino ad $n$ indirizzi successivi.
+\end{itemize}
+
+\subsubsection{Bus di sistema}
+Il bus di sistema connette i principali elementi di un calcolatori: CPU, memorie e IO.
+I bus hanno lo stesso problema delle memorie, vorrebbero un'elevata capacità e prestazioni con un basso costo di produzione, ma non è possibile. Per questo esiste una gerarchia di bus interna.
+\\
+Elencati dal più veloce al più lento:
+\begin{itemize}
+    \item Processor Bus, utilizzato per comunicare internamente al processore, collegando i diversi registri
+    \item Cache Bus, dedicato alla cache interna al processore
+    \item System Bus, utilizzato per legare il processore alle memorie
+    \item Local IO Bus, bus ad alta velocità utilizzato per collegare le periferiche critiche, come HDD e scheda video
+    \item Standard IO Bus, utilizzato per le periferiche più lente.
+\end{itemize}
+
+\subsubsection{Bus Unico PDP}
+Un unico bus, creato dalla PDP, utilizzato per fare tutte le operazioni di IO. Ha il vantaggio di essere modulare, e facilmente standardizzato.
+
+Lo svantaggio di questo bus, è che tutti i dispositivi sono collegati allo stesso bus, indipendentemente dalla loro velocità.
+Per questo la velocità di clock può risultare troppo veloce / lenta.
+\\
+Inoltre all'aumentare dei dispositivi connessi, la lunghezza del bus aumenta, implicando una lentezza di propagazione dei segnali.
+\\
+Il bus è anche limitato in ampiezza, dato che tutti i dispositivi connessi hanno lo stesso parallelismo dei dati.
+
+\subsubsection{Bus PCI - Peripheral Component Interconnect}
+% 39:44
+
+\end{document}

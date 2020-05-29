@@ -1,0 +1,125 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Dispositivi IO}
+Non è possibile pensare che i dispositivi di input/output siano sempre compatibili con il bus di sistema (AGP \textit{Accelerated graphic protocol}, dedicato alle schede grafiche)
+\\
+I dispositivi IO, nel loro bus di sistema, mettono a disposizione l'interfaccia con uno o più bus PCI semi-standard. Questo permette di avere dispositivi che funzionano a diverse velocità.
+
+Per interfacciarsi con I/O vengono utilizzati solitamente dei registri, definiti da un certo spazio di indirizzamento I/O. I registri possono essere di tre tipologie:
+\begin{itemize}
+    \item (DREG) Registro dati:  trasferimento dei dati buffer, necessario per il trasferimento asincrono dei dati, registri di comando e di stato.
+    \item (CREG) Registri di comando: dove il processore scrive i dati per inviare comandi alla periferica (es. stampa fronte retro)
+    \item (SREG) Registri di stato: indica lo stato della periferica (es. manca carta)
+\end{itemize}
+
+I registri sono lettura e scrittura, e spesso sono necessari solo pochi bit per descrivere sia stato che comando. L'accesso avviene tramite registro.
+
+L'accesso alle periferiche avviene attraverso indirizzi. Nel trasferimento dati col bus dipende dal parallelismo del bus del dispositivo, dalla possibilità di trasferimento a blocchi (burst), può avvenire a transazioni suddivise, necessarie per supportare l'accesso a multipli dispositivi, e dal livello di astrazione fornito dal sistema operativo.
+
+\subsubsection{Polling}
+Nel Polling o controllo di programma, il master della comunicazione tra i due dispositivi (CPU) decide come comunicare con l'IO: la CPU verifica lo stato delle periferiche fino a quando non ne trova una che richiede dati in ingresso o in uscita. Appena terminato il trasferimento dati con la periferica riprende a leggere gli stati delle periferiche.
+
+\subsubsection{Difetti del Polling}
+Parecchio tempo del processore è impiegato per controllare lo stato delle periferiche, inoltre se alcune periferiche sono lente, rallentano l'intero processo.
+
+Nel caso di mancanza di un meccanismo di timeout per interrompere il controllo di stato delle periferiche, in caso una di esse risulti non funzionante, l'intero sistema si blocca.
+
+La procedura è anche non scalabile, se sono connesse parecchie periferiche il processo rallenta notevolmente.
+
+\subsection{Interrupt}
+I dispositivi di IO inviano segnali di interrupt al processore, indicando che necessitano di trasmettere dei dati.
+Esistono due tipologie di interrupt: hardware veri e propri segnali elettrici che possono essere mascherabili o non mascherabili, e software, generati dalla cpu.
+
+\subsubsection{Gestione delle interruzioni}
+Passa attraverso sei fasi:
+\begin{enumerate}
+    \item Notifica delle interruzioni, viene segnalato l'interrupt (software attraverso bit di flag o hardware attraverso segnali)
+
+    \item Accettazione: quelle software vengono sempre accettate, per quelle hardware se il flag di mascheramento degli interrupt è disabilitato, vengono tutte accettate, altrimenti vengono accettate solo se non mascherabili.
+
+    \item Identificazione della sorgente che ha inviato l'interrupt attraverso l'RRI, per determinare come gestire l'interrupt.
+        Nel caso in cui più sorgenti abbiano lo stesso segnale di interrupt, per identificare quella che ha inviato il segnale si ricorre al polling.
+
+        Diversamente in caso di interrupt vettorizzati internamente è presente un "arbitro di priorità" decide quale interruzione servire.
+
+        Se sono interrupt vettorizzati con un controllore esterno, è presente un componente esterno PIC (\textit{Programmable Interrupt Controller}) al processore, che riceve tutti gli interrupt e segnala alla CPU quali, quando eseguirli e la sorgente dell'interrupt attraverso un identificativo.
+
+        In memoria è presente una tabella delle interruzioni, generata all'avvio della macchina, dove ad ogni interrupt è associato un indirizzo far, della routine di risposta all'interruzione.
+
+        L' interrupt type ricevuto dalla periferica, viene quindi moltiplicato per 4, ottenendo l'indirizzo di memoria della rispettiva routine di risposta.
+
+    \item Salvataggio dello stato della cpu, nelle macchine intel viene caricato sullo stack, e modifica del program counter.
+
+    \item Esecuzione delle RRI
+
+    \item Ritorno al programma e ripristino dello stato della CPU precedente.
+\end{enumerate}
+
+Nell' 8086, l'interfaccia di interruzioni, è un normale ciclo di bus, in cui il segnale INTA sostituisce il segnale READ.
+
+\subsection{Intel 8259}
+Ha 8 pin di dato dove riceve le parole di programmazione e invia l'interrupt type (ID dispositivo) al processore.
+Ha altri 8 pin di interrupt per le periferiche o un'altro controllore PIC slave, raggiungendo un massimo di 64 gestioni di interrupt.
+
+Il riconoscimento della interruzione viene usato il segnale INTA (\textit{INTerrupt Acknowledge}).
+
+Internamente ha un registro IRR (\textit{Interrupt Request Register}) ad 8 bit dove ogniuno di essi, se ad 1, indica che la corrispondente periferica richiede un interrupt.
+Un registro IMR \textit{Interrupt Map Register}), ad 8 bit, in cui un bit ad 1 indica che l'interrupt corrispondente è mascerato.
+
+Le informazioni ricevute, insieme all'elenco delle richieste ricevute, vengono trasmesse al priority resolver, con lo scopo di decidere quale tra gli interrupt ricevuti abbia una maggiore priorità, ed inviarlo al ISR (\textit{In Service Register}) e successivamente trasmetterlo attraverso il bus dei dati.
+
+L'ISR memorizza le istruzioni in esecuizione, dove il bit $n$ viene settato se la richiesta IRQn è stata accettata dalla CPU.
+
+Ha un blocco di logica di controllo per gestire i segnali di INTA ricevuti dal processore.
+
+Ed un'ultimo blocco per la gestione del PIC in cascata.
+
+Una volta inviati il vettore di interruzione, il PIC attende che la CPU invii un comando di EOI (\textit{End Of Interrupt}) che notifichi fine dell'interruzione.
+
+All'arrivo di EOI, PIC resetta il bit di ISR e controlla se sono presenti richieste di interrupt precedenti (rimaste in sospeso perchè con priorità minore), da inviare.
+
+Nel caso si riceva un interrupt con priorità maggiore di quello in esecuzione, viene data la precedenza a quest'ultimo, interrompendo momentaneamente l'esecuzione di quello corrente. Questo metodo prende il nome di Fully Nested Interrupt.
+
+\subsubsection{Connesioni a cascata}
+Tutti i PIC sono collegati al bus dei dati che porta al processore. Hanno un piedino in ingresso per specificare se comportarsi come master o slave.
+
+INTA e CS è ricevuto da tutti, gli interrupt degli slave vanno al master, mentre l'interrupt del master va al processore.
+
+La priorità che il master associa agli slave è uguale per tutti.
+Durante la programmazione, viene associato un id agli slave. Al momento della gestione di un'interrupt, il master comunica attraverso il CAS, quale slave far caricare i dati sul bus.
+
+\subsection{DMA controller}
+Nel caso di interruzioni è possibile che il processore risulti impegnato, e non sempre pronto a gestirle.
+Il \textit{Direct Memory Access} è il meccanismo per cui, sotto il controllo hardware del DMAC (\textit{DMA Controller}) una periferica si interfaccia direttamente con la memoria senza passare dalla CPU.
+
+Il processore vede il DMAC come una normale periferica, ed è in grado di programmarlo: il processore può mandare richieste di lettura o scrittura, indicare indirizzo di IO e memoria ed il numero di parole da trasferire.
+
+Questo è utile per ottimizzare il trasporto dei dati, soprattutto nel caso di memorie ad accesso lento. Delegando il trasferimento dei dati al DMAC, la CPU è in grado di volgere altre operazioni che non richiedono il bus di sistema.
+
+Nel DMAC sono presenti una serie di piedini per gli ingressi di dato, un data register e data count, che indica il numero di parole da trasferire. Contiene anche un bus degli indirizzi, utilizzato per indicarli alla memoria ed una logica di controllo, con una coppia di segnali \code{DMA Request} e \code{DMA Acknowledge}, utilizzati rispettivamente per chiedere al processore di diventare il master del bus, ed il segnale di risposta del processore.
+
+Infine ha anche un segnale di interrupt per notificare il processore.
+
+\begin{itemize}
+    \item La cpu programma il DMAC, indicando lettura/scrittura numero di parole, indirizzo di memoria e dispositivi IO.
+    \item Dispositivo di IO richiede di iniziare il trasferimento
+    \item Tramite i segnali di HOLD e HOLDA, si mette in comunicazione con il processore per prendere il controllo del bus di sistema.
+        Il segnale HOLD non può essere mascherato. Il processore risponde con HOLDA, tenendolo attivo fino a quando il segnale HOLD non diventa basso, indicando che DMAC ha finito il trasferimento.
+    \item La CPU non lavora sul bus ed il DMAC inizia i trasferimenti.
+
+    \item DMAC rilascia il controllo del bus al processore attraverso un segnale di interrupt.
+\end{itemize}
+
+I trasferimenti possono essere \textit{fly-by}, dove i dati vanno direttamente da dispositivo IO a memoria, senza passare dal DMAC. Non possibile nel caso di trasferimento da memoria a memoria (es. deframmentazione), dove si dovrebbe indicare nel bus sia l'indirizzo del dato sorgente che del dato destinazione.
+\\
+In questi casi viene utilizzata la modalità \textit{flow-through}, memorizzando temporaneamente i dati nel DMAC.
+
+
+\subsubsection{Trasferimenti}
+Oltre alla modalità di trasferimento a blocchi, dagli DMAC può essere supportato il trasferimento singolo: trasferisco una parola alla volta, e per trasferire la successiva si necessita la riprogrammazione ed il protocollo di handshake, e trasferimento on-demand dove vengono trasferiti i dati fino a quando c'è richiesta.
+
+Il DMA controller è visto come una periferica, e, al giorno d'oggi è integrato direttamente negli HD e dispositivi di IO.
+
+Il DMA può essere anche collegato ad un bus di IO, dove sono presenti anche le altre periferiche di IO.
+\end{document}

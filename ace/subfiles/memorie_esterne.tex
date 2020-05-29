@@ -1,0 +1,61 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Memorie Esterne}
+le memorie secondarie, sono caratterizzate da un'alta capacità, basti costi di produzione, e la non volatilità dei dati.
+
+\subsubsection{Esempio disco magnetico}
+È un unità di memoria che può essere costituita da più dischi magnetici che ruotano a velocità costante, connessi ad un unico asse.
+
+Ogni superficie viene chiamata faccia, ed una serie di testine, leggono i dati da ognuna di esse, muovendosi all'unisono.
+Le tracce su cui sono posizionate le testine, hanno tutte la stessa distanza dal centro, formando un cilindro.
+
+Ciascuna traccia in ogni faccia, è divisa in settori, di varia densità per tenere costante la quantità di bit letti al secondo.
+% -- 07:06
+
+Le tre informazioni per identificare un dato sono: la traccia (cilindro e faccia) e settore.
+
+Il piatto circolare è formato da materiale magnetizzabile, recentemente composto da materiale vetroso, garantendo una minore distanza della testina dal disco per una minor tempo d'accesso al dato.
+
+La testina è fatta da materiale ferromagnetico, a forma di ferro di cavallo, attraverso una bobina genera un campo magnetico per leggere il dato.
+Per la scrittura la bobina induce un campo magnetico che agisce sullo strato magnetizzabile, per la lettura lo strato magnetizzabile in movimento induce corrente su bobina. Spesso sono utilizzate due testine separate per lettura e scrittura.
+
+La testina non tocca la faccia del disco ma è separata da un cuscinetto d'aria per evitare di rovinare i dischi.
+
+Più la testina è vicina al disco più può essere piccola, garantendo una maggiore densità dati, ma un maggior rischio di contatto.
+
+\subsubsection{Accesso a dato}
+Il tempo d'accesso $t_a$ è determinato da $t_s$, il tempo per posizionare la testina sulla traccia, dipendente dalla distanza tra il cilindro corrente e quello contente il dato. $t_l$ tempo impiegato per posizionare la testina sul dato e $t_d$, il tempo per leggere serialmente i dati.
+
+
+\subsubsection{SSD}
+Sono più veloci rispetto agli HDD, dato che non hanno tempi di latenza, con una tecnologia solo elettronica, si comportano come memorie ad accesso casuale.
+
+È più robusto ai danni meccanici, non avendo dischi interni che si possono rovinare. Consumano e dissipano meno energia.
+
+Hanno il difetto di avere ancora un costo per bit superiore rispetto agli hard disk. Per questo esistono tecnologie ibride, chiamate SSHD composte da una componente meccanica ed una a stato solido. Il firmware si occupa della gestione dati, mentre la componente a stato solido si comporta come una cache.
+
+Un'altro problema degli SSH è che le prestazioni decadono col tempo: alla lettura è necessario leggere un'intero blocco alla volta, e le operazioni di scrittura richiedono una cancellazione completa di un blocco, ed il suo completo aggiornamento.
+\\
+Inoltre dopo un certo numero di utilizzi è inutilizzabile.
+
+Vengono quindi utilizzate tecnologie per prolungarne la durata, utilizzando una cache per raggruppare funzioni di scrittura, algoritmi che dividono le scritture su differenti blocchi, e la gestione dei bad blocks \footnote{Dopo un ripetuto numero di scritture su un blocco, il dato viene scritto su un blocco differente}.
+
+\subsubsection{Dischi ottici}
+Esistono diverse versioni:
+\begin{itemize}
+    \item CD: Compact disk, non cancellabile, per memorizzare informazioni, tipicamente audio
+    \item CD-ROM: Non riscrivibili, per portare dati fino a $650Mb$
+    \item CD-R: CD Scrivibile un'unica volta
+    \item CD-RW: CD Rewritable
+    \item DVD: Digital Versatile Disk, versione "più grossa" del CD, contiene fino a $17G$
+    \item DVD-R
+    \item DVD-RW
+    \item Blu-Ray DVD, presenta una maggiore capacità rispetto ad DVD, raggiungendo una capacità massima di $25G$
+\end{itemize}
+
+La tecnologia di base è policarbonato, e l'informazione viene codificata con dei pit (buche) su uno strato metallico riflettente.
+Le parti interne si dividono quindi in pit, che riflettono male la luce, e le parti land, che la riflettono bene.
+
+In fase di lettura, attraverso un laser, si riesce a leggere le informazioni codificate sul disco.
+\end{document}
