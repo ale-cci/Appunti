@@ -75,5 +75,71 @@ Il bus è anche limitato in ampiezza, dato che tutti i dispositivi connessi hann
 
 \subsubsection{Bus PCI - Peripheral Component Interconnect}
 % 39:44
+Sviluppato da intel ed introdotto nel 1993 su PC di classe pentium. Il protocollo che utilizza non è legato al tipo di piattaforma su cui è impiegato, ed attraverso un chipset dedicato fornisce funzionalità di plug'n'play e bus mastering.
+Lo standard è amministrato dal PCI Special Interest Group.
 
+Non è banale passare dai livelli alti di gerarchia, come bus sistema, ai livelli bassi come local bus o standard ISA/EISA (periferiche); sono necessari dei dispositivi chiamati bridge (PCI bridge, ISA bridge), utilizzati per convertire livelli di tensione, velocità e protocollo di comunicazione i diversi bus.
+
+Le funzionalità principali del PCI sono:
+\begin{itemize}
+    \item Burst Mode: dopo aver individuato l'indirizzo iniziale c'è un flusso molteplice di dati, trasferiti a burst.
+
+        Il dispositivo che vuole trasferire a burst deve prima ottenere lo stato di "master", diventando initiator. Successivamente inizia il trasferimento di dati verso il dispositivo di destinazione, chiamato "target".
+
+        Ovviamente, un solo dispositivo alla volta può essere master del bus, ed una volta diventato, la trasmissione non può essere interrotta.
+
+    \item Bus Mastering: collegamento peer-to-peer sul bus, con accesso diretto alla memoria centrale. Assicurato tramite un bus arbiter centralizzato, con un dispositivo ad hoc, che funziona da master.
+    \item Funzionamento sincrono ed asincrono
+    \item Expansions: sul bus PCI c'è la possibilità di inserire più schede di espansione attraverso connettori di tipo "Edge"
+    \item Linee Multiplexate: Le stesse linee fisiche sono utilizzate da più linee logiche, diminuendo il numero di linee generali a scapito delle prestazioni.
+
+        Le tipiche schede PCI a 32bit utilizzando circa 50 linee, di cui 32 sono linee dati e indirizzi multiplexate.
+
+        All'iniziare di un ciclo di clock, il PCI mette l'indirizzo, attivando il sengale FRAME\#.
+        Nei cicli di clock successivi, inizia il trasferimento dei dati, termina disattivando il segnale FRAME\#.
+
+    \item PCI IDE Bus Mastering: Il controller dei dischi collegato al Bus PCI, garantisce funzionalità DMA (Direct Memory Access)
+\end{itemize}
+
+\subsection{Transizione}
+Internamente alla transizione, sono presenti anche i segnali IRDY e TRDY, che indicano i segnali di ready dell'iniziato e del target.
+Il segnale C/BE\# (comando di bus) indica se sul bus si sta trasferendo indirizzo o dati.
+Ed il segnale di DEVSEL\# è utilizzato per la selezione del dispositivo.
+
+\begin{enumerate}
+    \item L'initiator richiede lo stato di master all'arbitro centrale, attraverso il segnale \code{REQ\#}.
+        Riceve conferma attraverso la linea \code{GNT\#}
+
+    \item Preso il controllo, l'initiator asserische \code{FRAME\#},
+        attiva i segnali \code{C/BE\#} durante la address phase per segnalare al sistema il tipo di transizione.
+
+    \item Il target riconosce il proprio indirizzo sulla linea \code{AD}
+    \item L' initiator smette di usare \code{AD} e prepare uso bus per target, dichiarando di essere pronto a trasmettere con \code{IRDY\#}
+
+    \item
+        Il target riconosce di essere selezionato \code{DEVSEL\#}, e mette a 0 il segnale di \code{TRDY\#}.
+        Si ha un trasferimento valido, solo quando sia \code{IRDY\#} e \code{TRDY\#}
+
+    \item
+        Quando un dato viene letto, l'abilitazione dei byte viene cambiata (toggle byte enable)
+    \item
+        L'initiator riabiliterà \code{BE} quando sul bus saranno pronti altri dati da leggere.
+    \item Nel caso contrario (lettura) in cui il target pone un terzo blocco, ma l'initiator non è encora pronto per leggerli, l'initiator disattiva il ready.
+
+
+    \item Al termine l'initiator segnala che è l'ultimo blocco è stato trasferito, annullando \code{FRAME\#}
+    \item L'initiator, terminata la conversazione toglie anche il segnale \code{IRDY\#}, tornando alla situazione iniziale.
+\end{enumerate}
+
+\subsection{AGP - Accelerated Grarphics Port}
+È un interfaccia introdotta da intel, per utilizzare applicazioni di grafica 3D e digital video.
+È fisicamente separato dal bus PCI ed offre nuove funzionalità come l'accesso alla memoria di tipo pipeline dedicato. Porta un fantaggio di togliere una quantità di traffico significativa sul bus PCI.
+
+Le schede AGP, dunque, hanno accesso diretto alla memoria centrale, non passando neanche dal bus di sistema, utilizzando un bridge.
+Questo serve ad esempio per memorizzare textures.
+
+\subsubsection{Seriale vs Parallelismo}
+Il parallelismo aumenta le prestazioni, soprattutto con più dispositivi, ma chiaramente necessita di risolvere conflitti e risulta costoso all'aumentare della lunghezza del bus.
+
+Si è abbandonato il parallelismo per due principali motivi: la mancanza di conflitti non necessita di arbitraggio, (es. collegamento punto a punto), e per il timing skew: per linee lunghe e parallele si forma un disallineamento tra i segnali, rischiando di leggere dati non corretti.
 \end{document}
