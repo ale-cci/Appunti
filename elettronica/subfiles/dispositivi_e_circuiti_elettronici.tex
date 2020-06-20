@@ -470,4 +470,131 @@ La condizione di equilibrio è raggiungibile in due modi: o sia la componente oh
 In particolare lo spostamento di elettroni per diffusione forma un campo elettrico ohmico che all'equilibrio è uguale ed opposto.
 
 $\Phi_B$ prende infatti il nome di potenziale di barriera, perché è necessario a sostenere il campo elettrico necessario a bilanciare la diffusione.
+
+\subsubsection{Lezione 5 - 12}
+Il modello appena analizzato si basa sull'esistenza di due coordinate $w_p$ e $w_n$, che discriminano regioni tra vicine e lontane alla giunzione di carica.
+
+Osservando che $E(0-) = E(0+)$, dalle relazioni, si ricava che $-qN_A w_p = -qN_D w_n$, considerato che dal grafico della densità di carica $\rho$, $qN_A$ e $w_p$ sono base ed altezza del rettangolo
+
+L' equazione esprime l'uguaglianza tra le due aree dei rettangoli del primo e terzo quadrante.
+Integrando quindi densità di carica sul volume, moltiplico entrambi i rettangoli per la sezione trasversale $S$, ottengo che il volume dei due cilindri $w_p S$, moltiplicato alla densità di carica $qN_A$, ottenendo le cariche $Q_p$ e $Q_n$ associate alla regione svuotata.
+
+In questa regione quindi, il dispositivo si comporta come un condensatore. La differenza è che la carica del condensatore è concentrata su due armature, questa carica è distribuita nel volume.
+
+Questa relazione esprime che $w_p$ e $w_n$ sono legati tra loro da una relazione.
+
+
+Ponendo l'uguaglianza tra le due formule del potenziale $\Psi$ nell'origine, otteniamo:
+\[
+    \Psi_B = \frac{q}{w \varepsilon} \big(N_A \cdot \frac{N_D^2}{N_A^2} + N_D \big) w_n^2 = \frac{qN_D^2}{2\varepsilon} \big( \frac{1}{N_A} + \frac{1}{N_D} \big) w_n^2
+\]
+
+Da cui si ricava il valore di $w_n$ come:
+\[
+w_n = \frac{1}{N_D} \sqrt{\frac{2\varepsilon \Psi_B}{q\big(\frac{1}{N_D} + \frac{1}{N_A}\big)}}
+\]
+e $w_p$ segue dalla relazione $w_p N_A = w_n N_D$.
+
+Dipendentemente dalla concentrazione dei droganti, i valori di $w_p$ e $w_n$ assumono valori dell'ordine di $10^{-6} m$ o inferiori, quindi l'ipotesi di esistenza delle zone neutre, sufficientemente lontane dalla giunzione, è soddisfatta appena le dimensioni fisiche del dispositivi eccedono i decimi di micron.
+
+% 21min
+L'alta densità di lacune nella regione $p$, tende per effetto di diffusione, a muoversi verso la regione $n$.
+Allo stesso tempo, l'alta densità di elettroni tendono a spostarsi nella regione $p$. Per questa condizione la corrente non può essere nulla. Difatti ad un dipolo di carica è associato un campo elettrico, col verso rivolto dalla carica positiva, alla negativa.
+
+Il campo elettrico è intrinseco. Le lacune si muovono per effetto di diffusione da $p$ ad $n$, gli elettroni si muovono per il campo elettrico da $n$ a $p$ per effetto di trascinamento.
+
+L'effetto del campo elettrico contrasta il fenomeno della diffusione, ed all'equilibrio le due componenti sono bilanciate.
+Nell'ipotesi in cui non ci sia trascinamento, ci sarebbe solo diffusione, non contrastata, portando una corrente non nulla, contraddicendo l'ipotesi di equilibrio.
+
+Analogamente se la regione svuotata si estendesse infinitamente, non si avrebbe diffusione in quanto non variabile, ma solo il trascinamento ohmico. I due fenomeni quindi esistono insieme.
+
+La diffusione agisce sulle lacune, portandole dalla regione $p$, alla $n$, per questo prende il nome di diffusione di portatori maggioritari. Il trascinamento, invece agisce sugli elettroni: i portatori minoritari.
+
+\[
+    \Psi_B \approx 0.5 V
+\]
+Questa differenza di potenziale non è in grado di fornire energia internamente ad una maglia, è la reazione intrinseca del materiale che si oppone generare corrente senza sorgente di energia.
+
+Ipotizzando quindi di cortocircuitare la giunzione, per lo stesso motivo per cui esiste una differenza di potenziale tra le due regioni polarizzate differentemente, esistono due differenze di potenziale "di contatto" ai capi della giunzione, collegata al filo conduttore in metallo.
+
+\subsubsection{Calcoli in regione dinamica}
+Spostandoci dalla condizione di equilibrio, ovvero applicando un generatore di tensione alla maglia, ne consegue che la corrente interna non è nulla.
+%42
+
+I due potenziali di barriera $\Psi_{cn}$ e $\Psi_{cb}$, possono essere considerati costanti, e uguali alla differenza di potenziale, calcolata precedentemente in condizione di equilibrio.
+Questa condizione prende il nome di "condizione di contatto ohmico", ovvero che la tensione è indipendente dalla corrente.
+
+Quando un flusso di carica attraversa una regione $p$ o $n$, la conducibilità elettrica $\sigma = q N_A \mu p$. Dalla conducibilità si ricava la resistività $\rho$ come $\rho = \frac{1}{\sigma}$, e quindi la resistenza vale: $R = \rho \frac{l}{S}$, considerando in questo modo la regione $p$ come una resistenza. Analogo ragionamento vale per la regione $n$.
+
+Alle regioni $p$ ed $n$ corrisponde quindi una differenza di potenziale: $\Psi_p$ e $\Psi_n$.
+
+L'equazione di kirkoff alla maglia diventa quindi:
+\[
+    V + \Psi_{cp} - \Psi_p - \Psi_B - \Psi_n - \Psi_{cn} = 0
+\]
+
+Con $V$ pari alla tensione applicata alla maglia. Prendendo come ipotesi che le differenze di potenziale $\Psi_p$ e $\Psi_n$ siano molto più piccole del potenziale di barriera $\Psi_b$, possiamo semplificare l'equazione a $V + \Psi_{cp} + \Psi_B - \Psi_{cn} = 0$.
+
+Questa ipotesi di semplificazione è quindi anche una condizione di validità dell'equazione ottenuta.
+
+Ricordando che i due potenziali siano costanti, all'equilibrio: $0 + \Psi_{cp0} + \Psi_{B0} - \Psi_{cn0} = 0 $, da cui $\Psi_{B0} = \Psi_{cn0} - \Psi_{cp0} = \Psi_{cn} - \Psi{cp}$.
+
+Riportato il risultato ottenuto all'equazione precedente:
+\[
+    V - \Psi_{B0} + \Psi_B = 0
+\]
+
+Sotto ipotesi di validità, la barriera di potenziale $\Psi_B = \Psi_{B0} - V$. Applicare una tensione positiva, vuol dire esattamente ridurre la barriera di potenziale dello stesso valore.
+
+Ricordando che la barriera di potenziale è legata al campo elettrico attraverso la formula $\Psi_B = - \int^{w_n}_{w_p} E dx$, al diminuire del potenziale, diminuisce anche l'area del campo elettrico.
+
+Inoltre, siccome la formula del campo elettrico è $E(x) = - \frac{qN_A}{\epsilon} (x + w_p)$, ed il suo coefficiente angolare è costante, allora per fare in modo che l'area del rettangolo diminuisca, i valori $w_n$ e $w_p$ devono per forza avvicinarsi all'origine.
+
+Applicare una tensione positiva significa che il campo elettrico, non crea un effetto di trascinamento sufficiente a bilanciare l'effetto di diffusione. Per questa ragione si crea una corrente $I$ positiva che circola nella maglia.
+Analogamente se una tensione negativa viene applicata, l'effetto di trascinamento prevale sulla diffusione, favorendo uno spostamento delle lacune nella direzione del campo (negativa), e gli elettroni nella regione concorde, risultando quindi in una corrente negativa.
+
+Per $V > 0$ la diffusione trasporta portatori maggioritari, risultando quindi in una corrente di maggioritari. Per $V < 0$ vengono spostate lacune dalla regione $n$ ed elettroni dalla regione $p$, risultando in una corrente di portatori minoritari.
+Quindi per tensione positiva, la corrente risulta molto forte in quanto sono presenti molti portatori di carica. Con la stessa differenza di potenziale ma negativa, si ottiene lo stesso effetto, ma il numero di portatori è estremamente inferiore, risultando in una corrente debole.
+
+% Aggiungere grafico corrente diodo
+Da questo segue l'equazione del diodo \diodecurrent{V}. La zona di polarizzazione diretta corrisponde alla tensione positiva, ed una corrente di portatori maggioritari, e la polarizzazione inversa alla tensione negativa quindi ad una corrente di portatori minoritari.
+
+\subsubsection{Verifica delle ipotesi}
+Tutto questo è vero se sono verificate le ipotesi imposte nella dimostrazione:
+\begin{itemize}
+    \item L'esistenza di due zone sufficientemente distanti dalla giunzione, già verificata
+    \item Le cadute sulle zone neutre siano trascurabili
+\end{itemize}
+
+Effettuando una simulazione, sul comportamento del diodo, otteniamo il risultato che l'espressione esponenziale della corrente è valida solamente per valori di tensione compresi in un certo intervallo. Infatti fintanto che la corrente è piccola, la caduta di potenziale sulle due regioni (ipotizzate come resistenze), è piccola e trascurabile, al crescere della corrente l'ipotesi non è più vera.
+
+Inoltre, per tensioni eccessivamente negative, la corrente cresce esponenzialmente, distaccandosi dal comportamento pressoché nullo atteso dal modello. Questo è dovuto all'alto valore del campo elettrico, che innesca fenomeni di generazione elettrone-lacuna (generazione per impatto), aumentando il numero di portatori di carica e di conseguenza la corrente. Prende il nome di "fenomeno di breakdown".
+
+Il fenomeno di breakdown, fornendo una corrente esponenziale sotto certo livello di tensione negativa, è utilizzato da un tipo di dispositivi che prende il nome di diodi zener, caratterizzati dal controllo preciso del livello negativo di tensione.
+
+\begin{figure}[ht]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0) to[R] (2, 0)
+        -- (3, 0)
+        to[R] (3, -2)
+        -- (2, -2)
+        to[ZZener diode] (2, 0)
+
+        (2, -2) -- (0, -2)
+        to[american voltage source](0, 0)
+
+        (1, -2) node[ground]{};
+    \end{circuitikz}
+    \caption{Limitatore di tensione con diodo zener}
+\end{figure}
+
+Il passaggio tra regione di polarizzazione diretta ed inversa del diodo non è immediata, in quanto richiede dello spostamento di carica.
+Per questo è stato introdotto un tempo di reazione
+
+% Lezione 209514
+\subsection{Lezione 2019514}
+Siccome in polarizzazione diretta si restringe la giunzione svuotata
+% 11:54
+
 \end{document}
