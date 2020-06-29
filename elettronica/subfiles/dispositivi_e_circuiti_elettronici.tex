@@ -597,4 +597,94 @@ Per questo è stato introdotto un tempo di reazione
 Siccome in polarizzazione diretta si restringe la giunzione svuotata
 % 11:54
 
+Carica fissa associata allo svuotamento: $Q = -q N_A S w_p$, con all'equilibrio $w_p$ noto.
+Supponendo di spostarci dalla condizione di equilibrio sufficientemente poco da poter considerare $w_p$ esprimibile ancora dalla formula:
+\[
+    w_p = \frac{1}{N_A}\sqrt{\frac{2\varepsilon \Psi_{B0}}{q \big(\frac{1}{N_D} + \frac{1}{N_A}\big)}}
+\]
+Nella nuova condizione, siccome varia il potenziale di barriera, la formula diventa
+\[
+    w_p(V) = \frac{1}{N_A}\sqrt{\frac{2\varepsilon (\Psi_{B0} - V)}{q \big(\frac{1}{N_D} + \frac{1}{N_A}\big)}}
+\]
+
+Sostituendo $w_p$ all'equazione della carica $Q$, si può osservare che la funzione non passa per l'origine
+\[
+    Q(V) = -q S \sqrt{\frac{2\varepsilon (\Psi_{B0} - V)}{q \big(\frac{1}{N_D} + \frac{1}{N_A}\big)}}
+\]
+
+Calcolando la carica specifica (Sezione trasversale unitaria, $S = 1$) per $V = 0$, si ottiene la formula
+\[
+Q(V) = -\sqrt{\frac{2q\varepsilon}{\frac{1}{N_D} + \frac{1}{N_A}}}\sqrt{\Psi_{B0} - V} = -M \sqrt{\Psi_{B0} - V}
+\]
+Osservando quindi che ha un andamento di radice quadrata, e che $Q = 0$ per $V = \Psi_{B0}$. Ipotizzando una tensione maggiore di $\Psi_{B0}$, il modello prevede una condizione assurda, quindi ci si può aspettare che anche le condizioni non siano più soddisfatte.
+
+Infatti spostandoci verso la regione di polarizzazione diretta, la regione svuotata si restringe, e la componente diffusiva porta le lacune a muoversi dalla regione $p$ alla regione $n$. Il modello che si basa sull'ipotesi di completo svuotamento non funziona più.
+
+Conoscendo la carica, attraverso la sua derivata, conosco anche la formula della corrente.
+Per questo è possibile aggiungere una costante al valore della carica, senza far variare l'espressione della corrente.
+Per questa proprietà trasliamo il grafico della carica per farlo passare per l'origine.
+
+La quantità id carica che si può trovare in una certa zona, dipende dalla probabilità di ricombinazione delle lacune.
+La carica per $V < 0$ è fissa e di svuotamento, per $V > 0$ è carica mobile, dovuta all'effetto di diffusione.
+
+Ottenere la carica complessiva nel volume è necessario integrare la quantità di carica $qn$ su tutto il volume, ovvero tutta la regione n, dato che nella regione
+\[
+    Q = \int_0^\infty{qnS dx}
+\]
+
+Siccome siamo in regione di polarizzazione diretta, la corrente diffusiva prevale sulla corrente ohmica, e possiamo
+% 41
+Siccome la componente di corrente dipenda da una forma esponenziale, essendo $p$ dipendente dalla derivata della corrente, anche $p$ sarà in forma esponenziale, quindi la concentrazione di elettroni dipende esponenzialmente da $V$, ed integrando quella concentrazione si arriva alla conclusione che anche $Q$ è dipendente esponenzialmente da $V$.
+
+\subsubsection{Sunto}
+In polarizzazione inversa, abbiamo ricavato l'espressione della carica efficace, dipendente da un termine di radice quadrata, ed associata alla carica fissa di svuotamento. Dall'altra parte in polarizzazione diretta, l'andamento è di tipo esponenziale, e dipende dalla carica mobile ed associata al movimento diffusivo.
+
+Mentre la qualità dell'approssimazione della regione in polarizzazione diretta è tanto buona quanto l'approssimazione della corrente, in polarizzazione inversa la componente radice quadrata è approssimata da una retta parallela alle ascisse, ovviamente riportando un errore elevato per $V \to -\infty$
+
+Per questo motivo viene introdotto in parallelo un condensatore di capacità variabile $C(V) = \frac{dQ}{dV}$, facendo comportare il circuito diodo-condensatore, per piccoli segnali, come un condensatore variabile.
+
+\subsection{Applicazioni del transistore bipolare}
+Riprendiamo il transistore bipolare e l'effetto transistore descritto a pagina \pageref{section:transistor_bjt} con relazione:
+\[
+    I_E \approx I_C \gg I_B
+\]
+
+Un transistor npn, è formato da due regioni $n$ agli estremi, ed una regione $p$ intermedia.
+Non è detto che il drogaggio tra collettore ed emettitore sia uguale.
+
+La distanza $w$ dai due diodi è quindi la distanza tra le due giunzioni $p$. In condizione di equilibirio si forma in $p$ ed ai suoi capi, una regione svuotata di elettroni.
+
+Andando in regione di polarizzazione diretta, la giunzione base emettitore, vede la regione svuotata ai suoi capi restringersi rispetto alla giunzione precedente, mentre avendo polarizzata in inversa la giunzione base collettore, la rispettiva giunzione si allarga.
+
+La regione non è più svuotata ma è sede di un fenomeno di diffusione, dove la carica si diffonde e si riduce gradualmente per effetto di ricombinazione.
+
+Con distanza $w$ ridotta, all'equilibrio, la situazione non cambia, ma in regione dinamica, essendo le giunzioni più vicine si ha un alto numero di elettroni che non si ricombinano, portando una corrente non trascurabile di portatori minoritari all'altra regione.
+Quindi fintanto che le giunzioni sono distanti lavorando indipendentemente, quando si avvicinano si ha un effetto di interazione, dove l'emettitore emette elettroni nella giunzione di base, dove non percorrono abbastanza spazio per potersi tutti ricombinare, e buona parte passa quindi alla regione di collettore per effetto di campo.
+
+Più piccola è $w$ maggiore è l'effetto transistore.
+
+Se il transistore fosse simmetrico, allora il funzionamento in regione diretta ed inversa sarebbe identico, ma per via di un differente drogaggio ne risulta che la regione diretta significativamente più efficiente della regione inversa.
+
+L'effetto di ricombinazione è una corrente che non aiuta opposta, chiamata corrente di base. La corrente di emettitore è dovuta agli elettroni che viaggiano dalla zona di emettitore al collettore, per effetto di campo, alle lacune che si spostano dalla base all'emettitore, che si oppone all'effetto transistore.
+L'obbiettivo è rendere la corrente formata dagli elettroni, molto maggiore rispetto alla corrente di base portata dallo spostamento di lacune.
+
+Per fare questo, indichiamo con $N_E$ la concentrazione di atomi donatori nella regione di emettitore, la concentrazione di lacune maggioritarie $N_B$ nella regione di base. Quindi per far si che la corrente di elettroni sia molto maggiore rispetto alla concentrazione di lacune, bisogna far si che $N_E \gg N_B$.
+
+Il parametro $\beta_F \gg 1$ e $\alpha_F \approx 1$.
+
+Per far si che il transistore funzioni ugualmente bene in regione attiva inversa, bisognerebbe arrivare alla condizione che $N_C \gg N_B$,
+ma dal grafico corrente tensione ($I_C$, $\vce$), sono presenti dei tratti dove la corrente è costante ed indipendente dalla tensione.
+Al variare della $\vce$ l'ampiezza della regione svuotata $w_p(\vbc)$ è dipendente da $\vbc$ secondo ragionamenti fatti in precedenza per il diodo.
+
+Aumentare la tensione $\vbc$ porta ad aumentare $\vce$ e quindi aumentare la grandezza della regione svuotata. Portando quindi ad aumentare il cammino degli elettroni in regione svuotata e diminuendo la corrente (Effetto Early).
+
+Quando la regione di base scompare completamente perché sovrapposta dalla regione svuotata, l'effetto prende il nome di "punch-through".
+L'estensione della regione svuotata è inversamente proporzionale al drogaggio. ($qN_A w_p = q N_D w_n$).
+
+Per minimizzare l'effetto early ed il "punch-through" occorre che il drogaggio della regione di base $N_B$ sia molto superiore al drogaggio del collettore $N_C$, portando l'asimmetria di drogaggio nel transistore.
+% 20200514 @ 1:44
+
+Sommariamente $N_E \gg N_B \gg N_C$. Esiste quindi un verso privilegiato per lo scorrimento di corrente.
+
+Il transistore non si comporta come "interruttore ideale" in quanto la corrente di basse dovrebbe essere nulla.
 \end{document}

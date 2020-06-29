@@ -1,0 +1,536 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Transistor MOSFET}
+Ricordando la struttura fisica di un condensatore: due lamine di metallo con in mezzo uno strato di materiale isolante, osserviamo che in condizioni statiche la corrente è necessariamente nulla.
+Utilizziamo quindi questo principio per creare un nuovo tipo di transistore, dove la corrente di base potrà essere nulla.
+
+Sostituendo la lamina di metallo inferiore con del materiale drogato uniformemente, come ad esempio silicio drogato con concentrazione $N_A$, ed utilizzando come materiale isolante ad esempio l'ossido di silicio, otteniamo un condensatore MOS (\textit{Metallo ossido semiconduttore}).
+
+Chiameremo la regione di semiconduttore, "regione di substrato" o bulk. La regione in metallo "gate", simboleggiando la regione che controlla il flusso di carica, ed immaginiamo di applicare una tensione $V_{GB}$ tra gate e bulk.
+
+Immaginando che la differenza di potenziale sia $V_{GB} > 0$, le lacune interne alla regione di bulk vengono trascinate nella direzione del campo elettrico, quindi verso il basso. Creando quindi un eccesso di carica positiva sulla superficie gate, una carica negativa distribuita spazialmente nella regione di bulk, dovuta agli ioni fissi ed una carica mobile negativa superficiale, dovuta al campo elettrico.
+
+Più è intenso il campo elettrico, maggiore è la concentrazione degli elettroni sulla superficie. Aumentare la concentrazione di elettroni porta ad aumentare la conducibilità elettrica e quindi un diminuire della resistenza.
+
+Sotto la regione con alta concentrazione di elettroni, si ha anche una regione svuotata di portatori di carica, con alta resistività e quindi isolante.
+
+In questo caso viene ottenuto un canale n, a partire da un substrato $p$.
+
+Per utilizzare questo condensatore come transistore basta applicare una differenza di potenziale longitudinale, per spostare gli elettroni presenti nel canale. La tensione $V_{GB}$ si occupa quindi di gestire la concentrazione dei portatori, e la tensione $V_T$ per spostare gli elettroni nel canale.
+
+
+Per collegare tutti i contatti da un'unica parte del dispositivo, vengono create due regioni fortemente drogate, in modo da funzionare da conduttori per collegare i due terminali (source e drain) da dove verrà applicata la tensione $V_T$.
+
+La creazione di questi due regioni di fortemente drogati si comporta come un diodo, quindi all'equilibrio sarà circondata da una regione svuotata.
+L'intero dispositivo quindi è completamente circondato da una regione isolata, e non necessita di isolamento esterno, si parla di dispositivo "autoisolante", caratteristica fondamentale per avere molti dispositivi in poco spazio.
+
+Diversamente dal transistor bipolare, non c'è differenza tra source e drain.
+
+
+\subsubsection{Studio dei fenomeni di campo del mosfet}
+
+\def\xd{3}
+\def\tox{2}
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel=$x$, ylabel=$\rho$, width=.33\textwidth]
+            \draw (-\tox, 0) node[circ]{} node[below] {-$t_{ox}$};
+            \draw (\xd, 0) node[circ]{} node[below] {$x_d$};
+
+            \addplot [domain=\xd:8] {0};
+            \addplot [domain=-\tox:0] {0};
+            \addplot [domain=0:\xd] {-3};
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+
+        \begin{axis}[xlabel=$x$, ylabel=$E$, width=.33\textwidth]
+            \draw (-\tox, 0) node[circ]{} node[below] {-$t_{ox}$};
+            \draw (\xd, 0) node[circ]{} node[below] {$x_d$};
+
+            \addplot [domain=\xd:8] {0};
+            \addplot [domain=-8:-\tox]{0};
+            \addplot [domain=-\tox:0]{3};
+            \addplot [domain=0:\xd]{1 - x/\xd};
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+
+        \begin{axis}[xlabel=$x$, ylabel=$\varphi$, width=.33\textwidth]
+            \draw (-\tox, 0) node[circ]{} node[below] {-$t_{ox}$};
+            \draw (\xd, 0) node[circ]{} node[below] {$x_d$};
+
+            \addplot [domain=\xd:8] {0};
+            \addplot [domain=-8:-\tox]{3};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+Supponiamo che esita una regione sufficientemente lontana dall'interfaccia ossido-semiconduttore, da poter considerare la regione di semiconduttore indipendente dall'interfaccia dopo una certa coordinata $x_d$.
+
+\subsubsection{Zona neutra}
+Per $x > x_d$, anche avendo applicato una differenza di potenziale, la corrente nella maglia è necessariamente nulla, in quanto non passa corrente attraverso lo strato isolante. Possiamo considerare quindi questa come una condizione di equilibrio.
+\[
+    \begin{cases}
+        n = n_0 e^\frac{q \varphi}{kT}\\
+        p = p_0 e^{-\frac{q \varphi}{kT}}\\
+        pn = n_i^2
+    \end{cases} \Rightarrow
+    \begin{cases}
+        p \approx N_A\\
+        n = \frac{n_i^2}{N_A}\\
+    \end{cases}
+\]
+Dalla relazione della resistività: $\rho = q (N_D - N_A + p - n) = 0$.
+Inoltre sappiamo che la densità di corrente $J_p = q \mu_p p E - q D_p \frac{dp}{dx}$, siccome $p = N_A$ ed è costante, da cui derivata nulla, allora siccome la densità di corrente deve essere necessariamente nulla, allora ne segue che il campo elettrico $E$ è anch'esso nullo.
+\[
+    E = -\frac{d \varphi}{dx} = 0 \Rightarrow \varphi = \text{costante} = 0
+\]
+
+Risulta quindi una regione neutra.
+\subsubsection{Regione metallica}
+Per $t < t_{ox}$, siccome è un conduttore ideale, il potenziale è costante $\varphi = \varphi_M$ ed il campo elettrico è nullo.
+
+Indichiamo con $\Psi_{MS}$ il potenziale di contatto, possiamo calcolare il valore del potenziale del metallo come $\varphi_M = 0 - \Psi_{MS} + V_G$. Possiamo indicarlo anche con $V_G'$ in quanto è il valore di $V_G$ diminuito di una costante.
+
+In questa regione la resistività non ha significato, quindi si può evitare di calcolare.
+
+\subsubsection{Regione di ossido}
+Per $-t_{ox} < x < 0$, dall'equazione di poisson:
+\[
+    \frac{d\varepsilon E}{dx} = \rho
+\]
+Ipotizzando che non ci sia carica interna all'ossido, possiamo considerare $\rho = 0$. (Ipotesi non completamente realistica a cause di impurità nell'ossido).
+
+Da cui ricaviamo che il campo elettrico interno alla regione è costante, e lo indichiamo con $E_{ox}$.
+
+\begin{align*}
+    E_{ox} &= - \frac{d\varphi}{dx}
+    \\
+    \int_{-t_{ox}}^x E_{ox} {dx} &= - \int_{\varphi(-t_{ox})}^{\varphi(x)} \frac{d\varphi}{dx} dx
+    \\
+    E_{ox}(x + t_{ox}) &= - (\varphi(x) - \varphi(-t_{ox}))
+    \\
+    \varphi(x) &= V_G' -E_{ox}(x + t_{ox})
+\end{align*}
+In particolare posso osservare che nell'origine è pari a $\varphi_S = V_G' - E_{ox}t_{ox}$, rendendo quindi esprimibile il campo elettrico come
+$E_{ox} = \frac{V_G' - \varphi_S}{t_ox}$.
+
+\subsubsection{Regione di semiconduttore}
+In $0 < x < x_d$, ipotizzando che, come nella giunzione pn, il potenziale abbia un andamento monotono, posso dire che $0 < \varphi(x) < \varphi_S$.
+
+Ricordando l'espressione della concentrazione di lacune riportata in precedenza, se il potenziale è positivo, ne segue che l'esponenziale
+$e^{-q\varphi / kT} < 1$, in particolare moltiplicando entrambi i membri della disequazione per $p_0$, ottengo che: $p(x) \ll p_0 \approx N_A$.
+
+Analogo ragionamento si può fare per la concentrazione di elettroni, partendo dalla formula $\varphi(x) < \varphi_S$, ottenendo
+\[
+    n(x) = n_0 e^\frac{q \varphi(x)}{kT} \ll n_0 e^\frac{q\varphi_S}{kT} = n_s
+\]
+Con $n_s$ la concentrazione di elettroni all'origine, i.e. l'interfaccia.
+Ipotizzando che rimanga vera l'equazione $n(x) \ll N_A$, possiamo dire che questa regione è completamente svuotata sia dai portatori maggioritari, che dai portatori minoritari.
+Ottenendo $\rho = -q N_A$.
+
+Dall'equazione di poisson otteiamo:
+\begin{align*}
+    \frac{dE}{dx} = -\frac{qN_A}{\varepsilon_S}
+    \\
+    \int_x^{x_d} \frac{dE} = \int_{x}^{x_d} - \frac{qN_A}{\varepsilon}dx
+    \\
+    E(x) = \frac{q N_A}{\varepsilon_S} (x_d - x)
+\end{align*}
+
+Si può osservare come la retta non è continua con il punto precedente, a cause dei differenti valori che assume la costante dielettrica: $\varepsilon_{ox} \approx 3.9 \varepsilon_0$ e $\varepsilon_S = 11.7 \varepsilon_0$.
+% 47:24
+Integrando l'equazione di poisson nell'intorno di 0, ottenendo
+\[
+    \int_{0-}^{0+} \frac{d\varepsilon E}{dx} dx = \varepsilon_S E (0^+) - \varepsilon_{ox} E_{ox} \Rightarrow
+    E(0^+) = \frac{\varepsilon_{ox}}{\varepsilon_S} E_{ox}
+\]
+
+%54:16
+\begin{align*}
+    &E(x) = \frac{q N_A}{\varepsilon_S} (x_d - x) = - \frac{d\varphi}{dx}
+    \\
+    &\int_x^{x_d} \frac{d\varphi}{dx}{dx} = \int_x^{x_d} \frac{qN_A}{\varepsilon_S}(x - x_d) dx
+    \\
+    \varphi(x) = \frac{q N_A} {2 \varepsilon_S} {(x - x_d)}^2
+\end{align*}
+
+Siccome il campo elettrico è derivata del potenziale, discontinuità di campo implica una discontinuità di pendenza del potenziale.
+
+Attraverso l'espressione ricavata è possibile calcolare il valore del potenziale all'origine $\varphi_S$, analizzando l'espressione possiamo verificare le ipotesi di validità presupposte in precedenza:
+\begin{align*}
+    \varphi(x) = \frac{q N_A}{2 \varepsilon_S} x_d^2 = \varphi_S
+    \\
+    x_d = \sqrt{\frac{2 \varepsilon_S \varphi_S}{qN_A}}
+\end{align*}
+
+La distanza $x_d$ ha ancora dimensioni dell'ordine di micron, rendendo valida l'ipotesi di esistenza di una regione neutra non perturbata.
+
+\subsubsection{Studio della concentrazione di lacune ed elettroni sulla superficie del semiconduttore}
+
+\begin{tikzpicture}
+    \begin{axis}
+    \end{axis}
+\end{tikzpicture}
+
+Guardiamo al variare del potenziale incognito $\varphi_S$ come varia la concentrazione superficiale degli elettroni e delle lacune.
+
+Partendo dalla condizione particolare, $\varphi_S = 0$, la concentrazione $n_s = n_0 = n_i^2 / N_A$, mentre $p_s = p_0 = N_A$.
+Questo è chiamata condizione di banda piatta, perché il potenziale si riduce ad una retta piatta sull'asse delle ascisse, in particolare $V_G' = V_G - \Psi_{MS} = 0 \Rightarrow V_G = \Psi_{MS}$.
+
+Aumentando il potenziale, si può presupporre che la concentrazione di elettroni cresca, mentre la concentrazione di lacune diminuisca.
+Accadrà quindi che per un particolare valore superficiale, la concentrazione di lacune, corrisponda alla concentrazione di elettroni. Chiamiamo questo particolare valore $\varphi_S^*$.
+
+\begin{align*}
+    n_0 e^\frac{q \varphi_S^*}{KT} = p_0 e^{-\frac{q\varphi_S^*}{kT}}
+    \\
+    e^{2 \frac{q\varphi_S^*}{kT}} = {\Big(\frac{N_A}{n_i}\Big)}^2
+    \\
+    \varphi_S^* = \frac{kT}{q} \ln\Big( \frac{N_A}{n_i}\Big) = \varphi_F
+\end{align*}
+
+$\varphi_F$ prende il nome di potenziale di fermi. Dove la concentrazione di elettroni e lacune si equivalgono.
+
+Prende il nome di fenomeno di inversione, il momento in cui gli elettroni diventano i portatori maggioritari sulla superficie, rispetto alle lacune.
+Diversamente la condizione per cui la concentrazione di lacune rimane superiore alla concentrazione di elettroni prende il nome di regione di svuotamento.
+
+
+Diventa importante, calcolare il punto in cui gli elettroni diventano i portatori maggioritari, eguagliando il numero originale di lacune, entrando quindi in una regione di forte inversione, in contrasto con la precedente regione di debole inversione.
+Volendo calcolare il valore di $\varphi*$ corrispondente:
+\begin{align*}
+    \frac{p_0}{n_0} = e^\frac{q \varphi_S^*}{kT}
+    \\
+    \varphi_S* = 2 \varphi_F
+\end{align*}
+Ottenendo una relazione $p_S < n_0 \ll p_0 < n_S$.
+
+In caso di potenziale negativo, la popolazione di lacune aumenta maggiormente e quella di elettroni diminuisce, entrando nella regione chiamata di "accumulazione dei portatori maggioritari".
+
+
+Per calcolare il valore di $\varphi_S (V_G')$, ovvero la concentrazione di elettroni in superficie, non si può riutilizzare l'equazione di poisson, presupponendo la regione svuotata di portatori di carica. È necessario utilizzare un'equazione di Poisson più precisa:
+\[
+    \frac{dE}{dx} = q \frac{(N_D - N_A + p_0 e^{-q\frac{\varphi}{kT}} - n_0 e^{q\frac{\varphi}{kT}})}{\varepsilon_S} = -\frac{d^2 \varphi}{d x^2}
+\]
+Per risparmiare tempo non risolviamo l'equazione ma andiamo direttamente al risultato, ottenendo un'andamento caratterizzato da tre regioni:
+Una lineare, una esponenziale, ed una satura. I valori negativi, lineari corrispondono al regime di accumulazione. Il punto di transizione tran regione esponenziale e satura corrisponde a $2 \varphi_F$.
+ I valori negativi, lineari corrispondono al regime di accumulazione. Il punto di transizione tra regione esponenziale e satura corrisponde a $2 \varphi_F$.
+
+ Al corrispondente potenziale di saturazione, chiamiamo la rispettiva tensione $V_T'$, come tensione di soglia. (Il primo è presente perchè fa riferimento a $V_G'$)
+
+La regione di saturazione giustifica l'ipotesi presa in precedenza, che il valore $n_S$ non superi eccessivamente il valore di $N_A$.
+
+Possiamo dire che per valori di $V_G' < V_T'$, il canale non si è formato (off), mentre per valori superiori, indichiamo che il canale si è formato (transistor on).
+
+\subsubsection{Calcolo del valore della tensione di soglia}
+\[
+\begin{cases}
+    E(0^+) = \frac{\varepsilon_{ox}}{\varepsilon_S t_{ox}} (V_G' - \varphi_S)
+    \\
+    E(0^+) = \frac{q N_A}{\varepsilon_S} x_d
+\end{cases}
+\Rightarrow x_d = \sqrt{\frac{2\varepsilon_S \varphi_S}{q N_A}}
+\]
+
+\[
+    \frac{\sqrt{2 q N_A \varepsilon_S \varphi_S}}{\frac{\varepsilon_{ox}}{t_{ox}}} = V_G' - \varphi_S = \gamma
+\]
+
+In questa condizione $\varphi_S = 2 \varphi_F$, ottenendo :
+\[
+    V_T' = \gamma \sqrt{2 \varphi_F} + 2 \varphi_F
+\]
+Ricordando che $V_T' = V_T - \Psi_{MS}$:
+\[
+    V_T = \Psi_{MS} + \gamma \sqrt{2 \varphi_F} + 2 \varphi_F
+\]
+Concludendo che la tensione di soglia, discrimina le tensioni di gate al di sotto della quale il canale non è formato.
+Possiamo vedere la formula come la somma di tre componenti:
+La condizione di banda piatta, la condizione di svuotamento del canale ed il raggiungimento della forte inversione.
+
+
+Inserendo una carica negativa interna all'ossido, allora una delle cariche positive del gate è impiegata a bilanciare
+tale carica, diverse cariche negative richiamano meno cariche negative nel canale, e ritardano il processo di raggiungimento di forte inversione.
+\\
+In questo caso, la tensione di soglia di un condensatore è modificabile, in alle cariche presenti nell'ossido.
+
+Le cariche in gioco sono $Q_M = Q_i + Q_B$, carica del gate, carica di interfaccia e carica di volume.
+\subsubsection{Andamento di Qi e Qb in funzione di $V_G$}
+Per $V_G' < V_T'$ il potenziale $\varphi_S < 2 \varphi_F$, ed è una regione svuotata di portatori mobili, quindi $n \ll N_A$.
+% 35
+
+La carica $Q_i$ esce nell'intervallo, ma di una quantità non percepibile, mentre $Q_B$ è data da
+$Q_N = -q N_A x_d S$, considerando la superficie $S$ unitaria, siccome $x_d$ dipende da un andamento di radice quadrata rispetto a $\varphi_S$, e $\varphi_S$ nel tratto da 0 a $V_T'$ ha un'andamento pressochè rettilineo, quindi $Q_B$ ha un andamento tipo radice quadrata.
+
+Al momento di formazione del canale, per $V_G' > V_T'$, la carica $Q_i$ cresce linearmente come un normale condensatore, in quanto ad ogni nuova carica positiva formata nella regione metallica, deve corrispondere una carica negativa associata nella regione di canale, in quanto la regione è già svuotata.
+L'andamento di $Q_i$ è quindi simile a quello di un condensatore, ma non passa per l'origine, rimanendo esprimibile dalla formula:
+\[
+    Q_i = C_{ox}(V_G' - V_T') = C_{ox} (V_G - V_T)
+\]
+Il condensatore MOS ha quindi due regimi di funzionamento diversi, un primo quando il canale non è formato, ed un secondo, dove la carica associata allo svuotamento non cambia, e la variazione di carica avviene solo nel canale.
+
+\begin{tikzpicture}
+    \begin{axis}[xlabel=$V_G'$, ylabel={$Q_B$,$Q_i$}]
+        \addplot[blue, domain=-8:0]{x};
+        \addplot[blue, domain=0:2]{0.2*  x};
+        \addplot[blue, domain=2:5]{(x-2) + 0.4};
+
+        \addplot[red, domain=0:2]{sqrt(x)};
+        \addplot[red, domain=2:5]{sqrt(2)};
+
+        \addplot[green, domain=-8:0]{x};
+        \addplot[green, domain=0:2]{sqrt(x) + 0.2*x};
+        \addplot[green, domain=2:5]{sqrt(2) + (x-2) + 0.4};
+    \end{axis}
+\end{tikzpicture}
+
+La capacità $C$ della formula del condensatore mos, dipende da $C_{ox} = \frac{\varepsilon_{ox}}{t_{ox}}S$, ricordando che consideriamo la superficie $S$ unitaria.
+Posso tracciare la capacità equivalente come la variazione di capacità del condensatore, la variare del potenziale, ottenendo due valori costanti nei tratti rettilinei, ed un "infossamento" nel tratto intermedio, dove cala per poi tornare costante.
+
+Il massimo valore di capacità lo otteniamo quindi come il valore costante $C_{ox}$. Siccome maggiore è la capacità, maggiore è il ritardo interno al circuito.
+Inoltre questo transistore fornisce un modo di ottenere una capacità variabile, al variare della tensione di polarizzazione.
+
+
+\subsubsection{Oss}
+Sono presenti due campi interni al transistore mos, uno $E_x$, che si occupa della formazione del canale, ed uno $E_y$, che si occupa dello spostamento della corrente.
+
+Se si scompone il condensatore infinitesimamente, e si guarda la quantità di carica presente in ogni frammento, otteniamo che
+\[
+    Q_i = C_{ox} (V_G - \varphi(y) - V_T)
+\]
+Con $\varphi(y)$ crescente più ci si sposta dal source al drain. Quindi la carica non è distribuita uniformemente sul condensatore, ed è più concentrata verso il source.
+
+Per utilizzare sempre un modello monodimensionale, utilizziamo un'ipotesi di profilo graduale, ipotizzando che le variazioni di carica siano sufficientemente piccole, si può modellare il condensatore come una seria di condensatori con carica distribuita costantemente.
+In questo modo si può dire che il trasporto della carica, si verifica sempre con la formula utilizzata in precedenza.
+
+Quello che si vuole calcolare è quindi l'andamento della corrente $I_D$ in funzione di $V_{GS}$ e $V_{DS}$.
+
+Saltando direttamente alla conclusione, si dimostra che per $V_{GX} < V_T$, allora $I_D = 0$ e per $V_{GS} > V_T$, allora
+\[
+    I_D = \beta \big\{ (V_{GS} - V_T) V_{DS} - \frac{V_{DS}^2}{2}\big\}
+\]
+Il coefficiente $\beta = C_{ox} \mu_n \frac{w}{L}$, con $\mu_n$ mobilità degli elettroni, $w$ la profondità del condensatore ed $L$ la lunghezza del condensatore.
+
+% 1h:24
+Per tracciare l'andamento in figura, possiamo osservare che la corrente $I$ è esprimibile in due termini, dove il primo è una retta, dove $V_{GS}$ funziona da coefficiente angolare, mentre il secondo è un' arco di parabola negativo.
+
+Osservando il grafico esistono tratti con tensione positiva e corrente negativa, quindi calcolando la potenza dissipata $P = VI$ si ottiene un valore negativo, che risulta impossibile in quanto andrebbe in contraddizione col principio di conservazione dell'energia.
+
+Osservando un modello sperimentale, in corrispondenza del punto di massimo l'approssimazione utilizzata non funziona più in quanto il valore di massimo una volta raggiunto rimane costante, e non diminuisce.
+
+Calcolando il valore del punto di massimo:
+\begin{align*}
+    \frac{dI_D}{dV_{DS}} = V_{GS} - V_T - \bar{V_{DS}} = 0
+    \\
+    \bar{V_{DS}} = V_{GS} - V_T
+\end{align*}
+
+Ricordando il modello di approssimazione, esprimendo la carica nel punto di massimo:
+\[
+    \bar{Q_i} = C_{ox} (V_{GS} - \bar{V_{DS}} - V_T) = 0
+\]
+Otteniamo quindi che nella sezione del punto di massimo, la carica si annulla. Questa condizione prende il nome di "pinch-off". Il raggiungimento di questa regione di pinch-off fa fallire il presupposto di svuotamento completo in quanto continua ad esistere corrente anche in assenza apparente di carica.
+\subsubsection{Studio della condizione di pinch-off}
+Il fatto che la carica $Q_i(L) \to 0$, siccome la corrente deve rimanere costante, è necessario che la velocità degli elettroni $v_n \to \infty$, che risulterebbe assurdo.
+Ricordando che la velocità degli elettroni è $V_n = - \mu_n E$ allora il campo elettrico dovrebbe tendere all'infinito. Per poi tornare a valori bassi una volta raggiunta la zona drogata $n$.
+
+\[
+    E_y = - \frac{d\varphi}{dy} \Rightarrow \int_0^L E_y dy = - \int_{\varphi(0)}^{\varphi(L)} \frac{d\varphi}{dy} dy
+\]
+Il primo integrale è interpretabile come l'area sottesa del campo elettrico da $0$ ad $L$. Il secondo come la differenza di potenziale ai capi del canale, pari a $V_{DS}$. Siccome $V_{DS}$ è un valore finito, allora l'area sottesa dalla curva è anch'essa finita.
+Quindi la lunghezza del tratto di campo elettrico che tende all'infinito deve necessariamente tendere a 0. Indipendentemente dal valore di $V_{DS}$.
+
+Ci si può immaginare quindi il canale come un partitore. Dove la regione con il canale formato è esprimibile da una resistenza. Mentre la regione strozzata, di "pinch-off" con un altra resistenza, e siccome è presente poca carica, la conducibilità è piccola e la resistenza equivalente quindi è superiore alla precedenza.
+Di conseguenza, dato che la resistenza di pinch-off è molto superiore alla resistenza di canale, ogni ulteriore variazione verrà assorbita principalmente dalla regione di pinch-off, non ripercuotendosi sulla resistenza di canale.
+
+\begin{tcolorbox}[title=OFF]
+    \[\begin{cases}
+        V_{GS} < V_T
+        \\
+        I_D = 0
+    \end{cases}\]
+\end{tcolorbox}
+\begin{tcolorbox}[title=Lineare]
+    \[\begin{cases}
+        V_{GS} > V_{DS} + V_T
+        \\
+        I_D = \beta_n \big\{ (V_{GS} - V_T) V_{DS} - \frac{V_{DS}^2}{2}\big\}
+    \end{cases}\]
+\end{tcolorbox}
+\begin{tcolorbox}[title=Saturazione]
+    \[\begin{cases}
+        V_T < V_{GS} < V_{DS} + V_T
+        \\
+        I_D = \frac{\beta_n}{2} (V_{GS} - V_T)^2
+    \end{cases}\]
+\end{tcolorbox}
+
+\subsection{Esempio circuito}
+\begin{circuitikz}
+    \draw
+    (0, 0) node[ground]{}
+    node[nmos, anchor=S] (npn){}
+
+    (npn.G) node[circ]{} node[above]{$V_i$}
+    (npn.D) to[R, label=$R_C$] ++(0, 2) node[vcc]{}
+    node[right] {$V_{cc}$}
+
+    (npn.D) to[short] ++(0.5, 0)
+    node[circ]{}
+    node[right]{$V_u$}
+    ;
+\end{circuitikz}
+
+Risolvendo il circuito otteniamo:
+\begin{tcolorbox}
+    Per $V_i < V_{GS}$ il transistor è spento con corrente $I_D = 0$ e $V_u = V_{cc}$
+\end{tcolorbox}
+\begin{tcolorbox}
+    Per regione di saturazione, $V_T < V_i < V_T - V_u$ quindi la regione di validità è dopo $V_T$ e sopra la retta del primo quadrante $V_i = V_T - V_u$.
+
+    La formula di $V_u$ è un' arco di parabola decresciente:
+    \[
+        V_u = V_{cc} - \frac{R\beta}{2} (V_i - V_T)^2
+    \]
+\end{tcolorbox}
+\begin{tcolorbox}
+    In regione di funzionamento lineare, le condizioni di esistenza sono sotto la retta espressa in regione di saturazione: $V_i = V_T - V_u$ ed il valore di $V_u$ è pari a:
+    \[
+        V_u = V_{cc} - R \beta \big\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\big\}
+    \]
+
+    Analogamente sappiamo che $I_D = (V_{cc} - V_u) / R$, ed unendo questa formula con la formula di $I_D$ al variare della tensione d'ingresso,
+    osservando che all'aumentare della tensione $V_i$, il valore di $V_u$ non raggiunge mai il valore di zero.
+    %53
+\end{tcolorbox}
+
+Studiando il guadagno della regione di saturazione:
+\begin{align*}
+    V_u = V_{dd} - \frac{\beta R}{2} (V_i - V_T)^2
+    \\
+    A_V = -\beta R (V_i - V_T)
+\end{align*}
+otteniamo che è dipendente da dove viene calcolato, e soprattutto dal valore di $\beta$, (dipendente dai parametri $\varepsilon_{ox}$ ,$t_{ox}$, $\mu_n$, $w$ ed $L$).
+
+In termini progettuali è possibile variare le dimensioni fisiche del canale $w$ ed $L$, ed il valore della resistenza $R$, dipendente da rispettiva lunghezza $L_R$ e ampiezza $w_R$.
+\[
+    \beta R = c_{ox} \mu_n \frac{\rho}{t} { \color{red}\frac{w_M}{L_M}\frac{L_R}{w_R}} = k \frac{w_M / L_M}{w_R / L_R}
+\]
+Il rapporto tra $w$ ed $L$ prende il nome di fattore di forma. Quindi il guadagno dipende dal rapporto dei fattori di forma di transistor e  resistore.
+Per questo motivo, l'invertitore viene chiamato di tipo "ratioed", dimensionato.
+
+Se si vuole simultaneamente aumentare il guadagno e ridurre l'ingombro si diminuisce il più possible i valori $L_M$ ed $w_M$, e per avere guadagni più elevati e maggiore immunità ai disturbi è richiesto di aumentare le dimensioni dei componenti.
+
+
+Nel circuito il transistore prende il nome di rete di pull-down  e la resistenza prende il nome di pull-up.
+
+Sostituiamo quindi alla rete di pull-up un'altro transistore, per simulare una resistenza ad alti valori resistivi.
+
+\begin{circuitikz}
+    \draw
+    (0, 0) node[ground]{}
+    node[nmos, anchor=S] (npn){}
+
+    (npn.G) node[circ]{} node[above]{$V_i$}
+    (npn.D) node[nmos, anchor=S] (npn2){}
+    (npn2.D) -| (npn2.G)
+    (npn2.D) node[vcc]{}
+    node[right] {$V_{cc}$}
+
+    (npn.D) to[short] ++(0.5, 0)
+    node[circ]{}
+    node[right]{$V_u$}
+    ;
+\end{circuitikz}
+
+Il transistore nella rete di pull-up è detto connesso a diodo, in quanto facendo riferimento al transistor bipolare, il cortocircuito tra le due giunzioni lo fa comportare come un diodo. Questo tipo di connessione fa si che la tensione $V_{GS}= V_{DS}$ ed in particolare $V_{GS} < V_{DS} + V_T$ facendo si che il transistor può lavorare solamente in regione di saturazione.
+
+Per questo prende il nome di invertitore nmos a carico attivo saturato.
+
+
+\subsubsection{Analisi del modello}
+\begin{tcolorbox}
+    Per $M_1$ OFF, $V_{GS1} < V_T$
+    \begin{align*}
+        I_{D1} = 0
+        \\
+        I_{D2} = 0
+    \end{align*}
+    Avendo escluso che $M_2$ non può funzionare in ragione lineare, allora $M_2$ è spento.
+    Posso scrivere quindi che $V_u = V_{cc} - V_{DS2} = V_{cc} - V_T$
+
+\end{tcolorbox}
+\begin{tcolorbox}
+    Per $M_1$ saturo, $V_T < V_{GS1} < V_{DS1} + V_T$ da cui $V_i > V_T$ e $V_u > V_i - V_T$.
+    Le condizioni di funzionamento della rete di pull-down sono le stesse del circuito a carico resistivo, in quanto la rete non cambia.
+
+    \begin{align*}
+        I_{D1} = \frac{\beta_1}{2} (V_i - V_T)^2 = \frac{\beta_2}{2} (V_{cc} - V_u - V_T)^2 = I_{D2}
+        \\
+        V_u = V_{cc} - V_T - \sqrt\frac{\beta_1}{\beta_2} (V_i - V_T)
+    \end{align*}
+\end{tcolorbox}
+\begin{tcolorbox}
+    Per $M_1$ in regione lineare ed $M_2$ acceso quindi saturo valgono le relazioni
+    \begin{align*}
+        I_{D1} = \beta_1 \big\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\big\}
+        = \frac{\beta_2}{2} (V_{cc} - V_u - V_T )^2 = I_{D2}
+    \end{align*}
+\end{tcolorbox}
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot[domain=-5:1]{3};
+        \addplot[domain=1:3]{(-x + 4)};
+        \addplot[domain=3:5]{1 + 5/x -5/3};
+    \end{axis}
+\end{tikzpicture}
+
+Abbiamo già messo in evidenza come il guadagno sia il rapporto tra i due coefficienti $\beta_1$ e $\beta_2$, quindi il guadagno è legato ancora ai fattori di forma dei due transistor, per questo è ancora un dispositivo dimensionato a rapporto, "ratioed".
+
+È possibile modificare il transistore mos, cambiando il drogaggio del semiconduttore, aggiungendo uno strato drogato con atomi donatori, in modo da rendere il canale già formato in partenza ed utilizzare la tensione $V_{GB}$ per svuotarlo.
+Questo tipo di transistore prende il nome di transistore a depletion, mentre quello utilizzato fino ad ora prende il nome di transistore ad enhancement.
+
+Connettendo a diodo questo nuovo tipo di transitore, è vero che $V_{GS} > V_{DS} - |V_T|$ permettendo il funzionamento in regione lineare quando è connesso a diodo.
+
+\begin{circuitikz}
+    \draw
+    (0, 0) node[ground]{}
+    node[nmos, anchor=S] (npn){}
+
+    (npn.G) node[circ]{} node[above]{$V_i$}
+    (npn.D) node[pmos, anchor=D] (npn2){}
+
+    (npn2.S) -| (npn2.G)
+    (npn2.S) node[vcc]{}
+    node[right] {$V_{cc}$}
+
+    (npn.D) to[short] ++(0.5, 0)
+    node[circ]{}
+    node[right]{$V_u$}    ;
+\end{circuitikz}
+
+$M_2$ è spento se $V_{GS2} = V_{cc} - V_u < V_{T2}$, ovvero $V_u > V_{cc} + |V_{T2}|$, la condizione è irrealistica in quanto l'uscita non riesce ad assumere valori superiori all'alimentazione, quindi il transistor è sempre acceso.
+Di conseguenza lavora solo in regione lineare.
+\begin{tcolorbox}
+    Per $M_1$ spento, allora $I_{D2} = 0$, quindi $V_{DS2} = 0$ quindi $V_u = V_{cc}$
+\end{tcolorbox}
+\begin{tcolorbox}
+    Per $M_1$ in regione di saturazione si ottiene ancora una relazione analoga alla precedente
+    \begin{align*}
+        I_{D2} = \beta_2 \big\{ (V_{cc} - V_u - V_T)(V_{cc} - V_u) - \frac{(V_{cc} - V_u)^2}{2}\big\}
+        \\
+        = \beta_2 (\frac{x^2}{2} + x |V_{T2})
+    \end{align*}
+\end{tcolorbox}
+
+Questo circuito a differenza del precedente, ha il vantaggio di avere al valore alto lo stesso valore di $V_{cc}$.
+
+\subsubsection{Transistore pmos}
+L'unica differenza è che il semiconduttore è drogato con atomi donatori $N_D$, il canale è formato dalle lacune, essendo portatori di carica positiva, il potenziale più basso è al drain e non al source. Il funzionamento rimane lo stesso.
+
+La mobilità delle lacune è inferiore di quella degli elettroni, risultando in un coefficiente $\beta_p$ peggiore rispetto a quello di $\beta_n$
+% sopra 20200527
+\end{document}

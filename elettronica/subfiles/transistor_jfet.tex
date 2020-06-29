@@ -1,0 +1,42 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Transistor JFET}
+Supponiamo di avere un blocco di materiale univorme di dimensioni $L \times w \times h$ e drogato uniformemente con concentrazione $N_D$.
+Se applicato un campo elettrico ai suoi estremi,
+\[
+    J_n= q \mu_n n E + \cancel{q D_n \frac{dn}{dx}} = q \mu_n N_D = \sigma
+\]
+Permettendo al dispositivo di comportarsi come buon conduttore o isolante in base al valore di $N_D$.
+La resistenza associata ricordiamo che è esprimibile come $R = \rho \frac{L}{h w}$.
+
+Presupponendo di applicare una differenza di potenziale $V_L$ ai suoi estremi, possiamo calcolare la corrente attraverso la legge di ohm:
+\[
+    I = \frac{V_L}{R}
+\]
+
+Prendendo una giunzione pn ed applicando agli estremi delle due regioni una differenza di potenziale $V_T$, sappiamo che nella giunzione si forma una regione svuotata, la cui ampiezza tende a restringersi in polarizzazione diretta ed allargarsi in polarizzazione inversa.
+
+L'ampiezza $w_n$ ricordiamo che è esprimibile come:
+\[
+    w_n = \frac{1}{N_A} \sqrt{ \frac{2 \varepsilon}{q (\frac{1}{N_D} + \frac{1}{N_A})}}\sqrt{\Psi_{B0} - V}
+\]
+
+Immaginando ora di mettere sopra al blocco, drogato uniformemente con concentrazione $N_D$ e con una tensione agli estremi $V_L$, una lastra di materiale $p$ drogato con concentrazione $N_A$, ed applicare una tensione $V_T$ dall'alto verso il basso.
+Si formano quindi due correnti $I_T$ e $I_L$.
+
+Supponendo $V_T < 0$, quindi $V_T \approx 0$, sotto la giunzione si forma una regione svuotata di portatori mobili.
+La conducibilità della regione svuotata è molto bassa, comportandosi come un isolante. Per calcolare la nuova resistenza del materiale non bisogna considerare la regione svuotata:
+\[
+    R = \rho \frac{L}{(h - w_n) w}
+\]
+Agendo quindi sulla tensione $V_T$ si è in grado di allargare la regione svuotata ed aumentare quindi il valore della resistenza $R$ e quindi la corrente $I_L$.
+
+Questo dispositivo approssima molto di più l'effetto di valvola idraulica, e prende il nome di \textit{Field Effect Transistor} o \textit{JFET}.
+La regione non svuotata prende il nome di "canale".
+
+Il dispositivo non è più bipolare, ma unipolare, in quanto il trasporto di carica è dovuto solo agli elettroni.
+
+Non è molto utilizzato nei circuiti digitali, in quanto per svuotare completamente la giunzione occorrono valori di $V_T$ molto bassi.
+
+\end{document}
