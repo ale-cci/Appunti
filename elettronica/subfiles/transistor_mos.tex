@@ -533,4 +533,176 @@ L'unica differenza è che il semiconduttore è drogato con atomi donatori $N_D$,
 
 La mobilità delle lacune è inferiore di quella degli elettroni, risultando in un coefficiente $\beta_p$ peggiore rispetto a quello di $\beta_n$
 % sopra 20200527
+
+
+\begin{minipage}{.5\textwidth}
+    \textbf{NMOS}
+
+    \begin{center}
+        \begin{circuitikz}
+            \draw (0, 0) node[nmos]{};
+        \end{circuitikz}
+    \end{center}
+
+    OFF: $V_{GS} < V_{Tn}$ e $I_D = 0$
+
+    SAT:
+        \begin{align*}
+            &V_{Tn} < V_{GS} < V_{DS} + V_{Tn} \\
+            &I_D = \frac{\beta_n}{2} (V_{GS} - V_{Tn})^2
+        \end{align*}
+
+    LIN:
+    \begin{align*}
+        &V_{GS} > V_{DS} + V_{Tn}
+        \\
+        &I_D = \beta_n \big\{ (V_{GS} - V_{Tn}) V_{DS} - \frac{V_{DS}^2}{2}\big\}
+    \end{align*}
+\end{minipage}
+\begin{minipage}{.45\textwidth}
+    \textbf{PMOS}
+    \begin{center}
+        \begin{circuitikz}
+            \draw (0, 0) node[pmos]{};
+        \end{circuitikz}
+    \end{center}
+
+    OFF: $V_{GS} > V_{Tp} < 0$ e $I_D = 0$
+
+    SAT:
+        \begin{align*}
+            &V_{DS} + v_{Tp} < V_{GS} < V_{Tp}\\
+            &I_D = \frac{\beta_n}{2} (V_{GS} - V_{Tp})^2
+        \end{align*}
+
+    LIN:
+    \begin{align*}
+        &V_{GS} < V_{DS} + V_{Tp}
+        \\
+        &I_D = \beta_n \big\{ (V_{GS} - V_{Tp}) V_{DS} - \frac{V_{DS}^2}{2}\big\}
+    \end{align*}
+\end{minipage}
+
+
+Limitandoci ad analizzare i transistori pmos ad arricchimento, ovvero $V_{TP} < 0$, allora è possible esprimere le equazioni come:
+
+OFF: $V_{SG} < |V_{TP}|$ e $I_D = 0$
+
+SAT: $V_{DS} + |V_{Tp}| > V_{SG} > |V_{Tp}|$ e $I_D = \frac{\beta_p}{2}(V_{SG} - |V_{Tp}|)^2$
+
+LIN: $V_{SG} > V_{SD} + |V_{Tp}|$ e $I_D = \beta_p \big\{ (V_{SD} - |V_{Tp}|) V_{SD} - \frac{V_{SD}^2}{2}\big\}$
+
+La struttura delle equazioni rimane quindi essenzialmente la stessa, variano solamente i componenti.
+
+
+Analizzando il circuito con un transistore
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0, 0) node[ground]{}
+        node[nmos, anchor=S] (npn){}
+
+        (npn.G) node[circ]{} node[above]{$V_i$}
+        (npn.D) node[pmos, anchor=D] (npn2){}
+
+        (npn2.G) -- ++(-0.5, 0) node[ground]{}
+        (npn2.S) node[vcc]{}
+        node[right] {$V_{cc}$}
+
+        (npn.D) to[short] ++(0.5, 0)
+        node[circ]{}
+        node[right]{$V_u$}    ;
+    \end{circuitikz}
+\end{figure}
+
+La rete di pull-down rimane la stessa, ed è spenta per $V_i < V_{Tn}$ ed è saturo per $V_u > V_i - V_{Tn}$ e lineare per $V_u < V_i - V_{Tn}$.
+
+Diversamente il transistore pmos non è mai spento in quanto $V_{cc} > |V_{Tp}$.
+È saturo quando $V_{cc} < V_{cc} - V_u + |V_{Tp}|$ ovvero $V_u < |V_{Tp}|$.
+
+\begin{tcolorbox}
+    Se l'nmos è spento, allora la corrente è nulla. la corrente sul ramo del transistor pmos è nulla se il transistor si trova in regione lineare o è spento. Quindi da precedente osservazione l'nmos funziona in regione lineare.
+    Ponendo a zero la corrente in regione lineare, allora otteniamo che $V_{SD} = 0$, quindi $V_u = V_{cc}$
+\end{tcolorbox}
+\begin{tcolorbox}
+    Nella regione in cui l'nmos è saturo ed il pmos è lineare, mettiamo a sistema le equazioni delle due correnti ottenendo:
+    \[
+        (V_{cc} - V_u)^2 - 2(V_{cc} - |V_{Tp}|)(V_{cc} - V_u) + \frac{\beta_n}{\beta_p} (V_i - V_{Tn})^2 = 0
+    \]
+    Da cui:
+    \[
+        V_u = |V_{Tp}| \pm \sqrt{(V_{cc}  - |V_{Tp}|)^2 - \frac{\beta_n}{\beta_p}(V_i - V_{Tn})^2}
+    \]
+    Per $V_i = V_{Tn}$, siccome sappiamo che l'uscita $V_u$ deve essere uguale a $V_{cc}$ per continuità, allora necessariamente la radice con soluzione deve essere positiva.
+\end{tcolorbox}
+Risolvendo graficamente l'equazione si ottene sempre il grafico di un'invertitore, dove la tensione d'uscita tende asintoticamente al valore 0.
+Nuovamente il guadagno di tensione è funzione dipendente da $\beta_n$ e $\beta_p$.
+
+Questo invertitore prende il nome di invertitore pseudo-nmos, per via che il transistore a canale p è utilizzato come rete di pull-up.
+
+Per utilizzare transistori nmos e pmos nello stesso circuito, dato che richiedono substrati con drogaggi di tipo differente, è necessario tenere in mente che la cosa che differenzia una regione drogata di tipo p ed una di tipo n è la differenza di atomi drogati. È possibile drogare selettivamente parti di un materiale già drogato.
+
+Nello stesso substrato è quindi possibile creare transistori di tipo n e di tipo p, questa tecnologia prende il nome di CMOS (\textit{Complementary MOS})
+
+\begin{circuitikz}
+    \draw (0, 0) node[pmos](pm) {}
+    (pm.G) node[circ]{} node[above]{$V_i$}
+    (pm.S) node[vcc]{}
+    (pm.D) -- ++(0.5, 0) node[circ]{} node[above]{$V_u$}
+    (pm.D) to[R] ++(0, -1.5) node[ground]{}
+    ;
+\end{circuitikz}
+
+\begin{tcolorbox}
+    pmos è spento per $V_{SG} < |V_{Tp}|$, quindi $V_i > V_{cc} - |V_{Tp}|$
+    ed $I_D = 0$ quindi $V_u = 0$.
+\end{tcolorbox}
+\begin{tcolorbox}
+    In saturazione $V_u < V_i + |V_{Tp}|$
+    e
+    \[
+        V_u = \frac{\beta_p R}{2} (V_{cc} - V_i - |V_{Tp}|)^2
+    \]
+\end{tcolorbox}
+\begin{tcolorbox}
+    $I_D = \frac{V_{cc} - V_{SD}}{R}$, intersecata con il grafico della caratteristica, si osserva che all'aumentare di $V_SG$, la tensione $V_{SD}$ tende asintoticamente a $0$, quindi $V_u$ tende a $V_{cc}$
+\end{tcolorbox}
+
+Confrontando i risultati ottenuti con l'nmos, per ingresso $V_i = V_L$, l'uscita dell'nmos si porta a $V_H$ indipendentemente dai fattori di forma e la corrente è nulla.
+Diversamente per uscita $V_u = V_H$ l'uscita dell nmos dipende dai fattori di forma e la corrente è positiva.
+Per l'nmos quindi il comportamento è ideale per $V_i = V_L$, con potenza dissipata nulla, ha una potenza statica solamente per $V_u = V_H$.
+L'uscita alta è la migliore possibile.
+
+Il pmos è l'esatto opposto portando all'uscita bassa $V_i = 0$, la potenza statica dissipata per tenere il valore basso in uscita è nulla.
+La tensione alta del pmos non raggiunge mai il valore massimo ed il valore dipende dal fattore di forma, dissipando potenza statica.
+
+L'nmos è un pull-down attivo intelligente in quando non serve si spegne, non dissipando potenza. Il pmos è una rete di pull-up intelligente.
+
+
+Si può intuire quindi che utilizzando i due componenti nella loro rete ideale otterremo migliori prestazioni, rendendo il risultato indipendente dal fattore di forma (ratioless). Questo circuito prende il nome di invertitore cmos.
+%1:48
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0, 0) node[ground]{}
+        node[nmos, anchor=S] (npn){}
+
+        (npn.G)
+        -- ++(-.5, 0)
+        node[circ]{} node[above]{$V_i$}
+        (npn.D) node[pmos, anchor=D] (npn2){}
+
+        (npn2.G) -| (npn.G)
+        (npn2.S) node[vcc]{}
+        node[right] {$V_{cc}$}
+
+        (npn.D) to[short] ++(0.5, 0)
+        node[circ]{}
+        node[right]{$V_u$}    ;
+    \end{circuitikz}
+\end{figure}
+
 \end{document}

@@ -1,0 +1,481 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Amplificatore differenziale}
+\begin{center}
+    \begin{tikzpicture}
+        \draw
+            (0, 0) node[ground]{}
+            to[european current source, i<=$I_D$] (0, 1.5)
+            coordinate(x)
+            -- ++(-1, 0)
+            node[nmos, anchor=S] (nmos1){}
+
+            (nmos1.D) to[R, l=R, i<=$I_{D1}$] ++(0, 2)
+            node[vdd]{}
+            (nmos1.G) node[left]{$V_{i1}$}
+            (nmos1.D) -- ++(0.2, 0) node[right]{$V_{u1}$}
+
+            (x) -- ++(1, 0)
+            node[nmos, anchor=S, xscale=-1] (nmos2){}
+            (nmos2.D) to[R, l=R, i<=$I_{D2}$] ++(0, 2)
+            node[vdd]{}
+            (nmos2.G) node[right]{$V_{i2}$}
+            (nmos2.D) -- ++(0.2, 0) node[right]{$V_{u2}$}
+            ;
+    \end{tikzpicture}
+\end{center}
+
+Da Kirkoff $I_{D1} + I_{D2} = I_D$
+\[
+    V_{i1} - V_{i2} =  V_{GS1} - V_{GS2}
+\]
+Questo di porta a dire che se $V_{i1} > V_{i2}$, allora $V_{GS1} > V_{GS2}$ e di conseguenza $I_{D1} > I_{D2}$.
+E siccome la tensione di uscita è scritta nella forma $V_u = V_{dd} - R I_D$, ne segue che $V_u1 < V_u2$.
+
+Se le due tensioni di ingresso sono identiche, non c'è motivo di pensare che le correnti sui due rami non siano identiche, siccome il circuito è simmetrico. Diversamente se una delle due tensioni è maggiori ci si può aspettare che la corrente maggiore vada dal ramo con tensione maggiore.
+
+Questo succede fino al limite in cui tutta la corrente circola su un unico ramo del circuito.
+
+\begin{figure}[h]
+    \begin{tikzpicture}
+        \begin{axis}[ylabel={$I_{D1}, I_{D2}$}, xlabel={$V_{i1} - V_{i2}$}]
+            \addplot {3 / (1 + e^(-x))};
+            \addplot {3-3 / (1 + e^(-x))};
+            \addplot[dashed, gray]{3};
+            \draw (0, 3) node[circ]{} node[left]{$I_0$};
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}[ylabel={$V_{U1}, V_{U2}$}, xlabel={$V_{i1} - V_{i2}$}]
+            \addplot {.5 + 3 / (1 + e^(-x))};
+            \addplot {.5 + 3-3 / (1 + e^(-x))};
+            \addplot[dashed, gray]{.5};
+            \draw (0, .5) node[circ]{} node[below]{$V_{dd} - R I_0$};
+            \draw (0, 3.5) node[circ]{} node[above] {$V_{dd}$};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+Questo circuito è un amplificatore che varia con la differenza dei segnali d'ingresso.
+Chiamando $V_{i1} - V{i2} = V_id$ e $\frac{V_{i1} + V_{i2}}{2} = V_{ic}$, posso sempre determinare i valori $V_{i1}$ e $V_{i2}$ attraverso differenza e valore medio. La media degli ingressi prende il nome di "componente di modo comune", ed è indicata con $V_{ic}$.
+È possibile definire un guadagno $A_d = \frac{dV_u}{dV_{id}}$, calcolando lo stesso guadagno per le componenti di modo comune:
+Tenendo i due segnali identici in ingresso, si ottiene:
+$I_{D1} = I_{D2} = \frac{I_0}{2}$, indipendentemente dal valore di corrente $V_{u1} = V_{u2} = k$. Da cui $A_{c} = \frac{dV_u}{dV_{iC}} = 0$, quindi questo circuito è in grado di amplificare la componente differenziale, ignorando completamente le variazioni in modo comune.
+
+\subsection{Considerazioni su opamp}
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0,0) node[op amp] (opamp) {}
+        (opamp.+) node[left] {$v_+$}
+        (opamp.-) node[left] {$v_-$}
+        (opamp.out) node[right] {$v_u$}
+        (opamp.up) --++(0,0.5) node[vcc]{}
+        (opamp.down) --++(0,-0.5) node[ground]{}
+        ;
+    \end{circuitikz}
+\end{center}
+
+È possibile descrivere la relazione in uscita della funzione a gradino in tre tratti differenti, una regione centrale, in cui il guadagno tende all'infinito, descritto dall'equazione di validità $V_{id = 0}$ per $-V_M < V_u < V_M$; un tratto di saturazione positiva, vero per $V_{id} > 0$, dove $V_u = V_M$, ed un tratto di saturazione negativa, $V_u = -V_M$, vero per $V_{id} < 0$.
+
+Per trasformare la funzione in uscita dell'operatore operazionale in una funzione a gradino, occorre amplificare l'uscita corrente e traslarla sul nuovo intervallo. Infatti mettendo l'uscita in ingresso a due invertitori il valore, appena positivo, viene tradotto in un valore positivo alto.
+
+Chiamando le corrente di ingresso sui rami $I^+$ e $I^-$, è facile capire che sono nulle, siccome sono correnti di gate dei transistori mos. Inoltre la tensione in uscita non dovrebbe essere influenzata dai circuiti connessi a carico, in modo da far funzionare questo componente come un generatore ideale di tensione, controllato dalla differenza di tensione in ingresso.
+
+Analizzando il seguente circuito:
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+    to[R, i<=$I_1$, l=$R_1$] (0, 2)
+    to[R, i<=$I_2$, l=$R_2$] (0, 4)
+    node[vdd]{}
+    (0, 2) to[short, i=$I_u$] (1, 2)
+    node[circ]{} node[above]{$V_u$};
+\end{circuitikz}
+\end{center}
+
+Otteniamo la formula della tensione in uscita $ V_u = \frac{R_1}{R_1 + R_2} (V_{dd} - R_2 I_u) $,
+da cui possiamo osservare che se la corrente in uscita $I_u$ è 0, il circuito si comporta esattamente come un partitore di corrente. Per ottenere questo risultato, colleghiamo un transistore bipolare
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+    to[R, i<=$I_1$, l=$R_1$] (0, 2)
+    to[R, i<=$I_2$, l=$R_2$] (0, 4)
+    node[vdd]{}
+    (0, 2) to[short, i=$I_u$] (1, 2)
+    node[npn, anchor=B] (npn){}
+    (npn.C) node[vdd]{}
+
+    (npn.E) to[short, i=$I_u$] ++(.5, 0){}
+    node[right]{$V_u$};
+    ;
+\end{circuitikz}
+\end{center}
+
+Il quale deve necessariamente funzionare in regione attiva diretta, in quanto la corrente di emettitore $I_u > 0$ e non può essere saturo, in quanto la giunzione della base collettore è negativa.
+Quindi la corrente di collettore $I_c = \beta_F I_B$ e $I_E = (\beta_F + 1) I_B$, siccome $\beta_F$ è grande, allora la corrente $I_B$ è approssimativamente 100 volte minore della corrente $I_E$. Generando una tensione in uscita pressoché indipendente dalla corrente a carico.
+
+Le tre caratteristiche ideali di questo circuito sono che dipende unicamente dalla differenza delle tensioni in ingresso, e la tensione e corrente a carico no influiscono sull'uscita.
+\subsubsection{Amplificatore invertente}
+
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R_1$, i=$I_1$] ++(2.5, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[ground]{};
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.-) to[open, v>=$V_{id}$] (am.+);
+    \end{circuitikz}
+\end{center}
+
+Il ramo con la corrente $R_2$ prende il nome di ramo in retroazione, siccome collega l'uscita all'ingresso.
+Studiamo il circuito nelle tre regioni di funzionamento, ricordando le relazioni:
+
+\begin{minipage}{.3\textwidth}
+    Alto guadagno:
+    \[\begin{cases}
+        &V_{id} = 0\\
+        &-V_M < V_u < V_M
+    \end{cases}\]
+\end{minipage}
+\begin{minipage}{.3\textwidth}
+    Saturazione positiva
+    \[\begin{cases}
+        V_{id} > 0\\
+        V_u = V_M
+    \end{cases}\]
+\end{minipage}
+\begin{minipage}{.3\textwidth}
+    Saturazione negativa
+    \[\begin{cases}
+        V_{id} < 0\\
+        V_u = -V_M
+    \end{cases}\]
+\end{minipage}
+Con $I^+ = I^- = 0$ e $V_{id} = V^+ - V^-$ sempre valide.
+
+\begin{tcolorbox}
+    In regione di alto guadagno, $V^+ = V^- = 0$, in quanto la tensione $V^-$ è vincolata dal potenziale di terra, portando un riferimento di terra virtuale, in quanto il nodo non è connesso veramente a terra.
+
+    Applicando kirkoff al nodo, allora $I_1 = I_2$ implicando
+    \[
+        V_u = - \frac{R_2}{R_1} V_i
+    \]
+    Valida per $V_i > -\frac{R_1}{R_2}V_M$ e $V_u < \frac{R_1}{R_2} V_M$
+
+    Come osservabile dalla relazione della tensione in uscita, in questa regione di alto guadagno, è possibile variare il valore del guadagno semplicemente cambiando le proporzioni tra le due resistenze.
+\end{tcolorbox}
+\begin{tcolorbox}
+    In regime di saturazione positiva, allora $V^+ > V_-$ e la corrente in ingresso è nulla, implicando $I_1 = I_2$ e dalle equazioni di ohm:
+    \[
+        V^- = \frac{V_i R_2 + V_u R_1}{R_1 + R_2}
+    \]
+    È da controllare $V^- < 0$, rendendo vera l'equazione per $V_i < - \frac{R_1 V_M}{R_2}$, lo stesso accade in regione di saturazione negativa.
+\end{tcolorbox}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot[domain=-2:2]{-x};
+            \addplot[domain=2:5]{-2};
+            \addplot[domain=-5:-2]{2};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+
+\subsection{Amplificatore lineare non invertente}
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[ground]{}
+        to[R, l=$R_1$, i=$I_1$] ++(2.5, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) to[R, l=$R_1$] ++(0, -2) node[ground]{}
+            (am.+) to[R, l=$R_2$] ++(-2, 0) node[circ]{} node[below]{$V_i$};
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.-) to[open, v>=$V_{id}$] (am.+);
+    \end{circuitikz}
+\end{center}
+
+\begin{tcolorbox}
+    In regione di alto guadagno,
+    \begin{align*}
+        &V^+ = V_i \frac{R_2}{R_1 + R_2}
+        &V^- = \frac{V^- - V_u}{R_2}
+    \end{align*}
+
+    Da cui la relazione: $V_u = \frac{R_2}{R_1} V_i$, che è la stessa relazione di prima, ma con segno opposto.
+
+    Calcolando le condizioni di validità:
+    \[
+        \frac{R_2}{R_1} V_M < V_i < \frac{R_2}{R_1} V_M
+    \]
+\end{tcolorbox}
+I calcoli sono gli stessi del precedente, risultando in un amplificatore lineare non invertente.
+
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot[domain=-2:2]{x};
+            \addplot[domain=2:5]{-2};
+            \addplot[domain=-5:-2]{2};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\subsection{Circuito sommatore analogico}
+\begin{center}
+    \begin{circuitikz}
+        \draw (-1, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R_1$, i=$I_R$] (2, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_R$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (-1, -1) node[above]{$V_2$} to[R, l=$R_1$, *-] (1.5, -1) -- (1.5, 0);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[eground]{};
+        \draw(am.out) to[short, -*] ++(2, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+    \end{circuitikz}
+\end{center}
+\begin{tcolorbox}
+    In regione di alto guadagno, unendo le equazioni delle singole correnti con l'equazione di kirkoff al nodo:
+    \begin{align*}
+        I_1 + I_1' = \cancel{I^-} + I_2
+        \\
+        \frac{V_u + V_{i2}}{R_1} = -\frac{V_u}{R_2}
+    \end{align*}
+    Da cui $V_u = - \frac{R_2}{R_2} (V_{i1} + V_{i2})$, risultato estremamente importante perché indica la funzione di una somma tra le due tensioni in ingresso. Per questo motivo, il circuito prende il nome di sommatore analogico.
+
+    Questo risultato ovviamente è indipendente dal numero di ingressi, e variando il valore delle resistenze legate agli ingressi è possible fare una somma pesata dei segnali in ingresso.
+\end{tcolorbox}
+
+\subsection{Circuito derivatore}
+
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above]{$V_i$}
+        to[C, *-*, l=$C$, i=$I_1$] ++(2.5, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=-](am){};
+        \draw(am.+) -- +(0, -1) node[ground]{};
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.-) to[open, v>=$V_{id}$] (am.+);
+    \end{circuitikz}
+\end{center}
+\begin{tcolorbox}
+    In regione attiva diretta $I_R = - \frac{V_u}{R}$ e $I_C = C \frac{dV_i}{dt}$, da cui:
+    \[
+        V_u = -RC \frac{dV_i}{dt}
+    \]
+\end{tcolorbox}
+Il circuito è quindi in grado di calcolare la derivata del segnale in ingresso.
+Mettendo un condensatore sul ramo di uscita ed una resistenza nel ramo in ingresso si ottiene un circuito integratore.
+
+\subsubsection{Stadio separatore}
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) node[op amp] (amp){}
+        (amp.+) node[circ]{} node[left] {$V_i$}
+        (amp.-) -- ++(0, 1) -| (amp.out)
+        (amp.out) -- ++(0.5, 0) node[circ]{} node[above]{$V_u$}
+        ;
+    \end{circuitikz}
+\end{center}
+\begin{tcolorbox}
+    In regione attiva diretta, è facile calcolare $V_u = V_i$ per $-V_M < V_i < V_M$.
+\end{tcolorbox}
+
+In questo modo è possibile leggere il valore di $V_i$ a corrente d'ingresso nulla, erogando una corrente arbitraria.
+Questo principio è possibile utilizzarlo per creare un generatore di tensione
+\begin{center}
+    \begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+        to[R, i<=$I_1$, l=$R_1$] (0, 2)
+        to[R, i<=$I_2$, l=$R_2$] (0, 4)
+        node[vdd]{}
+        (0, 2) to[short, i=$I_u$] (1, 2)
+        node[op amp, anchor=+] (amp){}
+        (amp.-) -- ++(0, 1) -| (amp.out)
+
+        (amp.out) to[short, i=$I_u$] ++(.5, 0){}
+        node[right]{$V_u$};
+    \end{circuitikz}
+\end{center}
+L'applicazione più importante è in strumenti di misura, essenziale per assorbire una corrente nulla dal circuito in oggetto.
+
+
+\subsubsection{Test}
+Ipotizzando di invertire la polarità dell'amplificatore operazionale, analizziamo il seguente circuito:
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[above]{$V_i$}
+        to[R, *-*, l=$R_1$, i=$I_1$] ++(2.5, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=+, yscale=-1](am){};
+        \draw(am.-) -- +(0, -1) node[ground]{};
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.+) to[open, v>=$V_{id}$] (am.-);
+    \end{circuitikz}
+\end{center}
+
+\begin{tcolorbox}
+    In regione di alto guadagno, $V^+ = V^- = 0$ e $I_1 = I_2$, $I_1 = V_i / R$ e $I_2 = - V^u/R_2$ che ci porta a dire:
+    \[
+        V_u = -\frac{R_2}{R_1} V_i
+    \]
+    e le condizioni di esistenza di rimangono le stesse:
+    \[
+        -\frac{R_2}{R_1} V_M < V_i < \frac{R_2}{R_1} V_M
+    \]
+\end{tcolorbox}
+\begin{tcolorbox}
+    In regione di saturazione positiva $V_u = V_M$ e $V_{id} > 0$, quindi $V^+ > 0$
+    Ma calcolando le condizioni di esistenza otteniamo:
+    \[
+        V_i > -\frac{R_1 V_M}{R_2}
+    \]
+\end{tcolorbox}
+Mentre la regione di alto guadagno non cambia aspetto, le regioni di saturazione cambiano funzionamento.
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot[domain=-2:2]{-x};
+        \addplot[domain=-5:2]{-2};
+        \addplot[domain=-2:5]{2};
+        \addplot[dashed, gray, thin] coordinates {(2,-5) (2, 5)};
+        \addplot[dashed, gray, thin] coordinates {(-2,-5) (-2, 5)};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+La relazione tra ingresso ed uscita non è più funzionale, richiede un'ulteriore ragionamento per comprendere quale tra i tre valori vengono restituiti dal circuito nella regione compresa tra $-V*$ e $V*$.
+
+Ragioniamo quindi in regime dinamico, partendo da $V_a < -V*$ spostandoci a $V_b > V*$. Fintanto che $V_a < -V*$, il valore è costante raggiunto il valore critico, per continuità l'uscita si tiene costante vino al punto $V*$. Appena raggiunto il punto $V*$ è ritorna ad essere presente una sola soluzione, portando l'uscita al valore positivo.
+
+\begin{center}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot[thin, domain=-2:2]{-x};
+            \addplot[thin, domain=-5:2]{-2};
+            \addplot[thin, domain=-2:5]{2};
+            \addplot[dashed, gray, thin] coordinates {(2,-5) (2, 5)};
+            \addplot[dashed, gray, thin] coordinates {(-2,-5) (-2, 5)};
+
+            \addplot[red, domain=-5:2]{-2};
+            \addplot[red] coordinates {(2, -2) (2, 2)};
+            \addplot[red, domain=2:5]{2};
+            \draw (-4.5, 0) node[circ]{} node[above]{$V_a$};
+            \draw (4.5, 0) node[circ]{} node[above]{$V_b$};
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot[thin, domain=-2:2]{-x};
+            \addplot[thin, domain=-5:2]{-2};
+            \addplot[thin, domain=-2:5]{2};
+            \addplot[dashed, gray, thin] coordinates {(2,-5) (2, 5)};
+            \addplot[dashed, gray, thin] coordinates {(-2,-5) (-2, 5)};
+
+            \addplot[green, domain=-5:-2]{-2};
+            \addplot[green] coordinates {(-2, -2) (-2, 2)};
+            \addplot[green, domain=-2:5]{2};
+            \draw (-4.5, 0) node[circ]{} node[above]{$V_a$};
+            \draw (4.5, 0) node[circ]{} node[above]{$V_b$};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Seguendo analogo ragionamento in verso opposto, si nota che per andare da $b$ ad $a$ e da $a$ a $b$, si effettuando due percorsi diversi, indicati in rosso ed in verde. Questo andamento prende il nome di ciclo di isteresi, ed il circuito prende il nome di circuito "trigger" di Shmitt.
+
+Per forzare l'uscita alta serve forzare un valore sufficientemente positivo. La caratteristica di questo circuito è che quando si triggera ed il valore si porta positivo, è difficile che si spenga a causa di rumore. Questo è utile ad esempio in un circuito dove una lampada si spegne quando raggiunge un certo livello di luce.
+
+Questo è il primo circuito che presenta un elemento di memoria.
+
+\subsection{}
+
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+        node[ground]{}
+        to[R, l=$R_1$, i=$I_1$] ++(2.5, 0)
+        coordinate(ing1)
+        -- ++(0, 1)
+        to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+        coordinate(tip);
+        \draw (ing1) node[op amp, anchor=+, yscale=-1](am){};
+        \draw(am.-) -- ++(0, -.7)
+        coordinate(x)
+        to[C] ++(0, -1) node[ground]{}
+        (x) to[R]  (x -| am.out)
+        -- (am.out);
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.+) to[open, v>=$V_{id}$] (am.-);
+    \end{circuitikz}
+\end{center}
+
+Immaginiamo che inizialmente la capacità sia scarica, e che per un qualunque motivo, ci troviamo nella condizione di alto guadagno, con $V_u = V_M$
+Ricordando che la corrente in ingresso è comunque nulla, possiamo separare il ramo e vederlo come uno risolvibile attraverso la forumla del partitore:
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) node[ground]{}
+        to[R] (2, 0)
+        to[R] (4, 0)
+        node[circ]{}
+        node[right]{$V_u$}
+
+        (2, 0) -- (2, -.5) node[below]{$V^+$};
+    \end{circuitikz}
+\end{center}
+Quindi fintanto che $V_u = V_M$ allora
+\[
+    V^+ = \frac{R_q} {R_1 + R_2} V_M > 0
+\]
+Quindi $V_{id} > 0$, in accordo con le ipotesi. Analizzando l'altro ramo con il condensatore, siccome la tensione $V_u$ è positiva, e sul ramo circola una corrente, questa ha l'effetto di caricare il condensatore $C$, aumentando la tensione $V^-$.
+Fintanto che $V_{id} > 0$, ovvero $V^+ > V^-$ allora l'amplificatore lavora in alto guadagno. Nel momento in cui $V_{id} < 0$, allora $V^- > V^+$ e l'uscita si porta con un ritardo al valore $-V_M$.
+
+Il condensatore vedendo variato il valore di $V_u$ da $V_M$ a $-V_M$ inizia a scaricarsi, fino a quando $V^- > V_u$.
+Raggiunto quel valore l'uscita si riporta a $+V_M$ e si ripete il ciclo.
+
+Analizzando la stabilità di questo circuito infatti, il valore di $V_i = 0$, otteniamo che il circuito è instabile. In questo modo si ottiene un generatore di un segnale periodico, (onda quadra) dipendente dal valore delle resistenze e dalla capacità del condensatore.
+
+Analogamente, mettendo a cascata un numero dispari di invertitori, e chiudendoli ad anello, si ottiene un oscillatore ad anello.
+
+\end{document}
+

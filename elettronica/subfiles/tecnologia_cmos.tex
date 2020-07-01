@@ -1,0 +1,438 @@
+\documentclass[../template]{subfiles}
+
+\begin{document}
+\section{Tecnologia cmos}
+Facendo riferimento all'invertitore nmos citato al capitolo precedente:
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0, 0) node[ground]{}
+        node[nmos, anchor=S] (npn){}
+
+        (npn.G)
+        -- ++(-.5, 0)
+        node[circ]{} node[above]{$V_i$}
+        (npn.D) node[pmos, anchor=D] (npn2){}
+
+        (npn2.G) -| (npn.G)
+        (npn2.S) node[vcc]{}
+        node[right] {$V_{cc}$}
+
+        (npn.D) to[short] ++(0.5, 0)
+        node[circ]{}
+        node[right]{$V_u$}    ;
+    \end{circuitikz}
+\end{figure}
+
+Il transistore a canale $n$ ke` spento per $V_i < V_{Tn}$ e saturo quando $V_i < V_u + V_{Tn}$
+
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot[dashed] coordinates {(1, 0) (1, 5)};
+        \addplot[dashed, domain=0:5] {x -1};
+        \addplot[dashed, domain=0:5] {x + 2};
+        \addplot[dashed] coordinates {(3, 0) (3, 5)};
+    \end{axis}
+\end{tikzpicture}
+
+In regione di saturazione: $V_{SGp} < V_{SDp} + |V_{Tp}|$ da cui $V_n < V_i + |V_{Tp}$
+\begin{tcolorbox}
+    In caso di nmos spento, $I_{DP} = 0$, quindi il pmos funziona in regione lineare o è spento. Avendo ipotizzato che $V_{cc} - |V_{Tp}| > V_{Tn}$, allora non esiste regione del piano in cui entrambi i transistor sono simultaneamente spenti. Quindi il transistore p deve essere in lineare.
+
+    \[
+    I_{DP} = \beta_p \big\{ V_{SGp} - |V_{Tp}|) V_{SDp} - \frac{V_{SDp}^2}{2} \big\} = \beta_p V_{SDp} (V_{SGp} - |V_{Tp}| - \frac{V_{SDp}}{2}) \big\}
+\]
+Quindi $V_{SDp} =0$ e $V_u = V_{cc}$.
+\end{tcolorbox}
+\begin{tcolorbox}
+    in caso di pmos spento: $I_{Dp} = 0$, quindi necessariamente l'nmos è spento o lineare, ma siccome è già stato detto che entrambi i transistori non possono essere spenti allo stesso tempo, allora n è in lineare.
+    Quindi
+\[
+    \beta_n V_u \big\{ V_i - V_{Tn} - \frac{V_u}{2}\big\} = 0
+\]
+Da cui $V_u = 0$
+\end{tcolorbox}
+Allora il valore massimo è il massimo possibile e non c'è corrente statica, ed il valore basso è il minimo possibile ed ancora non c'è corrente statica.
+\begin{tcolorbox}
+    nella regine in cui entrambi i transistori sono in regione di saturazione: (prese solo le radici positive per ipotesi)
+    \[
+        \sqrt{\frac{\beta_n}{\beta_p}} (V_i - V_{Tn}) = V_{cc} - V_i - |V_{Tp}|
+    \]
+    In questa espressione non compare $V_u$, quindi l'unica soluzione possibile è un $V_i$ costante
+    \[
+        V_i = \frac{V_{cc} - |V_{Tp}| + \theta V_{Tn}}{1 + \theta}
+    \]
+    Ottenendo un guadagno $|A_V| \to \infty$! Questo è il motivo per cui prende il nome di ratio-less.
+\end{tcolorbox}
+Indipendentemente dalla dimensione dei dispositivi si comporta comunque come un invertitore.
+
+\subsubsection{Caso particolare}
+Supponiamo la condizione di complementarietà perfetta: $\beta_n = \beta_p$ e $V_{Tn} = |V_{Tp}|$, quindi $\theta = 1$
+\[
+    \bar{V_i} = \frac{V_{dd}}{2}
+\]
+Ottenendo il massimo valore di margine di immunità ai disturbi.
+
+
+\subsubsection{Calcolo del margine di immunità ai disturbi}
+Per calcolare il guadagno è necessario calcolarlo nella curva in cui si passa da guadagno 0 a guadagno infinito.
+Utilizzando il caso particolare, calcoliamo le coordinate dei punti della caratteristica in cui la derivata è -1.
+
+Siccome n è in regione lineare e p è in saturazione, allora:
+\begin{align*}
+    \beta \big\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\big\} = \frac{\beta_2}(V_{cc} - V_i - V_T)^2
+    \\
+    V_u + (V_i - V_T) \frac{dV_u}{dV_i} - V_u \frac{dV_u}{dV_i} = (V_{cc} - V_i - V_T)
+    \\
+    2V_u - V_i + V_T = - V_{cc} + V_i + V_T
+    \\
+    V_u = V_i - \frac{V_{cc}}{2}
+\end{align*}
+Intersecando la condizione della retta ottenuta con la curva iniziale, otteniamo il valore di \vihmin e \volmax.
+
+
+\subsubsection{Porta NOR}
+Dall'espressione logica $y = \overline{a + b}$ sappiamo che la rete di pull-up deve portare l'uscita ad 1, quando sia $a$ che $b$ sono a 0, mentre la rete di pull-down deve portare l'uscita a 0 quando almeno uno dei due ingressi è al valore alto.
+\begin{figure}[h]
+    \centering
+\begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+    -- ++ (-.5, 0) node[nmos, anchor=S] (nmos1) {}
+    (nmos1.D) -- ++(.5, 0)
+
+    (0, 0) -- ++ (.5, 0) node[nmos, anchor=S, xscale=-1] (nmos2) {}
+    (nmos2.D) -- ++(-.5, 0)
+    -- ++(0, .5)
+    coordinate(x)
+
+    -- ++(.5, 0) node[circ]{} node[right]{$V_u$}
+
+    (x) node[pmos, anchor=D, xscale=-1] (pmos1){}
+    (pmos1.S) node[pmos, anchor=D] (pmos2) {}
+
+    (pmos2.S) node[vcc]{}
+
+    (nmos1.G) |- (pmos2.G)
+    (nmos2.G) |- (pmos1.G)
+
+    (nmos1.G) -- ++(-.2, 0) node[circ]{} node[above] {$V_a$}
+    (nmos2.G) -- ++(.2, 0) node[circ]{} node[above] {$V_b$}
+    ;
+\end{circuitikz}
+\end{figure}
+
+\begin{center}
+    \begin{tabular}{|c c|c c c c|c c|c|}
+        a & b & M1  & M2  & M3 & M4 & PD  & PU  & y\\
+        \hline
+        0 & 0 & OFF & OFF & ON & ON & OFF & ON  & 1\\
+        0 & 1 & OFF & ON  & OFF& ON & ON  & OFF & 0 \\
+        1 & 0 & ON  & OFF & ON & OFF& ON  & OFF & 0\\
+        1 & 1 & ON  & ON  & OFF& OFF& ON  & OFF & 0\\
+    \end{tabular}
+\end{center}
+
+\subsubsection{Porta nand}
+Analogamente, dall'espressione, logica $y = \overline{a \cdot b}$, il pull-up deve portare l'uscita ad 1 quando almeno 1 tra $a$ e $b$ è a 0, mentre la rete di pull down porta l'uscita a 0 quando entrambi gli ingressi sono ad 1
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0) node[ground]{}
+            node[nmos, anchor=S] (nmos1){}
+
+            (nmos1.D) node[nmos, anchor=S, xscale=-1] (nmos2){}
+
+            (nmos2.D) -- ++(.5, 0) node[right]{$V_u$}
+
+            (nmos2.D) -- ++(0, .2)  coordinate(x)
+            -- ++(-.5, 0) node[pmos, anchor=D] (pmos1){}
+            (pmos1.S) -- ++(.5, 0)
+            node[vcc]{}
+            (x) -- ++(.5, 0)
+            node[pmos, anchor=D, xscale=-1] (pmos2) {}
+            (pmos2.S) -- ++(-.5, 0)
+
+            (pmos1.G) |- (nmos1.G)
+            (pmos2.G) |- (nmos2.G)
+
+            (nmos1.G) -- ++(-.7, 0) node[left]{$V_a$}
+            (nmos2.G) -- ++(.7, 0) node[right]{$V_b$}
+
+            ;
+    \end{circuitikz}
+\end{figure}
+
+Inoltre bisogna notare che non sempre è ottimale esprimere le espressioni in funzione di nand o nor, ma è possibile fare la funzione direttamente con i transistori, risparmiando componenti, ad esempio $y = \overline{(a + b) c}$:
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0) node[ground]{}
+        -- ++ (-.5, 0) node[nmos, anchor=S] (nmos1) {}
+        (nmos1.D) -- ++(.5, 0)
+
+        (0, 0) -- ++ (.5, 0) node[nmos, anchor=S, xscale=-1] (nmos2) {}
+        (nmos2.D) -- ++(-.5, 0)
+        node[nmos, anchor=S] (nmos3){}
+
+        (nmos3.D)
+        -- ++(0, .5)
+        -- ++(-.5, 0)
+        node[pmos, anchor=D](pmos1){}
+        (pmos1.S) node[pmos, anchor=D](pmos2){}
+        (pmos2.S) -- ++(.5, 0)
+        coordinate(x)
+        node[vcc]{}
+
+
+        (nmos3.D) ++ (0, .5) -- ++(.5, 0)
+        node[pmos, anchor=D, xscale=-1] (pmos3){}
+        (pmos3.S) |- (x)
+
+        (nmos1.G) node[left]{$V_a$}
+        (nmos2.G) node[right]{$V_b$}
+        (nmos3.G) node[left]{$V_c$}
+
+        (pmos1.G) node[left]{$V_b$}
+        (pmos2.G) node[left]{$V_a$}
+        (pmos3.G) node[right]{$V_c$}
+
+        (nmos3.D) -- ++(.2, 0)
+        node[right]{$y$}
+        ;
+\end{circuitikz}
+\end{figure}
+
+Risparmiando un numero di transistori inferiore alla metà.
+Con questo tipo di logica, per $n$ ingressi, sono richiesti $2n$ transistori.
+\subsubsection{Transistori in parallelo}
+\begin{center}
+    \begin{circuitikz}
+            \draw (0, 0)
+            -- ++ (-.5, 0) node[nmos, anchor=S] (nmos1) {}
+            (nmos1.D) -- ++(.5, 0)
+
+            (0, 0) -- ++ (.5, 0) node[nmos, anchor=S, xscale=-1] (nmos2) {}
+            (nmos2.D) -- ++(-.5, 0)
+            -- ++(0, .5)
+
+            (0, 0) -- ++(0, -.5)
+            ;
+    \end{circuitikz}
+\end{center}
+Ai due transistori connessi in parallelo, è possibile sostituire un'unico transistore con stessa tensione di soglia $V_T$ ed un fattore $\beta_{ed}$ calcolabile come:
+\begin{align*}
+    I_{Deq} = (\beta_1 + \beta_2) \{(V_{GS} - V_T) V_{DS} \frac{V_{DS}^2}{2}\}
+    \\
+    \beta_{eq} = \beta_1 + \beta_2
+\end{align*}
+
+Analogamente se si dispongono due transistori, caratterizzati dalla stessa tensione di soglia $V_T$, se la tensione in ingresso è equivalente, allora è possibile sostituire ai due transistori un singolo transistore con
+\[
+    \beta_{eq} = \frac{\beta_1 \beta_2}{\beta_1 + \beta_2}
+\]
+Nel caso $\beta_1 = \beta_2$: $\beta_{eq} = \beta_2$
+
+Una qualsiasi rete cmos è quindi sempre riconducibile ad un invertitore cmos equivalente.
+
+In una rete cmos se un transistore è spento, quello conta come un circuito staccato.
+\subsection{Prestazioni e qualità dell'invertitore}
+Il circuito non presenta potenza statica, ma una dinamica, in quanto la corrente è diversa da 0 al momento del passaggio di stato.
+Inoltre in quanto è presente uno spostamento di carica è presente anche un ritardo.
+
+Per calcolare questi valori, prendiamo la capacità peggiore $C_{o}$ del transistore.
+Il modello del transistore MOS deve tenere conto anche di altre complicazioni, come la presenza di una capacità parassita non lienare tra source e bulk e tra bulk e drain. Una ctra source e gate ed una tra gate e drain. In altre parole ogni collegamento interno ad un circuito contiene una rispettiva capacità parassita tra i due nodi.
+
+Per semplificare i calcoli, diciamo che queste capacità sono correlate alla capacità del condensatore $C_o$.
+
+
+\subsubsection{Calcolo del ritardo tra due invertitori in cascata}
+\begin{center}
+\begin{circuitikz}
+    \draw
+    (0, 0)
+    node[ground] {}
+    node[nmos, anchor=S] (nmos1){}
+    (nmos1.D) node[pmos, anchor=D] (pmos1){}
+    (pmos1.S) node[vcc]{}
+    (nmos1.G) |- (pmos1.G)
+
+    (nmos1.D) -- ++(1, 0)
+    coordinate(x)
+    to[C] ++(0, -1)
+    node[ground]{}
+
+    (x) -- ++(1, 0)
+
+    (nmos1.G) ++ (3, 0)
+    node[nmos, anchor=G] (nmos2){}
+    (nmos2.S) node[ground]{}
+    (nmos2.D) node[pmos, anchor=D](pmos2){}
+    (pmos2.S) node[vcc]{}
+    (nmos2.G) |- (pmos2.G)
+    ;
+\end{circuitikz}
+\end{center}
+
+È possibile concentrare tutte le capacità parassita dei condensatori, in un unica capacità, situata nella connessione tra i due invertitori.
+La capacità semplificata dipende da $C_L = K C_0 + C_{wire}$, ovvero parte delle capacità parassite dei transistori e la capacità parassita del filo. Il termine prevalente è $k C_0$
+
+Presupponiamo che la tensione in ingresso abbia un andamento del tipo:
+
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[xlabel=$t$, ylabel=$V_i$]
+            \addplot[domain=-5:0]{0};
+            \addplot[domain=0:5]{3};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+\begin{tcolorbox}
+    per $t < 0$  e $V_i = 0$ siamo in condizione statica, ed è già nota dalla caratteristica: $V_u = V_{cc}$.
+\end{tcolorbox}
+\begin{tcolorbox}
+    Per $t > 0$ $V_i = V_{cc}$, presupponendo un tempo infinito, in cui si annullano gli effetti del transitorio, conosciamo già i valori della caratteristica: $V_u = 0$.
+
+\end{tcolorbox}
+
+Dato che serve un tempo infinito per raggiungere il valore $V_u = 0$, consideriamo il tempo di propagazione, il tempo necessario per portare l'uscita $V_u = V_{cc}/2$.
+
+\begin{tcolorbox}
+    Per $t = 0^+$, $V_{GS} = V_i = V_{cc} > V_T$, quindi l'nmos è necessariamente acceso, mentre
+    $V_{SGp} = V_{cc} - V_i = 0 < |V_{Tp}|$ il pmos si spegne immediatamente.
+
+    Quindi la corrente dell'nmos $I_D$ è uguale alla corrente che passa dal condensatore.
+    \[
+        I_{DN} = - I_C = - C_L \frac{dV_u}{dt}
+    \]
+    Siccome la formula della corrente varia in base al regime di funzionamento dell'nmos, il transitorio può essere scomposto in due tratti:
+    da $V_{cc}$ a $V_{cc} - V_T$ in regione satura, ed un secondo tratto il regione lineare fino a raggiunere il valore $V_{cc} /2$
+
+
+    Quindi nel tratto in regione satura:
+    \begin{align*}
+        I_D = \frac{\beta_n}{2}(V_{GS} - V_T)^2 = - C_L \frac{dV_u}{dt}
+        \\
+        \int^t_0 \frac{\beta_n}{2}(V_{GS} - V_T)^2 dt = \int^{V_u(t)}_{V_u(0) = V_{cc}} - C_L \frac{dV_u}{dt} dt
+    \end{align*}
+
+    Ottenendo un'andamento lineare decrescente
+    \[
+        V_u(t) = V_{cc} - \frac{\beta_n}{2C}(V_{cc} - V_T)^2t
+    \]
+    Ponendo la formula uguale a $V_{cc} - V_T$ ricavo la durata del primo transitorio:
+    \[
+        t_1 = \frac{2 C_L}{\beta_n} \frac{V_T}{(V_{cc} - V_T)^2}
+    \]
+
+    Il secondo tratto del transitorio è caratterizzato dalla regione lineare, valido da $V_{cc} - V_T$ a $\frac{V_{cc}}{2}$.
+    Risolvendo l'equazione utilizzando la diversa espressione della corrente ottengo ($m = 2(V_{cc} - V_T)$)
+    \begin{align*}
+        \frac{2 C_L}{\beta} \frac{dV_u}{dt} = V_u (V_u - m)
+        \\
+        \frac{2 C_L}{\beta} \frac{1}{V_u (V_u - m)}\frac{dV_u}{dt} = 1
+        \\
+        \int_{t_1}^{t_{phl}}\frac{2 C_L}{\beta} \frac{1}{V_u (V_u - m)}\frac{dV_u}{dt} dt= \int_{t_1}^{t_{phl}} dt
+        \\
+        \frac{2 C_L}{\beta_n} \frac{1}{2(V_{cc} - V_T)} \ln \big(3 - 4\frac{V_T}{V_{cc}}\big) = t_{phl} - t_1
+    \end{align*}
+
+    Mettendo a sistema l'equazione appena ottenuta con $t_1$ calcolato in precedenza, otteniamo:
+    \[
+        t_{phl} = \frac{2 C_L}{\beta_n (V_{cc} - V_T)} \big\{
+        \frac{V_T}{(V_{cc} - V_T)} + \frac{1}{2} \ln \big( 3 - 4 \frac{V_T}{V_{cc}}\big)\big
+        \}
+    \]
+
+\end{tcolorbox}
+Ipotizzando che $V_{cc} \gg V_T$ l'espressione si semplifica notevolmente in
+\[
+    \frac{C_L}{\beta_n V_{cc}} \ln(3) \approx \frac{C_L}{\beta_n V_{cc}}
+\]
+% 20200609
+
+La capacità $C_L$ che è una tra le componenti principali del ritardo è composta da $C_{MOS}$, capacità parassita legata al transistore e da $C_{wire}$, capacità parassita del filo.
+Prendendo come presupposto che $C_{MOS} \gg C_{wire}$, allora possiamo riscrivere l'espressione del tempo di propagazione come:
+\[
+    t_p = \frac{k C_{ox} w L}{c_{ox} \mu_n \frac{w}{L} V_{cc}} = \frac{k}{\mu_n}\frac{L^2}{V_{cc}}
+\]
+Da cui possiamo osservare come sia la capacità, sia il fattore $w$ non contino nell'espressione del tempo di reazione. Si osserva quindi che la componente principale è la lunghezza del canale $L$.
+Una volta ridotta il più possibile la lunghezza $L$, l'unico parametro rimanente è la tensione $V_{cc}$, aumentando la tensione però ci si può aspettare un aumento di potenza.
+
+Diversamente se la capacità parassita del filo prevale sulla capacità interna si sviluppano altri termini progettuali attraverso circuiti di buffer (spiegato dopo).
+
+\subsubsection{Consumo di potenza}
+Abbiamo già discusso il fatto che la potenza statica dell'invertitore è nulla. Ma la corrente di polarizzazione inversa, interna al transistor, seppur piccola, può essere significativa in circuiti "fermi" risultando, in circuiti complessi come componente fondamentale della potenza statica.
+
+La dispersione principle dei dispositivi che analizziamo in questo corso è la potenza dinamica. Siccome non ha senso calcolare la potenza in un determinato istante, faremo riferimento ad una potenza media:
+\[
+    \overline{P} = \frac{1}{T} \int^T_0 P_{dd} dt
+\]
+$P_{dd}$ è la potenza istantanea erogata dal generatore e corrisponde a $P_{dd} = V_{dd} I_D$
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0, 0)
+        node[ground] {}
+        node[nmos, anchor=S] (nmos1){}
+        (nmos1.D) node[pmos, anchor=D] (pmos1){}
+        (pmos1.S) node[vdd]{}
+        (nmos1.G) |- (pmos1.G)
+
+        (nmos1.D) -- ++(1, 0)
+        coordinate(x)
+        to[C] ++(0, -1)
+        node[ground]{}
+
+        ;
+    \end{circuitikz}
+\end{center}
+Dal circuito possiamo osservare come la corrente di pull-up $I_D = I_C + I_{Dn}$. Passando da un valore di uscita basso, ad un valore di uscita alto il valore della corrente assume un valore diverso da $0$, quindi anche in assenza del condensatore si dissipa potenza solamente per il fatto di avere per un'istante entrambi i condensatori accesi.
+La potenza dissipata in questo modo prende il nome di potenza di cortocircuito $P_{cc}$, con rispettiva corrente $I_{cc}$.
+L'altra componente della potenza dissipata è quella associata al carico, utilizzata per caricare il condensatore parassita $C_L$, prendendo il nome di potenza di carico $P_L$.
+
+Si può dimostrare che $P_{cc}$ dipende solo da quando il segnale d'ingresso è compreso tra $V_T < V_i < V_{dd} - V_T$, assumendo la forma di
+\[
+    \overline{P_{cc}} = \frac{\beta}{12} \frac{t_R}{T} (V_{dd} - 2 V_T)^3
+\]
+
+Di conseguenza se il tempo impiegato dal segnale d'ingresso per portarsi al valore alto tende a $0$, allora anche $P_{cc} \to 0$.
+
+Per calcolare solamente la componente di potenza di carico, basta annullare la potenza di cortocircuito, assumendo che il segnale d'ingresso abbia un andamento a gradino.
+
+Prendendo come riferimento un segnale d'ingresso ad'onda quadrata con periodo $T$, nel primo periodo da $0$ a $T/2$, il segnale d'ingresso è alto, quindi $V_i = V_{cc}$, di conseguenza l'nmos è acceso ad il pmos è spento. Nel secondo periodo il segnale d'ingresso è basso, quindi l'nmos è spento ed il pmos è acceso.
+
+Quindi
+\[
+    \overline{P_L} = \frac{1}{T} \int_0^T V_{dd} (I_{dn} + I_C) dt = \overline{P_n} + \overline{P_p} + \overline{P_C}
+\]
+osservando che il sistema è periodico, tutta la potenza assorbita dal circuito in un periodo, deve essere dissipata dal circuito nel periodo successivo, quindi la potenza media è composta dalla potenza dei singoli componenti del circuito: nmos, pmos e condensatore
+
+\[
+    \overline{P_C} = \frac{1}{T} \int_0^T V_u I_C dt = \frac{1}{T} \int_0^T V_u C \frac{dV_u}{dt} dt = \frac{C}{T} \big\{\frac{V_{dd}^2}{2} - \frac{V_{dd}^2}{2}\big\} = 0
+\]
+Nella fase di pull-up il condensatore si carica e nella fase di pulldown rilascia energia, risultando in un bilancio energetico nullo.
+\[
+    \overline{P_n} = \frac{1}{T} \int_0^T V_{DS} I_D dt = \frac{1}{T} \int_0 ^{T/2} V_u (-C) \frac{dV_u}{dt} dt = -\frac{C}{T} \big\{ \frac{0^2}{2} - \frac{V_{dd}^2}{2}\big\} = \frac{C}{T} \frac{V_{dd}^2}{2}
+\]
+\[
+    \overline{P_p} = \frac{1}{T} \int_0^T V_{SD} I_D dt = \frac{1}{T} \int_{T/2}^T (V_{dd} - V_u) I_D dt = \frac{C}{T} \frac{V_{dd}^2}{2}
+\]
+Concludendo che l'energia nella fase di pull-up è per metà dissipata e per metà immagazzinata nel condensatore, nella fase di pull-down l'energia immagazzinata viene dissipata attraverso la potenza richiesta dalla rete di pull-down nell'altra fase del transitorio.
+
+\[
+    \overline{P_L} = \frac{C_L V_{dd}^2}{T} = C_L V_{dd}^2 f
+\]
+aumentando $V_{dd}$ il circuito è quindi più veloce ma spende molta più potenza. Inoltre maggiore è la frequenza, maggiore è l'energia dissipata. Per questo motivo a bassi livelli di energia le prestazioni dei calcolatori diminuiscono.
+
+Nel confronto tra le due componenti di potenza, $P_{cc}$ e $P_L$, quello che si vede facilmente è che aumentando la frequenza, tipicamente il termine $P_L$ prevale su $P_{cc}$.
+
+Il prodotto tra il tempo richiesto per effettuare un'operazione e la potenza media richiesta, può essere interpretato come l'energia richiesta da una signola operazione:
+\[
+    t_p \overline{P_L} = \frac{C_L}{\beta V_{dd}}\frac{C_L V_{dd}^2}{T} = \frac{C_L^2 V_{dd}}{\beta T}
+\]
+Diminuire la capacità ha un effetto benefico su entrambi i parametri.
+
+\end{document}
