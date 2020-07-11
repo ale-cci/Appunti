@@ -62,7 +62,7 @@
             \[
                 \begin{aligned}
                     &V_{BE} = V_\gamma \qquad \text{per}\quad V_{CE} > V_{CE_{SAT}}\\
-                    &I_C = \beta_F I_B
+                    &I_C = \beta_F I_B \qquad \qquad I_B > 0
                 \end{aligned}
             \]
         \item SAT
@@ -137,14 +137,20 @@
         \item OFF
             \[ I_{SD} = 0 \qquad \text{per}\, V_{SG} < |V_{TP}| \]
         \item SATURAZIONE:
-            \[ I_{SD} = \frac{\beta}{2}(V_{SG} - |V_{TP}|) ^2 \qquad \text{per}\,V_{SD} \ge V_{SG} - |V_{TP}| \]
+            \[ I_{SD} = \frac{\beta}{2}(V_{SG} - |V_{TP}|) ^2 \qquad \text{per}\,
+                \begin{cases}
+                    V_{SD} \ge V_{SG} - |V_{TP}|
+                    \\
+                    V_{SG} > |V_{TP}|
+                \end{cases}
+            \]
         \item LINEARITÀ:
             \[
-                I_{SD} = \beta\left((V_{SG} - |V_{TP}|)V_{SD} - \frac{V_{SN}^2}{2}\right)
+                I_{SD} = \beta\left((V_{SG} - |V_{TP}|)V_{SD} - \frac{V_{SD}^2}{2}\right)
                 \qquad\text{per}
                 \begin{cases}
                     V_{SD} < V_{SG} - |V_{TP}|\\
-                V_{SG} \ge |V_TP|
+                    V_{SG} \ge |V_{TP}|
                 \end{cases}
             \]
     \end{itemize}
@@ -154,7 +160,7 @@
 \subsection*{N-mos in serie}
 \begin{minipage}{0.2\textwidth}
     \begin{tikzpicture}
-        \draw (0, 0) node[eground]{} node[nmos, anchor=S](m1){$M_1$};
+        \draw (0, 0) node[ground]{} node[nmos, anchor=S](m1){$M_1$};
         \draw (m1.D) node[nmos, anchor=S](m2){$M_2$};
         \draw(m2.D) to[short, -o] ++(0, 0.1) node[left]{$V_{DD}$};
     \end{tikzpicture}
@@ -164,5 +170,12 @@
         \beta_{eq} = \frac{\beta_1 \beta_2}{\beta_1 + \beta_2}
     \]
 \end{minipage}
+In parallelo $\beta_{eq} = \beta_1 + \beta_2$. Per applicare queste formule le tensioni ai capi dei transistori devono essere le stesse.
+
+La connessione in parallelo alla rete di pull-down è interpretabile come una somma logica (or) ed una connessione in serie come un prodotto (and).
+L'espressione finale è negata.
+Nella risoluzione applicata con questa formula, quando la rete CMOS è spenta, l'uscita $V_u$ è a 0.
+
+\subsection*{Calcolo del tempo di propagazione}
 
 \end{document}
