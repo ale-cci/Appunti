@@ -176,6 +176,16 @@ La connessione in parallelo alla rete di pull-down è interpretabile come una so
 L'espressione finale è negata.
 Nella risoluzione applicata con questa formula, quando la rete CMOS è spenta, l'uscita $V_u$ è a 0.
 
-\subsection*{Calcolo del tempo di propagazione}
+\subsubsection*{Note generali}
+\begin{itemize}
+    \item La tensione logica $V_{TL}$ è il valore di tensione per cui $V_u = V_i$
+    \item Il guadagno è $\frac{dV_u}{dV_i}$, nel tratto di pendenza, solitamente in regione attiva diretta del transistore
+    \item Per calcolare il tempo di propagazione, scrivere l'equazione della corrente sulla capacità parassita (condensatore) e risolvere l'equazione
+        \[
+            t_p = C \int_{V_i}^{V_f} \frac{1}{I_C} dV_u
+        \]
+    Controllare che le espressioni della corrente siano sempre valide per il transitorio da $V_i$ a $V_f$, controllando i le regioni di funzionamento dei componenti.
+\end{itemize}
+
 
 \end{document}

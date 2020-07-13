@@ -1,0 +1,11 @@
+\documentclass[tikz]{standalone}
+\input{./pgfconfig}
+
+\begin{document}
+\begin{tikzpicture}
+        \begin{axis}[xlabel=$V_i$, ylabel=$V_u$, domain=-5:5, ymin=-1]
+            \addplot[variable=\x, smooth, samples=800] plot ({\x + 0.4*ln(\x)}, {\x});
+            \addplot[dashed, gray, thin] {x};
+        \end{axis}
+    \end{tikzpicture}
+\end{document}

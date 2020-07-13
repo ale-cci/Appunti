@@ -3,16 +3,26 @@
 \begin{document}
 \section{Diodo a giunzione PN}
 \subsection{Diodo}
-\noindent
-La relazione corrente-tensione per il diodo è esponenziale. Per piccoli spostamenti dall'origine è ben approssimata dalla
-formula \diodecurrent{V}. Da una rapida analisi è facile osservare come per $V \to -\infty$ la corrente tende a saturare in un valore $-I_S$, chiamato per questo motivo \textit{corrente di saturazione}.
-\\
-Tale corrente assume un valore molto basso ($\approx 10^{-15} V$) risultando trascurabile rispetto al
-resto delle correnti misurabili nel circuito in polarizzazione diretta.
-\\
-Diremo quindi che il diodo è spento e non fa passare corrente quando si trova in regione di polarizzazione diretta.
-Diversamente diremo che è acceso quando si trova in polarizzazione diretta.
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0) to[diode, *-*] (2, 0);
+    \end{circuitikz}
+\end{center}
 
+Il diodo è un componente la cui corrente ha una formula esponenziale, dipendente dalla tensione applicatagli ai suoi capi:
+\[
+    I = \diodecurrent{V}
+\]
+Dall'espressione è possibile notare come per $V \to -\infty$, la corrente tende asintoticamente al valore $-I_S$, detto \textit{corrente di saturazione}.
+Dato che $I_S$ assume valori molto bassi, sull'ordine di $10^{-15}$, si può considerare questa corrente trascurabile, è può essere considerata nulla.
+
+Nel caso in cui $V > V_T$, il valore esponenziale della corrente inizia a farsi sentire, e scorre una forte corrente attraverso il componente.
+
+È quindi possibile distinguere due regioni di funzionamento: una caratterizzata da una bassa corrente, ed una caratterizzata da una corrente elevata. Le due regioni prendono il nome di \textit{polarizzazione diretta} e \textit{polarizzazione inversa}.
+
+Diremo che il diodo è spento (non fa passare corrente) in regione di polarizzazione inversa, mentre diremo che è acceso in regione di polarizzazione diretta.
+
+\subsubsection{Analisi del circuito raddrizzatore a singola semionda}
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[/tikz/circuitikz/bipoles/length=1cm, scale=1.1]
@@ -29,8 +39,7 @@ Diversamente diremo che è acceso quando si trova in polarizzazione diretta.
     \label{fig:singola_semionda}
 \end{figure}
 
-\noindent
-Il circuito in figura \ref{fig:singola_semionda} è descritto dalle relazioni:
+Il circuito in figura è descritto dalle relazioni:
 \[
     \begin{cases}
         V_i = V_d + V_u
@@ -40,13 +49,27 @@ Il circuito in figura \ref{fig:singola_semionda} è descritto dalle relazioni:
         I = I_D
     \end{cases}
 \]
-$V_T$ indica la tensione termica: $V_T = K \frac{T}{q}$, con $K$ costante di Boltzmann, $q$ la carica di un elettrone e
+$V_T$ indica la tensione termica del diodo: $V_T = K \frac{T}{q}$, con $K$ costante di Boltzmann, $q$ la carica di un elettrone e
 $T$ la temperatura del circuito (misurata a temperatura ambiente: $300K$).
 \\
 Siccome è prodotto di costanti, $V_T$ è considerabile come una costante che vale approssimativamente $26mV$.
 
+Svolgendo il sistema otteniamo l'equazione
+\[
+    V_u = R I_S (e^{\frac{V_i - V_u}{V_T}} -1)
+\]
+Risolvendo per $V_i$
+\[
+    V_i = V_u + V_T \ln(V_u + R I_S)
+\]
+Otteniamo che $V_i$ è composto dalla somma tra un componente lineare ed uno logaritmico, possiamo quindi tracciare un grafico approssimato di $V_i(V_u)$ e per ottenere $V_u(V_i)$ basta effettuare una simmetria sulla bisettrice:
+
+\begin{center}
+    \includegraphics{diode-voltage}
+\end{center}
+
 \subsection{Modello a soglia}
-Per semplificare la risoluzione del circuito, approssimiamo le zone di polarizzazione diretta ed inversa con due tratti lineari:
+Per semplificare la risoluzione dei circuiti con diodo, possiamo studiare le due regioni di funzionamento separatamente, approssimando i due tratti della caratteristica con due lineari:
 Il primo descritto dalla caratteristica $I = 0$ (diodo spento) valido per $V_d < V_\gamma$, ed il secondo una semiretta
 perpendicolare alle ascisse $V = V_\gamma$ a rappresentare la corrente costante a diodo acceso.
 \warnbox{
@@ -62,7 +85,7 @@ Partendo dall'ipotesi che il diodo sia spento, $\vu = R \cdot I = 0$.
 Inoltre abbiamo che $V_d = \vi - \vu = \vi$, e per ipotesi di funzionamento $V_d < \vgg$, quindi il diodo
 è spento per $\vi < \vgg$.
 
-Studiando ora la seconda ed ultima ipotesi per questo circuito, diodo acceso, abbiamo che:
+Studiando ora la seconda ipotesi, diodo acceso, abbiamo che:
 $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
 
 \[
@@ -72,6 +95,7 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
         V_u = V_i - V_d
     \end{cases} \quad \Rightarrow \quad V_i - V_d > 0 \quad \Rightarrow {\color{clr-main-blue}{V_i > V_d}}
 \]
+\subsubsection{Grafico dell'uscita ed andamento del circuito con ingresso sinusoidale}
 \begin{figure}[h]
     \centering
     \begin{minipage}[b]{0.48\textwidth}
@@ -88,45 +112,45 @@ $V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
     \end{minipage}
 \end{figure}
 
+\newpage
 \subsection{Circuito limitatore di tensione}
 \begin{figure}[h]
     \centering
     \begin{circuitikz}
-        \draw (0, 0)
-        -- (-1, 0)
-        to[american voltage source, v=$V_i$] (-1, 2)
-        to[R, v^=$V_R$] (2, 2)
-        to[diode, v=$V_u$, i=$I$] (2, 0)
-        -- (0.5, 0)
-        node[ground]{}
-        -- (-1, 0);
+        \draw (0, 0) node[circ]{}
+            node[left]{$V_i$}
+            -- (.2, 0)
+            to[R] ++(0, -1.5)
+            -- ++(.2, 0) node[circ]{} node[right]{$V_u$}
+            (.2, -1.5)
+            to[diode] ++(0, -1.5)
+            node[ground]{};
     \end{circuitikz}
 \end{figure}
 
 \begin{minipage}[b]{.50\textwidth -1.11pt}
-\begin{tcolorbox}[title=Diodo OFF]
-    \begin{align*}
-        &V_R = I \cdot R = 0
-        \\
-        &V_i - \cancel{V_R} - V_u = 0 \qquad &\Rightarrow & {\color{clr-main-red}V_u = V_i}
-        \\
-        &V_u < V_\gamma \qquad&\Rightarrow &{\color{clr-main-red}V_i < V_\gamma}
-    \end{align*}
-\end{tcolorbox}
+    \begin{tcolorbox}[title=Diodo OFF]
+        \[
+            I = 0 \Rightarrow
+            \begin{cases}
+                V_i = V_u \\
+                V_u < V_\gamma
+            \end{cases}
+        \]
+    \end{tcolorbox}
 \end{minipage}
 \begin{minipage}[b]{.50\textwidth -1.11pt}
-\begin{tcolorbox}[title=Diodo ON]
-    \begin{align*}
-        &V_d = V_\gamma \qquad&\Rightarrow &{\color{clr-main-blue}V_u = V_\gamma}
-        \\
-        &I\cdot R > 0 \qquad&\Rightarrow & V_i - V_d > 0
-        \\
-        &&& {\color{clr-main-blue} V_i > V_\gamma}
-    \end{align*}
-\end{tcolorbox}
+    \begin{tcolorbox}[title=Diodo ON]
+        \[
+            \begin{cases}
+                V_u = V_\gamma \\
+                I_D = \frac{V_i - V_\gamma}{R} > 0
+                \Rightarrow V_i > V_\gamma
+            \end{cases}
+        \]
+    \end{tcolorbox}
 \end{minipage}
-
-\noindent Se il segnale in ingresso eccede il valore $V_\gamma$, viene limitato a $V_\gamma$, da questo il nome limitatore di tensione.
+Possiamo osservare che se il segnale in ingresso eccede $V_\gamma$, il diodo si accende e limita l'uscita a $V_\gamma$. Da questo il nome \textit{circuito limitatore di tensione}.
 
 \begin{figure}[h]
     \centering
