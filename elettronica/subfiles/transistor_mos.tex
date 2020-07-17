@@ -5,7 +5,7 @@
 Ricordando la struttura fisica di un condensatore: due lamine di metallo con in mezzo uno strato di materiale isolante, osserviamo che in condizioni statiche la corrente è necessariamente nulla.
 Utilizziamo quindi questo principio per creare un nuovo tipo di transistore, dove la corrente di base potrà essere nulla.
 
-Sostituendo la lamina di metallo inferiore con del materiale drogato uniformemente, come ad esempio silicio drogato con concentrazione $N_A$, ed utilizzando come materiale isolante ad esempio l'ossido di silicio, otteniamo un condensatore MOS (\textit{Metallo ossido semiconduttore}).
+Sostituendo la lamina di metallo inferiore con del materiale drogato uniformemente, ad esempio silicio drogato con concentrazione $N_A$, ed utilizzando come materiale isolante ad esempio l'ossido di silicio, otteniamo un condensatore MOS (\textit{Metallo ossido semiconduttore}).
 
 Chiameremo la regione di semiconduttore, "regione di substrato" o bulk. La regione in metallo "gate", simboleggiando la regione che controlla il flusso di carica, ed immaginiamo di applicare una tensione $V_{GB}$ tra gate e bulk.
 
@@ -68,8 +68,10 @@ Diversamente dal transistor bipolare, non c'è differenza tra source e drain.
         \end{axis}
     \end{tikzpicture}
 \end{figure}
+Per studiare il comportamento del transistore nmos, supponiamo l'esistenza di una regione sufficientemente lontana dall'interfaccia ossido-semiconduttre da poter descrivere la regione di semiconduttore indipendentemente dall'interfaccia.
 
-Supponiamo che esita una regione sufficientemente lontana dall'interfaccia ossido-semiconduttore, da poter considerare la regione di semiconduttore indipendente dall'interfaccia dopo una certa coordinata $x_d$.
+
+% Supponiamo che esita una regione sufficientemente lontana dall'interfaccia ossido-semiconduttore, da poter considerare la regione di semiconduttore indipendente dall'interfaccia dopo una certa coordinata $x_d$.
 
 \subsubsection{Zona neutra}
 Per $x > x_d$, anche avendo applicato una differenza di potenziale, la corrente nella maglia è necessariamente nulla, in quanto non passa corrente attraverso lo strato isolante. Possiamo considerare quindi questa come una condizione di equilibrio.
@@ -85,14 +87,14 @@ Per $x > x_d$, anche avendo applicato una differenza di potenziale, la corrente 
     \end{cases}
 \]
 Dalla relazione della resistività: $\rho = q (N_D - N_A + p - n) = 0$.
-Inoltre sappiamo che la densità di corrente $J_p = q \mu_p p E - q D_p \frac{dp}{dx}$, siccome $p = N_A$ ed è costante, da cui derivata nulla, allora siccome la densità di corrente deve essere necessariamente nulla, allora ne segue che il campo elettrico $E$ è anch'esso nullo.
+Inoltre sappiamo che la densità di corrente $J_p = q \mu_p p E - q D_p \frac{dp}{dx}$, siccome $p = N_A$ ed è costante, da cui derivata nulla, allora siccome la densità di corrente deve essere necessariamente nulla (non passa corrente), allora ne segue che il campo elettrico $E$ è anch'esso nullo.
 \[
     E = -\frac{d \varphi}{dx} = 0 \Rightarrow \varphi = \text{costante} = 0
 \]
 
 Risulta quindi una regione neutra.
 \subsubsection{Regione metallica}
-Per $t < t_{ox}$, siccome è un conduttore ideale, il potenziale è costante $\varphi = \varphi_M$ ed il campo elettrico è nullo.
+Per $x < t_{ox}$, siccome è un conduttore ideale, il potenziale è costante $\varphi = \varphi_M$ ed il campo elettrico è nullo.
 
 Indichiamo con $\Psi_{MS}$ il potenziale di contatto, possiamo calcolare il valore del potenziale del metallo come $\varphi_M = 0 - \Psi_{MS} + V_G$. Possiamo indicarlo anche con $V_G'$ in quanto è il valore di $V_G$ diminuito di una costante.
 
@@ -103,7 +105,7 @@ Per $-t_{ox} < x < 0$, dall'equazione di poisson:
 \[
     \frac{d\varepsilon E}{dx} = \rho
 \]
-Ipotizzando che non ci sia carica interna all'ossido, possiamo considerare $\rho = 0$. (Ipotesi non completamente realistica a cause di impurità nell'ossido).
+Ipotizzando che non ci sia carica interna all'ossido, possiamo considerare $\rho = 0$. (Ipotesi non utilizzabile se si tiene conto di eventuali impurità dell'ossido).
 
 Da cui ricaviamo che il campo elettrico interno alla regione è costante, e lo indichiamo con $E_{ox}$.
 
@@ -172,10 +174,12 @@ La distanza $x_d$ ha ancora dimensioni dell'ordine di micron, rendendo valida l'
 
 \subsubsection{Studio della concentrazione di lacune ed elettroni sulla superficie del semiconduttore}
 
-\begin{tikzpicture}
-    \begin{axis}
-    \end{axis}
-\end{tikzpicture}
+%\begin{center}
+%    \begin{tikzpicture}
+%        \begin{axis}
+%        \end{axis}
+%    \end{tikzpicture}
+%\end{center}
 
 Guardiamo al variare del potenziale incognito $\varphi_S$ come varia la concentrazione superficiale degli elettroni e delle lacune.
 
@@ -369,6 +373,7 @@ Di conseguenza, dato che la resistenza di pinch-off è molto superiore alla resi
 \end{tcolorbox}
 
 \subsection{Esempio circuito}
+\begin{center}
 \begin{circuitikz}
     \draw
     (0, 0) node[ground]{}
@@ -383,137 +388,184 @@ Di conseguenza, dato che la resistenza di pinch-off è molto superiore alla resi
     node[right]{$V_u$}
     ;
 \end{circuitikz}
+\end{center}
 
-Risolvendo il circuito otteniamo:
 \begin{tcolorbox}
-    Per $V_i < V_{GS}$ il transistor è spento con corrente $I_D = 0$ e $V_u = V_{cc}$
+    Per $V_i < V_{GS}$ il transistor è spento, quindi $I_D = 0$, da cui:
+    \[
+        \begin{cases}
+            V_u = V_{cc}
+            \\
+            V_i < V_{GS}
+        \end{cases}
+    \]
 \end{tcolorbox}
 \begin{tcolorbox}
-    Per regione di saturazione, $V_T < V_i < V_T - V_u$ quindi la regione di validità è dopo $V_T$ e sopra la retta del primo quadrante $V_i = V_T - V_u$.
-
-    La formula di $V_u$ è un' arco di parabola decresciente:
+    Supponendo NMOS saturo:
+    \[\begin{cases}
+        V_i > V_T
+        \\
+        V_u > V_i - V_T
+    \end{cases}
+    \quad \Rightarrow \quad
+    V_T < V_i < V_u + V_T
+\]
+    La regione di validità è sopra la retta $V_i = V_T - V_u$.
+    La formula che descrive $V_u$ è un arco di parabola decrescente:
     \[
         V_u = V_{cc} - \frac{R\beta}{2} (V_i - V_T)^2
     \]
 \end{tcolorbox}
 \begin{tcolorbox}
-    In regione di funzionamento lineare, le condizioni di esistenza sono sotto la retta espressa in regione di saturazione: $V_i = V_T - V_u$ ed il valore di $V_u$ è pari a:
+    In regione di funzionamento lineare:
+    \[
+        \begin{cases}
+            V_i > V_T
+            \\
+            V_u < V_i - V_T
+        \end{cases}
+    \]
+    Ed il valore della tensione in uscita è descritto dalla formula:
     \[
         V_u = V_{cc} - R \beta \big\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\big\}
     \]
-
-    Analogamente sappiamo che $I_D = (V_{cc} - V_u) / R$, ed unendo questa formula con la formula di $I_D$ al variare della tensione d'ingresso,
-    osservando che all'aumentare della tensione $V_i$, il valore di $V_u$ non raggiunge mai il valore di zero.
-    %53
+    Dalle condizioni di esistenza e dall'espressione della corrente, possiamo notare come in questo tratto, $I_D > 0$.
 \end{tcolorbox}
 
-Studiando il guadagno della regione di saturazione:
-\begin{align*}
-    V_u = V_{dd} - \frac{\beta R}{2} (V_i - V_T)^2
-    \\
-    A_V = -\beta R (V_i - V_T)
-\end{align*}
-otteniamo che è dipendente da dove viene calcolato, e soprattutto dal valore di $\beta$, (dipendente dai parametri $\varepsilon_{ox}$ ,$t_{ox}$, $\mu_n$, $w$ ed $L$).
+\subsubsection{Natura ratioed}
+In regione di saturazione, il guadagno $A_V$ è descritto dalla formula:
+\[
+    A_V = -\beta R(V_i - V_T)
+\]
+e dipende dal punto $V_i$ in cui viene calcolato, e dal valore di $\beta$, ovvero dalle caratteristiche specifiche ($\varepsilon_{ox}$, $t_{ox}$, $\mu_n$, $w$ ed $L$) del transistore.
 
 In termini progettuali è possibile variare le dimensioni fisiche del canale $w$ ed $L$, ed il valore della resistenza $R$, dipendente da rispettiva lunghezza $L_R$ e ampiezza $w_R$.
 \[
     \beta R = c_{ox} \mu_n \frac{\rho}{t} { \color{red}\frac{w_M}{L_M}\frac{L_R}{w_R}} = k \frac{w_M / L_M}{w_R / L_R}
 \]
-Il rapporto tra $w$ ed $L$ prende il nome di fattore di forma. Quindi il guadagno dipende dal rapporto dei fattori di forma di transistor e  resistore.
-Per questo motivo, l'invertitore viene chiamato di tipo "ratioed", dimensionato.
-
-Se si vuole simultaneamente aumentare il guadagno e ridurre l'ingombro si diminuisce il più possible i valori $L_M$ ed $w_M$, e per avere guadagni più elevati e maggiore immunità ai disturbi è richiesto di aumentare le dimensioni dei componenti.
-
+Siccome il guadagno dipende dal rapporto tra i fattori di forma ($w / L$), l'invertitore è detto di tipo "ratioed" o dimensionato, in quanto per variare il valore del guadagno per aumentare l'immunità ai disturbi, è richiesto di cambiare le dimensioni dell nmos.
 
 Nel circuito il transistore prende il nome di rete di pull-down  e la resistenza prende il nome di pull-up.
 
-Sostituiamo quindi alla rete di pull-up un'altro transistore, per simulare una resistenza ad alti valori resistivi.
+\subsection{NMOS a carico saturo}
+Sostituendo alla rete di pull-up un secondo transistore, in modo da simulare una resistenza con più alti valori resistivi otteniamo il seguente circuito:
 
-\begin{circuitikz}
-    \draw
-    (0, 0) node[ground]{}
-    node[nmos, anchor=S] (npn){}
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0, 0) node[ground]{}
+        node[nmos, anchor=S] (npn){M1}
 
-    (npn.G) node[circ]{} node[above]{$V_i$}
-    (npn.D) node[nmos, anchor=S] (npn2){}
-    (npn2.D) -| (npn2.G)
-    (npn2.D) node[vcc]{}
-    node[right] {$V_{cc}$}
+        (npn.G) node[circ]{} node[above]{$V_i$}
+        (npn.D) node[nmos, anchor=S] (npn2){M2}
+        (npn2.D) -| (npn2.G)
+        (npn2.D) node[vcc]{}
+        node[right] {$V_{cc}$}
 
-    (npn.D) to[short] ++(0.5, 0)
-    node[circ]{}
-    node[right]{$V_u$}
-    ;
-\end{circuitikz}
+        (npn.D) to[short] ++(0.5, 0)
+        node[circ]{}
+        node[right]{$V_u$}
+        ;
+    \end{circuitikz}
+\end{center}
 
-Il transistore nella rete di pull-up è detto connesso a diodo, in quanto facendo riferimento al transistor bipolare, il cortocircuito tra le due giunzioni lo fa comportare come un diodo. Questo tipo di connessione fa si che la tensione $V_{GS}= V_{DS}$ ed in particolare $V_{GS} < V_{DS} + V_T$ facendo si che il transistor può lavorare solamente in regione di saturazione.
+Il transistore nella rete di pull-up è detto connesso a diodo: facendo riferimento al transistor bipolare, il cortocircuito tra le giunzioni $p$ ed $n$ lo fa comportare come un diodo.
+\\
+Questa connessione è caratterizzata da $V_{GS} = V_{DS}$, facendo si che quando il transistor è acceso, funziona solo in regione di saturazione.
 
-Per questo prende il nome di invertitore nmos a carico attivo saturato.
-
+Per questa ragione l'invertitore prende il nome di \textit{nmos a carico saturo}.
 
 \subsubsection{Analisi del modello}
 \begin{tcolorbox}
-    Per $M_1$ OFF, $V_{GS1} < V_T$
-    \begin{align*}
-        I_{D1} = 0
-        \\
-        I_{D2} = 0
-    \end{align*}
-    Avendo escluso che $M_2$ non può funzionare in ragione lineare, allora $M_2$ è spento.
-    Posso scrivere quindi che $V_u = V_{cc} - V_{DS2} = V_{cc} - V_T$
-
+    Per $M_1$ OFF
+    \[
+        \begin{cases}
+            V_{GS1} = V_i < V_T
+            \\
+            I_{D1} = I_{D2} = 0
+        \end{cases}
+    \]
+    Siccome la corrente è nulla ed $M_2$ se acceso può funzionare solo in regione lineare, di conseguenza $M_2$ è spento.
+    \[\begin{cases}
+        V_i < V_T \\
+        V_u = V_{cc} - V_{DS2} = V_{CC} - V_T
+    \end{cases}\]
 \end{tcolorbox}
 \begin{tcolorbox}
-    Per $M_1$ saturo, $V_T < V_{GS1} < V_{DS1} + V_T$ da cui $V_i > V_T$ e $V_u > V_i - V_T$.
-    Le condizioni di funzionamento della rete di pull-down sono le stesse del circuito a carico resistivo, in quanto la rete non cambia.
-
-    \begin{align*}
-        I_{D1} = \frac{\beta_1}{2} (V_i - V_T)^2 = \frac{\beta_2}{2} (V_{cc} - V_u - V_T)^2 = I_{D2}
+    Per $M_1$ saturo
+    \[\begin{cases}
+        V_i > V_T
         \\
-        V_u = V_{cc} - V_T - \sqrt\frac{\beta_1}{\beta_2} (V_i - V_T)
-    \end{align*}
+        V_u > V_i - V_T
+        \\
+        I_{D1} = \frac{\beta_1}{2}(V_i - V_T)^2
+    \end{cases}\]
+    Dato che la corrente $I_{D1}$ è positiva, $M_2$ necessariamente è in regione di saturazione:
+    \[
+        \frac{\beta_1}{2}(V_i - V_T)^2 = \frac{\beta_2}{2}(V_{cc} - V_u - V_T)^2
+    \]
+    Ottenendo la relazione:
+    \[
+        V_u = V_{cc} - V_T - \sqrt{\frac{\beta_1}{\beta_2}} (V_i - V_T)
+    \]
 \end{tcolorbox}
 \begin{tcolorbox}
-    Per $M_1$ in regione lineare ed $M_2$ acceso quindi saturo valgono le relazioni
+    Per $M_1$ lineare
+    \[
+        \begin{cases}
+            I_{D1} = \beta_1 \big((V_i - V_T) V_u - \frac{V_u^2}{2}\big)
+            \\
+            V_i > V_T
+            \\
+            V_u < V_i - V_T
+        \end{cases}
+    \]
+    Ancora una volta la corrente $I_{D1}$ è positiva, quindi $M_2$ si trova in regione di saturazione:
     \begin{align*}
         I_{D1} = \beta_1 \big\{ (V_i - V_T) V_u - \frac{V_u^2}{2}\big\}
         = \frac{\beta_2}{2} (V_{cc} - V_u - V_T )^2 = I_{D2}
     \end{align*}
+    Che ci risparmiamo i calcoli dicendo che risulta in un tratto ad andamento decrescente.
 \end{tcolorbox}
-\begin{tikzpicture}
-    \begin{axis}
-        \addplot[domain=-5:1]{3};
-        \addplot[domain=1:3]{(-x + 4)};
-        \addplot[domain=3:5]{1 + 5/x -5/3};
-    \end{axis}
-\end{tikzpicture}
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot[domain=-5:1]{3};
+            \addplot[domain=1:3]{(-x + 4)};
+            \addplot[domain=3:5]{1 + 5/x -5/3};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+\subsubsection{Osservazioni sul circuito}
+Come visibile nella regioni di saturazione di $M_1$, il rapporto tra i coefficienti $\beta_1$ e $\beta_2$ influenza direttamente il guadagno. Di conseguenza anche questo circuito è di tipo ratioed.
 
-Abbiamo già messo in evidenza come il guadagno sia il rapporto tra i due coefficienti $\beta_1$ e $\beta_2$, quindi il guadagno è legato ancora ai fattori di forma dei due transistor, per questo è ancora un dispositivo dimensionato a rapporto, "ratioed".
-
+\subsection{Modifica rete di pull-up con transistor a depletion}
 È possibile modificare il transistore mos, cambiando il drogaggio del semiconduttore, aggiungendo uno strato drogato con atomi donatori, in modo da rendere il canale già formato in partenza ed utilizzare la tensione $V_{GB}$ per svuotarlo.
 Questo tipo di transistore prende il nome di transistore a depletion, mentre quello utilizzato fino ad ora prende il nome di transistore ad enhancement.
 
-Connettendo a diodo questo nuovo tipo di transitore, è vero che $V_{GS} > V_{DS} - |V_T|$ permettendo il funzionamento in regione lineare quando è connesso a diodo.
+Connettendo a diodo questo nuovo tipo di transitore, è vera la condizione di funzionamento lineare: $V_{GS} > V_{DS} - |V_T|$, mentre la condizione di saturazione non è permessa.
 
-\begin{circuitikz}
-    \draw
-    (0, 0) node[ground]{}
-    node[nmos, anchor=S] (npn){}
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0, 0) node[ground]{}
+        node[nmos, anchor=S] (npn){$M_1$}
 
-    (npn.G) node[circ]{} node[above]{$V_i$}
-    (npn.D) node[pmos, anchor=D] (npn2){}
+        (npn.G) node[circ]{} node[above]{$V_i$}
+        (npn.D) node[nfet, anchor=S] (npn2){$M_2$}
 
-    (npn2.S) -| (npn2.G)
-    (npn2.S) node[vcc]{}
-    node[right] {$V_{cc}$}
+        (npn2.D) -| (npn2.G)
+        (npn2.D) node[vcc]{}
+        node[right] {$V_{cc}$}
 
-    (npn.D) to[short] ++(0.5, 0)
-    node[circ]{}
-    node[right]{$V_u$}    ;
-\end{circuitikz}
+        (npn.D) to[short] ++(0.5, 0)
+        node[circ]{}
+        node[right]{$V_u$}    ;
+    \end{circuitikz}
+\end{center}
 
-$M_2$ è spento se $V_{GS2} = V_{cc} - V_u < V_{T2}$, ovvero $V_u > V_{cc} + |V_{T2}|$, la condizione è irrealistica in quanto l'uscita non riesce ad assumere valori superiori all'alimentazione, quindi il transistor è sempre acceso.
-Di conseguenza lavora solo in regione lineare.
+$M_2$ è spento se $V_{GS2} = V_{cc} - V_u < V_{T2}$, ovvero $V_u > V_{cc} + |V_{T2}|$.
+Quindi se la tensione di uscita supera il valore di alimentazione. Non potendosi verificare questa condizione, $M_2$ funziona unicamente in regione lineare.
 \begin{tcolorbox}
     Per $M_1$ spento, allora $I_{D2} = 0$, quindi $V_{DS2} = 0$ quindi $V_u = V_{cc}$
 \end{tcolorbox}

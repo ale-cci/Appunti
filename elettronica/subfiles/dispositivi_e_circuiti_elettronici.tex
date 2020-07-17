@@ -137,13 +137,13 @@ Possiamo quindi definire come evento di generazione il momento in cui un'elettro
 
 Indichiamo quindi con $G$ il numero di coppie elettrone-lacune generate nell'unità di volume e nell'unità di tempo. Il tasso di ricombinazione è indicato con $R$.
 
-Alla equilibrio quindi $n = p = n_i(T)$ e $R = G\ge 0$ il numero di elettroni e lacune costante prende il nome di $n_i$ (concentrazione intrinseca del materiale).
+All' equilibrio $n = p = n_i(T)$ e $R = G\ge 0$ il numero di elettroni e lacune costante prende il nome di $n_i$ (concentrazione intrinseca del materiale).
 
 Sostituendo ad alcuni atomi di silicio, con atomi della 5a colonna, as es fosforo. In questo modo avendo un'elettrone di legame in più (ed un protone in più), siccome i legami sono tutti occupati con gli atomi di silicio adiacenti, otteniamo un'elettrone che non contribuisce ad alcun legame nel reticolo.
 \\
 La sostituzione di alcuni atomi di silicio con atomi della 3a o 5a colonna prende il nome di drogaggio.
 
-La rara sostituzione di atomi di silicio, non varia il reticolo cristallino originario.
+La rara sostituzione di atomi di silicio, non varia la struttura del reticolo cristallino originario.
 
 L'elettrone nella fascia più esterna non essendo legato agli altri se riceve energia sufficiente può liberarsi e comportarsi come una carica negativa mobile. È ancora vero che lascia alle sue spalle una carenza di carica negativa, ma la carica positiva è associata alla presenza del protone nel nucleo e non è in grado di spostarsi.
 In questo caso si genera un'elettrone mobile, senza generare lacune mobili. In questo caso $p \neq n$. Gli atomi della quinta colonna prendono quindi il nome di atomi droganti di tipo donatore.
@@ -170,7 +170,7 @@ L'equivalenza tra elettroni e lacune interna al materiale può essere modificata
 
 Supponendo di conoscere la concentrazione tra atomi donatori ed accettori, calcoliamo ora i nuovi valori di $p$ ed $n$ interni al materiale.
 
-Osservando il caso della concentrazione intrinseca, osserviamo che necessariamente il prodotto $pn = n_i^2$. Questa relazione è valida non solo per materiali intrinseci, ma anche per materiali estrinseci.
+Osservando il caso della concentrazione intrinseca, osserviamo che necessariamente vale il prodotto $pn = n_i^2$. Questa relazione è valida non solo per materiali intrinseci, ma anche per materiali estrinseci.
 
 Possiamo pensare che il tasso di generazione $G$ sia dipendente unicamente dalla temperatura: $g(T)$. Mentre il tasso di ricombinazione $R$, l'occupazione di una lacuna da parte di un'elettrone, è logico pensare che dipenda dal numero di elettroni presenti nel materiale e dalla temperatura: $R = pnr(T)$.
 \\
@@ -226,10 +226,18 @@ La carica $dQ$ è quella che nello stesso intervallo di tempo $dt$ attraversa la
 
 Quindi la densità $J$ è esprimibile come:
 \[
+    \begin{cases}
+        \frac{dx}{dt} = \mu_n E
+        \\
+        J = \frac{1}{S} \frac{dQ}{dt}
+        \\
+        Q = qnS dx
+    \end{cases}
+    \Rightarrow
     J_n = \frac{1}{\cancel{S}} \frac{qn\cancel{S} \mu_n E \cancel{dt}}{\cancel{dt}} = qn\mu_n E
 \]
 Vale ancora la relazione di ohm in forma locale $J = \sigma E$, con $\sigma = qn \mu_n = q \mu_n N_D$.
-È possibile concludere che $N_D$ è direttamente proporzionale alla conducibilità elettrica. Quindi possiamo variando dinamicamente il valore di $N_D$ si può ottenere un conduttore o un isolante.
+È possibile concludere che $N_D \propto \sigma$. Quindi possiamo variando dinamicamente il valore di $N_D$ si può ottenere un conduttore o un isolante.
 
 Quindi solo variando il valore di $N_D$ in una parte del materiale posso formare due regioni conduttive, separate da una isolante.
 

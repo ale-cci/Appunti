@@ -20,25 +20,23 @@
     \label{circit:transistor_bjt}
 \end{figure}
 \subsection{Modello di Ebers e Moll}
-Supponiamo che $V_{BE} > 0$ e $V_{BC} < 0$. Questo ci permetterà di dire che il diodo tra base
-ed emettitore è polarizzato in regione diretta ed il diodo tra base e collettore è polarizzato
-in inversa.
-Questo comporta che $I_E > 0$ e $I_C \approx 0$ e, considerando la legge di Kirchoff $I_B + I_C = I_E$,
-abbiamo $I_B \approx I_E$.
+Consideriamo $V_{BE} > 0$  e $V_{BC} < 0$. Di conseguenza il diodo tra base ed emettitore è polarizzato in regione diretta ed il diodo tra base e collettore è polarizzato in inversa, quindi spento. Analizzando il comportamento dei diodi ci aspettiamo che:
+\[
+    \begin{cases}
+        I_E > 0
+        \\
+        I_C \approx 0
+        \\
+        I_B + I_C = I_E
+    \end{cases}
+    \Rightarrow
+    I_B \approx I_E
+\]
 
-Quello che accade se la distanza tra i due diodi è ridotta (che indicheremo con $w$), l'interazione tra
-le loro cariche porta fa cambiare loro comportamento radicalmente, portando a far valere le
-relazioni $I_e \approx -I_c$ e $I_b \approx 0$.
+Ma quando la distanza tra i due diodi è molto piccola entra in gioco l'effetto transistore, cambiando il funzionamento del circuito.
+\subsubsection{Effetto Transistore}
 
-
-Quando $w$ è sufficientemente piccolo, quello che accade è che nel momento in cui il diodo tra base ed emettitore è' polarizzato
-in diretta, ed il diodo tra base e collettore è polarizzato in inversa, la corrente fluisce prevalentemente fra collettore
-ed emettitore a fronte di una corrente di base molto più piccola rispetto alle altre due regioni.
-% 9:40
-
-\begin{wrapfigure}{r}{.4\textwidth}
-    \centering
-    \vspace{-2\baselineskip}
+\begin{center}
     \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm]
         \draw
         (0, 0)
@@ -65,12 +63,23 @@ ed emettitore a fronte di una corrente di base molto più piccola rispetto alle 
         -- (2, 1)
         ;
     \end{circuitikz}
-\end{wrapfigure}
-\vspace{10pt}
-Possiamo tenere conto di questo comportamento attraverso un generatore aggiuntivo di corrente (riportato in rosso) che aggiunga
-alla corrente prevista dal modello del diodo polarizzata in inversa, correntemente trascurabile, una nuova corrente
-che dipende a sua volta esponenzialmente da \vbe. Chiameremo questa corrente $I_t$: corrente dell'\textbf{effetto transistore}.
+\end{center}
+Quando la distanza tra i due diodi (indicata con $w$ è ridotta, l'interazione tra le cariche cambia il comportamento del circuito; facendo valere le relazioni:
+\begin{align*}
+    &I_E \approx -I_C
+    \\
+    &I_B \approx 0
+\end{align*}
 
+% 9:40
+Nel momento in cui il diodo tra base ed emettitore è polarizzato in diretta, ed il diodo tra base e collettore è polarizzato
+in inversa, la corrente fluisce prevalentemente fra collettore ed emettitore a fronte di una corrente di base molto più piccola rispetto alle altre due regioni.
+
+Possiamo simulare questa corrente tra collettore ed emettitore attraverso un generatore di corrente fittizio (rosso) che aggiunga alla corrente trascurabile descritta dal modello del diodo, una corrente dipendente dalla tensione $V_{BE}$
+
+Questa nuova corrente prende $I_T$ è detta \textit{corrente dell'effetto transistore}.
+
+Analogamente quando la polarizzazione dei diodi è invertita, per lo stesso principio si manifesta una corrente dal emettitore a collettore. Indichiamo questa seconda corrente dell'effetto transistore con un secondo generatore di corrente (riportato in blu).
 \vspace{20pt}
 \begin{tcolorbox}[title={Equazioni caratteristiche transistore}, width=\textwidth]
     \begin{align*}
@@ -81,8 +90,6 @@ che dipende a sua volta esponenzialmente da \vbe. Chiameremo questa corrente $I_
 \end{tcolorbox}
 
 \vspace{10pt}
-\noindent È semplice calcolare l'espressione della corrente di emettitore $\I{E}$, di collettore $\I{C}$ e di base $\I{B}$,
-attraverso le equazioni di Kirchoff ai tre nodi.
 Bisogna considerare che abbiamo utilizzato solo una particolare condizione di polarizzazione.
 Se studiassimo il caso opposto, ovviamente otterremmo risultati simmetrici: vedremo che con $\V{BE} < 0$ e $\V{BC} > 0$
 avremo una componente aggiuntiva di corrente ad effetto transistore, diretta in direzione opposta, rappresentabile anch'essa
@@ -117,8 +124,8 @@ con un generatore di corrente pilotato.
 Esiste anche il suo duale, \textbf{transistore pnp} al quale faremo solo un rapido cenno più avanti ma suo
 comportamento è del tutto identico a quello che stiamo discutendo.
 
-Per la legge di Kirchoff abbiamo se conosciamo due tra le differenze di potenziale ai lati del transistore, la terza è
-univocamente determinata. Ragionamento del tutto analogo vale per le correnti.
+Per la legge di Kirchoff se conosciamo due differenze di potenziale ai lati del transistore, la terza è
+univocamente determinata. Lo stesso vale per le correnti.
 
 Per determinare completamente il regime di funzionamento del transistore, occorre determinare le 6 grandezze: 3 correnti e 3
 tensioni, attraverso 6 equazioni, due delle quali sono quelle di Kirchoff appena indicate.
@@ -242,7 +249,7 @@ $\V{BE} < 0$ e $\V{BC} < 0$ ci portano ad osservare che ciascuna delle espressio
     &\I{B} = - \I{BEs} - \I{BCs}\\
     &\I{E} = \I{BEs}
 \end{align*}
-"Il modello non ha bisogno dell'aggiunta di un generatore controllato per essere descritto".
+Quindi in questa regione il modello non necessita di generatori controllati per essere descritto.
 
 \subsubsection{Regione di saturazione}
 $\V{BE} > 0$ e $\V{BC} > 0$ indica che nessun esponenziale è trascurabile. Tutte le correnti dipendono da entrambe le tensioni di funzionamento $\V{BE}$ e $\V{BC}$.

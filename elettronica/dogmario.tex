@@ -185,7 +185,13 @@ Nella risoluzione applicata con questa formula, quando la rete CMOS è spenta, l
             t_p = C \int_{V_i}^{V_f} \frac{1}{I_C} dV_u
         \]
     Controllare che le espressioni della corrente siano sempre valide per il transitorio da $V_i$ a $V_f$, controllando i le regioni di funzionamento dei componenti.
+\item Per il calcolo della potenza statica trovare le regioni di funzionamento dei transistori ed applicare la formula
+    \[
+        \overline{P} = \frac{1}{T} \int_{t_0}^{t_f} V_{cc} I_{cc} dt
+    \]
+    Potrebbero esserci un po di integrali da risolvere. Nel caso di calcolo su un'invertitore cmos, la corrente è nulla quando i transisor sono spenti.
 \end{itemize}
+
 
 
 \end{document}
