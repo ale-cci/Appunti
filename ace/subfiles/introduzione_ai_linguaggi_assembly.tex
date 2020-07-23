@@ -76,15 +76,15 @@ Flag register descrive lo stato dell'ultima operazione effettuata dall'ALU (vedi
     \item tipo di istruzioni previste
 \end{itemize}
 
-\subsubsection{Dove sono memorizzati gli operandi nella CPU}
-Un metodo per memorizzare gli operandi è attraverso lo stack, in questo modo viene garantita un'indipendenza dal
+\subsubsection{In che modo gli operandi sono memorizzati nella CPU}
+Un metodo per memorizzare gli operandi è attraverso lo \textbf{stack}, in questo modo viene garantita un'indipendenza dal
 register set, ma con lo svantaggio di avere difficoltà di accesso agli operandi. Inoltre dato che il tempo di accesso allo
 stack è elevato rispetto al tempo di esecuzione si forma un bottleneck.
 
-Un altro metodo è l'utilizzo di un unico registro accumulatore, da cui passano tutte le operazioni. La gestione diventa
+Un altro metodo è l'utilizzo di un unico \textbf{registro accumulatore}, da cui passano tutte le operazioni. La gestione diventa
 molto semplice ma è ovvia la formazione di bottleneck.
 
-Il metodo più utilizzato è a set di registri, ovvero gli operandi vengono salvati direttamente nei registri del
+Il metodo più utilizzato è a \textbf{set di registri}, ovvero gli operandi vengono salvati direttamente nei registri del
 processore.
 In particolare, nella  CPU 8086, i registri possono essere di tre categorie: general purpose (generici non ortogonali), segment o miscellaneous.
 I registri sono \ax, \bx, \cx, \dx, \lstinline{si}, \lstinline{di}, \lstinline{bp}, \lstinline{sp}, tutti a 16 bit. Per
@@ -109,8 +109,8 @@ una \lstinline{l} rispettivamente (es. \ah per accedere ai primi 8 del registro 
         \hline
         \multicolumn{2}{|c|}{\bfseries Registri speciali}\\
         \hline
-        IP & Instruction Pointer\\
-        FLAG & Register flag\\
+        \code{IP} & Instruction Pointer\\
+        \code{FLAG} & Register flag\\
         \hline
     \end{tabu}
 \end{table}
@@ -133,6 +133,5 @@ una \lstinline{l} rispettivamente (es. \ah per accedere ai primi 8 del registro 
     \caption{Flag architettura}
     \label{8086_flags}
 \end{table}
-
 
 \end{document}

@@ -4,18 +4,19 @@
 \begin{document}
 \section{Modelli di Memoria}
 \subsection{Accesso alla memoria}
-Per scegliere gli operandi con i quali accedere alla memoria, si dividono le ISA in base a due numeri:
-il \textbf{numero di riferimenti diretti in memoria} indicati nelle istruzioni dell ALU
-ed il \textbf{numero di operandi indicati in modo esplicito nelle istruzioni}.
-Entrambi possono assumere solo valori compresi tra 0 e 3 inclusi.
+Le ISA vengono sono distinte in base a due numeri:
+\begin{itemize}
+    \item Numero di riferimenti diretti in memoria
+    \item Numero di operandi indicati in modo esplicito nelle istruzioni
+\end{itemize}
+Entrambi assumono solo valori compresi tra 0 e 3 inclusi.
 
-Ad esempio nelle architetture chiamate \textit{register-register},
-il numero di riferimenti diretti in memoria è 0, ed il numero di operandi che indica in modi indicati
-in modo esplicito è 3.
-In altre parole le uniche operazioni che possono accedere in memoria sono LOAD e STORE.
-\\
-Il numero di operandi indicati in modo esplicito indica il numero massimo di operandi specificati in
-modo esplicito come parametri di una funzione.
+Il numero di operandi indicati in modo esplicito indica il numero massimo di operandi specificati
+esplicitamente come parametri di una funzione.
+
+Nelle architetture chiamate \textit{register-register}, il numero di riferimenti diretti in memoria è 0,
+ed il numero di operandi indicati in modo esplicito è 3.
+In altre parole le uniche operazioni che possono accedere in memoria sono \lstinline{load} e \lstinline{store}.
 
 Quindi per effettuare un operazione come \lstinline{c = a + b} sono necessarie le operazioni:
 
@@ -28,10 +29,10 @@ Quindi per effettuare un operazione come \lstinline{c = a + b} sono necessarie l
 
 Utilizzando lo stesso esempio per una architettura \textit{register-memory}, (1, 2) otteniamo:
 \begin{lstlisting}
-    mov     AX, var1
-    add     AX, var2            ; AX funziona sia da sorgente
+    mov     ax, var1
+    add     ax, var2            ; ax funziona sia da sorgente
                                 ; che destinazione
-    mov     var3, AX
+    mov     var3, ax
 \end{lstlisting}
 In questo caso posso avere al massimo solo un operando che fa riferimento alla memoria.
 
@@ -48,8 +49,8 @@ Bit).
 \subsection{Allineamento della memoria}
 Se la memoria è forzata a salvare i dati in modo allineato, allora riesco a leggere i dati
 di grandezza maggiore di 1 byte in un \textbf{singolo ciclo}.
-L'unico svantaggio è che per salvare dei dati di grandezza inferiore 4byte, avrò delle
-celle inutilizzate.
+L'unico svantaggio è che per salvare dei dati di grandezza inferiore 4byte, non si occupano tutte le celle di memoria,
+risultando in celle inutilizzate.
 \\
 Se la memoria non è allineata, risparmio più spazio in memoria, ma l'accesso può richiedere
 più di un ciclo di CPU.
@@ -58,7 +59,7 @@ più di un ciclo di CPU.
 Si definisce con \textbf{effective address}, l' indirizzo reale in memoria.
 \\
 La \textbf{riallocazione della memoria} (RAM) si intende il riordinamento dei blocchi di memoria,
-in modo da raggruppare un unico blocco di memoria, tutti i blocchi non utilizzati, isolati
+in modo da raggruppare in un unico blocco di memoria, tutti i blocchi non utilizzati, isolati
 dalla memoria in uso.
 
 Il problema che porta con se la riallocazione di memoria, è che una volta che un blocco di
@@ -74,9 +75,9 @@ Al momento di una riallocazione, per un modello di memoria segmentato, l'unica c
 sono i due registri segmento di ciascun programma.
 
 \subsection{Modello di memoria Intel 8086}
-Nel caso di Intel 8086, la memoria viene vista come un gruppo di paragrafi e segmenti:
-i \textbf{paragrafi} sono una zona di memoria a 16bit, i quali non si possono sovrapporre,
-mentre un \textbf{segmento} è un unita logica indipendente formata da locazioni continue di memoria, di
+Nel caso di Intel 8086, la memoria viene vista come un gruppo di paragrafi e segmenti.
+I paragrafi sono una zona di memoria a 16bit, non sovrapponibili tra loro.
+Un \textbf{segmento} è un unita logica indipendente formata da locazioni continue di memoria, di
 dimensione massima 64k, ha inizio ad un indirizzo di memoria
 multiplo di 16, (in modo da essere allineato ad un paragrafo) ed a differenza dei paragrafi,
 sono sovrapponibili.

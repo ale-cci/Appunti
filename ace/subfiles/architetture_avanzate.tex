@@ -69,35 +69,44 @@ Chiamate A e B, due istruzioni, dove A precede B, esistono tre tipi di dipendenz
     \item WAR (\textit{write-after-read}) B scrive un dato prima che sia letto da A
     \item WAW (\textit{write-after-write}) B tenta di scrivere un dato prima che A lo abbia scritto
 \end{itemize}
-Nel primo caso, prendendo come esempio le istruzioni in successione \lstinline{add r1,r2,r3} e \lstinline{sub r4,r1,r2},
-il valore di r1 è richiesto dalla seconda istruzione nella fase di execute, ma è salvato dalla prima istruzione solo in fase di writeback.
+Nel primo caso, prendendo come esempio
+\begin{lstlisting}
+    add r1, r2, r3
+    sub r4, r1, r2
+\end{lstlisting}
+il valore di \code{r1} è richiesto nella fase di execute della seconda operazione, ma è salvato dalla prima istruzione nella fase di writeback.
 
-Un metodo possibile per individuare questo tipo di alea è tenere marcato i registri in utilizzo ed controllare di volta in volta i registri richiesti dall'istruzione corrente.
-\\
+Per individuare questo tipo di alea è possibile tenere traccia di tutti i registri in utilizzo e ad ogni istruzione, controllare quali registri richiede per essere eseguita.
+
 Le possibili soluzioni sono le seguenti:
 \begin{itemize}
-    \item Stallo: attendere che una delle due istruzioni termini
-    \item Anticipazione: rendere immediatamente disponibile il dato, senza attendere la fase di WB. Ma risulta un metodo
-        costoso e non banale da implementare.
+    \item Stallo: attendere che la prima istruzione termini per poi passare alla successiva
+    \item Anticipazione: rendere immediatamente disponibile il dato, senza attendere la fase di WB.
+        Ma risulta un metodo costoso e non banale da implementare.
     \item Sovrapposizione:
-        Produco il risultato nel fronte di clock di salita e lo leggo nel fronte di discesa (half-clock).
+        Il risultato viene prodotto nel fronte di salita del clock, e viene letto sul fronte di discesa (half-clock).
+
         Non sempre raddoppiare la frequenza di clock risulta possibile.
-    \item Riordinamento: Vengono eseguite delle istruzioni ortogonali \footnote{non hanno conflitto con le altre
-        istruzioni e non alterano l'output del programma}, eseguendo cosi la seconda istruzione solo dopo che la prima abbia effettuato il WB
+    \item Riordinamento:
+        Tra le due istruzioni vengono anticipate delle istruzioni ortogonali
+        \footnote{non hanno conflitto con le altre istruzioni e non alterano l'output del programma},
+        dando il tempo alla prima istruzione di effettuare il WB, prima che la seconda entri in esecuzione.
 \end{itemize}
 
 \subsubsection{Alee di controllo}
-In caso di jump, il valore del program counter è noto solo in fase di decode, non sapendo a priori da dove continuare l'esecuzione si ha un alea di controllo.
-È risolvibile introducendo un delay di 1 ciclo di clock, dando il tempo alla CPU di calcolare il valore del program counter, o riordinando le istruzioni, anticipando la decodifica dell'indirizzo di un'istruzione.
+In caso di jump, il valore del program counter è noto solo in fase di decode, non sapendo a priori da dove continuare l'esecuzione si manifesta un'alea di controllo.
 
-Il problema maggiore delle alee di controllo è introdotto dai salti condizionali, nei quali è necessario controllare anche la condizione di salto.
-In questo caso, il semplice riordinamento delle istruzioni non è possibile.
+Per evitare questo problema è necessario ritardare le istruzioni successive ad un salto di 1 ciclo di clock, dando il tempo alla CPU di calcolare l'indirizzo di destinazione.
+Diversamente è necessario riordinare l'esecuzione delle istruzioni, anticipando la decodifica dell'indirizzo di un'istruzione.
+
+Il problema principale delle alee di controllo è introdotto dai salti condizionali, dove oltre a calcolare l'indirizzo è necessario controllare anche la condizione di salto.
 \\
-Per minimizzare il numero di cicli "idle" sono utilizzate tecniche di predizione, per stimare in anticipo se la condizione di salto si verifica.
-Se queste euristiche funzionano più del 50\% delle volte, si misura un aumento di prestazione.
+In questo caso non basta riordinare le istruzioni per risolvere il problema.
 
-Le tecniche possono essere statiche (i salti si verifichino sempre o che non si verifichino mai), o dinamiche: basate
-sul comportamento precedente del salto (vedi esempio in figura \ref{fig:dynamic_prediction}).
+Per minimizzare il numero di cicli "idle" vengono utilizzate tecniche di predizione, per stimare in anticipo se la condizione di salto si verifica.
+Se queste euristiche funzionano più del 50\% delle volte, si misura un aumento di prestazione, in quanto se la previsione è corretta il tempo di esecuzione è uguale quello del salto incondizionato, diversamente viene invalidata l'istruzione in esecuzione e cambiato il program counter.
+
+Le tecniche possono essere: statiche (i salti si verifichino sempre o che non si verifichino mai), o dinamiche, basate sul comportamento precedente del salto (vedi esempio in figura \ref{fig:dynamic_prediction}).
 
 \begin{figure}[h]
     \centering
@@ -143,21 +152,26 @@ Ipotizzando che allo stadio ID (\textit{Instruction Decode}) sia emessa una sola
     \item \label{prob_2} Può accadere che due istruzioni richiedano nello stesso istante di passare alla fase di writeback, generando un conflitto di risorse.
 \end{enumerate}
 
-Per risolvere il problema \ref{prob_1} esistono tre metodi: il completamento in ordine, dove le istruzioni sono
-completate secondo l'ordine prestabilito; il buffer di riordinamento, dove le istruzioni una volta completate scrivono il
-loro output su un buffer in cui vengono successivamente riordinate; ed attraverso l'history buffer, dove lo stato
+Per risolvere il problema \ref{prob_1} esistono tre metodi:
+\begin{enumerate}
+    \item il completamento in ordine (reservation shift register), dove le istruzioni attendono per essere completate secondo l'ordine prestabilito;
+    \item il buffer di riordinamento, dove le istruzioni una volta completate scrivono il
+loro output su un buffer in cui vengono successivamente riordinate;
+    \item attraverso l'history buffer, dove lo stato
 coerente può essere ripristinato in presenza di conflitti.
+\end{enumerate}
 
-\subsubsection{Reservation Shift register}
-Il primo metodo, meno efficiente, è realizzabile attraverso un RSR (\textit{Reservation Shift Register}). Per la
-scrittura in tale registro è utilizzato un metodo di prenotazione.
+\subsubsection{RSR - Reservation Shift register}
+Il primo metodo, meno efficiente, è realizzabile attraverso un RSR (\textit{Reservation Shift Register}).
+La scrittura sul registro è effettuata tramite prenotazione.
+
 L'RSR è una tabella di colonne:
 \begin{itemize}
-    \item $V$, bit di validità che indica se la posizione corrente contiene informazioni,
-    \item $PC$ il program counter dell'istruzione, necessario per il ripristinare uno stato coerente in caso di
+    \item \code{V}: bit di validità che indica se la posizione corrente contiene informazioni,
+    \item \code{PC}: il program counter dell'istruzione, necessario per il ripristinare uno stato coerente in caso di
         predizione di salto errata
-    \item $UF$ (\textit{Unità Funzionale}) componente che sta eseguendo l'istruzione
-    \item $R_d$ Registro destinazione del risultato
+    \item \code{UF}: (\textit{Unità Funzionale}) componente che sta eseguendo l'istruzione
+    \item \code{Rd}: Registro destinazione del risultato
 \end{itemize}
 % Tabella esecuzione
 Il riordinamento richiede diversi cicli di clock, e non risolve il problema \ref{prob_2} nel caso di multiple richieste d'accesso alla memoria,
@@ -167,35 +181,41 @@ Per risolvere questo problema o non si emettono comandi di memorizzazione prima 
 siano completate, o si considera la memoria come un'unità funzionale quindi store occupa una posizione in RSR in modo
 che questa raggiunga la cima quando tutte le istruzioni precedenti sono completate.
 
-\subsubsection{Reordering Buffer}
-Il ROB (\textit{ReOrdering Buffer}) non è in grado di risolvere i problemi d'accesso al buffer, per questo viene utilizzato un RSR in versione
-semplificata.
+\subsubsection{ROB - Reordering Buffer}
+Il ROB (\textit{ReOrdering Buffer}) non è in grado di risolvere i problemi d'accesso al buffer, per questo viene utilizzato insieme ad RSR con meno campi.
 
-Nella tabella RSR, vengono tenute solo le colonne $V$ ed $UF$ ed aggiunto $pROB$, un puntatore alla riga
-della tabella ROB in cui è inserita l'unità funzionale.
+Nell RSR sono presenti le colonne: \code{V}, \code{UF} ed è aggiunto \code{pROB}, un puntatore alla riga della tabella ROB in è inserita l'unità funzionale.
 
-Nella tabella ROB, vengono spostati $PC$ e $R_d$ rimossi dal RSR, in aggiunta ad un bit di completamento $C$
-(1=istruzione completata) e $RIS$ risultato temporaneo della istruzione.
+Nella tabella ROB, sono presenti le colonne:
+\begin{itemize}
+    \item \code{PC}: Program counter dell'istruzione
+    \item \code{Rd}: Registro destinazione
+    \item \code{C}: bit di completamento, messo ad 1 quando l'istruzione è completata
+    \item \code{RIS}: Risultato dell'istruzione
+\end{itemize}
 
 È gestito come un buffer circolare. Il writeback viene eseguito quando l'elemento puntato dalla testa del buffer
 circolare è segnato come completato.
 
-\subsubsection{History Buffer}
-È la soluzione più flessibile delle tre, permettendo il completamento delle operazioni fuori ordine.
-L' History Buffer tiene traccia di tutte le scritture sul register file, fornendo un modo di effettuare un rollback in caso di stato di incoerenza.
+\subsubsection{HB - History Buffer}
+L' History Buffer è una vera e propria history di tutte le scritture sul register file.
+È la soluzione più flessibile delle tre, in quanto permette il completamento fuori ordine delle istruzioni. La cronologia delle scritture garantisce il ripristino di uno stato coerente nel caso di previsione di salto errata.
 
-HB è gestito come il rob: un buffer circolare di cui ogni riga è costituita dai componenti $C$, $PC$, $R_d$ e $OLD$ che
-contiene il valore del registro di destinazione al momento dell'operazione.
+È gestito come il ROB, un buffer circolare di cui ogni riga contiene i valori:
+\begin{itemize}
+    \item \code{C}: Flag di istruzione completata
+    \item \code{PC}: Program counter dell'istruzione
+    \item \code{Rd}: Registro destinazione
+    \item \code{OLD}: Valore contenuto nel registro destinazione prima di effettuare il writeback
+\end{itemize}
 
-Se alle componenti di HA si aggiunge un ulteriore campo EPR (\textit{Errata Previsione}). Quando un'istruzione di salto
-arriva in testa ad HB, se EPR=1: Blocco l'emissione di nuovi valori, attendo operazioni ancora attive che vengano
-completate (svuotamento pipeline), eseguo il rollback fino ad arrivare alla prima istruzione sul percorso sbagliato.
-L'esecuzione riprende prelevando l'istruzione proveniente dal percorso corretto.
+Se ad ogni riga si aggiunge l'informazione \code{EPR} (\textit{Errata Previsione}), quando un'istruzione di salto arriva alla testa dell'HB, se \code{EPR = 1}, blocco l'immissione di nuovi valori, attendendo che le operazioni attive vengano completate (svuotamento della pipeline), ed eseguo il rollback fino a raggiungere la prima istruzione sul percorso sbagliato.
 
 
 \subsubsection{Considerazioni}
-Abbiamo assunto l'emissione ed il ritiro di un'unica istruzione alla volta. Se viene emessa una sola istruzione alla
-volta non accadrà mai che vengano eseguite più di un istruzione per clock. Occorre quindi ritirare, decodificare ed emettere più
-istruzioni in parallelo.
+Per l'architettura superscalare, abbiamo presupposto l'emissione ed il ritiro di un'unica istruzione alla volta dalla coda di esecuzione.
+Se viene emessa un'unica istruzione alla volta non può mai accadere che viene eseguita più di un'istruzione per ciclo di clock.
+
+Per avere una completa architettura superscalare è necessario ritirare, decodificare ed emettere più istruzioni in parallelo.
 
 \end{document}

@@ -78,17 +78,20 @@ Se si vuole comunque accedere ad un altro segmento di memoria, è possibile effe
 specificando il segmento di memoria dove si vuole accedere: \lstinline{mov AX, [CX:BX + 5]}.
 
 \subsection{Modi di indirizzamento nel trasferimento di controllo}
-Con questo nome si intende come indicare il valore del program counter (o instruction pointer) al momento di
+Con questo nome si intende come viene specificato il valore del program counter (o instruction pointer) al momento di
 un salto.
 \\
-Normalmente viene indicato in modo diretto dalla istruzione di jump, e può essere espresso sia in modo assoluto,
-che in modo relativo.
-Nell' ISA Intel è disponibile anche gli indirizzamenti intrasegment ed intersegment, sia in modo diretto che indiretto.
+Normalmente viene indicato in modo diretto dall'istruzione di jump, ed è esprimibile o in modo assoluto (indicando l'indirizzo completo)
+o in modo relativo.
 
-Vengono chiamati intrasegment i salti che si trovano e terminano nello stesso code segment, mentre intersegment
-i salti che riguardano terminano in un code segment differente da quello di partenza.
+I salti che partono e terminano dallo stesso code segment prendono il nome di intrasegment,
+mentre i salti che terminano in un code segment differente prendono il nome di intersegment.
+
 A seconda dei casi si può avere un indirizzamento diretto o indiretto, ovvero viene indicato
 direttamente il termine del salto o l'indirizzo di termine è contenuto in un registro.
+
+Nell' ISA Intel è disponibile anche gli indirizzamenti intrasegment ed intersegment, sia in modo diretto che indiretto.
+
 
 \subsection{Modi di indirizzamento I/O}
 Dal punto di vista dell' ISA esistono due metodi di indirizzamento: il \textbf{memory mapped I/O},

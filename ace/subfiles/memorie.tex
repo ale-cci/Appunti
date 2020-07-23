@@ -4,7 +4,7 @@
 \section{Memorie}
 \subsection{Distinzione delle memorie}
 Una memoria è un'unità logica, dedicata alla memorizzazione dei dati nel calcolatore.
-Diversi tipi di memoria, sono classificate in base a 5 parametri:
+Le memorie sono classificate in base a 5 parametri:
 \begin{itemize}
     \item Capacità: numero delle parole memorizzabili
         Chiamato $L$ il numero di linee, ed $N$ il numero di parole $L =\log_2 N$.
@@ -43,11 +43,9 @@ Le modalità d'accesso sono
 
 
 \subsection{Gerarchie di memoria}
-La memoria ideale sarebbe di capacità infinita, con tempo d'accesso, costo e consumo nullo.
+La gerarchia di memorie ha lo scopo di combinare tutte le caratteristiche migliori di ogni tipo di memoria per avvicinarsi il più possibile alla memoria ideale: capacità infinita, tempo d'accesso, costo e consumo nullo.
 
-L'insieme delle memorie presenti in un calcolatore mira a combinare le caratteristiche migliori di ogni tipo di memoria per raggiungere l'obbiettivo di memoria ideale.
-
-Salendo la gerarchia diminuisce il tempo d'accesso e la capacità delle memorie e cresce il costo per bit.
+Salendo la gerarchia diminuisce il tempo d'accesso e la capacità delle memorie ma aumenta il costo per bit.
 
 Al livello più alto della gerarchia sono presenti i registri interni alla CPU, segue la cache, poi la memoria centrale o principale, ed in fondo alla gerarchia le memorie secondarie, con alte capacità ma bassi costi e permanenti.
 \subsubsection{Principio di località}
@@ -63,36 +61,33 @@ Gli algoritmi della MMU (\textit{Memory Management Unit}) si concentrano a minim
 Con blocco si fa riferimento all'unità di informazione minima scambiata fra i livelli di memoria.
 Quando un particolare dato viene richiesto ad una memoria, l'evento che il dato non sia presente prende il nome di "miss" mentre se il dato è già presente si chiama "hit".
 \\
-Lo scopo di una buona gerarchia di memoria è massimizzare il rapporto tra hit e miss.
-La frequenza di accessi trovati direttamente al livello superiore prende il nome di hit-rate ($h$).
-La miss rate è quindi complementare a quest'ultimo.
-\\
-Il tempo per recuperare il dato al livello successivo in caso di miss prende il nome di "Miss Penalty", mentre se il dato è già disponibile, il tempo per recuperarlo è pari al tempo di hit.
+Lo scopo di una buona gerarchia di memoria è massimizzare il numero di hit. La frequenza con cui avviene una hit prende il nome di hit-rate ($h$), mentre la frequenza con cui avviene una miss è complementare
+e viene chiamato miss rate.
 
-Il miss penalty $T_{mp}$ può essere visto come la somma tra hit time ed il tempo richiesto per il trasferimento dei dati dai blocchi inferiori ($T_{miss}$).
+Il tempo per recuperare il dato al livello inferiore in caso di miss prende il nome di "Miss Penalty", mentre se il dato è già disponibile, il tempo per recuperarlo è pari al tempo di hit.
+
+Il miss penalty $T_\text{mp}$ può essere visto come la somma tra hit time ed il tempo richiesto per il trasferimento dei dati dai blocchi inferiori ($T_\text{miss}$).
 \\
 Ottenendo la relazione:
 \[
-    T_{acc} = h \cdot T_h + (1-h) T_{mp} = T_h + (1 -h) T_{miss}
+    T_\text{acc} = h \cdot T_h + (1-h) T_\text{mp} = T_h + (1 -h) T_\text{miss}
 \]
-Dalla formula, minimizzando la miss rate, si tende alla memoria ideale, portando il tempo d'accesso uguale al tempo di hit.
+Dalla formula, minimizzando la miss rate ($1 -h$), si tende alla memoria ideale: $T_\text{acc} = T_h$.
 
 
 \subsection{Gerarchie di memoria}
 Una gerarchia di memoria è definita dai suoi livelli di memoria: il loro numero, dimensione, velocità e componenti.
 \\
-Il piazzamento del blocco, chiamato anche funzione di traduzione o di mapping, sceglie dove allocare il blocco nel livello di memoria corrente.  Nel caso della cache ad esempio è necessario calcolare un hash per determinarne la locazione.
+Il piazzamento o rimpiazzamento del blocco, chiamato anche funzione di traduzione o di mapping, sceglie dove allocare il blocco nel livello di memoria corrente.  Nel caso della cache ad esempio è necessario calcolare un hash per determinarne la locazione.
 
-L'identificazione come del blocco indica come risalire alla posizione del blocco di memoria.
-
-Il rimpiazzamento si occupa di inserire i dati provenienti dai livelli inferiori della gerarchia, scegliendo in quale posizione del livello corrente inserirlo.
-
-I dati, una volta modificati, vengono scritti sui livelli inferiori utilizzando strategie di scrittura.
+L'identificazione del blocco indica come risalire alla posizione del blocco di memoria.
 
 
-Ad esempio, nel caso dei registri, l'identificazione è nominale, ed il nome viene indicato nel codice sorgente, mentre identificazione e rimpiazzamento sono definiti dal compilatore.
+I dati, una volta modificati, vengono scritti sui livelli inferiori attraverso delle strategie di scrittura.
 
-In memoria centrale, il piazzamento del blocco dipende dall'istruzizone (specificato dall'indirizzo di memoria), i dati sono identificati dall'indirizzo e le scritture sono scielte a livello di codice.
+Nel caso dei registri, l'identificazione è nominale, siccome il nome del registro è scritto nel codice sorgente,  mentre il rimpiazzamento è effettuato dal compilatore.
+
+In memoria centrale, il piazzamento del blocco dipende dall'istruzione (specificato dall'indirizzo di memoria), i dati sono identificati dall'indirizzo e le scritture sono scelte a livello di codice.
 
 Le memorie centrali nei calcolatori sono le RAM, volatili e di lettura e scrittura). Di memorie RAM ci sono due categorie:
 SRAM (\textit{Static RAM}) utilizzate per memorie cache e DRAM (\textit{Dynamic RAM}) utilizzate come memoria centrale.
@@ -210,10 +205,10 @@ La \textit{Conductive Bridging RAM} è basata sulle proprietà di un elettrolita
 I principali vantaggi di questa tecnologia sono il basso consumo, l'elevata velocità di scrittura e la lunga durata.
 
 \subsection{Interfaccia tra CPU e Memoria}
-Tramite il bus degli indirizzi di dimensione $na$, unidirezionale verso la memoria, e tramite il bus dei dati di dimensione $nd$ bidirezionale il processore scambia informazioni con la memoria.
+Tramite il bus degli indirizzi di dimensione \code{na}, unidirezionale verso la memoria, e tramite il bus dei dati di dimensione \code{nd} bidirezionale il processore scambia informazioni con la memoria.
 
-Oltre a bus degli indirizzi e bus dei dati sono presenti bus di controllo, con segnali di read, write, ads (\textit{Address Strobe}) indica che il bus degli indirizzi è campionabile e presenta un'indirizzo valido (unidirezionale verso la memoria).
-Nel caso di memorie sincrone, è presente anche Rdy (\textit{Ready}) unidirezionale verso il processore, ed indica se il dato della memoria è pronto.
+Oltre a bus degli indirizzi e bus dei dati sono presenti bus di controllo, con segnali di read, write, \code{ads} (\textit{Address Strobe}) indica che il bus degli indirizzi è campionabile e presenta un'indirizzo valido (unidirezionale verso la memoria).
+Nel caso di memorie sincrone, è presente anche \code{rdy} (\textit{Ready}) unidirezionale verso il processore, ed indica se il dato della memoria è pronto.
 
 È presente anche un segnale M/IO  (\textit{Memory I/O}) che indica se si vuole accedere a memoria o input/output.
 Infatti esistono due politiche per accedere alla memoria: le memory mapped IO, dove gli indirizzi di memoria sono considerati dal processore insieme agli indirizzi di input/output, accedere ad IO in questo caso vuole dire accedere alla memoria; nelle macchine intel come l'8086 gli indirizzi di memoria ed indirizzi per direttive ad input/output sono separati, quindi è necessario specificare se il dato nel bus degli indirizzi è destinato per la memoria o ad un dispositivo esterno.
