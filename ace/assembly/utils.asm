@@ -1,6 +1,6 @@
 ;==================================================================[ Utils ]===
 
-; _print_c: (StringAddr)
+; _print_c: (*Source)
 ; Print C-Style string passed as first arg
 ; Arg0: Address of the string
 _print_c:
@@ -22,7 +22,7 @@ _print_c:
         pop bp
         ret
 
-; _print_p: (StringAddr) void
+; _print_p: (*Source)
 ; Print Pascal-Style string
 ; Arg0: Address of the string
 _print_p:

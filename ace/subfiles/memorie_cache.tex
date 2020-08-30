@@ -2,7 +2,8 @@
 
 \begin{document}
 \section{Memorie Cache}
-Le memorie cache non sono visibili dal programmatore, il processore, attraverso l'MMU cerca di accedere prima agli indirizzi attraverso la cache, e, se non sono presenti, attraverso il system bus li preleva dalla memoria.
+Le memorie cache non sono visibili dal programmatore.
+Il processore, attraverso la MMU cerca di accedere prima agli indirizzi attraverso la cache, e, se non sono presenti, attraverso il system bus li preleva dalla memoria.
 
 Essa è una memoria associativa, divisa in due parti: la cache directory, che contiene un tag, un indice richiesto per risalire al dato presente nella memoria, e la cache memory, dove sono presenti i dati, organizzata in blocchi di $k$ parole.
 
@@ -59,7 +60,7 @@ Diversamente, per la politica writeback, il dato viene scritto solamente quando 
 Nel caso di miss, in caso sia stata adottata una politica di writeback è frequente allocare i dati in cache e poi modificarli (write-allocate). La miss in caso di writethrough normalmente è gestita scrivendo il dato direttamente ai blocchi inferiori, senza caricarli in cache.
 
 \subsubsection{Protocollo MESI}
-Per ogni linea di cache, sono associati due bit, necessari per identificare uno dei quattro stati: Motified, Exclusive, Shared, Invalid
+Per ogni linea di cache, sono associati due bit, necessari ad identificare uno dei quattro stati: Motified, Exclusive, Shared, Invalid
 Utilizzato soprattutto per i sistemi multiprocessore.
 \begin{itemize}
     \item M - modified:
@@ -76,12 +77,15 @@ Questi stati sono utilizzati solo per la gestione dei dati, nel caso di codice n
 
 
 \subsection{Memoria Virtuale}
-Nel caso in cui si abbia un processore con un bus di indirizzamento a 36bit (64Gb), se si ha a disposizione un' unico banco di ram da 8Gb è comunque simulare il comportamento di 64Gb di memoria attraverso la memoria virtuale: quando si eccedono gli 8G di memoria disponibili, i restanti vengono salvati in uno spazio riservato del disco, chiamato swap file.
 
-Si occupa il sistema operativo a gestire i Gb di dati disponibili attraverso i principi di vicinanza spaziale e temporale.
+Quando la capacità di indirizzamento del processore è superiore alla memoria fisica disponibile, è possibile simulare la memoria mancante, salvando in uno spazio riservato sul disco (swap file) i dati destinati nella memoria mancante.
+Si occupa il sistema operativo a gestire lo spazio disponibile nello swap file, caricando i dati in memoria attraverso i principi di vicinanza spaziale e temporale.
+
+
 
 Tecnica di paginazione:
-Lo spazio di indirizzamento della memoria centrale viene diviso in blocchi (pagine) di dimensione fissa e continugi. Un inidirizzo è identificabile quindi attraverso un'indice di pagina ed un offset rispetto alla pagina.
+Lo spazio di indirizzamento della memoria centrale è suddiviso in blocchi (pagine) di dimensione fissa e continugi.
+Un inidirizzo è identificabile quindi attraverso un' indice di pagina ed un offset relativo alla pagina.
 
 Nel caso di un acceso ad indirizzo, il sistema operativo, attraverso l' address mapper, l'indirizzo virtuale viene trasformato in indirizzo fisico.
 
