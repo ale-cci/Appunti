@@ -36,11 +36,11 @@ La dimostrazione viene effettuata per ragionamento induttivo sui due seguenti pu
     \item quando il nodo $x$ viene aggiunto a $W$, il valore \lstinline{dist[x]} rappresenta la distanza minima tra
         \lstinline{source} e $x$.  Il cammino minimo è ricostruibile procedendo a ritroso partendo da \lstinline{parent[x]}.
 \end{enumerate}
-Per $n = i = 0$ sono ovviamente vere entrambe.
+Per $n = i = 0$ sono ovviamente vere entrambe, siccome \lstinline{W = \{s\}} e \lstinline{dist[s] = 0}.
 
 \subsubsection{Dimostrazione punto 1}
 Per il passo $n = i+1$, quando analizziamo $y$, abbiamo due casi possibili:
-$x$ non è contenuto all'interno del cammino minimo, per cui, per ipotesi induttiva, la distanza minima è \lstinline{dist[y]};
+Il nodo corrente $x$ non è contenuto all'interno del cammino minimo da $S$ ad $y$, per cui, per ipotesi induttiva, la distanza minima è \lstinline{dist[y]};
 oppure $x$ precede immediatamente $y$ nel cammino minimo, quindi in tal caso deve avere distanza \lstinline{dist[x] + weight[x][y]}.
 
 % 1h:03

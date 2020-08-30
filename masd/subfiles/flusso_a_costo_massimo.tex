@@ -124,6 +124,39 @@ Inoltre tutti i nodi raggiungibili dal nodo sorgente con un camino orientato for
     \end{minipage}
 \end{center}
 
+Il sottoinsieme di nodi che forma il taglio a costo minimo, si considera nel grafo tutti i nodi raggiungibili da $S$, con un cammino orientato.
+Per creare il grafo associato:
+Il grafo associato ha gli stessi nodi del grafo originario, ed ha il seguente insieme di archi:
+\[
+    A(\overline{X}) =
+    \{ (i, j) : (i, j) \in A, \overline{x}_{ij} < c_{ij}\}
+    \cup
+    \{ (i, j) : (i, j) \in A, \overline{x}_{ij} > 0\}
+\]
+Ovvero tutti gli archi non saturi, uniti a tutti gli archi che trasportano almeno 1 unità di prodotto.
+
+Algoritmo FFks:
+\begin{enumerate}
+    \item Si parte da un flusso nullo, e si crea il grafo associato.
+    \item Si associa alla sorgente l'etichetta $(S, \infty)$, l'insieme dei nodi analizzati $R = \emptyset$, e l'insieme dei nodi etichettati $E = \{S\}$
+    \item Se non si verifica la condizione d'arresto $E - R = \emptyset$, si seleziona $i \in E - R$, con etichetta $(k, \Delta)$, e per ogni $j \notin E$,
+        se $(i, j) \in A_f$, si etichetta $j$ con $(i, \min(\Delta, c_{ij} - x_{ij}))$, altrimenti con $(i, \min(\Delta,  x_{ij})$
+    \item Si aggiungono i nodi etichettati nello step precedente ad $E$, e si sposta $i$ da $E$ ad $R$.
+        Se $D \in E$ si va al passo 5, altrimenti al passo 2.
+    \item Si ricostruisce il cammino da $S$ a $D$, utilizzando le etichette.
+    \item Si aggiorna il flusso sul cammino da $S$ a $D$ utilizzando la seconda componente dell'etichetta del nodo $D$.
+    \item Si ripete il passo 1
+\end{enumerate}
+Al momento della terminazione dell'algoritmo l'insieme $E$ è il taglio di costo minimo
+\subsection{Dimostrazione}
+\begin{itemize}
+    \item Osservare che l'insieme $E$ induce un taglio:
+        Per indurre un taglio, l'insieme di nodi deve contenere la sorgente, ma non la destinazione. Quindi j
+    \item  Abbiamo osservato che il costo di ogni taglio è una limitazione inferiore del valore ottimo.
+\end{itemize}
+
+
+
 \subsubsection{Teorema}
 Se si pone $U = E$, dove $E$ è l'insieme dei nodi etichettati al momento della terminazione dell'algoritmo, si ha che il taglio $S_U$, indotto
 da $U$ è soluzione ottima del problema di taglio minimo e il flusso attuale è soluzione ottima del problema di flusso massimo.

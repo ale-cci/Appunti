@@ -19,18 +19,19 @@
 \end{center}
 \lstinputlisting{algorithms/mst_kruskal.py}
 \subsubsection{Correttezza algoritmo di Kruskal}
-Supponiamo per assurdo che esista un' diverso MST $T' = (V,E_{T'})$ di peso inferiore a $T = (V, E_T)$,
-quello restituito dall'algoritmo greedy.
+\begin{enumerate}
+    \item Supponiamo che per assurdo esista un MST, di peso inferiore a quello restituito dall'algoritmo greedy.
+    \item Siccome i due alberi hanno il costo differente, hanno almeno un arco non in comune.
+    \item Indicato con $e_h \in \{E_T - E_{T'}\}$ l'arco a peso minore appartenente all'albero restituito dall'algoritmo
+        greedy, non appartenente all'albero preso per ipotesi $T'$.
+    \item Dato che $T'$ è un MST, allora esiste un ciclo $C$ in $\{e_h\} \cup E_{T'}$ contenente $e_h$.
+    \item Siccome anche $T$ è un albero, allora $C \cap E_{T} \neq \emptyset$, chiamiamo $e_r$ l'arco a peso minore,
+        appartenente a $C \cap E_T - E_{T'}$.
+    \item $w_{e_r} < w_{e_h}$, altrimenti l'algoritmo greedy applicato a $T$ avrebbe selezionato prima $e_h$ di $e_r$.
+    \item Sostituendo in $T'$ l'arco $e_r$ con $e_h$, ottengo un nuovo albero di peso inferiore, contraddicendo l'ipotesi che
+        $T'$ è l'albero di supporto a peso minore.
+\end{enumerate}
 
-Siccome i due alberi hanno costo diverso, differiscono di almeno un' arco.
-Indichiamo con $e_h$ l'arco a peso minore appartenente a $\{E_T - E_{T'}\}$.
-Dato che $T'$ è un MST, esiste un ciclo $C$ in $\{e_h\} \cup E_{T'}$ contenente l'arco $e_h$.
-Siccome anche $T$ è un albero, quindi non ha cicli, allora $C \cap E_{T} \neq \emptyset$.
-Chiamiamo $e_r$ l'arco a peso minore appartenente a $C \cap \{E_{T} - E_{T'}\}$.
-Necessariamente $w_{e_r} \le w_{e_h}$, altrimenti l'algoritmo greedy applicato a $T$ avrebbe selezionato prima $e_h$ al posto di $e_r$.
-Sostituendo in $T'$ l'arco $e_r$ con $e_h$ ottengo un nuovo albero di peso inferiore.
-
-Questo va contro l'ipotesi $T'$ è l'albero di supporto a peso minore.
 \subsubsection{Analisi complessità}
 $O(E \cdot \log (E))$, dovuta all'ordinamento degli archi in ordine di peso.
 Il controllo dell'esistenza di cicli è effettuato in $O(1)$.
@@ -53,6 +54,7 @@ contraddicendo l'ipotesi.
 
 \newpage
 \subsection{Algoritmo di Prim (MST-1)}
+Dijkstra
 \begin{center}
     \begin{tikzpicture}[rotate=90]
         \Vertices[unit=2.3]{circle}{0,1,2,3,4}
