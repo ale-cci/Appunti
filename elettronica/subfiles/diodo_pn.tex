@@ -9,7 +9,7 @@
     \end{circuitikz}
 \end{center}
 
-Il diodo è un componente la cui corrente ha una formula esponenziale, dipendente dalla tensione applicatagli ai suoi capi:
+Il diodo è un componente la cui corrente ha una formula esponenziale, dipendente dalla tensione applicata ai suoi capi:
 \[
     I = \diodecurrent{V}
 \]
@@ -869,9 +869,9 @@ essere a loro volta corretti alla luce di questa considerazione.
     \end{minipage}
 \end{figure}
 
-In grigio riportata la risposta statica del circuito in risposta al segnale in ingresso $V_i$.
+In grigio riportata la risposta statica del circuito al segnale $V_i$ in ingresso.
 
-\noindent Per calcolare il ritardo dobbiamo introdurre un modello nel diodo, che, in aggiunta a quanto descritto fino ad ora,
+Per calcolare il ritardo dobbiamo introdurre un modello nel diodo, che, in aggiunta a quanto descritto fino ad ora,
 tenga conto anche degli effetti di reazione appena introdotti.
 Introduciamo in parallelo al diodo una capacità, che ci permette di simulare il comportamento del diodo in regime
 dinamico.
@@ -908,31 +908,30 @@ in cui questa approssimazione risulterà inadeguata.
     \end{tcolorbox}
 \end{minipage}
 
-Ed in entrambe è valida $Q = \tau I$.
-
-\noindent Per $t < 0$, siccome arriviamo da tempo $t = -\infty$, il circuito è ancora in regione statica,
-per questo la derivata della corrente è nulla e valgono ancora le equazioni del diodo in regione statica.
-
-Stesso ragionamento è valido se attendo un tempo sufficientemente lungo, dove ogni fenomeno
-transitorio tenderà ad esaurirsi.
+Ed in entrambe è valida $Q = \tau I$
+\\
+Per $t < 0$ il circuito si trova in regione statica quindi è ancora descritto dalle relazioni statiche del diodo.
+Stessa cosa accade per $t \to \infty$, dove la regione di transitorio tende ad esaurirsi.
 
 \begin{tcolorbox}[title=Equazioni generali]
     \begin{align*}
         &V_i - V_d - V_u = 0\\
         &I_d + I_c = I\\
         &I_c = \frac{dQ_u}{dt}\\
-        &I_d = \frac{Q}{\tau}
+        &Q = \tau I_D
     \end{align*}
 \end{tcolorbox}
-
 \begin{minipage}{.47\textwidth}
-    \begin{tcolorbox}[title=Circuito a diodo acceso]
-        \[\begin{cases}
-            V_i = V_f > V_\gamma\\
-            V_u = V_f - V_\gamma\\
-            I = \frac{V_f - V_\gamma}{R}\\
-            Q = \frac{\tau}{R}(V_f - V_\gamma)
-        \end{cases}\]
+    \begin{tcolorbox}[title={$t<0$ Diodo on}]
+        \[
+            V_i \coloneqq V_f \Rightarrow
+            \begin{cases}
+                V_i > V_\gamma\\
+                V_u = V_f - V_\gamma\\
+                I = \frac{V_f - V_\gamma}{R}\\
+                Q = \frac{\tau}{R}(V_f - V_\gamma)
+            \end{cases}
+        \]
     \end{tcolorbox}
 \end{minipage}
 \begin{minipage}{.47\textwidth}
@@ -944,17 +943,20 @@ transitorio tenderà ad esaurirsi.
         &Q = 0
         \end{cases}
     \]
-    \end{tcolorbox}
+\end{tcolorbox}
 \end{minipage}
 
 \begin{minipage}{.47\textwidth}
     \begin{tcolorbox}[title={Condizioni iniziali $t = 0^+$}]
-        \begin{align*}
-            &Q(0^+) = Q(0^-) = \frac{\tau}{R}(V_f - V_\gamma)\\
+        \[
+            -V_R \coloneqq V_i \Rightarrow
+            \begin{cases}
+            &Q^{0+} = Q^{0-} = \frac{\tau}{R}(V_f - V_\gamma)\\
             &V_d(0^+) = V_d(0^-) = V_\gamma\\
             &V_u(0^+) = -V_R - V_\gamma\\
             &I(0^+) = \frac{-V_R - V_\gamma}{R}
-        \end{align*}
+        \end{cases}
+        \]
     \end{tcolorbox}
 \end{minipage}
 \begin{minipage}{.47\textwidth}
@@ -983,8 +985,8 @@ L'equazione del transitorio è valida fino a quando l'equazione del diodo una co
 Il valore finale di $Q(t)$ può essere al minimo 0,
 
 Il diodo, dovendo smaltire la carica positiva sulla giunzione, per un certo periodo di tempo tiene costante
-la tensione ai suoi capi, quindi ritarda a spegnersi. Chiamiamo questo tempo: tempo di storage.
-Per calcolare questo tempo dobbiamo trovare il punto in cui l'equazione della carica raggiunge il valore 0.
+la tensione ai suoi capi, ritardando a spegnersi. Questo tempo prende il nome di \textit{tempo di storage}.
+Per calcolarlo bisogna trovare il punto in cui la carica $Q$ è nulla.l'equazione della carica raggiunge il valore 0.
 \begin{align*}
     \frac{\tau}{R}(V_f + V_R) e ^ {-t_s/\tau} - \frac{\tau}{R}(V_R + V_\gamma) = 0
     \\
@@ -1034,18 +1036,17 @@ ma dipende unicamente dalla escursione di tensione e dalle caratteristiche fisic
 
 Nel modello approssimato che stiamo utilizzando si impiega un tempo $t_s$ per passare da $Q = Q(0^-)$, a $Q = 0$
 perché abbiamo dovuto spostare le cariche interne al diodo fino ad arrivare al valore 0.
-Dato che nel modello approssimato che stiamo utilizzando non c'è ulteriore carica da spostare,
-il tempo del transitorio è necessariamente nullo, quindi la tensione è libera di variare istantaneamente.
+Siccome non sono necessari ulteriori spostamenti di carica, il transitorio rimanente è immediato, e la tensione varia istantaneamente.
 
 Abbiamo già commentato che la qualità dell'approssimazione della carica è inferiore a quella della corrente, dato
 che in regione di polarizzazione inversa, una si comporta come radice e l'altra come esponenziale negativo che tende ad un
 valore di $I_s$ pressoché 0.
 
-Questo significa che l'approssimazione considera nulla la carica in polarizzazione inversa non è accuratissima, perché la
+Questo significa che l'approssimazione che considera nulla la carica in polarizzazione inversa non è accurata, perché la
 carica essendo anche debolmente negativa, comporta un transitorio di scarica del condensatore, dove ci dobbiamo aspettare che
 il valore della resistenza $R$ influirà sul tempo di scarica.
 
-Abbiamo descritto il transitorio di spegnimento del diodo, descrivendolo in due tratti:
+Abbiamo descritto il transitorio di spegnimento del diodo, in due tratti:
 il primo caratterizzato da una tensione costante $V_d = V_\gamma$ ed una carica che varia da un valore positivo
 ad un valore nullo in un tempo $t_s$, ed un secondo tratto dove la carica è costante e vale 0,
 e la tensione $V_d < V_\gamma$ che si compie in un tempo nullo.
