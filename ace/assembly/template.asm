@@ -1,5 +1,5 @@
 CPU 8086
-;===========================================================[ Documantation ]===
+;===========================================================[ Documentation ]===
 ; What are you trying to solve...
 ;
 ;
@@ -22,7 +22,7 @@ SECTION code
 
         call _main
 
-        mov ax, 4c00h       ; Terminate iterrupt
+        mov ax, 4c00h       ; Terminate interrupt
         int 21h
 
 ;===================================================================[ Main ]===
@@ -33,6 +33,7 @@ _main:
         call _fun
         add sp, 2*2         ; Restore stack pointer value
 
+        ; Other logic or functions call
         ret
 
 
