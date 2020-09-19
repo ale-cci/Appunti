@@ -25,6 +25,7 @@
             ;
     \end{tikzpicture}
 \end{center}
+\label{circuito:amplificatore_differenziale}
 
 
 Da Kirchoff $I_{D1} + I_{D2} = I_D$, quindi i transistori non potranno mai essere simultaneamente spenti, altrimenti $I_D = 0$.
@@ -121,66 +122,109 @@ Quindi $A_{c} = \frac{dV_u}{dV_{ic}} = 0$.
 In conclusione, questo circuito amplifica la componente differenziale, ignorando completamente le variazioni di modo comune.
 Per questo motivo il circuito prende il nome di "amplificatore differenziale".
 
-\subsection{Considerazioni su opamp}
+\newpage
+\subsection{Amplificatore operazionale ideale}
+Il circuito dell'amplificatore differenziale viene espresso attraverso il seguente componente:
+
 \begin{center}
     \begin{circuitikz}
         \draw
         (0,0) node[op amp] (opamp) {}
-        (opamp.+) node[left] {$v_+$}
-        (opamp.-) node[left] {$v_-$}
-        (opamp.out) node[right] {$v_u$}
-        (opamp.up) --++(0,0.5) node[vcc]{}
-        (opamp.down) --++(0,-0.5) node[ground]{}
+        (opamp.+) node[left] {$V^+$}
+        (opamp.-) node[left] {$V^-$}
+        (opamp.out) node[right] {$V_u$}
+        ;
+    \end{circuitikz}
+    \qquad
+    \begin{tikzpicture}
+        \begin{axis}[ymax=3,ymin=-3, width=.3\textwidth]
+            \addplot[red, domain=-8:0]{-2};
+            \addplot[red, domain=0:8]{2};
+            \addplot[red] coordinates {(0, 2) (0, -2)};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Rendendo il dispositivo ideale (guadagno $+\infty$), otteniamo una relazione tra tensione di ingresso e uscita
+simile a quella di una funzione a gradino, esprimibile da un modello lineare a tratti:
+
+\label{formula:ideal_opamp}
+\begin{itemize}
+    \item una regione di \textbf{alto guadagno}:
+        \[\begin{cases}
+            V_{id} = 0\\
+            -V_M < V_u < V_M
+        \end{cases}\]
+    \item un tratto di \textbf{saturazione positiva}:
+        \[\begin{cases}
+            V_{u} = V_M\\
+            V_{id} > 0
+        \end{cases}\]
+    \item ed un tratto di \textbf{saturazione negativa}:
+        \[\begin{cases}
+            V_{u} = -V_M\\
+            V_{id} < 0
+        \end{cases}\]
+\end{itemize}
+
+Per rendere compatibile questo modello ideale con il circuito dell'amplificatore differenziale risolto
+precedentemente (pagina \pageref{circuito:amplificatore_differenziale}),
+è necessario aumentare il guadagno, e modificare l'escursione del segnale di uscita da
+$[V_{dd} - R I_0:V_M]$ a $[-V_M:+V_M]$.
+
+Un facile trucco per poter ottenere questo risultato e mettere in serie all'uscita invertita dell'amplificatore
+un invertitore polarizzato a $[-V_M:V_M]$:
+
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0, 0)
+        to[american current source] (0, -1.5)
+            node[ground]{}
+        (0, 0) -- (-1, 0)
+        node[nmos, anchor=E] (n1) {}
+        (n1.C) to[R] ++(0, 1.5)
+        -- ++(1, 0) node[vcc](VCC){}
+        (0, 0) -- (1, 0)
+        node[nmos, anchor=E, xscale=-1] (n2) {}
+        (n2.C) to[R] ++(0, 1.5)
+            -- ++(-1, 0)
+        (n1.G) node[left]{$V^+$}
+        (n2.G) node[right]{$V^-$}
+
+        (n2.C) -- ++(2, 0) coordinate(c)
+        % Amplificatore mos
+        % (c) - (0, 0))
+        -- ++(0, -1) node[nmos, anchor=G] (ni) {}
+        (ni.D) node[pmos, anchor=D] (pi) {}
+        (c) -- (pi.G)
+
+        (ni.S) node[circ]{} node[below]{$-V_M$}
+        (pi.S) node[circ]{} node[above]{$V_M$}
+
+        (ni.D) -- ++(.5, 0) node[right]{$V_u$}
         ;
     \end{circuitikz}
 \end{center}
 
-È possibile descrivere la relazione in uscita della funzione a gradino in tre tratti differenti, una regione centrale, in cui il guadagno tende all'infinito, descritto dall'equazione di validità $V_{id = 0}$ per $-V_M < V_u < V_M$; un tratto di saturazione positiva, vero per $V_{id} > 0$, dove $V_u = V_M$, ed un tratto di saturazione negativa, $V_u = -V_M$, vero per $V_{id} < 0$.
+Un'ulteriore caratteristica di questo circuito è che le correnti in ingresso $I^+$ ed $I^-$ sono nulle perché
+correnti di gate in ingresso a transistor nmos.
 
-Per trasformare la funzione in uscita dell'operatore operazionale in una funzione a gradino, occorre amplificare l'uscita corrente e traslarla sul nuovo intervallo. Infatti mettendo l'uscita in ingresso a due invertitori il valore, appena positivo, viene tradotto in un valore positivo alto.
+Per comportarsi in modo ideale, $V_u$ è unicamente dipendente dalla tension in ingresso $V_{id}$ ed è indipendente
+da correnti e tensioni di modo comune a carico.
+\\
+Il circuito si deve quindi comportare come un generatore ideale di tensione , controllato dalla $V_{id}$.
 
-Le correnti sui rami di ingresso $I^+$ ed $I^-$ sono nulle perché correnti di gate di due transistor nmos.
-La tensione di uscita $V_u$ non è indipendente dalla corrente dalla corrente e dai circuiti connessi a carico.
-Questo componente quindi si comporta come un generatore ideale di tensione, controllato dalla differenza delle tensioni
-$V^+$ e $V^-$ applicate all'ingresso.
+Ricapitolando, le tre caratteristiche che descrivono questo componente ideale sono:
+\begin{enumerate}
+    \item L'uscita $V_u$ è una funzione "a gradino".
+    \item Le correnti $I^+$ e $I^-$ in ingresso sono nulle.
+    \item Si comporta come un generatore ideale di tensione controllato unicamente da $V_{id}$.
+\end{enumerate}
 
-Analizzando il seguente circuito:
+\textit{Spiegazione circuito per approssimare generatore di tensione a pag. \pageref{approfondimento:approx_circuito_generatore_ideale_tensione}}
 
-\begin{center}
-\begin{circuitikz}
-    \draw (0, 0) node[ground]{}
-    to[R, i<=$I_1$, l=$R_1$] (0, 2)
-    to[R, i<=$I_2$, l=$R_2$] (0, 4)
-    node[vdd]{}
-    (0, 2) to[short, i=$I_u$] (1, 2)
-    node[circ]{} node[above]{$V_u$};
-\end{circuitikz}
-\end{center}
-
-Otteniamo la formula della tensione in uscita $ V_u = \frac{R_1}{R_1 + R_2} (V_{dd} - R_2 I_u) $,
-da cui possiamo osservare che se la corrente in uscita $I_u$ è 0, il circuito si comporta esattamente come un partitore di corrente. Per ottenere questo risultato, colleghiamo un transistore bipolare
-
-\begin{center}
-\begin{circuitikz}
-    \draw (0, 0) node[ground]{}
-    to[R, i<=$I_1$, l=$R_1$] (0, 2)
-    to[R, i<=$I_2$, l=$R_2$] (0, 4)
-    node[vdd]{}
-    (0, 2) to[short, i=$I_u$] (1, 2)
-    node[npn, anchor=B] (npn){}
-    (npn.C) node[vdd]{}
-
-    (npn.E) to[short, i=$I_u$] ++(.5, 0){}
-    node[right]{$V_u$};
-    ;
-\end{circuitikz}
-\end{center}
-
-Il quale deve necessariamente funzionare in regione attiva diretta, in quanto la corrente di emettitore $I_u > 0$ e non può essere saturo, in quanto la giunzione della base collettore è negativa.
-Quindi la corrente di collettore $I_c = \beta_F I_B$ e $I_E = (\beta_F + 1) I_B$, siccome $\beta_F$ è grande, allora la corrente $I_B$ è approssimativamente 100 volte minore della corrente $I_E$. Generando una tensione in uscita pressoché indipendente dalla corrente a carico.
-
-Le tre caratteristiche ideali di questo circuito sono che dipende unicamente dalla differenza delle tensioni in ingresso, e la tensione e corrente a carico no influiscono sull'uscita.
-\subsubsection{Amplificatore invertente}
+\subsection{Circuito Amplificatore invertente}
 
 \begin{center}
     \begin{circuitikz}
@@ -200,63 +244,51 @@ Le tre caratteristiche ideali di questo circuito sono che dipende unicamente dal
     \end{circuitikz}
 \end{center}
 
-Il ramo con la corrente $R_2$ prende il nome di ramo in retroazione, siccome collega l'uscita all'ingresso.
-Studiamo il circuito nelle tre regioni di funzionamento, ricordando le relazioni:
+Il ramo con la resistenza $R_2$ prende il nome di ramo in retroazione, siccome collega l'uscita all'ingresso.
+Ricordando le equazioni dell'amplificatore operazionale ideale (pag. \pageref{formula:ideal_opamp}), studiamo il circuito:
 
-\begin{minipage}{.3\textwidth}
-    Alto guadagno:
-    \[\begin{cases}
-        &V_{id} = 0\\
-        &-V_M < V_u < V_M
-    \end{cases}\]
-\end{minipage}
-\begin{minipage}{.3\textwidth}
-    Saturazione positiva
-    \[\begin{cases}
-        V_{id} > 0\\
-        V_u = V_M
-    \end{cases}\]
-\end{minipage}
-\begin{minipage}{.3\textwidth}
-    Saturazione negativa
-    \[\begin{cases}
-        V_{id} < 0\\
-        V_u = -V_M
-    \end{cases}\]
-\end{minipage}
+\subsubsection{Analisi regione di alto guadagno:}
+In regione di alto guadagno, da $V_{id} = 0$ otteniamo $V^+ = V^- = 0$, in quanto la tensione $V^-$ è vincolata dal potenziale di terra, portando un riferimento di terra virtuale.
+\\
+Seppur il potenziale del nodo risulta a terra, non permette alla corrente di scaricarsi, dato che la corrente in ingresso è obbligatoriamente nulla.
 
-Con $I^+ = I^- = 0$ e $V_{id} = V^+ - V^-$ sempre valide.
+Applicando Kirchoff: $I_1 = I_2$
+\begin{align*}
+    -\frac{V_u}{R_2} = \frac{V_i}{R_1}
+    \quad\Rightarrow\quad
+    V_u = - \frac{R_2}{R_1} V_i
+\end{align*}
 
-\begin{tcolorbox}
-    In regione di alto guadagno, $V^+ = V^- = 0$, in quanto la tensione $V^-$ è vincolata dal potenziale di terra, portando un riferimento di terra virtuale, in quanto il nodo non è connesso veramente a terra.
+Rappresenta una semiretta decrescente valida per i valori di $V_i$:
+\[
+    -\frac{R_1}{R_2}V_M < V_i < \frac{R_1}{R_2} V_M
+\]
+per via dei valori di $V_u$ compresi tra $-V_M$ e $+V_M$.
 
-    Applicando Kirchoff: $I_1 = I_2$
-    \begin{align*}
-        -\frac{V_u}{R_2} = \frac{V_i}{R_1}
-        \quad\Rightarrow\quad
-        V_u = - \frac{R_2}{R_1} V_i
-    \end{align*}
+Dall' equazione ottenuta possiamo osservare come è possibile variare il valore di guadagno nella regione attiva diretta,
+semplicemente variando le relazioni tra le due resistenze.
 
-    Rappresenta una semiretta decrescente valida per i valori di $V_i$:
-    \[
-        -\frac{R_1}{R_2}V_M < V_i < \frac{R_1}{R_2} V_M
-    \]
-    per via dei valori di $V_u$ compresi tra $-V_M$ e $+V_M$.
+\subsubsection{Analisi regione di saturazione positiva:}
+Da ipotesi $V_u = V_M$, $V^+ = 0$ e $V^+ > V^-$.
 
-    Dall' equazione ottenuta possiamo osservare come è possibile variare il valore di guadagno nella regione attiva diretta,
-    semplicemente variando le relazioni tra le due resistenze.
-\end{tcolorbox}
-\begin{tcolorbox}
-    In saturazione positiva non vale più l'ipotesi di cortocircuito virtuale, perché non è più vero che $V_{id} = 0$.
-    Sapendo che $V_u = V_M$ da ipotesi, $V^+ = 0$ e $V^+ > V^-$,
+L'ipotesi di cortocircuito virtuale non è più valida in quanto $V_{id} > 0$.
+\\
+Applicando Kirchoff $I_1 = I_2$:
+\[
+    \begin{rcases}
+        I_1 = \frac{V_i - V^-}{R_1}\\
+        I_2 = \frac{V^- - V_u}{R_2}
+    \end{rcases} \Rightarrow
+    V^- = \frac{V_i R_2 + V_u R_1}{R_1 + R_2}
+\]
 
-    Applicando Kirchoff $I_1 = I_2$:
-    \[
-        V^- = \frac{V_i R_2 + V_u R_1}{R_1 + R_2}
-    \]
-$V^- < 0$ implica $V_i < - \frac{R_1}{R_2}V_M$, cosa analoga accade in regione di saturazione negativa.
+Imponendo $V^- < 0$ si ottiene la regione di validità:
+\[
+    V_i < - \frac{R_1}{R_2}V_M
+\]
 
-\end{tcolorbox}
+Cosa analoga accade in regione di saturazione negativa.
+
 \begin{center}
     \begin{tikzpicture}
         \begin{axis}
@@ -267,52 +299,7 @@ $V^- < 0$ implica $V_i < - \frac{R_1}{R_2}V_M$, cosa analoga accade in regione d
     \end{tikzpicture}
 \end{center}
 
-
-\subsection{Circuito con polarità invertita}
-% TODO: Controlla sezione "test"
-\begin{center}
-    \begin{circuitikz}
-        \draw (0, 0)
-            node[above]{$V_i$}
-            to[R, *-*, l=$R_1$, i=$I_1$] ++(2.5, 0)
-            coordinate(ing1)
-            -- ++(0, 1)
-            to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
-            coordinate(tip);
-        \draw (ing1) node[op amp, anchor=+, yscale=-1](am){};
-
-        \draw(am.-) -- +(0, -1) node[ground]{};
-        \draw(am.out) to[short, -*] ++(1, 0)
-        node[right] {$V_u$};
-        \draw(tip) -- (tip |- am.out);
-        \draw(am.+) to[open, v>=$V_{id}$] (am.-);
-    \end{circuitikz}
-\end{center}
-
-
-\begin{tcolorbox}
-    In regione di alto guadagno, da $I_1 = I_2$, si ricava:
-    \[
-        V_u = - \frac{R_2}{R_1} V_i
-    \]
-    l'equazione è del tutto uguale alla precedente, difatti fino a quando ci troviamo in una condizione di
-    cortocircuito virtuale la differenza tra le tensioni è sempre nulla.
-
-    \[
-        -\frac{R_1}{R_2}V_M < V_i < \frac{R_1}{R_2}V_M
-    \]
-\end{tcolorbox}
-\begin{tcolorbox}
-    \begin{align*}
-        \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
-        \Rightarrow
-        V^+ = \frac{R_2 V_i + R_1 V_M}{R_1 + R_2} > 0
-    \end{align*}
-    $V_i > -\frac{R_1}{R_2}V_M$
-\end{tcolorbox}
-
 \subsection{Amplificatore lineare non invertente}
-
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0)
@@ -332,20 +319,20 @@ $V^- < 0$ implica $V_i < - \frac{R_1}{R_2}V_M$, cosa analoga accade in regione d
     \end{circuitikz}
 \end{center}
 
-\begin{tcolorbox}
-    In regione di alto guadagno,
-    \begin{align*}
-        &V^+ = V_i \frac{R_2}{R_1 + R_2}
-        &V^- = \frac{V^- - V_u}{R_2}
-    \end{align*}
+\subsubsection{Analisi circuito in alto guadagno:}
+In regione di alto guadagno,
+\begin{align*}
+    &V^+ = \frac{R_2}{R_1 + R_2} V_i
+    &V^- = \frac{R_1}{R_1 + R_2} V_u
+\end{align*}
 
-    Da cui la relazione: $V_u = \frac{R_2}{R_1} V_i$, che è la stessa relazione di prima, ma con segno opposto.
+E da $V^+ = V^-$ si ricava il valore della tensione di uscita: $V_u = \frac{R_2}{R_1} V_i$, che è la stessa relazione di prima, ma con segno opposto.
 
-    Calcolando le condizioni di validità:
-    \[
-        \frac{R_2}{R_1} V_M < V_i < \frac{R_2}{R_1} V_M
+Calcolando le condizioni di validità:
+\[
+    -\frac{R_1}{R_2} V_M < V_i < \frac{R_1}{R_2} V_M
     \]
-\end{tcolorbox}
+\subsubsection{Regione di saturazione positiva e negativa:}
 I calcoli sono gli stessi del precedente, risultando in un amplificatore lineare non invertente.
 
 \begin{center}
@@ -362,13 +349,13 @@ I calcoli sono gli stessi del precedente, risultando in un amplificatore lineare
 \begin{center}
     \begin{circuitikz}
         \draw (-1, 0)
-        node[above]{$V_i$}
-        to[R, *-*, l=$R_1$, i=$I_R$] (2, 0)
+        node[above]{$V_{i1}$}
+        to[R, *-*, l=$R_1$] (2, 0)
         coordinate(ing1)
         -- ++(0, 1)
         to[R, l=$R_2$, i=$I_R$] ++(2.5, 0)
         coordinate(tip);
-        \draw (-1, -1) node[above]{$V_2$} to[R, l=$R_1$, *-] (1.5, -1) -- (1.5, 0);
+        \draw (-1, -1) node[above]{$V_{i2}$} to[R, l=$R_1$, *-] (1.5, -1) -- (1.5, 0);
         \draw (ing1) node[op amp, anchor=-](am){};
         \draw(am.+) -- +(0, -1) node[eground]{};
         \draw(am.out) to[short, -*] ++(2, 0)
@@ -376,17 +363,16 @@ I calcoli sono gli stessi del precedente, risultando in un amplificatore lineare
         \draw(tip) -- (tip |- am.out);
     \end{circuitikz}
 \end{center}
-\begin{tcolorbox}
-    In regione di alto guadagno, unendo le equazioni delle singole correnti con l'equazione di kirkoff al nodo:
-    \begin{align*}
-        I_1 + I_1' = \cancel{I^-} + I_2
-        \\
-        \frac{V_u + V_{i2}}{R_1} = -\frac{V_u}{R_2}
-    \end{align*}
-    Da cui $V_u = - \frac{R_2}{R_2} (V_{i1} + V_{i2})$, risultato estremamente importante perché indica la funzione di una somma tra le due tensioni in ingresso. Per questo motivo, il circuito prende il nome di sommatore analogico.
+\subsubsection{Analisi regione di alto guadagno}
+In regione di alto guadagno, unendo le equazioni delle singole correnti con l'equazione di Kirchoff al nodo:
+\begin{align*}
+    I_1 + I_2 = \cancel{I^-} + I_R
+    \\
+    \frac{V_{i1} + V_{i2}}{R_1} = -\frac{V_u}{R_2}
+\end{align*}
+Da cui $V_u = - \frac{R_2}{R_2} (V_{i1} + V_{i2})$, risultato estremamente importante perché indica la funzione di una somma tra le due tensioni in ingresso. Per questo motivo, il circuito prende il nome di sommatore analogico.
 
-    Questo risultato ovviamente è indipendente dal numero di ingressi, e variando il valore delle resistenze legate agli ingressi è possible fare una somma pesata dei segnali in ingresso.
-\end{tcolorbox}
+Questo risultato ovviamente è indipendente dal numero di ingressi, e variando il valore delle resistenze legate agli ingressi è possible fare una somma pesata dei segnali in ingresso.
 
 \subsection{Circuito derivatore}
 
@@ -407,16 +393,17 @@ I calcoli sono gli stessi del precedente, risultando in un amplificatore lineare
         \draw(am.-) to[open, v>=$V_{id}$] (am.+);
     \end{circuitikz}
 \end{center}
-\begin{tcolorbox}
-    In regione attiva diretta $I_R = - \frac{V_u}{R}$ e $I_C = C \frac{dV_i}{dt}$, da cui:
+\subsubsection{Analisi alto guadagno}
+In regione di alto guadagno $I_R = - \frac{V_u}{R}$ e $I_C = C \frac{dV_i}{dt}$, da cui:
     \[
         V_u = -RC \frac{dV_i}{dt}
     \]
-\end{tcolorbox}
-Il circuito è quindi in grado di calcolare la derivata del segnale in ingresso.
-Mettendo un condensatore sul ramo di uscita ed una resistenza nel ramo in ingresso si ottiene un circuito integratore.
 
-\subsubsection{Stadio separatore}
+Il circuito è quindi in grado di calcolare la derivata del segnale in ingresso.
+
+Mettendo un condensatore sul ramo di uscita ed una resistenza nel ramo in ingresso si ottiene un circuito \textbf{integratore}.
+
+\subsection{Stadio separatore}
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0) node[op amp] (amp){}
@@ -448,9 +435,12 @@ Questo principio è possibile utilizzarlo per creare un generatore di tensione
 \end{center}
 L'applicazione più importante è in strumenti di misura, essenziale per assorbire una corrente nulla dal circuito in oggetto.
 
+\textit{Nel caso non si sia capita l'utilità di questo circuito guardare l'approfondimento a pagina \pageref{approfondimento:approx_circuito_generatore_ideale_tensione}.}
 
-\subsubsection{Test}
+\newpage
+\subsection{Trigger di Schmitt}
 Ipotizzando di invertire la polarità dell'amplificatore operazionale, analizziamo il seguente circuito:
+
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0)
@@ -469,24 +459,44 @@ Ipotizzando di invertire la polarità dell'amplificatore operazionale, analizzia
     \end{circuitikz}
 \end{center}
 
+\subsubsection{Analisi del circuito in regione di alto guadagno}
+In regione di alto guadagno, $V^+ = V^- = 0$.
+\\
+Da $I_1 = I_2$:
+\[
+    \frac{V_i}{R_1} = - \frac{V_u}{R_2}\quad
+    \Rightarrow\quad
+    V_u = -\frac{R_2}{R_1} V_i
+\]
+
+Le condizioni di esistenza di rimangono le stesse:
+\[
+    -\frac{R_2}{R_1} V_M < V_i < \frac{R_2}{R_1} V_M
+\]
 \begin{tcolorbox}
-    In regione di alto guadagno, $V^+ = V^- = 0$ e $I_1 = I_2$, $I_1 = V_i / R$ e $I_2 = - V^u/R_2$ che ci porta a dire:
-    \[
-        V_u = -\frac{R_2}{R_1} V_i
-    \]
-    e le condizioni di esistenza di rimangono le stesse:
-    \[
-        -\frac{R_2}{R_1} V_M < V_i < \frac{R_2}{R_1} V_M
-    \]
+La condizione $V_{id} = 0$ della regione di alto guadagno, porta ad avere risultati esattamente identici
+al circuito con polarità non invertita.
 \end{tcolorbox}
-\begin{tcolorbox}
-    In regione di saturazione positiva $V_u = V_M$ e $V_{id} > 0$, quindi $V^+ > 0$
-    Ma calcolando le condizioni di esistenza otteniamo:
-    \[
-        V_i > -\frac{R_1 V_M}{R_2}
-    \]
-\end{tcolorbox}
-Mentre la regione di alto guadagno non cambia aspetto, le regioni di saturazione cambiano funzionamento.
+
+\subsubsection{Analisi del circuito in regione di saturazione positiva}
+Da ipotesi $V_u = V_M$ e $V^+ > 0$, dato che $V^- = 0$ e $V_{id} > 0$.
+
+Da $I_1 = I_2$:
+\[
+    \begin{cases}
+        \frac{V_i - V^+}{R_1} = -\frac{V_M - V^+}{R_2}
+        \\
+        V^+ > 0
+    \end{cases}
+    \quad\Rightarrow\quad
+    V_i > -\frac{R_1}{R_2} V_M
+\]
+
+Gli stessi calcoli possono essere svolti per la regione di saturazione negativa, ottenendo che la stessa inversione
+della regione di polarità si manifesta nell'altra regione.
+
+\subsubsection{Interpretazione dell'analisi del circuito}
+Mentre la regione di alto guadagno non cambia aspetto, le regioni di saturazione invertono le regioni di funzionamento.
 
 \begin{center}
 \begin{tikzpicture}
@@ -500,9 +510,14 @@ Mentre la regione di alto guadagno non cambia aspetto, le regioni di saturazione
 \end{tikzpicture}
 \end{center}
 
-La relazione tra ingresso ed uscita non è più funzionale, richiede un'ulteriore ragionamento per comprendere quale tra i tre valori vengono restituiti dal circuito nella regione compresa tra $-V*$ e $V*$.
+La relazione tra ingresso ed uscita non è più funzionale. È richiesta una maggiore analisi per capire quale tra i tre valori
+di tensione d'uscita il circuito restituisce per $-V^* < V_i < V^*$.
 
-Ragioniamo quindi in regime dinamico, partendo da $V_a < -V*$ spostandoci a $V_b > V*$. Fintanto che $V_a < -V*$, il valore è costante raggiunto il valore critico, per continuità l'uscita si tiene costante vino al punto $V*$. Appena raggiunto il punto $V*$ è ritorna ad essere presente una sola soluzione, portando l'uscita al valore positivo.
+Ragioniamo quindi in regime dinamico, partendo da $V_a < -V^*$, spostandoci verso un punto $V_b > V^*$.
+\\
+Fintanto che $V_a < -V*$, il valore è univoco e costante. Raggiunto il valore critico $-V^*$, per continuità,
+l'uscita si mantiene costante fino a raggiungere il punto $V^*$.
+Appena raggiunto il punto $V^*$, ritorna ad essere presente un'unica soluzione, portando l'uscita al valore positivo.
 
 \begin{center}
     \centering
@@ -538,14 +553,19 @@ Ragioniamo quindi in regime dinamico, partendo da $V_a < -V*$ spostandoci a $V_b
     \end{tikzpicture}
 \end{center}
 
-Seguendo analogo ragionamento in verso opposto, si nota che per andare da $b$ ad $a$ e da $a$ a $b$, si effettuando due percorsi diversi, indicati in rosso ed in verde. Questo andamento prende il nome di ciclo di isteresi, ed il circuito prende il nome di circuito "trigger" di Shmitt.
+Seguendo analogo ragionamento in verso opposto, si nota che per andare da $b$ ad $a$ e da $a$ a $b$, si effettuando due percorsi diversi, indicati in rosso ed in verde.
+\\
+Questo andamento prende il nome di ciclo di isteresi, ed il circuito prende il nome di circuito "trigger di Schmitt".
 
-Per forzare l'uscita alta serve forzare un valore sufficientemente positivo. La caratteristica di questo circuito è che quando si triggera ed il valore si porta positivo, è difficile che si spenga a causa di rumore. Questo è utile ad esempio in un circuito dove una lampada si spegne quando raggiunge un certo livello di luce.
+Per forzare l'uscita alta serve un valore di ingresso sufficientemente positivo.
+La caratteristica di questo circuito è che si triggera, portando l'uscita ad un valore positivo.
+\\
+È resistente al rumore in quanto per cambiare "stato" richiede delle tensioni significative, rendendolo utile ad esempio
+per un circuito dove una lampada si spegne raggiunto un certo livello di luce.
 
 Questo è il primo circuito che presenta un elemento di memoria.
 
-\subsection{}
-
+\subsection{Circuito basato su trigger di schmitt}
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0)
@@ -595,5 +615,43 @@ Analizzando la stabilità di questo circuito infatti, il valore di $V_i = 0$, ot
 
 Analogamente, mettendo a cascata un numero dispari di invertitori, e chiudendoli ad anello, si ottiene un oscillatore ad anello.
 
+\subsection{Approssimazione circuito generatore ideale di tensione}
+\label{approfondimento:approx_circuito_generatore_ideale_tensione}
+Analizzando il seguente circuito:
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+    to[R, i<=$I_1$, l=$R_1$] (0, 2)
+    to[R, i<=$I_2$, l=$R_2$] (0, 4)
+    node[vdd]{}
+    (0, 2) to[short, i=$I_u$] (1, 2)
+    node[circ]{} node[above]{$V_u$};
+\end{circuitikz}
+\end{center}
+
+Otteniamo la formula della tensione in uscita $ V_u = \frac{R_1}{R_1 + R_2} (V_{dd} - R_2 I_u) $,
+da cui possiamo osservare che se la corrente in uscita $I_u$ è 0, il circuito si comporta esattamente come un partitore di corrente. Per ottenere questo risultato, colleghiamo un transistore bipolare
+
+\begin{center}
+\begin{circuitikz}
+    \draw (0, 0) node[ground]{}
+    to[R, i<=$I_1$, l=$R_1$] (0, 2)
+    to[R, i<=$I_2$, l=$R_2$] (0, 4)
+    node[vdd]{}
+    (0, 2) to[short, i=$I_u$] (1, 2)
+    node[npn, anchor=B] (npn){}
+    (npn.C) node[vdd]{}
+
+    (npn.E) to[short, i=$I_u$] ++(.5, 0){}
+    node[right]{$V_u$};
+    ;
+\end{circuitikz}
+\end{center}
+
+Il quale deve necessariamente funzionare in regione attiva diretta, in quanto la corrente di emettitore $I_u > 0$ e non può essere saturo, in quanto la giunzione della base collettore è negativa.
+Quindi la corrente di collettore $I_c = \beta_F I_B$ e $I_E = (\beta_F + 1) I_B$, siccome $\beta_F$ è grande, allora la corrente $I_B$ è approssimativamente 100 volte minore della corrente $I_E$. Generando una tensione in uscita pressoché indipendente dalla corrente a carico.
+
+Le tre caratteristiche ideali di questo circuito sono che dipende unicamente dalla differenza delle tensioni in ingresso, e la tensione e corrente a carico no influiscono sull'uscita.
 \end{document}
 
