@@ -6,7 +6,7 @@
     \begin{tikzpicture}
         \draw
             (0, 0) node[ground]{}
-            to[european current source, i<=$I_D$] (0, 1.5)
+            to[isource, i<=$I_D$] (0, 1.5)
             coordinate(x)
             -- ++(-1, 0)
             node[nmos, anchor=S] (nmos1){}
@@ -26,42 +26,100 @@
     \end{tikzpicture}
 \end{center}
 
-Da Kirkoff $I_{D1} + I_{D2} = I_D$
-\[
+
+Da Kirchoff $I_{D1} + I_{D2} = I_D$, quindi i transistori non potranno mai essere simultaneamente spenti, altrimenti $I_D = 0$.
+\begin{gather*}
+    V_{i1} - V_{GS1} + V_{GS2} = V_{i2}\\
+    \Downarrow\\
     V_{i1} - V_{i2} =  V_{GS1} - V_{GS2}
-\]
-Questo di porta a dire che se $V_{i1} > V_{i2}$, allora $V_{GS1} > V_{GS2}$ e di conseguenza $I_{D1} > I_{D2}$.
-E siccome la tensione di uscita è scritta nella forma $V_u = V_{dd} - R I_D$, ne segue che $V_u1 < V_u2$.
+\end{gather*}
 
-Se le due tensioni di ingresso sono identiche, non c'è motivo di pensare che le correnti sui due rami non siano identiche, siccome il circuito è simmetrico. Diversamente se una delle due tensioni è maggiori ci si può aspettare che la corrente maggiore vada dal ramo con tensione maggiore.
+Di conseguenza se $V_{i1} > V_{i2}$ segue $V_{GS1} > V_{GS2}$, e siccome la corrente di drain dipende dalla tensione $V_{GS}$
+allora $I_{D1} > I_{D2}$.
+E siccome le tensione di uscita scritta nella forma $V_u = V_{dd} - R I_D$, ne segue che $V_{u1} < V_{u2}$.
 
-Questo succede fino al limite in cui tutta la corrente circola su un unico ramo del circuito.
+Quindi se ai due segnali di ingresso si presenta uno sbilanciamento positivo a favore di $V_{i1}$, fra i due segnali d'uscita
+si presenta uno sbilanciamento negativo rispetto a $V_{u1}$.
+
+La somma delle correnti è limitata dal valore costante $I_D$
+
+Se le tensioni applicate agli ingressi sono identiche, dato che il circuito è simmetrico non c'è motivo di pensare che
+le correnti sui rispettivi rami non siano identiche.
+
+Quindi:
+\begin{align*}
+    V_{i1} = V_{i2} \quad \Rightarrow \quad I_{D1} = I_{D2} = \frac{I_0}{2}
+\end{align*}
+
+Diversamente se le tensioni sono differenti, ci si può aspettare che scorra più corrente sul ramo a tensione maggiore.
+
+Il caso limite si manifesta quando la differenza di tensione è talmente elevata da far circolare tutta la corrente
+su un' unico ramo del circuito.
+
 
 \begin{figure}[h]
     \begin{tikzpicture}
-        \begin{axis}[ylabel={$I_{D1}, I_{D2}$}, xlabel={$V_{i1} - V_{i2}$}]
-            \addplot {3 / (1 + e^(-x))};
-            \addplot {3-3 / (1 + e^(-x))};
+        \begin{axis}[
+            ylabel={$I_{D1}, I_{D2}$},
+            xlabel={$V_{i1} - V_{i2}$},
+            ymin=-1,
+            width=.45\textwidth
+        ]
+
+            \addplot[blue] {3 / (1 + e^(-2*x))};
+            \addplot[red] {3-3 / (1 + e^(-2*x))};
             \addplot[dashed, gray]{3};
             \draw (0, 3) node[circ]{} node[left]{$I_0$};
         \end{axis}
     \end{tikzpicture}
     \begin{tikzpicture}
-        \begin{axis}[ylabel={$V_{U1}, V_{U2}$}, xlabel={$V_{i1} - V_{i2}$}]
-            \addplot {.5 + 3 / (1 + e^(-x))};
-            \addplot {.5 + 3-3 / (1 + e^(-x))};
+        \begin{axis}[
+            ylabel={$V_{U1}, V_{U2}$},
+            xlabel={$V_{i1} - V_{i2}$},
+            ymin=-1,
+            width=.45\textwidth
+        ]
+
+            \addplot[red] {.5 + 3 / (1 + e^(-2*x))};
+            \addplot[blue] {.5 + 3-3 / (1 + e^(-2*x))};
             \addplot[dashed, gray]{.5};
             \draw (0, .5) node[circ]{} node[below]{$V_{dd} - R I_0$};
             \draw (0, 3.5) node[circ]{} node[above] {$V_{dd}$};
         \end{axis}
     \end{tikzpicture}
+
+    \caption{Grafici corrente-tensione amplificatore differenziale}
+    \label{fig:tensione_corrente_opamp}
 \end{figure}
 
-Questo circuito è un amplificatore che varia con la differenza dei segnali d'ingresso.
-Chiamando $V_{i1} - V{i2} = V_id$ e $\frac{V_{i1} + V_{i2}}{2} = V_{ic}$, posso sempre determinare i valori $V_{i1}$ e $V_{i2}$ attraverso differenza e valore medio. La media degli ingressi prende il nome di "componente di modo comune", ed è indicata con $V_{ic}$.
-È possibile definire un guadagno $A_d = \frac{dV_u}{dV_{id}}$, calcolando lo stesso guadagno per le componenti di modo comune:
-Tenendo i due segnali identici in ingresso, si ottiene:
-$I_{D1} = I_{D2} = \frac{I_0}{2}$, indipendentemente dal valore di corrente $V_{u1} = V_{u2} = k$. Da cui $A_{c} = \frac{dV_u}{dV_{iC}} = 0$, quindi questo circuito è in grado di amplificare la componente differenziale, ignorando completamente le variazioni in modo comune.
+Intuitivamente possiamo rappresentare questo comportamento di tensione e corrente con i grafici in figura \ref{fig:tensione_corrente_opamp}.
+
+Questo circuito guarda la differenza delle tensioni applicate agli ingressi.
+A seconda della differenza frazioni della corrente circolano su un ramo o sull'altro.
+
+Come osservabile quindi dal grafico delle tensioni di uscita, il circuito è un amplificatore che dipende dalla
+differenza dei segnali d'ingresso.
+
+Posso sempre sempre esprimere le correnti d'ingresso come la combinazione tra la componente di modo comune
+$V_{ic} = \frac{V_{i1} + V_{i2}}{2}$ e la componente differenziale $V_{id} = V_{i1} - V_{i2}$.
+
+\begin{align*}
+    V_{i1} = V_{ic} + \frac{V_{id}}{2}
+    \\
+    V_{i2} = V_{ic} - \frac{V_{id}}{2}
+\end{align*}
+
+È possibile definire un guadagno differenziale come $A_d = \frac{dV_u}{dV_{id}}$, la variazione della tensione in uscita
+in funzione della differenza di in ingresso.
+
+Studiando il cambiamento della tensione di uscita al variare della componente di modo comune, immaginandoci di applicare
+due segnali identici agli ingressi, per tenere la componente differenziale nulla, necessariamente $I_{D1} = I_{D2}$.
+\\
+Di conseguenza anche $V_{u1} = V_{u2}$ sono costanti se applicate le stesse variazioni di tensione ad entrambi gli ingressi.
+Quindi $A_{c} = \frac{dV_u}{dV_{ic}} = 0$.
+
+In conclusione, questo circuito amplifica la componente differenziale, ignorando completamente le variazioni di modo comune.
+Per questo motivo il circuito prende il nome di "amplificatore differenziale".
 
 \subsection{Considerazioni su opamp}
 \begin{center}
@@ -81,7 +139,10 @@ $I_{D1} = I_{D2} = \frac{I_0}{2}$, indipendentemente dal valore di corrente $V_{
 
 Per trasformare la funzione in uscita dell'operatore operazionale in una funzione a gradino, occorre amplificare l'uscita corrente e traslarla sul nuovo intervallo. Infatti mettendo l'uscita in ingresso a due invertitori il valore, appena positivo, viene tradotto in un valore positivo alto.
 
-Chiamando le corrente di ingresso sui rami $I^+$ e $I^-$, è facile capire che sono nulle, siccome sono correnti di gate dei transistori mos. Inoltre la tensione in uscita non dovrebbe essere influenzata dai circuiti connessi a carico, in modo da far funzionare questo componente come un generatore ideale di tensione, controllato dalla differenza di tensione in ingresso.
+Le correnti sui rami di ingresso $I^+$ ed $I^-$ sono nulle perché correnti di gate di due transistor nmos.
+La tensione di uscita $V_u$ non è indipendente dalla corrente dalla corrente e dai circuiti connessi a carico.
+Questo componente quindi si comporta come un generatore ideale di tensione, controllato dalla differenza delle tensioni
+$V^+$ e $V^-$ applicate all'ingresso.
 
 Analizzando il seguente circuito:
 
@@ -163,25 +224,38 @@ Studiamo il circuito nelle tre regioni di funzionamento, ricordando le relazioni
         V_u = -V_M
     \end{cases}\]
 \end{minipage}
+
 Con $I^+ = I^- = 0$ e $V_{id} = V^+ - V^-$ sempre valide.
 
 \begin{tcolorbox}
     In regione di alto guadagno, $V^+ = V^- = 0$, in quanto la tensione $V^-$ è vincolata dal potenziale di terra, portando un riferimento di terra virtuale, in quanto il nodo non è connesso veramente a terra.
 
-    Applicando kirkoff al nodo, allora $I_1 = I_2$ implicando
-    \[
+    Applicando Kirchoff: $I_1 = I_2$
+    \begin{align*}
+        -\frac{V_u}{R_2} = \frac{V_i}{R_1}
+        \quad\Rightarrow\quad
         V_u = - \frac{R_2}{R_1} V_i
-    \]
-    Valida per $V_i > -\frac{R_1}{R_2}V_M$ e $V_u < \frac{R_1}{R_2} V_M$
+    \end{align*}
 
-    Come osservabile dalla relazione della tensione in uscita, in questa regione di alto guadagno, è possibile variare il valore del guadagno semplicemente cambiando le proporzioni tra le due resistenze.
+    Rappresenta una semiretta decrescente valida per i valori di $V_i$:
+    \[
+        -\frac{R_1}{R_2}V_M < V_i < \frac{R_1}{R_2} V_M
+    \]
+    per via dei valori di $V_u$ compresi tra $-V_M$ e $+V_M$.
+
+    Dall' equazione ottenuta possiamo osservare come è possibile variare il valore di guadagno nella regione attiva diretta,
+    semplicemente variando le relazioni tra le due resistenze.
 \end{tcolorbox}
 \begin{tcolorbox}
-    In regime di saturazione positiva, allora $V^+ > V_-$ e la corrente in ingresso è nulla, implicando $I_1 = I_2$ e dalle equazioni di ohm:
+    In saturazione positiva non vale più l'ipotesi di cortocircuito virtuale, perché non è più vero che $V_{id} = 0$.
+    Sapendo che $V_u = V_M$ da ipotesi, $V^+ = 0$ e $V^+ > V^-$,
+
+    Applicando Kirchoff $I_1 = I_2$:
     \[
         V^- = \frac{V_i R_2 + V_u R_1}{R_1 + R_2}
     \]
-    È da controllare $V^- < 0$, rendendo vera l'equazione per $V_i < - \frac{R_1 V_M}{R_2}$, lo stesso accade in regione di saturazione negativa.
+$V^- < 0$ implica $V_i < - \frac{R_1}{R_2}V_M$, cosa analoga accade in regione di saturazione negativa.
+
 \end{tcolorbox}
 \begin{center}
     \begin{tikzpicture}
@@ -194,7 +268,51 @@ Con $I^+ = I^- = 0$ e $V_{id} = V^+ - V^-$ sempre valide.
 \end{center}
 
 
+\subsection{Circuito con polarità invertita}
+% TODO: Controlla sezione "test"
+\begin{center}
+    \begin{circuitikz}
+        \draw (0, 0)
+            node[above]{$V_i$}
+            to[R, *-*, l=$R_1$, i=$I_1$] ++(2.5, 0)
+            coordinate(ing1)
+            -- ++(0, 1)
+            to[R, l=$R_2$, i=$I_2$] ++(2.5, 0)
+            coordinate(tip);
+        \draw (ing1) node[op amp, anchor=+, yscale=-1](am){};
+
+        \draw(am.-) -- +(0, -1) node[ground]{};
+        \draw(am.out) to[short, -*] ++(1, 0)
+        node[right] {$V_u$};
+        \draw(tip) -- (tip |- am.out);
+        \draw(am.+) to[open, v>=$V_{id}$] (am.-);
+    \end{circuitikz}
+\end{center}
+
+
+\begin{tcolorbox}
+    In regione di alto guadagno, da $I_1 = I_2$, si ricava:
+    \[
+        V_u = - \frac{R_2}{R_1} V_i
+    \]
+    l'equazione è del tutto uguale alla precedente, difatti fino a quando ci troviamo in una condizione di
+    cortocircuito virtuale la differenza tra le tensioni è sempre nulla.
+
+    \[
+        -\frac{R_1}{R_2}V_M < V_i < \frac{R_1}{R_2}V_M
+    \]
+\end{tcolorbox}
+\begin{tcolorbox}
+    \begin{align*}
+        \frac{V_i - V^+}{R_1} = \frac{V^+ - V_M}{R_2}
+        \Rightarrow
+        V^+ = \frac{R_2 V_i + R_1 V_M}{R_1 + R_2} > 0
+    \end{align*}
+    $V_i > -\frac{R_1}{R_2}V_M$
+\end{tcolorbox}
+
 \subsection{Amplificatore lineare non invertente}
+
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0)
