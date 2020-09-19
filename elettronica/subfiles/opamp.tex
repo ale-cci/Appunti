@@ -565,7 +565,7 @@ per un circuito dove una lampada si spegne raggiunto un certo livello di luce.
 
 Questo è il primo circuito che presenta un elemento di memoria.
 
-\subsection{Circuito basato su trigger di schmitt}
+\subsection{Generatore di segnale periodico}
 \begin{center}
     \begin{circuitikz}
         \draw (0, 0)
@@ -579,7 +579,7 @@ Questo è il primo circuito che presenta un elemento di memoria.
         \draw(am.-) -- ++(0, -.7)
         coordinate(x)
         to[C] ++(0, -1) node[ground]{}
-        (x) to[R]  (x -| am.out)
+        (x) to[R, l_=$R_3$]  (x -| am.out)
         -- (am.out);
         \draw(am.out) to[short, -*] ++(1, 0)
         node[right] {$V_u$};
@@ -588,33 +588,38 @@ Questo è il primo circuito che presenta un elemento di memoria.
     \end{circuitikz}
 \end{center}
 
-Immaginiamo che inizialmente la capacità sia scarica, e che per un qualunque motivo, ci troviamo nella condizione di alto guadagno, con $V_u = V_M$
-Ricordando che la corrente in ingresso è comunque nulla, possiamo separare il ramo e vederlo come uno risolvibile attraverso la forumla del partitore:
-\begin{center}
-    \begin{circuitikz}
-        \draw (0, 0) node[ground]{}
-        to[R] (2, 0)
-        to[R] (4, 0)
-        node[circ]{}
-        node[right]{$V_u$}
-
-        (2, 0) -- (2, -.5) node[below]{$V^+$};
-    \end{circuitikz}
-\end{center}
-Quindi fintanto che $V_u = V_M$ allora
+Per studiare il circuito immaginiamo che inizialmente il condensatore sia scarico $V^- = 0$, e per un qualunque motivo,
+ci troviamo nella condizione di saturazione positiva, con $V_u = V_M$.
+Ricordando che la corrente in ingresso al componente comunque nulla,
+possiamo separare il ramo e vederlo come uno risolvibile attraverso la forumla del partitore:
 \[
-    V^+ = \frac{R_q} {R_1 + R_2} V_M > 0
+    V^+ = \frac{R_1}{R_1 + R_2} V_u  = \frac{R_1}{R_1 + R_2} V_M
 \]
-Quindi $V_{id} > 0$, in accordo con le ipotesi. Analizzando l'altro ramo con il condensatore, siccome la tensione $V_u$ è positiva, e sul ramo circola una corrente, questa ha l'effetto di caricare il condensatore $C$, aumentando la tensione $V^-$.
-Fintanto che $V_{id} > 0$, ovvero $V^+ > V^-$ allora l'amplificatore lavora in alto guadagno. Nel momento in cui $V_{id} < 0$, allora $V^- > V^+$ e l'uscita si porta con un ritardo al valore $-V_M$.
+Di conseguenza $V_{id} = V^+ - V^- > 0$
+
+Quindi $V_{id} > 0$, in accordo con le ipotesi di saturazione positiva.
+
+Analizzando il ramo $[V_u :: R_3 :: C]$, essendo la tensione $V_u$ positiva ed il condensatore scarico ($V^- = 0$), sul ramo
+circola una corrente che carica il condensatore, aumentando (con un andamento di un esponenziale negativo) il valore della
+tensione $V^-$, fino a quando $V_{id} > 0$.
+
+Al crescere della differenza $V_{id}$ diventa negativa, passando istantaneamente alla regione di polarizzazione negativa,
+portando l'uscita con un breve ritardo al valore $-V_M$.
 
 Il condensatore vedendo variato il valore di $V_u$ da $V_M$ a $-V_M$ inizia a scaricarsi, fino a quando $V^- > V_u$.
 Raggiunto quel valore l'uscita si riporta a $+V_M$ e si ripete il ciclo.
 
-Analizzando la stabilità di questo circuito infatti, il valore di $V_i = 0$, otteniamo che il circuito è instabile. In questo modo si ottiene un generatore di un segnale periodico, (onda quadra) dipendente dal valore delle resistenze e dalla capacità del condensatore.
+Lo stato $V_u = 0$ non si verifica in quanto è instabile, infatti nel caso $V_u = 0$ basta il minimo disturbo per passare
+irreversibilmente ad una regione di polarizzazione.
 
-Analogamente, mettendo a cascata un numero dispari di invertitori, e chiudendoli ad anello, si ottiene un oscillatore ad anello.
+La durata del transitorio dipende dal tempo di carica e scarica del condensatore. Variando quindi il valore delle resistenze
+è possibile cambiare la frequenza del segnale.
 
+\subsubsection{Extra}
+Un altro metodo per creare un oscillatore basta mettere in cascata un numero dispari di invertitori e chiuderli ad anello,
+con frequenza dipendente dal tempo di propagazione del segnale e dal numero di invertitori.
+
+\newpage
 \subsection{Approssimazione circuito generatore ideale di tensione}
 \label{approfondimento:approx_circuito_generatore_ideale_tensione}
 Analizzando il seguente circuito:
