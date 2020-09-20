@@ -14,11 +14,12 @@ Il diodo è un componente la cui corrente ha una formula esponenziale, dipendent
     I = \diodecurrent{V}
 \]
 Dall'espressione è possibile notare come per $V \to -\infty$, la corrente tende asintoticamente al valore $-I_S$, detto \textit{corrente di saturazione}.
-Dato che $I_S$ assume valori molto bassi, sull'ordine di $10^{-15}$, si può considerare questa corrente trascurabile, è può essere considerata nulla.
+\\
+Dato che $I_S$ assume valori molto bassi, sull'ordine di $10^{-15}$, si può trascurare rispetto
+al resto delle correnti che circolano nel circuito, approssimandola a 0.
 
-Nel caso in cui $V > V_T$, il valore esponenziale della corrente inizia a farsi sentire, e scorre una forte corrente attraverso il componente.
-
-È quindi possibile distinguere due regioni di funzionamento: una caratterizzata da una bassa corrente, ed una caratterizzata da una corrente elevata. Le due regioni prendono il nome di \textit{polarizzazione diretta} e \textit{polarizzazione inversa}.
+Per $V > V_T$ la corrente esponenziale inizia a prevalere rispetto alla corrente di saturazione.
+È possibile quindi distinguere due regioni di funzionamento: una valida per $V < V_T$ caratterizzata da una bassa corrente, ed una caratterizzata da una corrente elevata, valida per $V > V_T$. Le due regioni prendono il nome di \textit{polarizzazione diretta} e \textit{polarizzazione inversa}.
 
 Diremo che il diodo è spento (non fa passare corrente) in regione di polarizzazione inversa, mentre diremo che è acceso in regione di polarizzazione diretta.
 
@@ -52,7 +53,7 @@ Il circuito in figura è descritto dalle relazioni:
 $V_T$ indica la tensione termica del diodo: $V_T = K \frac{T}{q}$, con $K$ costante di Boltzmann, $q$ la carica di un elettrone e
 $T$ la temperatura del circuito (misurata a temperatura ambiente: $300K$).
 \\
-Siccome è prodotto di costanti, $V_T$ è considerabile come una costante che vale approssimativamente $26mV$.
+Siccome è prodotto di costanti, $V_T$ è considerabile come una costante approssimabile a $26mV$.
 
 Svolgendo il sistema otteniamo l'equazione
 \[
@@ -69,7 +70,8 @@ Otteniamo che $V_i$ è composto dalla somma tra un componente lineare ed uno log
 \end{center}
 
 \subsection{Modello a soglia}
-Per semplificare la risoluzione dei circuiti con diodo, possiamo studiare le due regioni di funzionamento separatamente, approssimando i due tratti della caratteristica con due lineari:
+Per semplificare la risoluzione dei circuiti con diodo, possiamo studiare le due regioni di funzionamento separatamente,
+approssimando le due regioni di funzionamento del diodo con delle semirette.
 Il primo descritto dalla caratteristica $I = 0$ (diodo spento) valido per $V_d < V_\gamma$, ed il secondo una semiretta
 perpendicolare alle ascisse $V = V_\gamma$ a rappresentare la corrente costante a diodo acceso.
 \warnbox{
@@ -78,16 +80,15 @@ perpendicolare alle ascisse $V = V_\gamma$ a rappresentare la corrente costante 
         $\diodeoffcases{I}{V}$ & $\diodeoncases{I}{V}$\\
     \end{tabular*}
 }
-Questa semplificazione porta a dover risolvere il circuito due volte, una per ogni stato di funzionamento per cui
+Questa semplificazione porta a dover risolvere il circuito due volte, una per ogni stato di funzionamento in cui
 il diodo si può trovare. Inoltre è necessario anche controllare le relative ipotesi di funzionamento.
 
 Partendo dall'ipotesi che il diodo sia spento, $\vu = R \cdot I = 0$.
-Inoltre abbiamo che $V_d = \vi - \vu = \vi$, e per ipotesi di funzionamento $V_d < \vgg$, quindi il diodo
+Inoltre abbiamo che $V_d = \vi - \cancel{\vu} = \vi$, e per ipotesi di funzionamento $V_d < \vgg$, quindi il diodo
 è spento per $\vi < \vgg$.
 
 Studiando ora la seconda ipotesi, diodo acceso, abbiamo che:
-$V_u = V_i - V_d = V_i - V_\gamma$. E come condizioni di validità:
-
+$V_u = V_i - V_d = V_i - \vgg$. E come condizioni di validità:
 \[
     \begin{cases}
         V_u = R \cdot I\\
@@ -824,8 +825,9 @@ Fin'ora abbiamo tracciato delle caratteristiche di trasferimento ingresso-uscita
 fosse possibile determinare la tensione d'uscita in funzione di quella in ingresso indipendentemente dal tempo, come
 se fosse una relazione statica.
 Ma nel diodo, per passare dalla condizione di polarizzazione diretta, alla condizione di polarizzazione inversa, è necessario
-che avvenga uno spostamento di carica all'interno del dispositivo, ed è impossibile muovere elettrone in tempi nulli.
-Quindi a questo spostamento, che corrisponde alla commutazione di polarizzazione diretta ed inversa, è associato un ritardo.
+che avvenga uno spostamento di carica all'interno del dispositivo, ed è impossibile muovere della carica in tempi nulli.
+\\
+Quindi ad ogni variazione di carica, è associato un ritardo.
 
 Vogliamo stimare questo ritardo per capire se i risultati sino ad ora calcolati sono effettivamente realistici o devono
 essere a loro volta corretti alla luce di questa considerazione.
@@ -871,23 +873,21 @@ essere a loro volta corretti alla luce di questa considerazione.
 
 In grigio riportata la risposta statica del circuito al segnale $V_i$ in ingresso.
 
-Per calcolare il ritardo dobbiamo introdurre un modello nel diodo, che, in aggiunta a quanto descritto fino ad ora,
-tenga conto anche degli effetti di reazione appena introdotti.
-Introduciamo in parallelo al diodo una capacità, che ci permette di simulare il comportamento del diodo in regime
-dinamico.
+Per calcolare il ritardo di propagazione è necessario introdurre in parallelo al diodo ideale una capacità parassita,
+permettendo di simulare il comportamento di un componente reale.
+
 La relazione associata alla carica di questo condensatore parassita non è descritta dalla relazione $Q=CV$, ma da una
-relazione non lineare, dove nel primo quadrante segue la relazione esponenziale $Q = Q_s (e^{V_d / V_t} - 1)$.
-È facile osservare che il rapporto $Q/I_D = Q_s/I_s$ è una costante delle dimensioni fisiche di un tempo, che indicheremo genericamente
-con la costante $\tau$.
+relazione lineare, dove nel primo quadrante segue la relazione esponenziale $Q = Q_s (e^{V_d / V_t} - 1)$.
+Si può notare come il rapporto $Q/I_D = Q_s / I_s = \tau$ è costante, con le dimensioni fisiche di un tempo.
+
 Sintetizziamo quindi la regione di funzionamento della capacità in funzione diretta, come $Q=\tau I$.
 
 La stessa relazione non vale in polarizzazione inversa, dove la carica non segue un asintoto, ma ha un' andamento
 simile a quello di una radice quadrata.
 
 Dato che abbiamo approssimato l'andamento della corrente con un andamento lineare a tratti, faremo lo stesso con la carica.
-È del tutto evidente che la qualità di questa approssimazione è meno buona ma ci accontenteremo, mettendo in evidenze i momenti
-in cui questa approssimazione risulterà inadeguata.
-
+È del tutto evidente che la qualità di questa approssimazione è meno accurata in regione di polarizzazione inversa,
+buona ma ci accontenteremo, mettendo in evidenza quando questa approssimazione risulti troppo imprecisa.
 
 \begin{minipage}{.45\textwidth}
     \begin{tcolorbox}[title=Diodo OFF]
@@ -908,11 +908,31 @@ in cui questa approssimazione risulterà inadeguata.
     \end{tcolorbox}
 \end{minipage}
 
-Ed in entrambe è valida $Q = \tau I$
-\\
+Ed è sempre valida la relazione $Q = \tau I$
+
 Per $t < 0$ il circuito si trova in regione statica quindi è ancora descritto dalle relazioni statiche del diodo.
 Stessa cosa accade per $t \to \infty$, dove la regione di transitorio tende ad esaurirsi.
+\subsubsection{Analisi per $t < 0$}
+Il circuito è descritto dalle relazioni statiche, e dalla tensione $V_i = V_f > V_\gamma$ si ricavano le relazioni:
+\[\begin{cases}
+    V_u = V_{f} - V_\gamma
+    \\
+    I = (V_{f} - V_\gamma)/R
+    \\
+    Q = \tau I = \frac{\tau}{R} (V_{f} - V_\gamma)
+\end{cases}\]
+\subsubsection{Analisi per $t \to \infty$}
+Passato un tempo sufficientemente lungo, il circuito è ancora descritto dalle relazioni statiche,
+e dalla tensione $V_i = -V_R < 0$:
+\[\begin{cases}
+    V_u = 0
+    \\
+    I = 0
+    \\
+    Q = 0
+\end{cases}\]
 
+\subsubsection{Analisi per $t > 0$}
 \begin{tcolorbox}[title=Equazioni generali]
     \begin{align*}
         &V_i - V_d - V_u = 0\\
@@ -921,72 +941,41 @@ Stessa cosa accade per $t \to \infty$, dove la regione di transitorio tende ad e
         &Q = \tau I_D
     \end{align*}
 \end{tcolorbox}
-\begin{minipage}{.47\textwidth}
-    \begin{tcolorbox}[title={$t<0$ Diodo on}]
-        \[
-            V_i \coloneqq V_f \Rightarrow
-            \begin{cases}
-                V_i > V_\gamma\\
-                V_u = V_f - V_\gamma\\
-                I = \frac{V_f - V_\gamma}{R}\\
-                Q = \frac{\tau}{R}(V_f - V_\gamma)
-            \end{cases}
-        \]
-    \end{tcolorbox}
-\end{minipage}
-\begin{minipage}{.47\textwidth}
-    \begin{tcolorbox}[title={Circuito da $t > 0$ a $t \to \infty$}]
-        \[\begin{cases}
-        &V_u = 0\\
-        &I_c = 0\\
-        &I = 0\\
-        &Q = 0
-        \end{cases}
-    \]
-\end{tcolorbox}
-\end{minipage}
+Analizzando il transitorio di scarica del condensatore parassita, la tensione in ingresso è $V_i = -V_R$, e la
+carica, non potendo variare istantaneamente è ancora uguale al valore calcolato per $t < 0$. Quindi: $Q = \frac{\tau}{R}(V_f - V_\gamma)$.
 
-\begin{minipage}{.47\textwidth}
-    \begin{tcolorbox}[title={Condizioni iniziali $t = 0^+$}]
-        \[
-            -V_R \coloneqq V_i \Rightarrow
-            \begin{cases}
-            &Q^{0+} = Q^{0-} = \frac{\tau}{R}(V_f - V_\gamma)\\
-            &V_d(0^+) = V_d(0^-) = V_\gamma\\
-            &V_u(0^+) = -V_R - V_\gamma\\
-            &I(0^+) = \frac{-V_R - V_\gamma}{R}
-        \end{cases}
-        \]
-    \end{tcolorbox}
-\end{minipage}
-\begin{minipage}{.47\textwidth}
-    \begin{tcolorbox}[title={Circuito a $t > 0$}]
-        \begin{align*}
-            &\frac{dQ}{dt} + \frac{Q}{\tau} = -\frac{V_R + V_\gamma}{R}\\
-            \\
-            &\text{da cui}
-            \\
-            &Q(t) = \frac{\tau}{R}(V_f + V_R) e ^ {-\frac{t}{\tau}} - \frac{\tau}{R}(V_R + V_\gamma)
-        \end{align*}
-    \end{tcolorbox}
-\end{minipage}
+Siccome $V_C = \frac{1}{C} Q$, se la carica non è variata, allora anche la tensione ai capi della capacità parassita è rimasta
+costante.
+Per $t < 0$, la tensione $V_C$ ai capi della capacità era pari a $V_\gamma$, (imposta dalla polarizzazione diretta dal diodo),
+quindi segue che il valore iniziale della tensione di uscita è
+$$V_u = V_i - V_\gamma = -V_R - V_\gamma$$
 
+Che comporta un valore di corrente iniziale $I = -\frac{1}{R}(V_R + V_\gamma)$.
 
-Analizzando l'equazione del transitorio di $Q(t)$ ottenuta, possiamo osservare che per $t = 0$,
-allora $Q(t) = \frac{\tau}{R}\big(V_f - V_\gamma\big)$, che corrisponde a $Q(0^+)$.
-Mentre per $t \to \infty$, otteniamo $-\frac{\tau}{R}\big(V_R + V_\gamma)$, che, essendo $V_R + V_\gamma$ positivo
-$Q(t) < 0$ per $t \to \infty$.
+Nota la situazione iniziale, iniziamo l'analisi del transitorio. Dall'equazione $I_C + I_D = I$, otteniamo:
+$$
+    \frac{dQ}{dt} + \frac{Q}{\tau} = -\frac{V_R + V_\gamma}{R}
+$$
+Risolvendo l'equazione differenziale:
+\begin{align}
+    \frac{1}{dt} &= \big(-\frac{Q}{\tau} - \frac{V_R + V_\gamma}{R}\big)\frac{1}{dQ}
+    \\
+    \frac{1}{\tau} dt &= -\frac{R}{RQ + \tau (V_R + V_\gamma)} dQ
+    \\
+    -\frac{1}{\tau}\int_0^t{dt} &= \int_{Q(0)}^{Q(t)}{\frac{R}{Q + \tau (V_R + V_\gamma)} dQ}
+    \\
+    -\frac{1}{\tau} t &= \ln\Big(\frac{Q(t) + \frac{\tau}{R}(V_R + V_\gamma)}{Q(0) + \frac{\tau}{R}(V_R + V_\gamma)}\Big)
+\end{align}
 
-L'equazione $V_d = V\gamma$, ipotesi utilizzata per il transitorio, è valida fino a quando il valore
-di $Q$ è positivo, maggiore o al limite 0.
+Sostituendo $Q(0) = \frac{\tau}{R}(V_f - V_\gamma)$ e risolvendo per $Q(t)$:
+$$
+    Q(t) = \frac{\tau}{R}(V_f + V_R) e^{-\frac{t}{\tau}} - \frac{\tau}{R}(V_R + V_\gamma)
+$$
+Si ottiene l'espressione di un'esponenziale decrescente, che tende asintoticamente ad un valore di carica negativo: $-\frac{\tau}{R}(V_R + V_\gamma)$.
+L'equazione ottenuta è valida solo per $Q(t) > 0$.
 
+Con questa osservazione, è possibile calcolare la durata totale del transitorio, imponendo $Q(t) = 0$.
 
-L'equazione del transitorio è valida fino a quando l'equazione del diodo una costante e pari a $V_\gamma$, $Q(t) > 0$
-Il valore finale di $Q(t)$ può essere al minimo 0,
-
-Il diodo, dovendo smaltire la carica positiva sulla giunzione, per un certo periodo di tempo tiene costante
-la tensione ai suoi capi, ritardando a spegnersi. Questo tempo prende il nome di \textit{tempo di storage}.
-Per calcolarlo bisogna trovare il punto in cui la carica $Q$ è nulla.l'equazione della carica raggiunge il valore 0.
 \begin{align*}
     \frac{\tau}{R}(V_f + V_R) e ^ {-t_s/\tau} - \frac{\tau}{R}(V_R + V_\gamma) = 0
     \\
@@ -994,6 +983,10 @@ Per calcolarlo bisogna trovare il punto in cui la carica $Q$ è nulla.l'equazion
 \end{align*}
 Si vede subito che il rapporto è maggiore di 1, e che il tempo di storage, non dipende dal valore della resistenza,
 ma dipende unicamente dalla escursione di tensione e dalle caratteristiche fisiche $\tau$ del diodo.
+
+Questo significa che il diodo, dovendo smaltire la carica positiva sulla giunzione, per un certo periodo di tempo tiene costante
+la tensione ai suoi capi, ritardando lo spegnimento.
+Il tempo $t_s$ prende il nome di \textit{tempo di storage}.
 
 \begin{center}
     \def\tm{3}
