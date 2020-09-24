@@ -19,7 +19,9 @@ Dato che $I_S$ assume valori molto bassi, sull'ordine di $10^{-15}$, si può tra
 al resto delle correnti che circolano nel circuito, approssimandola a 0.
 
 Per $V > V_T$ la corrente esponenziale inizia a prevalere rispetto alla corrente di saturazione.
-È possibile quindi distinguere due regioni di funzionamento: una valida per $V < V_T$ caratterizzata da una bassa corrente, ed una caratterizzata da una corrente elevata, valida per $V > V_T$. Le due regioni prendono il nome di \textit{polarizzazione diretta} e \textit{polarizzazione inversa}.
+È possibile quindi distinguere due regioni di funzionamento: una valida per $V < V_T$ caratterizzata da una bassa corrente,
+ed una caratterizzata da una corrente elevata, valida per $V > V_T$. Le due regioni prendono il nome di
+\textit{polarizzazione diretta} e \textit{polarizzazione inversa}.
 
 Diremo che il diodo è spento (non fa passare corrente) in regione di polarizzazione inversa, mentre diremo che è acceso in regione di polarizzazione diretta.
 
@@ -984,10 +986,14 @@ Con questa osservazione, è possibile calcolare la durata totale del transitorio
 Si vede subito che il rapporto è maggiore di 1, e che il tempo di storage, non dipende dal valore della resistenza,
 ma dipende unicamente dalla escursione di tensione e dalle caratteristiche fisiche $\tau$ del diodo.
 
+Dal modello a soglia utilizzato per la carica, essa è positiva, fino a quando la tensione ai capi della giunzione si
+mantiene costante e pari a $V_\gamma$.
+
 Questo significa che il diodo, dovendo smaltire la carica positiva sulla giunzione, per un certo periodo di tempo tiene costante
 la tensione ai suoi capi, ritardando lo spegnimento.
 Il tempo $t_s$ prende il nome di \textit{tempo di storage}.
 
+(Comportamento del modello in blu)
 \begin{center}
     \def\tm{3}
 
