@@ -98,8 +98,8 @@ con un generatore di corrente pilotato.
 %17:39
 \begin{tcolorbox}[title=Equazioni caratteristiche transistore (linearm. dipendenti)]
     \begin{align*}
-        &\I{B} = \diodecurrent[\I{BES}]{\V{BE}} - \diodecurrent[\I{BC}]{\V{BC}}\\
-        &\I{E} = \diodecurrent[(\I{S} + \I{BE})]{\V{BE}} - \diodecurrent[\I{S}]{\V{BC}}\\
+        &\I{B} = \diodecurrent[\I{BES}]{\V{BE}} - \diodecurrent[\I{BCS}]{\V{BC}}\\
+        &\I{E} = \diodecurrent[(\I{S} + \I{BES})]{\V{BE}} - \diodecurrent[\I{S}]{\V{BC}}\\
         &\I{C} = \diodecurrent[\I{S}]{\V{BE}} - \diodecurrent[(\I{S} + \I{BCS})]{\V{BC}}\\
     \end{align*}
 \end{tcolorbox}
@@ -260,57 +260,42 @@ Utilizzando le approssimazioni appena ricavate nel circuito in figura \ref{circu
 
 \begin{tcolorbox}[title=Regione attiva diretta, width=\textwidth]
     \begin{align*}
-        &\vu = \vbe - \vbc > 0\\
+        &\vu = \vbe - \vbc = \vce > 0\\
         &\vu = -R\I{C} = -R \diodecurrent[\I{s}]{\vbe} < 0
     \end{align*}
 \end{tcolorbox}
 
-\noindent
 Quindi il circuito non può funzionare in regione normale.
-Modifichiamo quindi il circuito aggiungendo un generatore di tensione $\V{cc}$ tale che $\vu = \V{cc} - R\I{c} > 0$.
-Mantenendo compatibilità con la prima ipotesi.
+Per questo motivo modifichiamo il circuito, aggiungendo un generatore di tensione $\V{cc}$ tale per cui $\vu = \V{cc} - R\I{c} > 0$
+risulti vera.
+Mantenendo la compatibilità con la prima ipotesi, il circuito funziona necessariamente in regione attiva diretta.
 
 \begin{figure}[h]
     \centering
     \begin{circuitikz}[scale=1.2]
         \draw (0, 0)
-        to[american voltage source, v=$V_i$, i=$\I{B}$] (0, 3)
-        -- (1, 3)
-        -- (1, 1.5) node[npn, anchor=B, scale=2](tr){}
+            node[ground]{}
+            node[npn, anchor=E] (n){}
 
-        (tr.E) -- (tr.E |- 0, 0)
-        node[ground]{}
-        (0, 0) -- (tr.E |- 0, 0)
-        -- ++(1, 0) coordinate(x)
-
-        (tr.C) -- (tr.C |- 0, 3)
-        -- ++(1, 0)
-        node[circ] {} node[above] {$\vu$}
-        to[R, i<=$\I{C}$] ++(0, -2)
-
-        (x) to[american voltage source, v_=$\V{cc}$] ++(0, 1)
-
-        ;
+            (n.B) node[circ]{} node[above]{$V_i$}
+            (n.C) -- ++(.5, 0) node[circ]{} node[above]{$V_u$}
+            (n.C) to[R] ++(0, 1.5) node[vcc]{};
+            ;
     \end{circuitikz}
 \end{figure}
-\noindent
-Siccome ci siamo assicurati che il circuito funzioni in regione attiva diretta, verifichiamo ora se è possibile che tale
-circuito funzioni in regione attiva inversa:
+
+Verificando se il circuito può funzionare in regione attiva inversa:
 
 \begin{tcolorbox}[title=Regione attiva inversa]
     \begin{align*}
-        &\vu = \vbe - \vbc < 0\\
+        &\vu = \vbe - \vbc = \vce < 0\\
         &\vu = \V{cc} - R\I{C} > 0
     \end{align*}
 \end{tcolorbox}
 
-\noindent
-Abbiamo dimostrato quindi che questo circuito, corretto appositamente per farlo lavorare in regione attiva diretta,
-non può lavorare in regione attiva inversa. Per funzionare in quest'ultima regione il generatore di tensione \V{cc} dovrebbe
-avere una tensione negativa, per questo motivo per analizzare di questo circuito, consideriamo solo
-tre regioni di funzionamento.
+Si ottiene che non è possibile, dato che $\V{cc}$ dovrebbe essere negativa. Di conseguenza il transistor può lavorare in
+solo tre regioni: interdizione, attiva diretta e saturazione.
 
-\noindent
 \begin{minipage}{.49\textwidth}
     \begin{tcolorbox}[title=Regione di interdizione]
         \vspace{-1.5em}
@@ -331,8 +316,7 @@ tre regioni di funzionamento.
     \end{tcolorbox}
 \end{minipage}
 
-\noindent
-In regione di saturazione abbiamo che
+In regione di saturazione:
 \begin{align*}
     \I{C} = \frac{\V{cc} - \vce}{R}
 \end{align*}
@@ -618,7 +602,7 @@ di corrente, e siccome manca la resistenza in ingresso, per raggiungere la stess
 quantità di corrente è necessario raggiungere valori di tensione molto più elevati.
 
 \warnbox{
-    Riassumendo: Quando la giunzione è in serie ad una resistenza qualunque variazione in ingresso si scarica prevalentemente
+    Riassumendo: Quando la giunzione è in serie ad una resistenza, qualunque variazione in ingresso si scarica prevalentemente
     sulla resistenza consentendo un'approssimazione di tensione costante.
     Nel caso in cui manchi la resistenza, non si può pensare di applicare un modello che consideri la tensione in ingresso costante
     se quest'ultima è variabile per definizione.

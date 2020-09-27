@@ -164,8 +164,8 @@ La condizione ottimale per avere massimo margine ai disturbi è quindi in caso i
 
         (tl.C) ++(1, 0) node[circ]{}
         node[below]{$V_u$}
-        to[R, l=$R_C$, i<=$I_{RC}$, -*] ++(0, 2)
-        node[right]{$V_{cc}$}
+        to[R, l=$R_C$, i<=$I_{RC}$] ++(0, 2)
+        node[vcc]{} node[right]{$V_{cc}$}
 
         (tr.B) to[R, l=$R_B$, i<=$I_B$, -*] ++(2, 0)
         node[above]{$V_{i2}$}
@@ -219,39 +219,42 @@ Analogamente è possibile interpretare la rete composta dalla resistenza $R_c$ c
 
 Osserviamo che questo circuito si comporta allo stesso modo se alla rete di pulldown è composta da più di due transistori, dato che la corrente $\I{RC}$ sarebbe suddivisa equamente tra tutti i transistori accesi, mantenendo vera l'ipotesi $\I{C} < \beta_F \I{B}$. Quindi questo circuito è generalizzabile ad una porta NOR a numero arbitrario di ingressi.
 
-L'insieme degli ingressi prende il nome di FAN-IN. Analogamente il numero delle uscite prende il nome di FAN-OUT.
-
-L'operatore NOR rappresenta di per sé una famiglia funzionalmente completa. Per questo con logica RTL è possibile realizzare qualsiasi funzione combinatoria.
+L'insieme degli ingressi prende il nome di \textit{fan-in}, mentre il numero di uscite prende il nome di \textit{fan-out}.
+Siccome l'operatore NOR è una famiglia funzionalmente completa, con la logica RTl è possibile realizzare una qualsiasi funzione combinatoria.
 
 Manca da analizzare se la connessione in serie delle seguenti porte NOR, mantenga il valore del segnale.
 
 \begin{figure}[h]
     \centering
     \begin{circuitikz}
-        \draw (0, 0)
-        node[above] {$V_{i1}$}
-        to[R, l=$R_B$, i=$I_B$, *-] (2,0)
-        node[npn, anchor=B](tl){}
+        \draw(0, 0)
+        % First transistor
+        node[circ]{} node[left]{$V_i$}
+        to[R, l=$R_B$] ++(1.5, 0)
+        node[npn, anchor=B] (n1) {}
 
-        (tl.E) node[ground]{}
-        (tl.C) --++(1, 0)
-        node[circ]{} node[anchor=north]{\vu}
-        to[R] ++(0, 2)
-        node[vcc]{} node[anchor=north east]{$\V{cc}$}
-        ;
+        (n1.C) to[R] ++(0, 1.5) node[vcc]{}
+        (n1.E) node[ground]{}
 
-        \draw (tl.C) -- ++(2, 0) coordinate(x)
-        -- (x |- tl.B)
-        node[circ]{} node[anchor=north east]{$\vi'$}
-        to[R] ++(2, 0)
-        node[npn, anchor=B](tr){}
+        % First transistor label
+        (n1) node[right]{$T$}
 
-        (tr.E) node[ground]{}
-        (tr.C) to[R] ++(0, 2)
-        node[vcc]{} node[anchor=north east]{$\V{cc}$}
+        % Connect Vu1 to Vi2
+        (n1.C) -- ++(1, 0) -| (4, 0)
 
-        (tl) node[right]{$T$}
-        (tr) node[right]{$T'$}
+        % Second transistor
+        node[circ]{} node[below]{$V_u' = V_i$'}
+        to[R, l=$R_B$] ++(1.5, 0)
+        node[npn, anchor=B] (n2) {}
+
+       (n2.C) to[R] ++(0, 1.5) node[vcc]{}
+        (n2.E) node[ground]{}
+
+        % Second transistor label
+        (n2) node[right]{$T'$}
+
+        % Draw Vu
+        (n2.C) -- ++(0.5, 0) node[circ]{} node[right]{$V_u$}
         ;
     \end{circuitikz}
 \end{figure}
@@ -260,7 +263,7 @@ Partendo ad analizzare la condizione per cui $T$ OFF otteniamo che $\vu = \V{cc}
 Nel caso in cui anche $T'$ sia OFF, allora $\I{B}'$ è 0 e di conseguenza:
 \begin{align*}
     &\vu = \V{cc}\\
-    &\vu = \vi' -\cancel{R\I{B}'} = \vbe'
+    &\vi' -\cancel{R\I{B}'} = \vbe'
 \end{align*}
 Ma ciò non è possibile dato che se $T'$ è OFF, allora $\vbe' < V_\gamma$. Quindi $T'$ non può essere OFF se $T$ è OFF.
 Quindi $T'$ è necessariamente acceso, con $\vbe'=V_\gamma$. Dall'equazione di kirkoff al nodo \vu:
@@ -294,13 +297,13 @@ Sostituendo inoltre i dati utilizzati nel circuito precedente, otteniamo $\vu = 
     \def\betaf{30}
 
     \begin{axis}[ymax=6, ymin=-1, xmin=-1]
-        \addplot[thin, red, domain=-5:\vgamma]{5};
-        \addplot[thin, red, domain=\vgamma:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
-        \addplot[thin, red, domain={(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}:5]{\vcesatval};
+        \addplot[thin, red, domain=-5:\vgamma]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc)};
+        \addplot[thin, red, domain=\vgamma:{-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc) - (\betaf*\rc)/(\rb + \rc) * (x - \vgamma)};
+        \addplot[thin, red, domain={-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
 
-        \addplot[thin, black, domain=-5:\vgamma]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc)};
-        \addplot[thin, black, domain=\vgamma:{-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}]{(\rb * 5 + \rc * \vgamma)/(\rb + \rc) - (\betaf*\rc)/(\rb + \rc) * (x - \vgamma)};
-        \addplot[thin, black, domain={-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
+        \addplot[thin, black, domain=-5:\vgamma]{5};
+        \addplot[thin, black, domain=\vgamma:{(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}]{5 - \betaf*\rc/\rb*(x - \vgamma)};
+        \addplot[thin, black, domain={(5 - \vcesatval)*\rb/(\betaf*\rc) + \vgamma}:5]{\vcesatval};
 
         \addplot[thin, lightgray, dashed] coordinates {(\vgamma, 0) (\vgamma, 5)};
         \addplot[thin, lightgray, dashed, domain=0:{-(\vgamma - (\rb * 5 + \rc *\vgamma)/(\rb + \rc))*((\rb + \rc)/(\betaf*\rc)) + \vgamma}] {\vgamma};

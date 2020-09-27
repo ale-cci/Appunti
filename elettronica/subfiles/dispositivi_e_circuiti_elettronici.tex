@@ -3,7 +3,7 @@
 \newcommand{\idiff}{\ensuremath{I = \frac{dQ}{dt}}}
 
 \begin{document}
-\section{Dispositivi e Circuiti Elettronici}
+\section{Fisica dei semiconduttori}
 La corrente elettrica $\idiff$ è generata da movimenti di carica. Il campo elettrico provoca lo spostamento di cariche dei materiali in esso.
 \[
     \overline{J} = \sigma \overline{E}
@@ -212,22 +212,22 @@ Posso effettuare gli stessi ragionamenti nel caso duale ($N_A \gg N_D \gg n_i$),
 Chiameremo questo materiale "estrinseco di tipo p".
 
 \subsubsection{Studio conduzione materiale uniforme, estrinseco di tipo n}
-
-Conoscendo la conduzione del materiale $n \approx N_D$, ed indicando con $S$ la sezione trasversale del materiale, indicheremo $J = I/S$.
-Ricordando che $I = dQ/dt$, otteniamo:
+Noto il drogaggio del materiale $n \approx N_D$, ed indicando con $S$ la sezione trasversale. Si indica con $J = \frac{I}{S}$ la densità di corrente.
+Ricordando che la corrente è derivata della carica nel tempo, si ricava l'equazione:
 \[
     J = \frac{1}{S}\frac{dQ}{dt}
 \]
-Per via delle forze repulsive interne al materiale, si può vewdere sperimentalmente che gli elettroni si muovono a velocità costante $V_n = -\mu_n E$, in direzione opposta al campo elettrico, con $\mu_n$ costante di mobilità elettronica.
+A causa delle forze repulsive interne al materiale, si può osservare sperimentalmente che gli elettroni si muovono con velocità costante, di modulo
+$\mu_n E$ e con direzione opposta al campo elettrico $E$. $\mu_n$ prende il nome di costante di mobilità elettrica.
 
-Il percorso che percorre una singola particella in un piccolo intervallo di tempo è esprimibile quindi come $dx = -\mu_n E dt$.
-\\
-La carica $dQ$ è quella che nello stesso intervallo di tempo $dt$ attraversa la sezione del materiale, è possibile pensarla come $nq S dx$ (carica del numero di portatori nel volume $Sdx$).
+Lo spostamento di una particella in un infinitesimo intervallo di tempo è esprimibile come: $dx = -\mu_n E dt$.
 
-Quindi la densità $J$ è esprimibile come:
+La carica $dQ$ che nello stesso intervallo infinitesimo attraversa la sezione $S$ del materiale è descritta dalla formula $nqSdx$ (prodotto tra la carica dei portatori nell'unità di volume per il volume occupato).
+
+Da cui:
 \[
     \begin{cases}
-        \frac{dx}{dt} = \mu_n E
+        dx = \mu_n E
         \\
         J = \frac{1}{S} \frac{dQ}{dt}
         \\
@@ -236,16 +236,18 @@ Quindi la densità $J$ è esprimibile come:
     \Rightarrow
     J_n = \frac{1}{\cancel{S}} \frac{qn\cancel{S} \mu_n E \cancel{dt}}{\cancel{dt}} = qn\mu_n E
 \]
-Vale ancora la relazione di ohm in forma locale $J = \sigma E$, con $\sigma = qn \mu_n = q \mu_n N_D$.
-È possibile concludere che $N_D \propto \sigma$. Quindi possiamo variando dinamicamente il valore di $N_D$ si può ottenere un conduttore o un isolante.
-
-Quindi solo variando il valore di $N_D$ in una parte del materiale posso formare due regioni conduttive, separate da una isolante.
+Dall'equazione di Ohm in forma locale: $J = \sigma E$, si ottiene che la conducibilità elettrica del materiale è:
+\[
+    \sigma = q n \mu_n
+\]
+Quindi è possibile concludere che $N_D \propto \sigma$. Di conseguenza variando il drogaggio del materiale si può ottenere
+un conduttore o un isolante.
+Drogando localmente il materiale si possono ottenere due regioni conduttive, separate da una regione di isolante.
 
 \subsubsection{Conduzione materiali estrinseci di tipo p}
-Con ragionamento del tutto analogo al precedente, si ottiene che la velocità di mobilità delle lacune è pari a $V_p = \mu_p E$.
-Nel dettaglio $\mu_p \approx \frac{2}{3} \mu_n$, sottolineando che le lacune si comportano come particelle fittizzie che si muovono più lentamente degli elettroni.
+Analogamente al caso precedente, la velocità di mobilità dei portatori primari (lacune) è pari a $V_p = \mu_p E$.
+Nel dettaglio $\mu_p \approx \frac{2}{3} \mu_n$, sottolineando che le lacune si comportano come particelle fittizie esi muovono più lentamente degli elettroni.
 
-Ottenendo
 \[
     J_p = \frac{1}{S}\frac{qp\mu_pESdx}{dt} = qp\mu_p E
 \]
@@ -255,89 +257,103 @@ La totale conducibilità elettrica è possibile esprimerla come $J = J_n + J_p$.
 \[
     J = J_n + J_p = qn\mu_n E + qp \mu_p E
 \]
-\subsubsection{Materiale drogato non uniformemente}
+\subsubsection{Materiale drogato n, non uniformemente}
 
-Nel caso in cui il campo elettrico esterno sia nullo, gli elettroni si spostano ugualmente per il moto browniano.
-Possiamo pensare alla carica $dQ$ come $dQ_1 - dQ_2$ ovvero la carica dovuta agli elettroni che escono dalla sezione di volume, e la carica degli elettroni entranti nella sezione di volume.
-Chiamata quindi $n_1$ la quantità di elettroni esterni al volume, e $n_2$ la quantità di elettroni interni; siccome le cariche hanno un 50\% di probabilità di entrare nel volume, si possono esprimere le cariche come:
+Nel caso in cui il campo elettrico esterno sia nullo, gli elettroni si muovono di moto browniano.
+Possiamo pensare alla carica $dQ$ come la differenza tra gli elettroni entranti ed uscenti dalla sezione di volume: $dQ_1 - dQ_2$.
+
+Chiamata quindi $n_1$ la quantità di elettroni esterni al volume, e $n_2$ la quantità di elettroni interni; siccome le cariche hanno un 50\% di probabilità di entrare nel volume, otteniamo le equazioni:
 \begin{align*}
-    dQ_1 = -\frac{q n_1 dV}{2}\\
-    dQ_2 = -\frac{q n_2 dV}{2}
+    dQ_1 = -\frac{1}{2}q n_1 dV\\
+    dQ_2 = -\frac{1}{2}q n_2 dV
 \end{align*}
 Ricordando che il volume $dV = S V_{th} dt$ ($V_{th}$ velocità termica) si ottiene che:
 \[
     J_n = \frac{1}{S} \frac{-qn_1 S V_{th} dt + qn_2 S V_{th} dt}{2dt}  = q(n_2 - n_1) V_{th} \neq 0
 \]
-Ma siamo giunti ad un assurdo, in quanto avremmo trovato un modo per generare corrente senza spendere energia.
+Il che è un' assurdo, in quanto sarebbe un modo per generare corrente senza spendere energia.
 
-Effettuando i calcoli più accuratamente è possibile ottenere $J_n = q D_n \frac{dn}{dx}$. Quello che accade è il fenomeno della diffusione, infatti tende a muovere la carica, dalla regione di concentrazione più alta a quella più bassa. Il sistema evolve verso una distribuzione uniforme.
-\\
-Lo spostamento degli elettroni lascia cariche positive nella regione con maggior carica negativa, portando una carica negativa nell'altra regione.
+Effettuando i calcoli più accuratamente è possibile ottenere $J_n = q D_n \frac{dn}{dx}$.
 
-Otteniamo quindi un campo elettrico nella direzione della regione con meno cariche negative, pari a $F = -qE$.
+Il fenomeno prende il nome di "\textit{effetto diffusivo}" e tende a muovere la carica dalla regione con concentrazione
+di portatori può alta a quella più bassa, "pareggiando" il livello di portatori.
+
+Lo spostamento di elettroni genera un campo elettrico pari a $F = -q E$, nella direzione con minor numero di cariche negative.
 
 \subsection{Modello Ohmico-Diffusivo}
 % 17.03
-Analogamente al caso precedente, studiamo un materiale estrinseco di tipo p, la cui concentrazione di lacune non è costante, ottenendo:
+Analogamente al caso precedente, studiamo un materiale estrinseco di tipo p, con concentrazione di portatori non uniforme, si ottiene:
 \[
-    J_p = \frac{1}{S}\frac{d(Q_1 - Q_2)}{dt} = \frac{q(p_1 - p_2) V_{th}}{2}
+    J_p = \frac{1}{S}\frac{dQ_1 - dQ_2}{dt} = \frac{q(p_1 - p_2) V_{th}}{2}
 \]
-contrariamente al caso degli elettroni, se $p_2 > p_1$ otteniamo $J_p < 0$.
-In questo, effettuando i calcoli in maniera più accurata, otterremo che $J_p = -qD_p \frac{dp}{dx}$.
+contrariamente al caso degli elettroni, se $p_2 > p_1$ otteniamo $J_p < 0$, la densità di corrente in verso opposto.
+In questo caso, il modello diffusivo sarà in verso opposto:
+$$J_p = -qD_p \frac{dp}{dx}$$
 
-Abbiamo introdotto quindi i funzionamenti di tipo ohmico: $J_n = q\mu_n n E$ e $J_p = q \mu_p p E$, la cui direzione è concorde;
-ed un meccanismo di tipo diffusivo: $J_n = q D_n \frac{dn}{dx}$ e $J_p = -qD_p \frac{dp}{dx}$, la discordanza di segno è dovuta al bilanciamento della carica.
-
-Non possiamo considerare i due funzionamenti come uno indipendente dall'altro, in quanto porterebbe a conclusioni assurde, esprimiamo quindi la combinazione degli effetti:
+Dai calcoli fatti fino ad ora, possiamo concludere che considerare il funzionamento ohmico indipendente dal modello diffusivo
+porta a conclusioni assurde, infatti la concentrazione di carica $J$ è una combinazione di entrambi gli effetti:
 \begin{align*}
     J_n = q \mu_n n E + q D_n \frac{dn}{dx} \\
     J_p = q \mu_p p E + q D_p \frac{dp}{dx}
 \end{align*}
 
-Quindi un conduttore prevede un solo meccanismo di trasporto di carica, per un meccanismo unicamente di tipo ohmico. In un semiconduttore teniamo conto di due tipi di portatori e due diversi meccanismi di trasporto di carica: ohmico e diffusivo.
+A differenza dei conduttori che prevedono un unico metodo di trasporto di carica, i semiconduttori trasportano carica in due
+diversi metodi: ohmico e diffusivo.
 
-
-$D_n$ indica la reattività dell'elettrone alla temperatura.
 \[
-    D_n = \frac{kT}{q} \mu_n
+    D_n = \frac{kT}{q} \mu_n \qquad \qquad
+    D_p = \frac{kT}{q} \mu_p
 \]
-Analogamente $D_p = \frac{kT}{q}\mu_p$. Queste prendono il nome di relazioni di Einstein, dove $k$ è la costante di Boltzmann, $q$ è la carica dell'elettrone e $T$ è la temperatura.
+Queste prendono il nome di relazioni di Einstein, dove $k$ è la costante di Boltzmann, $q$ è la carica dell'elettrone, $T$ è la temperatura
+, $D_n$ e $D_p$ indicano la reattività dell'elettrone alla temperatura.
 
-Quello che dicono queste relazioni è che il coefficiente di diffusione e la mobilità dell'elettrone, sono legate.
+Queste equazioni dicono che il coefficiente di diffusione e la mobilità dell'elettrone sono dipendenti.
 Ricordando che la mobilità degli elettroni è superiore a quella delle lacune, analogamente il fattore $D_n$ è maggiore di $D_p$
 % 37:50
 
-Ricordandoci che $E = -\frac{d\phi}{dx}$
-prendiamo in considerazione, un materiale, tale per cui la concentrazione varia in base alla coordinata $x$: $n(x)$.
-Siccome il campo elettrico $E$, costante ed indipendente dalla posizione $x$, prendiamo un punto $x_1$ interno al materiale e lo usiamo come origine per misurare il campo elettrico. In tale punto avremo che $\varphi = 0$, $n_0$ e $p_0$.
+\subsubsection{Materiale con concentrazione variabile}
+Prendiamo in considerazione, un materiale, tale per cui la concentrazione varia in base alla coordinata $x$.
+Dall'equazione del campo elettrico: $E = -\dfrac{d\varphi}{dx}$, ne segue che il campo elettrico è costante, ed indipendente dalla posizione $x$.
 
-Allo stesso identico modo posso scegliere un punto $x_2$, caratterizzato da un $\varphi(x)$, $n(x)$ e $p(x)$.
+Utilizzando un punto $x_1$ internamente al materiale come origine per misurare il campo elettrico.
+\\
+In $x_1$ si ha
+\begin{align*}
+    \varphi = 0 \\
+    n_0 = 0 \\
+    p_0 = 0
+\end{align*}
 
-All'equilibrio $pn = n_i^2$, otteniamo che, dalla funzione di $J_n = q \mu_n  n E + q D_n \frac{dn}{dx} \approx 0$, otteniamo:
+Prendendo in considerazione un punto generico $x$, caratterizzato da $\varphi(x)$, $n(x)$ e $p(x)$.
+
+All'equilibrio $pn = n_i^2$, otteniamo che, dalla funzione di $J_n = q \mu_n  n E + q D_n \frac{dn}{dx} \approx 0$:
 \[
-    \frac{kT}{nq} \frac{dn}{dx} = \frac{d\varphi}{dx}
-\]
-
-Integrando la relazione sui margini $\varphi(0)$ e $\varphi(x)$, ottengo:
-\[
+    qn \frac{d\varphi}{dx} - kT\frac{dn}{dx} = 0 \qquad
+    \xrightarrow{\quad\int\quad} \qquad
     \varphi(x) = \frac{kT}{q} \ln \frac{n(x)}{n_0}
 \]
-Da cui
+Da cui:
 \[
     n(x) = n_0 e^{\dfrac{q\varphi(x)}{kT}}
 \]
-Inoltre dalla relazione $p(x) n(x) = n_i^2$, otteniamo la relazione duale $p(x) = p_0 e^{-q\varphi(x) / kT}$ la inversa $\varphi(x) = - \frac{kT}{q} \ln \frac{p(x)}{p_0}$.
+Dalla relazione $p(x) n(x) = n_i ^ 2$ si ricavano le equazioni:
+\begin{align*}
+    p(x) = p_0 e^{-q\varphi(x) / kT}
+    \\
+    \varphi(x) = - \frac{kT}{q} \ln \frac{p(x)}{p_0}
+\end{align*}
 
 % maxwell
-Dalle equazioni di Maxwell, per i materiali uniformi: $\frac{d^2 \varphi}{dx} = -\frac{\rho}{\varepsilon}$
+Dalle equazioni di Maxwell, per i materiali uniformi: $\dfrac{d^2 \varphi}{dx} = -\dfrac{\rho}{\varepsilon}$
+
 \subsection{Ragionamento su struttura diversamente drogata}
 Supponiamo un unico cristallo di semiconduttore, drogato per metà in con atomi accettori, e per metà con atomi donatori.
-Il materiale prende il nome di giunzione pn.
+La giunzione tra le due regioni diversamente drogate prende il nome di "\textit{giunzione PN}".
 
 
-\subsubsection{Studio della struttura all'equilibrio}
-
-Supponiamo una differente distribuzione di atomi accettori e donatori. Prendendo quindi come origine il punto intermedio tra le due giunzioni, otteniamo:
+\subsubsection{Analisi della giunzione all'equilibrio}
+Supponiamo una differente distribuzione di atomi accettori e donatori. Prendendo come origine il punto intermedio tra le due giunzioni, si può
+osservare la seguente distribuzione di drogaggio:
 
 \begin{figure}[h]
     \centering
@@ -354,32 +370,33 @@ Supponiamo una differente distribuzione di atomi accettori e donatori. Prendendo
     \end{tikzpicture}
 \end{figure}
 
-Supponiamo che il dispositivo sia abbastanza lungo, da supportare l'ipotesi che dopo una certa distanza, l'effetto della giunzione risulti trascurabile, in modo che sia possibile esprimere le relazioni dei due estremi indipendentemente.
-Quindi, che esistano due coordinate $w_p$ e $w_n$, che oltre a quelle coordinate, le due regioni si comportano come regioni uniformemente drogate di tipo $p$ ed $n$.
+Prendiamo come ipotesi che il dispositivo sia sufficientemente esteso, da far si che esistano due punti $w_p$ e $w_n$, dopo i quali l'effetto della giunzione risulti trascurabile
+e le regioni possano essere trattate individualmente come materiale uniformemente drogato.
 
-
-\begin{tcolorbox}[title={Zona neutra p}]
-    Per $x < -w_p$, la popolazione di portatori maggioritaria sono le lacune, quindi $p = N_A$ e $n = \frac{n_i^2}{N_A}$
+\subsubsection{Zona neutra p}
+    Per $x < -w_p$, $p = N_A$, $n = \frac{n_i^2}{N_A}$ e le lacune sono i portatori maggioritari,
     \begin{align*}
         \rho = q (\cancel{N_D} - N_A + p - \cancel{n}) \approx  0\\
         J_p = q \mu_p p E - q D_n \frac{dp}{dx} = 0
     \end{align*}
     Essendo la densità di carica pari a 0, e la variazione di atomi portatori nulla, allora necessariamente $E = 0$
 
-    Siccome $E$ dipende dalla derivata di $\varphi$ rispetto ad $x$ allora $\varphi$ è costante. Prendiamo questo valore, come valore di riferimento, per i successivi $\varphi$, quindi $\varphi = 0$.
-\end{tcolorbox}
-\begin{tcolorbox}[title={Zona neutra n}]
+    Siccome $E$ dipende dalla derivata di $\varphi$ rispetto ad $x$ allora $\varphi$ è costante.
+    Non sapendo il valore di $\varphi$, lo utilizziamo come origine, quindi $\varphi = 0$.
+
+\subsubsection{Zona neutra n}
     Per $x > w_n$, $n = N_D$ e $p = \frac{n_i^2}{N_D}$. Inoltre $\rho = q (N_D - n) \approx 0$.
     \[
         J_n = q \mu_n n E + q D_n \frac{dn}{dx} = 0
     \]
-    Per analogo ragionamento $E = 0$ e $\varphi$ è costante, calcolabile attraverso la formula
+    Per analogo ragionamento $E = 0$ e $\varphi$ è costante, calcolabile attraverso la formula ottenuta in precedenza, sostituendo ad $N_0$ il numero
+    di elettroni nella regione di potenziale scelta come riferimento (Zona neutra p):
     \[
-        \frac{kT}{q} \ln \frac{n(x)}{n_0} = \frac{kT}{q} \ln \frac{N_D N_A}{n_i^2}
+        \varphi(x) = \frac{kT}{q} \ln \frac{n(x)}{n_0} = \frac{kT}{q} \ln \frac{N_D}{\frac{n_i^2}{N_A}} = \frac{kT}{q} \ln \frac{N_D N_A}{n_i^2}
     \]
     Indicheremo questo valore con $\Psi_B$. Siccome i valori di $N_D$ ed $N_A$ sono entrambi molto maggiori di $n_i$, allora $\Psi_B$ è positiva e molto maggiore di 1.
     Inoltre siccome dipende dal logaritmo di $N_D$ ed $N_A$, per variazioni di quest'ultimi è assimilabile ad una costante.
-\end{tcolorbox}
+
 \begin{tcolorbox}[title={Regione svuotata}]
     Per $-w_p < x < w_n$, ipotizzando che il potenziale sia monotono in questo intervallo, possiamo presupporre che $0 < \varphi(x) < \Psi_B$.
 
@@ -399,13 +416,15 @@ Quindi, che esistano due coordinate $w_p$ e $w_n$, che oltre a quelle coordinate
 \begin{tcolorbox}[title={Regione svuotata e regione di carica}]
     Per $-w_p < x < 0$
     La densità di carica non sarà più nulla, ma siccome $p(x) \ll N_A$, $n(x) \ll N_D$, in base all'intervallo in cui mi trovo, per la relazione $\rho = q(N_D - N_A + \cancel{p} - \cancel{n})$, la densità di carica potrà valere $-qN_A$ o $qN_D$.
-    Per la relazione di poisson: $\frac{dE}{dx} = -\frac{\rho}{\varepsilon}$. Sostituendo rispettivo valore di $\rho$ ed integrando nei relativi estremi, si ottiene il campo elettrico:
+    Per la relazione di Poisson:
+    $$\dfrac{dE}{dx} = -\dfrac{\rho}{\varepsilon}$$
+    Sostituendo rispettivo valore di $\rho$ ed integrando nei relativi estremi, si ottiene il campo elettrico:
     \[
-        E = - \frac{qN_A}{\varepsilon} (x + w_p)
+        E(x) = - \frac{qN_A}{\varepsilon} (x + w_p)
     \]
-    Nel caso particolare $E(0^-) = \dfrac{-qN_A w_p}{\varepsilon}$
+    Nel caso particolare $E(0^-) = -\dfrac{qN_A}{\varepsilon}w_p$
 
-    Dalla relazione $E = -\frac{d\phi}{dx}$, integrando sugli estremi si ottiene:
+    Dalla relazione $E = -\dfrac{d\varphi}{dx}$, integrando sugli estremi si ottiene:
     \[
         \varphi(x) = \frac{qN_A}{\varepsilon}\frac{{(x + w_p)}^2}{2}
     \]

@@ -3,7 +3,7 @@
 \begin{document}
 \section{Transistor MOSFET}
 Ricordando la struttura fisica di un condensatore: due lamine di metallo con in mezzo uno strato di materiale isolante, osserviamo che in condizioni statiche la corrente è necessariamente nulla.
-Utilizziamo quindi questo principio per creare un nuovo tipo di transistore, dove la corrente di base potrà essere nulla.
+Utilizziamo questo principio per creare un nuovo tipo di transistore, dove la corrente di base potrà essere nulla.
 
 Sostituendo la lamina di metallo inferiore con del materiale drogato uniformemente, ad esempio silicio drogato con concentrazione $N_A$, ed utilizzando come materiale isolante ad esempio l'ossido di silicio, otteniamo un condensatore MOS (\textit{Metallo ossido semiconduttore}).
 
@@ -13,17 +13,19 @@ Immaginando che la differenza di potenziale sia $V_{GB} > 0$, le lacune interne 
 
 Più è intenso il campo elettrico, maggiore è la concentrazione degli elettroni sulla superficie. Aumentare la concentrazione di elettroni porta ad aumentare la conducibilità elettrica e quindi un diminuire della resistenza.
 
-Sotto la regione con alta concentrazione di elettroni, si ha anche una regione svuotata di portatori di carica, con alta resistività e quindi isolante.
+Sotto la regione con alta concentrazione di elettroni, si ha anche una regione svuotata di portatori di carica, con alta
+resistività, comportandosi di conseguenza da isolante.
 
-In questo caso viene ottenuto un canale n, a partire da un substrato $p$.
+In questo caso si forma un canale $n$, partendo da un substrato di tipo $p$.
 
 Per utilizzare questo condensatore come transistore basta applicare una differenza di potenziale longitudinale, per spostare gli elettroni presenti nel canale. La tensione $V_{GB}$ si occupa quindi di gestire la concentrazione dei portatori, e la tensione $V_T$ per spostare gli elettroni nel canale.
 
 
 Per collegare tutti i contatti da un'unica parte del dispositivo, vengono create due regioni fortemente drogate, in modo da funzionare da conduttori per collegare i due terminali (source e drain) da dove verrà applicata la tensione $V_T$.
 
-La creazione di questi due regioni di fortemente drogati si comporta come un diodo, quindi all'equilibrio sarà circondata da una regione svuotata.
-L'intero dispositivo quindi è completamente circondato da una regione isolata, e non necessita di isolamento esterno, si parla di dispositivo "autoisolante", caratteristica fondamentale per avere molti dispositivi in poco spazio.
+La differenza di drogaggio di queste due regioni, come visto dal diodo crea una regione svuotata di portatori di carica.
+L'intero dispositivo quindi è completamente circondato da una regione isolata, e non richiede isolamento esterno.
+Questo dispositivo è "autoisolante", ed è una caratteristica fondamentale per avere molti componenti in spazio ridotto.
 
 Diversamente dal transistor bipolare, non c'è differenza tra source e drain.
 
@@ -139,7 +141,7 @@ Dall'equazione di poisson otteiamo:
 \begin{align*}
     \frac{dE}{dx} = -\frac{qN_A}{\varepsilon_S}
     \\
-    \int_x^{x_d} \frac{dE} = \int_{x}^{x_d} - \frac{qN_A}{\varepsilon}dx
+    \int_x^{x_d} \frac{dE}{dx} = \int_{x}^{x_d} - \frac{qN_A}{\varepsilon}dx
     \\
     E(x) = \frac{q N_A}{\varepsilon_S} (x_d - x)
 \end{align*}
